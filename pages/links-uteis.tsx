@@ -38,7 +38,7 @@ export default function LinksUtil() {
               />
               <span>Smartview</span>
             </Link>
-            <Link href={'https://glpi.naturafrig.com.br/'} className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl">
+            <Link href={'https://helpdesk.naturafrig.com.br/'} className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl">
               <Image
                   src={'/assets/images/logos/glpi.png'}
                   alt="Logo GLPI"
