@@ -124,3 +124,13 @@ Coloque o AjudaNova.exe dentro dessa pasta.
 | `atualizar-ajuda-nova.bat` | `.bat` | Atualiza o projeto, recompila e reinicia o site | Quando há mudanças no código |
 | `iniciar-ajuda-nova.bat` | `.bat` | Apenas inicia o site existente | Quando só deseja rodar o site |
 | `AjudaNova.exe` | `.exe` | Versão automática que inicia o site ao ligar o PC | Quando quer execução em segundo plano |
+
+### Start PM2
+
+```bash
+    pm2 start pm2-site.js --name site-estatico
+
+    pm2 start server.js --name site-estatico
+    pm2 save
+    pm2 startup
+```
