@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
-    "start-static": "cd out && python -m http.server 5000"
+    "start-static": "cd out && python -m http.server 5050"
   },
   "dependencies": {
     "express": "^5.2.1",
