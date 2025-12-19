@@ -25,33 +25,38 @@ export default function Sidebar() {
           justify-center
           font-bold
     ">
-      <Image
-        src={'/assets/images/logo-naturafrig.png'}
-        width={200}
-        height={200}
-        alt="Picture of the author"
-        className='mb-6 mx-auto'
-      />
-      <div className='w-[100%] flex justify-center'>
-        <h2 className="text-xl font-bold">Manuais de Ajuda</h2>
-      </div>
-      {menuItems.map((item) => (
-        <Link key={item.path} href={item.path} className="hover:bg-yellow-500 p-2 rounded flex items-center">
-          <Image
-            src={item.icon}
-            alt={item.label}
-            width={35}
-            height={10}
-            className='mr-3'
-          />
-          {item.label}
-        </Link>
-      ))}
-      <footer className='left-8 bottom-10'>
-        <div className='flex justify-center items-center mx-auto'>
-          <p className='mt-9'>TI - Nova Andradina 2025</p>
+      <div>
+        <Image
+          src={'/assets/images/logo-naturafrig.png'}
+          width={150}
+          height={150}
+          alt="Picture of the author"
+          className='mb-6 mx-auto'
+        />
+        <div className='w-[100%] flex justify-center'>
+          <h2 className="text-xl font-bold">Manuais de Ajuda</h2>
         </div>
-      </footer>
+        {menuItems.map((item) => (
+          <Link key={item.path} href={item.path} className="hover:bg-yellow-500 p-1 rounded flex items-center">
+            <Image
+              src={item.icon}
+              alt={item.label}
+              width={20}
+              height={10}
+              className='mr-3'
+            />
+            {item.label}
+          </Link>
+        ))}
+        <footer className='left-8 bottom-10'>
+          <div className='flex justify-center items-center mx-auto'>
+            <p className='mt-9 font-light'>TI - Nova Andradina 2025</p>
+          </div>
+          <div className='flex justify-center items-center mx-auto'>
+            <p className='font-light'>Feito por Kaue 💻</p>
+          </div>
+        </footer>
+      </div>
     </aside>
   )
 }
