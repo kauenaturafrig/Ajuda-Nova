@@ -1,0 +1,13 @@
+// pages/api/auth/logout.ts
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getIronSession } from "iron-session";
+import { sessionOptions } from "@/lib/session";
+
+export default async function logout(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const session = await getIronSession(req, res, sessionOptions);
+  session.destroy();
+  res.json({ success: true });
+}

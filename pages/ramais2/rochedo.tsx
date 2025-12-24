@@ -2,25 +2,48 @@
 
 import Layout from "@/components/Layout";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from 'next/image'
-import ramais from "../data/ramais/ramais-nova-andradina.json"; // importe os dados
 
 type Ramal = {
-  // nome: string;
+  id: number;
+  numero: string;
   setor: string;
-  ramal: string;
+  responsavel: string | null;
 };
 
-export default function RamaisNovaAndradina() {
+export default function RamaisRochedo() {
+  const [ramais, setRamais] = useState<Ramal[]>([]);
+  const [loading, setLoading] = useState(true);
   const [busca, setBusca] = useState("");
 
-  const filtrados = (ramais as Ramal[]).filter(
-    (r) =>
-      // r.nome.toLowerCase().includes(busca.toLowerCase()) ||
-      r.setor.toLowerCase().includes(busca.toLowerCase()) ||
-      r.ramal.includes(busca)
-  );
+  useEffect(() => {
+  const timeout = setTimeout(() => {
+    setLoading(true);
+
+    const params = new URLSearchParams({
+      unidade: "Rochedo-MS",
+    });
+
+    if (busca.trim()) {
+      params.append("busca", busca);
+    }
+
+    fetch(`/api/ramais?${params.toString()}`)
+      .then(res => res.json())
+      .then(json => {
+        if (!json.success) throw new Error(json.error);
+        setRamais(json.data);
+      })
+      .catch(err => {
+        console.error(err);
+        setRamais([]);
+      })
+      .finally(() => setLoading(false));
+  }, 400); // ← tempo humano de digitação
+
+  return () => clearTimeout(timeout);
+  }, [busca]);
 
   return (
     <Layout>
@@ -30,9 +53,9 @@ export default function RamaisNovaAndradina() {
         </span>
       </Link>
 
-      <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg my-8 max-h-[1000px]">
+      <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg my-8">
         <h1 className="text-4xl font-extrabold text-blue-800 mb-6 border-b-4 border-blue-200 pb-2">
-          Nova Andradina - MS
+          Rochedo - MS
         </h1>
 
         {/* Campo de busca */}
@@ -46,19 +69,23 @@ export default function RamaisNovaAndradina() {
 
         <div className="flex items-start gap-6">
           {/* Lista de ramais com scroll */}
-          <div className="max-h-[600px] max-w-lg overflow-y-auto flex-1">
+          <div className="max-h-[1000px] max-w-lg overflow-y-auto flex-1">
             <ul className="divide-y divide-gray-200 pr-4">
-              {filtrados.length > 0 ? (
-                filtrados.map((r, idx) => (
+              {loading ? (
+                <p className="text-gray-500">Buscando...</p>
+              ) : ramais.length > 0 ? (
+                ramais.map((r, idx) => (
                   <li
                     key={idx}
                     className="py-3 flex justify-between min-w-96"
                   >
                     <div>
-                      <p className="font-semibold text-lg text-gray-800">{r.setor}</p>
+                      <p className="font-semibold text-lg text-gray-800">
+                        {r.setor} {r.responsavel && ` - ${r.responsavel}`}
+                      </p>
                     </div>
                     <span className="text-xl font-bold text-blue-700">
-                      {r.ramal}
+                      {r.numero}
                     </span>
                   </li>
                 ))
@@ -71,8 +98,8 @@ export default function RamaisNovaAndradina() {
           {/* Imagem responsiva */}
           <div className="flex-1">
             <Image
-              src="/assets/images/ramais/nova.png"
-              alt="Ramais Nova Andradina"
+              src={'/assets/images/ramais/rochedo.png'}
+              alt="Ramais Rochedo"
               width={0}
               height={0}
               sizes="100vw"
