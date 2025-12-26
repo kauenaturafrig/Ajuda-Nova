@@ -1,200 +1,114 @@
-//pages/admin/ramais/importar.tsx
-"use client";
-
-import Layout from "@/components/Layout";
+// pages/admin/ramais/importar.tsx
 import { useState } from "react";
-
-/* ─────────── TIPOS ─────────── */
-
-type ImportState =
-  | "idle"
-  | "validating"
-  | "preview"
-  | "importing"
-  | "done";
+import DiffTable from "@/components/ramais/DiffTable";
 
 type DiffCampo = {
   antes: string | null;
   depois: string | null;
+  bloqueado: boolean;
 };
 
-type PreviewItem =
-  | {
-      tipo: "NOVO";
-      numero: string;
-      depois: {
-        setor: string;
-        responsavel: string | null;
-      };
-    }
-  | {
-      tipo: "ALTERADO";
-      numero: string;
-      diff: Record<string, DiffCampo>;
-    }
-  | {
-      tipo: "ERRO";
-      numero?: string;
-      erro: string;
-    };
+type DiffItem = {
+  tipo: "ALTERADO";
+  numero: string;
+  diff: Record<string, DiffCampo>;
+};
 
-/* ─────────── COMPONENTE ─────────── */
+type PreviewResponse = {
+  total: number;
+  validos: number;
+  invalidos: number;
+  erros: any[];
+  diff: DiffItem[];
+};
 
 export default function ImportarRamaisPage() {
-  const [state, setState] = useState<ImportState>("idle");
-  const [preview, setPreview] = useState<PreviewItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [preview, setPreview] = useState<PreviewResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [aplicando, setAplicando] = useState(false);
 
-  async function handleFile(file: File) {
-    setState("validating");
-    setError(null);
-    setPreview([]);
-    setFileName(file.name);
+  const existeCampoAplicavel =
+    preview?.diff.some(item =>
+      Object.values(item.diff).some(campo => campo.bloqueado === false)
+    ) ?? false;
 
-    try {
-      const text = await file.text();
-      const parsed = JSON.parse(text);
+  async function handlePreview() {
+    setLoading(true);
+    setPreview(null);
 
-      const res = await fetch("/api/admin/ramais/import/preview", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          unidade: "Nova Andradina-MS",
-          ramais: parsed,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Erro ao gerar preview");
-      }
-
-      setPreview(data.preview);
-      setState("preview");
-    } catch (err: any) {
-      setError(err.message || "Arquivo JSON inválido");
-      setState("idle");
-    }
-  }
-
-  async function aplicarImportacao() {
-    if (!confirm("Deseja aplicar a importação?")) return;
-
-    setState("importing");
-
-    const res = await fetch("/api/admin/ramais/import/apply", {
+    const res = await fetch("/api/admin/ramais/import/preview", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        unidade: "Nova Andradina-MS",
-      }),
+        meta: { unidade: { id: 1 } },
+        ramais: [] // ← aqui entra seu JSON real
+      })
     });
 
-    if (!res.ok) {
-      const data = await res.json();
-      setError(data.error || "Erro ao aplicar importação");
-      setState("preview");
-      return;
-    }
+    const data = await res.json();
+    setPreview(data);
+    setLoading(false);
+  }
 
-    setState("done");
-    alert("Importação concluída com sucesso");
+  async function handleApply() {
+    if (!preview || !existeCampoAplicavel) return;
+
+    setAplicando(true);
+
+    await fetch("/api/admin/ramais/import/apply", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(preview)
+    });
+
+    setAplicando(false);
+    alert("Importação aplicada");
   }
 
   return (
-    <Layout>
-      <div className="p-6 max-w-4xl">
-        <h1 className="text-xl font-bold mb-4">
-          Importar Ramais (JSON)
-        </h1>
+    <div className="p-6 max-w-5xl">
+      <h1 className="text-xl font-bold mb-4">
+        Importação de Ramais
+      </h1>
 
-        {/* Upload */}
-        <input
-          type="file"
-          accept="application/json"
-          onChange={(e) => {
-            if (e.target.files?.[0]) {
-              handleFile(e.target.files[0]);
-            }
-          }}
-        />
+      <button
+        onClick={handlePreview}
+        disabled={loading}
+        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+      >
+        {loading ? "Gerando preview..." : "Gerar preview"}
+      </button>
 
-        {fileName && (
-          <p className="mt-2 text-sm text-gray-600">
-            Arquivo: {fileName}
-          </p>
-        )}
+      {preview && (
+        <>
+          <div className="mt-6 text-sm text-gray-700 space-y-1">
+            <p>Total no arquivo: {preview.total}</p>
+            <p>Válidos: {preview.validos}</p>
+            <p>Inválidos: {preview.invalidos}</p>
+          </div>
 
-        {/* Estado */}
-        {state === "validating" && (
-          <p className="mt-4 text-blue-600">
-            Validando arquivo…
-          </p>
-        )}
+          <DiffTable items={preview.diff} />
 
-        {error && (
-          <p className="mt-4 text-red-600 font-semibold">
-            {error}
-          </p>
-        )}
+          {!existeCampoAplicavel && (
+            <div className="mt-4 p-3 bg-yellow-100 text-yellow-800 text-sm rounded">
+              Todas as alterações estão bloqueadas.  
+              Nenhuma modificação será aplicada.
+            </div>
+          )}
 
-        {/* Preview */}
-        {state === "preview" && preview.length > 0 && (
-          <>
-            <h2 className="mt-6 font-semibold text-lg">
-              Preview da Importação
-            </h2>
-
-            <ul className="mt-4 space-y-3">
-              {preview.map((item, i) => (
-                <li
-                  key={i}
-                  className="border p-3 rounded bg-gray-50"
-                >
-                  {item.tipo === "NOVO" && (
-                    <>
-                      <strong>{item.numero}</strong> — NOVO
-                      <pre className="mt-2 text-sm bg-white p-2 border">
-                        {JSON.stringify(item.depois, null, 2)}
-                      </pre>
-                    </>
-                  )}
-
-                  {item.tipo === "ALTERADO" && (
-                    <>
-                      <strong>{item.numero}</strong> — ALTERADO
-                      <pre className="mt-2 text-sm bg-white p-2 border">
-                        {JSON.stringify(item.diff, null, 2)}
-                      </pre>
-                    </>
-                  )}
-
-                  {item.tipo === "ERRO" && (
-                    <span className="text-red-600">
-                      ERRO: {item.erro}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-
-            <button
-              onClick={aplicarImportacao}
-              className="mt-6 px-4 py-2 bg-green-600 text-white rounded"
-            >
-              Aplicar Importação
-            </button>
-          </>
-        )}
-
-        {state === "done" && (
-          <p className="mt-6 text-green-700 font-semibold">
-            Importação finalizada.
-          </p>
-        )}
-      </div>
-    </Layout>
+          <button
+            onClick={handleApply}
+            disabled={!existeCampoAplicavel || aplicando}
+            className={`mt-6 px-4 py-2 rounded text-white ${
+              existeCampoAplicavel
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-gray-400 cursor-not-allowed"
+            }`}
+          >
+            {aplicando ? "Aplicando..." : "Aplicar importação"}
+          </button>
+        </>
+      )}
+    </div>
   );
 }
