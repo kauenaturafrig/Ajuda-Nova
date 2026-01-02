@@ -2,128 +2,127 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { withAuth } from "@/lib/auth/requireAuth";
 import db from "@/db/connection";
-import { registrarAuditoria } from "@/domain/auditoria/auditoria.repository";
+const importId = crypto.randomUUID();
 
-type RamalImportado = {
-  numero: string;
-  setor: string;
-  responsavel?: string | null;
+type DiffCampo = {
+  antes: string | null;
+  depois: string | null;
+  bloqueado: boolean;
 };
 
-type CamposBloqueados = {
-  setor: boolean;
-  responsavel: boolean;
+type DiffItem = {
+  tipo: "ALTERADO";
+  numero: string;
+  diff: Record<string, DiffCampo>;
 };
 
 export default withAuth(
   async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") {
-      return res.status(405).json({ error: "Método inválido" });
+      return res.status(405).json({ error: "Método não permitido" });
     }
 
     const user = (req as any).user;
-    const userId = user.id;
+    const { diffs } = req.body as { diffs: DiffItem[] };
 
-    const { meta, ramais } = req.body;
-
-    if (!meta?.unidade?.id || !Array.isArray(ramais)) {
-      return res.status(400).json({ error: "Payload inválido" });
+    if (!Array.isArray(diffs)) {
+      return res.status(400).json({ error: "Diffs inválidos" });
     }
 
-    const unidadeId = meta.unidade.id;
+    const aplicados: {
+      numero: string;
+      campos: string[];
+    }[] = [];
 
-    if (user.role === "admin" && user.unidade_id !== unidadeId) {
-      return res.status(403).json({ error: "Acesso negado" });
-    }
+    const ignorados: {
+      numero: string;
+      motivo: string;
+    }[] = [];
 
     const tx = db.transaction(() => {
-      for (const r of ramais as RamalImportado[]) {
-        const atual = db
+      for (const item of diffs) {
+        if (item.tipo !== "ALTERADO") continue;
+
+        const camposAplicaveis = Object.entries(item.diff)
+          .filter(([, v]) => v.bloqueado === false);
+
+        if (camposAplicaveis.length === 0) {
+          ignorados.push({
+            numero: item.numero,
+            motivo: "Todos os campos bloqueados",
+          });
+          continue;
+        }
+
+        const ramal = db
           .prepare(
             `
-            SELECT id, setor, responsavel
-            FROM ramais
-            WHERE numero = ? AND unidade_id = ? AND deleted_at IS NULL
-          `
+          SELECT id
+          FROM ramais
+          WHERE numero = ? AND deleted_at IS NULL
+        `
           )
-          .get(r.numero, unidadeId) as
-          | { id: number; setor: string; responsavel: string | null }
-          | undefined;
+          .get(item.numero) as { id: number } | undefined;
 
-        if (!atual) continue;
-
-        // 🔒 buscar bloqueios via auditoria
-        const audit = db
-          .prepare(
-            `
-            SELECT payload
-            FROM auditoria
-            WHERE entidade = 'ramal'
-              AND entidade_id = ?
-              AND acao = 'UPDATE'
-            ORDER BY created_at DESC
-            LIMIT 1
-          `
-          )
-          .get(atual.id) as { payload: string } | undefined;
-
-        const bloqueios: CamposBloqueados = {
-          setor: false,
-          responsavel: false,
-        };
-
-        if (audit?.payload) {
-          const p = JSON.parse(audit.payload);
-          if (p.setor) bloqueios.setor = true;
-          if (p.responsavel) bloqueios.responsavel = true;
+        if (!ramal) {
+          ignorados.push({
+            numero: item.numero,
+            motivo: "Ramal não encontrado",
+          });
+          continue;
         }
 
-        const diff: any = {};
-        const novoSetor = r.setor;
-        const novoResp = r.responsavel ?? null;
+        const updatePayload: Record<string, any> = {};
+        const camposAtualizados: string[] = [];
 
-        let setorFinal = atual.setor;
-        let respFinal = atual.responsavel;
-
-        if (!bloqueios.setor && atual.setor !== novoSetor) {
-          diff.setor = { antes: atual.setor, depois: novoSetor };
-          setorFinal = novoSetor;
+        for (const [campo, diff] of camposAplicaveis) {
+          updatePayload[campo] = diff.depois;
+          camposAtualizados.push(campo);
         }
 
-        if (
-          !bloqueios.responsavel &&
-          atual.responsavel !== novoResp
-        ) {
-          diff.responsavel = {
-            antes: atual.responsavel,
-            depois: novoResp,
-          };
-          respFinal = novoResp;
-        }
-
-        if (Object.keys(diff).length === 0) continue;
+        const setSQL = camposAtualizados
+          .map((c) => `${c} = @${c}`)
+          .join(", ");
 
         db.prepare(
           `
-          UPDATE ramais
-          SET setor = ?, responsavel = ?, updated_at = datetime('now')
-          WHERE id = ?
-        `
-        ).run(setorFinal, respFinal, atual.id);
+        UPDATE ramais
+        SET ${setSQL}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = @id
+      `
+        ).run({
+          id: ramal.id,
+          ...updatePayload,
+        });
 
-        registrarAuditoria({
-          user_id: userId,
-          acao: "UPDATE",
-          entidade: "ramal",
-          entidade_id: atual.id,
-          payload: diff,
+        db.prepare(
+          `
+        INSERT INTO auditoria
+          (entidade, entidade_id, acao, payload, usuario_id, import_id, created_at)
+        VALUES
+          ('ramal', ?, 'UPDATE', ?, ?, CURRENT_TIMESTAMP)
+      `
+        ).run(
+          ramal.id,
+          JSON.stringify(updatePayload),
+          user.id
+        );
+
+        aplicados.push({
+          numero: item.numero,
+          campos: camposAtualizados,
         });
       }
     });
 
     tx();
 
-    res.json({ success: true });
+    res.json({
+      aplicados,
+      ignorados,
+      totalAplicados: aplicados.length,
+      totalIgnorados: ignorados.length,
+    });
   },
-  { roles: ["admin", "owner"] }
+  { roles: ["owner", "admin"] }
 );

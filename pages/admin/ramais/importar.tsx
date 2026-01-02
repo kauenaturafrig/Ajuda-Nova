@@ -2,6 +2,8 @@
 import { useState } from "react";
 import DiffTable from "@/components/ramais/DiffTable";
 
+/* ─────────── TIPOS ─────────── */
+
 type DiffCampo = {
   antes: string | null;
   depois: string | null;
@@ -22,26 +24,46 @@ type PreviewResponse = {
   diff: DiffItem[];
 };
 
+type ApplyResult = {
+  aplicados: {
+    numero: string;
+    campos: string[];
+  }[];
+  ignorados: {
+    numero: string;
+    motivo: string;
+  }[];
+  totalAplicados: number;
+  totalIgnorados: number;
+};
+
+/* ─────────── COMPONENTE ─────────── */
+
 export default function ImportarRamaisPage() {
   const [preview, setPreview] = useState<PreviewResponse | null>(null);
+  const [resultado, setResultado] = useState<ApplyResult | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [aplicando, setAplicando] = useState(false);
 
   const existeCampoAplicavel =
     preview?.diff.some(item =>
-      Object.values(item.diff).some(campo => campo.bloqueado === false)
+      Object.values(item.diff).some(c => c.bloqueado === false)
     ) ?? false;
+
+  /* ─────────── PREVIEW ─────────── */
 
   async function handlePreview() {
     setLoading(true);
     setPreview(null);
+    setResultado(null);
 
     const res = await fetch("/api/admin/ramais/import/preview", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         meta: { unidade: { id: 1 } },
-        ramais: [] // ← aqui entra seu JSON real
+        ramais: [] // ← JSON real aqui
       })
     });
 
@@ -50,38 +72,50 @@ export default function ImportarRamaisPage() {
     setLoading(false);
   }
 
+  /* ─────────── APPLY ─────────── */
+
   async function handleApply() {
     if (!preview || !existeCampoAplicavel) return;
 
     setAplicando(true);
 
-    await fetch("/api/admin/ramais/import/apply", {
+    const payload = {
+      diffs: preview.diff
+    };
+
+    const res = await fetch("/api/admin/ramais/import/apply", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(preview)
+      body: JSON.stringify(payload)
     });
 
+    const data = await res.json();
+
+    setResultado(data);
     setAplicando(false);
-    alert("Importação aplicada");
   }
 
+  /* ─────────── UI ─────────── */
+
   return (
-    <div className="p-6 max-w-5xl">
-      <h1 className="text-xl font-bold mb-4">
+    <div className="p-6 max-w-5xl space-y-6">
+      <h1 className="text-xl font-bold">
         Importação de Ramais
       </h1>
 
-      <button
-        onClick={handlePreview}
-        disabled={loading}
-        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-      >
-        {loading ? "Gerando preview..." : "Gerar preview"}
-      </button>
+      {!preview && !resultado && (
+        <button
+          onClick={handlePreview}
+          disabled={loading}
+          className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+        >
+          {loading ? "Gerando preview..." : "Gerar preview"}
+        </button>
+      )}
 
-      {preview && (
+      {preview && !resultado && (
         <>
-          <div className="mt-6 text-sm text-gray-700 space-y-1">
+          <div className="text-sm text-gray-700 space-y-1">
             <p>Total no arquivo: {preview.total}</p>
             <p>Válidos: {preview.validos}</p>
             <p>Inválidos: {preview.invalidos}</p>
@@ -90,8 +124,8 @@ export default function ImportarRamaisPage() {
           <DiffTable items={preview.diff} />
 
           {!existeCampoAplicavel && (
-            <div className="mt-4 p-3 bg-yellow-100 text-yellow-800 text-sm rounded">
-              Todas as alterações estão bloqueadas.  
+            <div className="p-3 bg-yellow-100 text-yellow-800 text-sm rounded">
+              Todas as alterações estão bloqueadas.
               Nenhuma modificação será aplicada.
             </div>
           )}
@@ -99,7 +133,7 @@ export default function ImportarRamaisPage() {
           <button
             onClick={handleApply}
             disabled={!existeCampoAplicavel || aplicando}
-            className={`mt-6 px-4 py-2 rounded text-white ${
+            className={`px-4 py-2 rounded text-white ${
               existeCampoAplicavel
                 ? "bg-green-600 hover:bg-green-700"
                 : "bg-gray-400 cursor-not-allowed"
@@ -108,6 +142,34 @@ export default function ImportarRamaisPage() {
             {aplicando ? "Aplicando..." : "Aplicar importação"}
           </button>
         </>
+      )}
+
+      {resultado && (
+        <div className="space-y-6">
+          <h2 className="text-lg font-semibold">
+            Resultado da Importação
+          </h2>
+
+          <div className="flex gap-6">
+            <div className="p-4 border rounded bg-green-50">
+              <p className="font-semibold text-green-800">
+                Aplicados
+              </p>
+              <p className="text-3xl font-bold text-green-700">
+                {resultado.totalAplicados}
+              </p>
+            </div>
+
+            <div className="p-4 border rounded bg-yellow-50">
+              <p className="font-semibold text-yellow-800">
+                Ignorados
+              </p>
+              <p className="text-3xl font-bold text-yellow-700">
+                {resultado.totalIgnorados}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

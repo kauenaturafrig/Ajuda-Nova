@@ -49,6 +49,7 @@ db.exec(`
         entidade TEXT,
         entidade_id INTEGER,
         diff TEXT,
+        import_id TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
