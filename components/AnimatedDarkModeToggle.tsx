@@ -1,3 +1,5 @@
+"use client";
+
 import { useTheme } from "./themeContext";
 import Image from "next/image";
 
