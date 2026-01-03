@@ -59,9 +59,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { numero, nome, setor, unidadeId } = body;
 
-    if (user.role === 'ti' && unidadeId !== user.unidadeId) {
+    const isOwner = user.role === "owner";
+
+    if (!isOwner && unidadeId !== user.unidadeId) {
       return NextResponse.json(
-        { error: 'Você só pode criar ramais da sua unidade' }, 
+        { error: "Você só pode operar ramais da sua unidade" },
         { status: 403 }
       );
     }
