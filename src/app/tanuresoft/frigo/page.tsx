@@ -1,12 +1,14 @@
-import Layout from '@/components/Layout'
-import Image from 'next/image'
-import Link from 'next/link'
+import Layout from "../../../components/Layout";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Frigo() {
   return (
     <Layout>
       <Link href="/tanuresoft">
-        <span className="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-3xl ml-5">← Voltar</span>
+        <span className="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-3xl ml-5">
+          ← Voltar
+        </span>
       </Link>
       <div className="container mx-auto p-6 max-w-4xl bg-white shadow-lg rounded-lg my-8">
         <h1 className="text-4xl font-extrabold text-blue-800 mb-6 border-b-4 border-blue-200 pb-2">
@@ -15,29 +17,26 @@ export default function Frigo() {
 
         <section className="mb-8">
           <p className="text-lg text-gray-700 leading-relaxed">
-            Tutorial para acesso ao sistema frigo através do CMD ou Prompt de comando:
+            Tutorial para acesso ao sistema frigo através do CMD ou Prompt de
+            comando:
           </p>
         </section>
 
         <section className="mb-8">
           <ol className="list-decimal list-inside text-lg text-gray-700 ml-4 space-y-3">
-            <li>
-              Pesquise por “CMD” no menu iniciar:
-            </li>
-            <div className='flex justify-center'>
+            <li>Pesquise por “CMD” no menu iniciar:</li>
+            <div className="flex justify-center">
               <Image
-                src={'/assets/images/tanuresoft/frigo/frigo-1.png'}
+                src={"/assets/images/tanuresoft/frigo/frigo-1.png"}
                 alt="CMD FRIGO"
                 width={500}
                 height={500}
               />
             </div>
-            <li>
-              Quando iniciar, digite F: e aperte a tecla ENTER:
-            </li>
-            <div className='flex justify-center'>
+            <li>Quando iniciar, digite F: e aperte a tecla ENTER:</li>
+            <div className="flex justify-center">
               <Image
-                src={'/assets/images/tanuresoft/frigo/frigo-2.png'}
+                src={"/assets/images/tanuresoft/frigo/frigo-2.png"}
                 alt="CMD FRIGO"
                 width={500}
                 height={500}
@@ -46,20 +45,18 @@ export default function Frigo() {
             <li>
               Digite o nome do programa desejado, no caso FRIGO e aperte ENTER:
             </li>
-            <div className='flex justify-center'>
+            <div className="flex justify-center">
               <Image
-                src={'/assets/images/tanuresoft/frigo/frigo-3.png'}
+                src={"/assets/images/tanuresoft/frigo/frigo-3.png"}
                 alt="CMD FRIGO"
                 width={500}
                 height={500}
               />
             </div>
-            <li>
-              Aguarde o programa carregar e digite seu usuário e senha:
-            </li>
-            <div className='flex justify-center'>
+            <li>Aguarde o programa carregar e digite seu usuário e senha:</li>
+            <div className="flex justify-center">
               <Image
-                src={'/assets/images/tanuresoft/frigo/frigo-4.png'}
+                src={"/assets/images/tanuresoft/frigo/frigo-4.png"}
                 alt="CMD FRIGO"
                 width={500}
                 height={500}
@@ -69,5 +66,5 @@ export default function Frigo() {
         </section>
       </div>
     </Layout>
-  )
+  );
 }

@@ -1,9 +1,9 @@
 "use client";
 
-import Layout from "@/components/Layout";
+import Layout from "../../../components/Layout";
 import Link from "next/link";
 import { useState } from "react";
-import Image from 'next/image'
+import Image from "next/image";
 import ramais from "../data/ramais/ramais-rochedo.json"; // importe os dados
 
 type Ramal = {
@@ -50,12 +50,11 @@ export default function RamaisRochedo() {
             <ul className="divide-y divide-gray-200 pr-4">
               {filtrados.length > 0 ? (
                 filtrados.map((r, idx) => (
-                  <li
-                    key={idx}
-                    className="py-3 flex justify-between min-w-96"
-                  >
+                  <li key={idx} className="py-3 flex justify-between min-w-96">
                     <div>
-                      <p className="font-semibold text-lg text-gray-800">{r.setor}</p>
+                      <p className="font-semibold text-lg text-gray-800">
+                        {r.setor}
+                      </p>
                     </div>
                     <span className="text-xl font-bold text-blue-700">
                       {r.ramal}
@@ -71,7 +70,7 @@ export default function RamaisRochedo() {
           {/* Imagem responsiva */}
           <div className="flex-1">
             <Image
-              src={'/assets/images/ramais/rochedo.png'}
+              src={"/assets/images/ramais/rochedo.png"}
               alt="Ramais Rochedo"
               width={0}
               height={0}

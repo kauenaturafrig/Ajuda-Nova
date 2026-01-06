@@ -1,9 +1,9 @@
 "use client";
 
-import Layout from "@/components/Layout";
+import Layout from "../../../components/Layout";
 import Link from "next/link";
 import { useState } from "react";
-import Image from 'next/image'
+import Image from "next/image";
 import ramais from "../../data/ramais/ramais-nova-andradina.json"; // importe os dados
 
 type Ramal = {
@@ -50,12 +50,11 @@ export default function RamaisNovaAndradina() {
             <ul className="divide-y divide-gray-200 pr-4">
               {filtrados.length > 0 ? (
                 filtrados.map((r, idx) => (
-                  <li
-                    key={idx}
-                    className="py-3 flex justify-between min-w-96"
-                  >
+                  <li key={idx} className="py-3 flex justify-between min-w-96">
                     <div>
-                      <p className="font-semibold text-lg text-gray-800">{r.setor}</p>
+                      <p className="font-semibold text-lg text-gray-800">
+                        {r.setor}
+                      </p>
                     </div>
                     <span className="text-xl font-bold text-blue-700">
                       {r.ramal}
