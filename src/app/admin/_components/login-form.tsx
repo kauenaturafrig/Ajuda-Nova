@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import {
   Form,
   FormControl,
@@ -16,9 +16,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/ui/form";
+} from "../../../components/ui/form";
 import { TwitchLogo } from "@phosphor-icons/react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "../../../lib/auth-client";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Email inválido" }),

@@ -15,7 +15,7 @@ export default function Signup() {
         <div className="text-center text-sm">
           <p>
             Já tem uma conta?{" "}
-            <Link href="/" className="font-medium text-primary hover:underline">
+            <Link href="/admin/signin" className="font-medium text-primary hover:underline">
               Faça login
             </Link>
           </p>
