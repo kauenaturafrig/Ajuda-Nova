@@ -4,7 +4,7 @@ import Layout from "../../../components/Layout";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
-import ramais from "../data/ramais/ramais-barra-dos-bugres.json"; // importe os dados
+import ramais from "../../data/ramais/ramais-barra-dos-bugres.json"; // importe os dados
 
 type Ramal = {
   // nome: string;

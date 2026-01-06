@@ -15,18 +15,31 @@ datasource db {
 }
 
 model User {
-    id            String    @id
-    name          String
-    email         String
-    emailVerified Boolean   @default(false)
-    image         String?
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime  @updatedAt
-    sessions      Session[]
-    accounts      Account[]
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-    @@unique([email])
-    @@map("user")
+  // novo: relação com Unidade
+  unidadeId     Int?
+  unidade       Unidade?  @relation(fields: [unidadeId], references: [id])
+
+  // novo: papel do usuário na aplicação
+  role          UserRole  @default(ADMIN)
+
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
 }
 
 model Session {
@@ -75,4 +88,42 @@ model Verification {
 
     @@index([identifier])
     @@map("verification")
+}
+
+model Unidade {
+  id      Int     @id @default(autoincrement())
+  nome    String
+
+  // relacionamentos
+  ramais  Ramal[]
+  emails  Email[]
+  users   User[]
+
+  @@map("unidades")
+}
+
+model Ramal {
+  id        Int      @id @default(autoincrement())
+  numero    String
+  nome      String?
+  setor     String
+  unidadeId Int
+  unidade   Unidade  @relation(fields: [unidadeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ramais")
+}
+
+model Email {
+  id        Int      @id @default(autoincrement())
+  email     String
+  nome      String?
+  setor     String
+  unidadeId Int
+  unidade   Unidade  @relation(fields: [unidadeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("emails")
 }

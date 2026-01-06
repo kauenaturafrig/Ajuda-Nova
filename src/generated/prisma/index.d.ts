@@ -33,6 +33,38 @@ export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
  * 
  */
 export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
+/**
+ * Model Unidade
+ * 
+ */
+export type Unidade = $Result.DefaultSelection<Prisma.$UnidadePayload>
+/**
+ * Model Ramal
+ * 
+ */
+export type Ramal = $Result.DefaultSelection<Prisma.$RamalPayload>
+/**
+ * Model Email
+ * 
+ */
+export type Email = $Result.DefaultSelection<Prisma.$EmailPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const UserRole: {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN'
+};
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+}
+
+export type UserRole = $Enums.UserRole
+
+export const UserRole: typeof $Enums.UserRole
 
 /**
  * ##  Prisma Client ʲˢ
@@ -50,7 +82,7 @@ export type Verification = $Result.DefaultSelection<Prisma.$VerificationPayload>
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -82,13 +114,6 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
-
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
 
 /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -198,6 +223,36 @@ export class PrismaClient<
     * ```
     */
   get verification(): Prisma.VerificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.unidade`: Exposes CRUD operations for the **Unidade** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Unidades
+    * const unidades = await prisma.unidade.findMany()
+    * ```
+    */
+  get unidade(): Prisma.UnidadeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.ramal`: Exposes CRUD operations for the **Ramal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Ramals
+    * const ramals = await prisma.ramal.findMany()
+    * ```
+    */
+  get ramal(): Prisma.RamalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.email`: Exposes CRUD operations for the **Email** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Emails
+    * const emails = await prisma.email.findMany()
+    * ```
+    */
+  get email(): Prisma.EmailDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -256,8 +311,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.10.1
-   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
+   * Prisma Client JS version: 6.19.1
+   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
     client: string
@@ -270,6 +325,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -641,7 +697,10 @@ export namespace Prisma {
     User: 'User',
     Session: 'Session',
     Account: 'Account',
-    Verification: 'Verification'
+    Verification: 'Verification',
+    Unidade: 'Unidade',
+    Ramal: 'Ramal',
+    Email: 'Email'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -660,7 +719,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification"
+      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -960,6 +1019,228 @@ export namespace Prisma {
           }
         }
       }
+      Unidade: {
+        payload: Prisma.$UnidadePayload<ExtArgs>
+        fields: Prisma.UnidadeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UnidadeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UnidadeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>
+          }
+          findFirst: {
+            args: Prisma.UnidadeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UnidadeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>
+          }
+          findMany: {
+            args: Prisma.UnidadeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>[]
+          }
+          create: {
+            args: Prisma.UnidadeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>
+          }
+          createMany: {
+            args: Prisma.UnidadeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UnidadeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>[]
+          }
+          delete: {
+            args: Prisma.UnidadeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>
+          }
+          update: {
+            args: Prisma.UnidadeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>
+          }
+          deleteMany: {
+            args: Prisma.UnidadeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UnidadeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UnidadeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>[]
+          }
+          upsert: {
+            args: Prisma.UnidadeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UnidadePayload>
+          }
+          aggregate: {
+            args: Prisma.UnidadeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUnidade>
+          }
+          groupBy: {
+            args: Prisma.UnidadeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UnidadeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UnidadeCountArgs<ExtArgs>
+            result: $Utils.Optional<UnidadeCountAggregateOutputType> | number
+          }
+        }
+      }
+      Ramal: {
+        payload: Prisma.$RamalPayload<ExtArgs>
+        fields: Prisma.RamalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RamalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RamalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>
+          }
+          findFirst: {
+            args: Prisma.RamalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RamalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>
+          }
+          findMany: {
+            args: Prisma.RamalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>[]
+          }
+          create: {
+            args: Prisma.RamalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>
+          }
+          createMany: {
+            args: Prisma.RamalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RamalCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>[]
+          }
+          delete: {
+            args: Prisma.RamalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>
+          }
+          update: {
+            args: Prisma.RamalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>
+          }
+          deleteMany: {
+            args: Prisma.RamalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RamalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RamalUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>[]
+          }
+          upsert: {
+            args: Prisma.RamalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RamalPayload>
+          }
+          aggregate: {
+            args: Prisma.RamalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRamal>
+          }
+          groupBy: {
+            args: Prisma.RamalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RamalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RamalCountArgs<ExtArgs>
+            result: $Utils.Optional<RamalCountAggregateOutputType> | number
+          }
+        }
+      }
+      Email: {
+        payload: Prisma.$EmailPayload<ExtArgs>
+        fields: Prisma.EmailFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmailFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmailFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
+          }
+          findFirst: {
+            args: Prisma.EmailFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmailFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
+          }
+          findMany: {
+            args: Prisma.EmailFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>[]
+          }
+          create: {
+            args: Prisma.EmailCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
+          }
+          createMany: {
+            args: Prisma.EmailCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmailCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>[]
+          }
+          delete: {
+            args: Prisma.EmailDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
+          }
+          update: {
+            args: Prisma.EmailUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
+          }
+          deleteMany: {
+            args: Prisma.EmailDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmailUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmailUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>[]
+          }
+          upsert: {
+            args: Prisma.EmailUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
+          }
+          aggregate: {
+            args: Prisma.EmailAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmail>
+          }
+          groupBy: {
+            args: Prisma.EmailGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmailGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmailCountArgs<ExtArgs>
+            result: $Utils.Optional<EmailCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1003,16 +1284,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1027,6 +1316,10 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
+    /**
+     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
+     */
+    adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -1048,6 +1341,9 @@ export namespace Prisma {
     session?: SessionOmit
     account?: AccountOmit
     verification?: VerificationOmit
+    unidade?: UnidadeOmit
+    ramal?: RamalOmit
+    email?: EmailOmit
   }
 
   /* Types for Logging */
@@ -1057,10 +1353,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -1100,25 +1401,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -1178,6 +1460,55 @@ export namespace Prisma {
 
 
   /**
+   * Count Type UnidadeCountOutputType
+   */
+
+  export type UnidadeCountOutputType = {
+    ramais: number
+    emails: number
+    users: number
+  }
+
+  export type UnidadeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ramais?: boolean | UnidadeCountOutputTypeCountRamaisArgs
+    emails?: boolean | UnidadeCountOutputTypeCountEmailsArgs
+    users?: boolean | UnidadeCountOutputTypeCountUsersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UnidadeCountOutputType
+     */
+    select?: UnidadeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeCountRamaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RamalWhereInput
+  }
+
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeCountEmailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailWhereInput
+  }
+
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -1187,8 +1518,18 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    unidadeId: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    unidadeId: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1199,6 +1540,8 @@ export namespace Prisma {
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    unidadeId: number | null
+    role: $Enums.UserRole | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1209,6 +1552,8 @@ export namespace Prisma {
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    unidadeId: number | null
+    role: $Enums.UserRole | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1219,9 +1564,19 @@ export namespace Prisma {
     image: number
     createdAt: number
     updatedAt: number
+    unidadeId: number
+    role: number
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    unidadeId?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    unidadeId?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -1231,6 +1586,8 @@ export namespace Prisma {
     image?: true
     createdAt?: true
     updatedAt?: true
+    unidadeId?: true
+    role?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1241,6 +1598,8 @@ export namespace Prisma {
     image?: true
     createdAt?: true
     updatedAt?: true
+    unidadeId?: true
+    role?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1251,6 +1610,8 @@ export namespace Prisma {
     image?: true
     createdAt?: true
     updatedAt?: true
+    unidadeId?: true
+    role?: true
     _all?: true
   }
 
@@ -1292,6 +1653,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1322,6 +1695,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -1334,7 +1709,11 @@ export namespace Prisma {
     image: string | null
     createdAt: Date
     updatedAt: Date
+    unidadeId: number | null
+    role: $Enums.UserRole
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1361,6 +1740,9 @@ export namespace Prisma {
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    unidadeId?: boolean
+    role?: boolean
+    unidade?: boolean | User$unidadeArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -1374,6 +1756,9 @@ export namespace Prisma {
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    unidadeId?: boolean
+    role?: boolean
+    unidade?: boolean | User$unidadeArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1384,6 +1769,9 @@ export namespace Prisma {
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    unidadeId?: boolean
+    role?: boolean
+    unidade?: boolean | User$unidadeArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1394,20 +1782,28 @@ export namespace Prisma {
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    unidadeId?: boolean
+    role?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "unidadeId" | "role", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | User$unidadeArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | User$unidadeArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | User$unidadeArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
+      unidade: Prisma.$UnidadePayload<ExtArgs> | null
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
     }
@@ -1419,6 +1815,8 @@ export namespace Prisma {
       image: string | null
       createdAt: Date
       updatedAt: Date
+      unidadeId: number | null
+      role: $Enums.UserRole
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1813,6 +2211,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    unidade<T extends User$unidadeArgs<ExtArgs> = {}>(args?: Subset<T, User$unidadeArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -1851,6 +2250,8 @@ export namespace Prisma {
     readonly image: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly unidadeId: FieldRef<"User", 'Int'>
+    readonly role: FieldRef<"User", 'UserRole'>
   }
     
 
@@ -2100,6 +2501,10 @@ export namespace Prisma {
      */
     data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2170,6 +2575,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2236,6 +2645,25 @@ export namespace Prisma {
      * Limit how many Users to delete.
      */
     limit?: number
+  }
+
+  /**
+   * User.unidade
+   */
+  export type User$unidadeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    where?: UnidadeWhereInput
   }
 
   /**
@@ -5573,6 +6001,3371 @@ export namespace Prisma {
 
 
   /**
+   * Model Unidade
+   */
+
+  export type AggregateUnidade = {
+    _count: UnidadeCountAggregateOutputType | null
+    _avg: UnidadeAvgAggregateOutputType | null
+    _sum: UnidadeSumAggregateOutputType | null
+    _min: UnidadeMinAggregateOutputType | null
+    _max: UnidadeMaxAggregateOutputType | null
+  }
+
+  export type UnidadeAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type UnidadeSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type UnidadeMinAggregateOutputType = {
+    id: number | null
+    nome: string | null
+  }
+
+  export type UnidadeMaxAggregateOutputType = {
+    id: number | null
+    nome: string | null
+  }
+
+  export type UnidadeCountAggregateOutputType = {
+    id: number
+    nome: number
+    _all: number
+  }
+
+
+  export type UnidadeAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type UnidadeSumAggregateInputType = {
+    id?: true
+  }
+
+  export type UnidadeMinAggregateInputType = {
+    id?: true
+    nome?: true
+  }
+
+  export type UnidadeMaxAggregateInputType = {
+    id?: true
+    nome?: true
+  }
+
+  export type UnidadeCountAggregateInputType = {
+    id?: true
+    nome?: true
+    _all?: true
+  }
+
+  export type UnidadeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Unidade to aggregate.
+     */
+    where?: UnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unidades to fetch.
+     */
+    orderBy?: UnidadeOrderByWithRelationInput | UnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unidades.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Unidades
+    **/
+    _count?: true | UnidadeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UnidadeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UnidadeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UnidadeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UnidadeMaxAggregateInputType
+  }
+
+  export type GetUnidadeAggregateType<T extends UnidadeAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnidade]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUnidade[P]>
+      : GetScalarType<T[P], AggregateUnidade[P]>
+  }
+
+
+
+
+  export type UnidadeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UnidadeWhereInput
+    orderBy?: UnidadeOrderByWithAggregationInput | UnidadeOrderByWithAggregationInput[]
+    by: UnidadeScalarFieldEnum[] | UnidadeScalarFieldEnum
+    having?: UnidadeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UnidadeCountAggregateInputType | true
+    _avg?: UnidadeAvgAggregateInputType
+    _sum?: UnidadeSumAggregateInputType
+    _min?: UnidadeMinAggregateInputType
+    _max?: UnidadeMaxAggregateInputType
+  }
+
+  export type UnidadeGroupByOutputType = {
+    id: number
+    nome: string
+    _count: UnidadeCountAggregateOutputType | null
+    _avg: UnidadeAvgAggregateOutputType | null
+    _sum: UnidadeSumAggregateOutputType | null
+    _min: UnidadeMinAggregateOutputType | null
+    _max: UnidadeMaxAggregateOutputType | null
+  }
+
+  type GetUnidadeGroupByPayload<T extends UnidadeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UnidadeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UnidadeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UnidadeGroupByOutputType[P]>
+            : GetScalarType<T[P], UnidadeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UnidadeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    ramais?: boolean | Unidade$ramaisArgs<ExtArgs>
+    emails?: boolean | Unidade$emailsArgs<ExtArgs>
+    users?: boolean | Unidade$usersArgs<ExtArgs>
+    _count?: boolean | UnidadeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["unidade"]>
+
+  export type UnidadeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+  }, ExtArgs["result"]["unidade"]>
+
+  export type UnidadeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+  }, ExtArgs["result"]["unidade"]>
+
+  export type UnidadeSelectScalar = {
+    id?: boolean
+    nome?: boolean
+  }
+
+  export type UnidadeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome", ExtArgs["result"]["unidade"]>
+  export type UnidadeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ramais?: boolean | Unidade$ramaisArgs<ExtArgs>
+    emails?: boolean | Unidade$emailsArgs<ExtArgs>
+    users?: boolean | Unidade$usersArgs<ExtArgs>
+    _count?: boolean | UnidadeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UnidadeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UnidadeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $UnidadePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Unidade"
+    objects: {
+      ramais: Prisma.$RamalPayload<ExtArgs>[]
+      emails: Prisma.$EmailPayload<ExtArgs>[]
+      users: Prisma.$UserPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      nome: string
+    }, ExtArgs["result"]["unidade"]>
+    composites: {}
+  }
+
+  type UnidadeGetPayload<S extends boolean | null | undefined | UnidadeDefaultArgs> = $Result.GetResult<Prisma.$UnidadePayload, S>
+
+  type UnidadeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UnidadeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UnidadeCountAggregateInputType | true
+    }
+
+  export interface UnidadeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Unidade'], meta: { name: 'Unidade' } }
+    /**
+     * Find zero or one Unidade that matches the filter.
+     * @param {UnidadeFindUniqueArgs} args - Arguments to find a Unidade
+     * @example
+     * // Get one Unidade
+     * const unidade = await prisma.unidade.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UnidadeFindUniqueArgs>(args: SelectSubset<T, UnidadeFindUniqueArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Unidade that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UnidadeFindUniqueOrThrowArgs} args - Arguments to find a Unidade
+     * @example
+     * // Get one Unidade
+     * const unidade = await prisma.unidade.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UnidadeFindUniqueOrThrowArgs>(args: SelectSubset<T, UnidadeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Unidade that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnidadeFindFirstArgs} args - Arguments to find a Unidade
+     * @example
+     * // Get one Unidade
+     * const unidade = await prisma.unidade.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UnidadeFindFirstArgs>(args?: SelectSubset<T, UnidadeFindFirstArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Unidade that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnidadeFindFirstOrThrowArgs} args - Arguments to find a Unidade
+     * @example
+     * // Get one Unidade
+     * const unidade = await prisma.unidade.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UnidadeFindFirstOrThrowArgs>(args?: SelectSubset<T, UnidadeFindFirstOrThrowArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Unidades that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnidadeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Unidades
+     * const unidades = await prisma.unidade.findMany()
+     * 
+     * // Get first 10 Unidades
+     * const unidades = await prisma.unidade.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const unidadeWithIdOnly = await prisma.unidade.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UnidadeFindManyArgs>(args?: SelectSubset<T, UnidadeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Unidade.
+     * @param {UnidadeCreateArgs} args - Arguments to create a Unidade.
+     * @example
+     * // Create one Unidade
+     * const Unidade = await prisma.unidade.create({
+     *   data: {
+     *     // ... data to create a Unidade
+     *   }
+     * })
+     * 
+     */
+    create<T extends UnidadeCreateArgs>(args: SelectSubset<T, UnidadeCreateArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Unidades.
+     * @param {UnidadeCreateManyArgs} args - Arguments to create many Unidades.
+     * @example
+     * // Create many Unidades
+     * const unidade = await prisma.unidade.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UnidadeCreateManyArgs>(args?: SelectSubset<T, UnidadeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Unidades and returns the data saved in the database.
+     * @param {UnidadeCreateManyAndReturnArgs} args - Arguments to create many Unidades.
+     * @example
+     * // Create many Unidades
+     * const unidade = await prisma.unidade.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Unidades and only return the `id`
+     * const unidadeWithIdOnly = await prisma.unidade.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UnidadeCreateManyAndReturnArgs>(args?: SelectSubset<T, UnidadeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Unidade.
+     * @param {UnidadeDeleteArgs} args - Arguments to delete one Unidade.
+     * @example
+     * // Delete one Unidade
+     * const Unidade = await prisma.unidade.delete({
+     *   where: {
+     *     // ... filter to delete one Unidade
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UnidadeDeleteArgs>(args: SelectSubset<T, UnidadeDeleteArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Unidade.
+     * @param {UnidadeUpdateArgs} args - Arguments to update one Unidade.
+     * @example
+     * // Update one Unidade
+     * const unidade = await prisma.unidade.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UnidadeUpdateArgs>(args: SelectSubset<T, UnidadeUpdateArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Unidades.
+     * @param {UnidadeDeleteManyArgs} args - Arguments to filter Unidades to delete.
+     * @example
+     * // Delete a few Unidades
+     * const { count } = await prisma.unidade.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UnidadeDeleteManyArgs>(args?: SelectSubset<T, UnidadeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Unidades.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnidadeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Unidades
+     * const unidade = await prisma.unidade.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UnidadeUpdateManyArgs>(args: SelectSubset<T, UnidadeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Unidades and returns the data updated in the database.
+     * @param {UnidadeUpdateManyAndReturnArgs} args - Arguments to update many Unidades.
+     * @example
+     * // Update many Unidades
+     * const unidade = await prisma.unidade.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Unidades and only return the `id`
+     * const unidadeWithIdOnly = await prisma.unidade.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UnidadeUpdateManyAndReturnArgs>(args: SelectSubset<T, UnidadeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Unidade.
+     * @param {UnidadeUpsertArgs} args - Arguments to update or create a Unidade.
+     * @example
+     * // Update or create a Unidade
+     * const unidade = await prisma.unidade.upsert({
+     *   create: {
+     *     // ... data to create a Unidade
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Unidade we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UnidadeUpsertArgs>(args: SelectSubset<T, UnidadeUpsertArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Unidades.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnidadeCountArgs} args - Arguments to filter Unidades to count.
+     * @example
+     * // Count the number of Unidades
+     * const count = await prisma.unidade.count({
+     *   where: {
+     *     // ... the filter for the Unidades we want to count
+     *   }
+     * })
+    **/
+    count<T extends UnidadeCountArgs>(
+      args?: Subset<T, UnidadeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UnidadeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Unidade.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnidadeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UnidadeAggregateArgs>(args: Subset<T, UnidadeAggregateArgs>): Prisma.PrismaPromise<GetUnidadeAggregateType<T>>
+
+    /**
+     * Group by Unidade.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnidadeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UnidadeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UnidadeGroupByArgs['orderBy'] }
+        : { orderBy?: UnidadeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UnidadeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnidadeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Unidade model
+   */
+  readonly fields: UnidadeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Unidade.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UnidadeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    ramais<T extends Unidade$ramaisArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$ramaisArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    emails<T extends Unidade$emailsArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends Unidade$usersArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Unidade model
+   */
+  interface UnidadeFieldRefs {
+    readonly id: FieldRef<"Unidade", 'Int'>
+    readonly nome: FieldRef<"Unidade", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Unidade findUnique
+   */
+  export type UnidadeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which Unidade to fetch.
+     */
+    where: UnidadeWhereUniqueInput
+  }
+
+  /**
+   * Unidade findUniqueOrThrow
+   */
+  export type UnidadeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which Unidade to fetch.
+     */
+    where: UnidadeWhereUniqueInput
+  }
+
+  /**
+   * Unidade findFirst
+   */
+  export type UnidadeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which Unidade to fetch.
+     */
+    where?: UnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unidades to fetch.
+     */
+    orderBy?: UnidadeOrderByWithRelationInput | UnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Unidades.
+     */
+    cursor?: UnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unidades.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Unidades.
+     */
+    distinct?: UnidadeScalarFieldEnum | UnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade findFirstOrThrow
+   */
+  export type UnidadeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which Unidade to fetch.
+     */
+    where?: UnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unidades to fetch.
+     */
+    orderBy?: UnidadeOrderByWithRelationInput | UnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Unidades.
+     */
+    cursor?: UnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unidades.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Unidades.
+     */
+    distinct?: UnidadeScalarFieldEnum | UnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade findMany
+   */
+  export type UnidadeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which Unidades to fetch.
+     */
+    where?: UnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Unidades to fetch.
+     */
+    orderBy?: UnidadeOrderByWithRelationInput | UnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Unidades.
+     */
+    cursor?: UnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Unidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Unidades.
+     */
+    skip?: number
+    distinct?: UnidadeScalarFieldEnum | UnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade create
+   */
+  export type UnidadeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Unidade.
+     */
+    data: XOR<UnidadeCreateInput, UnidadeUncheckedCreateInput>
+  }
+
+  /**
+   * Unidade createMany
+   */
+  export type UnidadeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Unidades.
+     */
+    data: UnidadeCreateManyInput | UnidadeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Unidade createManyAndReturn
+   */
+  export type UnidadeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * The data used to create many Unidades.
+     */
+    data: UnidadeCreateManyInput | UnidadeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Unidade update
+   */
+  export type UnidadeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Unidade.
+     */
+    data: XOR<UnidadeUpdateInput, UnidadeUncheckedUpdateInput>
+    /**
+     * Choose, which Unidade to update.
+     */
+    where: UnidadeWhereUniqueInput
+  }
+
+  /**
+   * Unidade updateMany
+   */
+  export type UnidadeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Unidades.
+     */
+    data: XOR<UnidadeUpdateManyMutationInput, UnidadeUncheckedUpdateManyInput>
+    /**
+     * Filter which Unidades to update
+     */
+    where?: UnidadeWhereInput
+    /**
+     * Limit how many Unidades to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Unidade updateManyAndReturn
+   */
+  export type UnidadeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * The data used to update Unidades.
+     */
+    data: XOR<UnidadeUpdateManyMutationInput, UnidadeUncheckedUpdateManyInput>
+    /**
+     * Filter which Unidades to update
+     */
+    where?: UnidadeWhereInput
+    /**
+     * Limit how many Unidades to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Unidade upsert
+   */
+  export type UnidadeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Unidade to update in case it exists.
+     */
+    where: UnidadeWhereUniqueInput
+    /**
+     * In case the Unidade found by the `where` argument doesn't exist, create a new Unidade with this data.
+     */
+    create: XOR<UnidadeCreateInput, UnidadeUncheckedCreateInput>
+    /**
+     * In case the Unidade was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UnidadeUpdateInput, UnidadeUncheckedUpdateInput>
+  }
+
+  /**
+   * Unidade delete
+   */
+  export type UnidadeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    /**
+     * Filter which Unidade to delete.
+     */
+    where: UnidadeWhereUniqueInput
+  }
+
+  /**
+   * Unidade deleteMany
+   */
+  export type UnidadeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Unidades to delete
+     */
+    where?: UnidadeWhereInput
+    /**
+     * Limit how many Unidades to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Unidade.ramais
+   */
+  export type Unidade$ramaisArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    where?: RamalWhereInput
+    orderBy?: RamalOrderByWithRelationInput | RamalOrderByWithRelationInput[]
+    cursor?: RamalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RamalScalarFieldEnum | RamalScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade.emails
+   */
+  export type Unidade$emailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    where?: EmailWhereInput
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
+    cursor?: EmailWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade.users
+   */
+  export type Unidade$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade without action
+   */
+  export type UnidadeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Ramal
+   */
+
+  export type AggregateRamal = {
+    _count: RamalCountAggregateOutputType | null
+    _avg: RamalAvgAggregateOutputType | null
+    _sum: RamalSumAggregateOutputType | null
+    _min: RamalMinAggregateOutputType | null
+    _max: RamalMaxAggregateOutputType | null
+  }
+
+  export type RamalAvgAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type RamalSumAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type RamalMinAggregateOutputType = {
+    id: number | null
+    numero: string | null
+    nome: string | null
+    setor: string | null
+    unidadeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RamalMaxAggregateOutputType = {
+    id: number | null
+    numero: string | null
+    nome: string | null
+    setor: string | null
+    unidadeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RamalCountAggregateOutputType = {
+    id: number
+    numero: number
+    nome: number
+    setor: number
+    unidadeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RamalAvgAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type RamalSumAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type RamalMinAggregateInputType = {
+    id?: true
+    numero?: true
+    nome?: true
+    setor?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RamalMaxAggregateInputType = {
+    id?: true
+    numero?: true
+    nome?: true
+    setor?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RamalCountAggregateInputType = {
+    id?: true
+    numero?: true
+    nome?: true
+    setor?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RamalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Ramal to aggregate.
+     */
+    where?: RamalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ramals to fetch.
+     */
+    orderBy?: RamalOrderByWithRelationInput | RamalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RamalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ramals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ramals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Ramals
+    **/
+    _count?: true | RamalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RamalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RamalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RamalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RamalMaxAggregateInputType
+  }
+
+  export type GetRamalAggregateType<T extends RamalAggregateArgs> = {
+        [P in keyof T & keyof AggregateRamal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRamal[P]>
+      : GetScalarType<T[P], AggregateRamal[P]>
+  }
+
+
+
+
+  export type RamalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RamalWhereInput
+    orderBy?: RamalOrderByWithAggregationInput | RamalOrderByWithAggregationInput[]
+    by: RamalScalarFieldEnum[] | RamalScalarFieldEnum
+    having?: RamalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RamalCountAggregateInputType | true
+    _avg?: RamalAvgAggregateInputType
+    _sum?: RamalSumAggregateInputType
+    _min?: RamalMinAggregateInputType
+    _max?: RamalMaxAggregateInputType
+  }
+
+  export type RamalGroupByOutputType = {
+    id: number
+    numero: string
+    nome: string | null
+    setor: string
+    unidadeId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: RamalCountAggregateOutputType | null
+    _avg: RamalAvgAggregateOutputType | null
+    _sum: RamalSumAggregateOutputType | null
+    _min: RamalMinAggregateOutputType | null
+    _max: RamalMaxAggregateOutputType | null
+  }
+
+  type GetRamalGroupByPayload<T extends RamalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RamalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RamalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RamalGroupByOutputType[P]>
+            : GetScalarType<T[P], RamalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RamalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    numero?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ramal"]>
+
+  export type RamalSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    numero?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ramal"]>
+
+  export type RamalSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    numero?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ramal"]>
+
+  export type RamalSelectScalar = {
+    id?: boolean
+    numero?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RamalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "numero" | "nome" | "setor" | "unidadeId" | "createdAt" | "updatedAt", ExtArgs["result"]["ramal"]>
+  export type RamalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+  export type RamalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+  export type RamalIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+
+  export type $RamalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Ramal"
+    objects: {
+      unidade: Prisma.$UnidadePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      numero: string
+      nome: string | null
+      setor: string
+      unidadeId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["ramal"]>
+    composites: {}
+  }
+
+  type RamalGetPayload<S extends boolean | null | undefined | RamalDefaultArgs> = $Result.GetResult<Prisma.$RamalPayload, S>
+
+  type RamalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RamalFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RamalCountAggregateInputType | true
+    }
+
+  export interface RamalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Ramal'], meta: { name: 'Ramal' } }
+    /**
+     * Find zero or one Ramal that matches the filter.
+     * @param {RamalFindUniqueArgs} args - Arguments to find a Ramal
+     * @example
+     * // Get one Ramal
+     * const ramal = await prisma.ramal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RamalFindUniqueArgs>(args: SelectSubset<T, RamalFindUniqueArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Ramal that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RamalFindUniqueOrThrowArgs} args - Arguments to find a Ramal
+     * @example
+     * // Get one Ramal
+     * const ramal = await prisma.ramal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RamalFindUniqueOrThrowArgs>(args: SelectSubset<T, RamalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Ramal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RamalFindFirstArgs} args - Arguments to find a Ramal
+     * @example
+     * // Get one Ramal
+     * const ramal = await prisma.ramal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RamalFindFirstArgs>(args?: SelectSubset<T, RamalFindFirstArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Ramal that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RamalFindFirstOrThrowArgs} args - Arguments to find a Ramal
+     * @example
+     * // Get one Ramal
+     * const ramal = await prisma.ramal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RamalFindFirstOrThrowArgs>(args?: SelectSubset<T, RamalFindFirstOrThrowArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Ramals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RamalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Ramals
+     * const ramals = await prisma.ramal.findMany()
+     * 
+     * // Get first 10 Ramals
+     * const ramals = await prisma.ramal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const ramalWithIdOnly = await prisma.ramal.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RamalFindManyArgs>(args?: SelectSubset<T, RamalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Ramal.
+     * @param {RamalCreateArgs} args - Arguments to create a Ramal.
+     * @example
+     * // Create one Ramal
+     * const Ramal = await prisma.ramal.create({
+     *   data: {
+     *     // ... data to create a Ramal
+     *   }
+     * })
+     * 
+     */
+    create<T extends RamalCreateArgs>(args: SelectSubset<T, RamalCreateArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Ramals.
+     * @param {RamalCreateManyArgs} args - Arguments to create many Ramals.
+     * @example
+     * // Create many Ramals
+     * const ramal = await prisma.ramal.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RamalCreateManyArgs>(args?: SelectSubset<T, RamalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Ramals and returns the data saved in the database.
+     * @param {RamalCreateManyAndReturnArgs} args - Arguments to create many Ramals.
+     * @example
+     * // Create many Ramals
+     * const ramal = await prisma.ramal.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Ramals and only return the `id`
+     * const ramalWithIdOnly = await prisma.ramal.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RamalCreateManyAndReturnArgs>(args?: SelectSubset<T, RamalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Ramal.
+     * @param {RamalDeleteArgs} args - Arguments to delete one Ramal.
+     * @example
+     * // Delete one Ramal
+     * const Ramal = await prisma.ramal.delete({
+     *   where: {
+     *     // ... filter to delete one Ramal
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RamalDeleteArgs>(args: SelectSubset<T, RamalDeleteArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Ramal.
+     * @param {RamalUpdateArgs} args - Arguments to update one Ramal.
+     * @example
+     * // Update one Ramal
+     * const ramal = await prisma.ramal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RamalUpdateArgs>(args: SelectSubset<T, RamalUpdateArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Ramals.
+     * @param {RamalDeleteManyArgs} args - Arguments to filter Ramals to delete.
+     * @example
+     * // Delete a few Ramals
+     * const { count } = await prisma.ramal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RamalDeleteManyArgs>(args?: SelectSubset<T, RamalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Ramals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RamalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Ramals
+     * const ramal = await prisma.ramal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RamalUpdateManyArgs>(args: SelectSubset<T, RamalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Ramals and returns the data updated in the database.
+     * @param {RamalUpdateManyAndReturnArgs} args - Arguments to update many Ramals.
+     * @example
+     * // Update many Ramals
+     * const ramal = await prisma.ramal.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Ramals and only return the `id`
+     * const ramalWithIdOnly = await prisma.ramal.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RamalUpdateManyAndReturnArgs>(args: SelectSubset<T, RamalUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Ramal.
+     * @param {RamalUpsertArgs} args - Arguments to update or create a Ramal.
+     * @example
+     * // Update or create a Ramal
+     * const ramal = await prisma.ramal.upsert({
+     *   create: {
+     *     // ... data to create a Ramal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Ramal we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RamalUpsertArgs>(args: SelectSubset<T, RamalUpsertArgs<ExtArgs>>): Prisma__RamalClient<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Ramals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RamalCountArgs} args - Arguments to filter Ramals to count.
+     * @example
+     * // Count the number of Ramals
+     * const count = await prisma.ramal.count({
+     *   where: {
+     *     // ... the filter for the Ramals we want to count
+     *   }
+     * })
+    **/
+    count<T extends RamalCountArgs>(
+      args?: Subset<T, RamalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RamalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Ramal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RamalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RamalAggregateArgs>(args: Subset<T, RamalAggregateArgs>): Prisma.PrismaPromise<GetRamalAggregateType<T>>
+
+    /**
+     * Group by Ramal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RamalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RamalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RamalGroupByArgs['orderBy'] }
+        : { orderBy?: RamalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RamalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRamalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Ramal model
+   */
+  readonly fields: RamalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Ramal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RamalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    unidade<T extends UnidadeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnidadeDefaultArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Ramal model
+   */
+  interface RamalFieldRefs {
+    readonly id: FieldRef<"Ramal", 'Int'>
+    readonly numero: FieldRef<"Ramal", 'String'>
+    readonly nome: FieldRef<"Ramal", 'String'>
+    readonly setor: FieldRef<"Ramal", 'String'>
+    readonly unidadeId: FieldRef<"Ramal", 'Int'>
+    readonly createdAt: FieldRef<"Ramal", 'DateTime'>
+    readonly updatedAt: FieldRef<"Ramal", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Ramal findUnique
+   */
+  export type RamalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * Filter, which Ramal to fetch.
+     */
+    where: RamalWhereUniqueInput
+  }
+
+  /**
+   * Ramal findUniqueOrThrow
+   */
+  export type RamalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * Filter, which Ramal to fetch.
+     */
+    where: RamalWhereUniqueInput
+  }
+
+  /**
+   * Ramal findFirst
+   */
+  export type RamalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * Filter, which Ramal to fetch.
+     */
+    where?: RamalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ramals to fetch.
+     */
+    orderBy?: RamalOrderByWithRelationInput | RamalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Ramals.
+     */
+    cursor?: RamalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ramals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ramals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Ramals.
+     */
+    distinct?: RamalScalarFieldEnum | RamalScalarFieldEnum[]
+  }
+
+  /**
+   * Ramal findFirstOrThrow
+   */
+  export type RamalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * Filter, which Ramal to fetch.
+     */
+    where?: RamalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ramals to fetch.
+     */
+    orderBy?: RamalOrderByWithRelationInput | RamalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Ramals.
+     */
+    cursor?: RamalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ramals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ramals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Ramals.
+     */
+    distinct?: RamalScalarFieldEnum | RamalScalarFieldEnum[]
+  }
+
+  /**
+   * Ramal findMany
+   */
+  export type RamalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * Filter, which Ramals to fetch.
+     */
+    where?: RamalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Ramals to fetch.
+     */
+    orderBy?: RamalOrderByWithRelationInput | RamalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Ramals.
+     */
+    cursor?: RamalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Ramals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Ramals.
+     */
+    skip?: number
+    distinct?: RamalScalarFieldEnum | RamalScalarFieldEnum[]
+  }
+
+  /**
+   * Ramal create
+   */
+  export type RamalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Ramal.
+     */
+    data: XOR<RamalCreateInput, RamalUncheckedCreateInput>
+  }
+
+  /**
+   * Ramal createMany
+   */
+  export type RamalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Ramals.
+     */
+    data: RamalCreateManyInput | RamalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Ramal createManyAndReturn
+   */
+  export type RamalCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * The data used to create many Ramals.
+     */
+    data: RamalCreateManyInput | RamalCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Ramal update
+   */
+  export type RamalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Ramal.
+     */
+    data: XOR<RamalUpdateInput, RamalUncheckedUpdateInput>
+    /**
+     * Choose, which Ramal to update.
+     */
+    where: RamalWhereUniqueInput
+  }
+
+  /**
+   * Ramal updateMany
+   */
+  export type RamalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Ramals.
+     */
+    data: XOR<RamalUpdateManyMutationInput, RamalUncheckedUpdateManyInput>
+    /**
+     * Filter which Ramals to update
+     */
+    where?: RamalWhereInput
+    /**
+     * Limit how many Ramals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Ramal updateManyAndReturn
+   */
+  export type RamalUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * The data used to update Ramals.
+     */
+    data: XOR<RamalUpdateManyMutationInput, RamalUncheckedUpdateManyInput>
+    /**
+     * Filter which Ramals to update
+     */
+    where?: RamalWhereInput
+    /**
+     * Limit how many Ramals to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Ramal upsert
+   */
+  export type RamalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Ramal to update in case it exists.
+     */
+    where: RamalWhereUniqueInput
+    /**
+     * In case the Ramal found by the `where` argument doesn't exist, create a new Ramal with this data.
+     */
+    create: XOR<RamalCreateInput, RamalUncheckedCreateInput>
+    /**
+     * In case the Ramal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RamalUpdateInput, RamalUncheckedUpdateInput>
+  }
+
+  /**
+   * Ramal delete
+   */
+  export type RamalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+    /**
+     * Filter which Ramal to delete.
+     */
+    where: RamalWhereUniqueInput
+  }
+
+  /**
+   * Ramal deleteMany
+   */
+  export type RamalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Ramals to delete
+     */
+    where?: RamalWhereInput
+    /**
+     * Limit how many Ramals to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Ramal without action
+   */
+  export type RamalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ramal
+     */
+    select?: RamalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ramal
+     */
+    omit?: RamalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RamalInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Email
+   */
+
+  export type AggregateEmail = {
+    _count: EmailCountAggregateOutputType | null
+    _avg: EmailAvgAggregateOutputType | null
+    _sum: EmailSumAggregateOutputType | null
+    _min: EmailMinAggregateOutputType | null
+    _max: EmailMaxAggregateOutputType | null
+  }
+
+  export type EmailAvgAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type EmailSumAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type EmailMinAggregateOutputType = {
+    id: number | null
+    email: string | null
+    nome: string | null
+    setor: string | null
+    unidadeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmailMaxAggregateOutputType = {
+    id: number | null
+    email: string | null
+    nome: string | null
+    setor: string | null
+    unidadeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmailCountAggregateOutputType = {
+    id: number
+    email: number
+    nome: number
+    setor: number
+    unidadeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type EmailAvgAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type EmailSumAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type EmailMinAggregateInputType = {
+    id?: true
+    email?: true
+    nome?: true
+    setor?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmailMaxAggregateInputType = {
+    id?: true
+    email?: true
+    nome?: true
+    setor?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmailCountAggregateInputType = {
+    id?: true
+    email?: true
+    nome?: true
+    setor?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type EmailAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Email to aggregate.
+     */
+    where?: EmailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Emails to fetch.
+     */
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Emails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Emails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Emails
+    **/
+    _count?: true | EmailCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EmailAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EmailSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmailMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmailMaxAggregateInputType
+  }
+
+  export type GetEmailAggregateType<T extends EmailAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmail]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmail[P]>
+      : GetScalarType<T[P], AggregateEmail[P]>
+  }
+
+
+
+
+  export type EmailGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailWhereInput
+    orderBy?: EmailOrderByWithAggregationInput | EmailOrderByWithAggregationInput[]
+    by: EmailScalarFieldEnum[] | EmailScalarFieldEnum
+    having?: EmailScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmailCountAggregateInputType | true
+    _avg?: EmailAvgAggregateInputType
+    _sum?: EmailSumAggregateInputType
+    _min?: EmailMinAggregateInputType
+    _max?: EmailMaxAggregateInputType
+  }
+
+  export type EmailGroupByOutputType = {
+    id: number
+    email: string
+    nome: string | null
+    setor: string
+    unidadeId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: EmailCountAggregateOutputType | null
+    _avg: EmailAvgAggregateOutputType | null
+    _sum: EmailSumAggregateOutputType | null
+    _min: EmailMinAggregateOutputType | null
+    _max: EmailMaxAggregateOutputType | null
+  }
+
+  type GetEmailGroupByPayload<T extends EmailGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmailGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmailGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmailGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["email"]>
+
+  export type EmailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["email"]>
+
+  export type EmailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["email"]>
+
+  export type EmailSelectScalar = {
+    id?: boolean
+    email?: boolean
+    nome?: boolean
+    setor?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "nome" | "setor" | "unidadeId" | "createdAt" | "updatedAt", ExtArgs["result"]["email"]>
+  export type EmailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+  export type EmailIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+  export type EmailIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+
+  export type $EmailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Email"
+    objects: {
+      unidade: Prisma.$UnidadePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      email: string
+      nome: string | null
+      setor: string
+      unidadeId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["email"]>
+    composites: {}
+  }
+
+  type EmailGetPayload<S extends boolean | null | undefined | EmailDefaultArgs> = $Result.GetResult<Prisma.$EmailPayload, S>
+
+  type EmailCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmailFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmailCountAggregateInputType | true
+    }
+
+  export interface EmailDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Email'], meta: { name: 'Email' } }
+    /**
+     * Find zero or one Email that matches the filter.
+     * @param {EmailFindUniqueArgs} args - Arguments to find a Email
+     * @example
+     * // Get one Email
+     * const email = await prisma.email.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmailFindUniqueArgs>(args: SelectSubset<T, EmailFindUniqueArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Email that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmailFindUniqueOrThrowArgs} args - Arguments to find a Email
+     * @example
+     * // Get one Email
+     * const email = await prisma.email.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmailFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Email that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailFindFirstArgs} args - Arguments to find a Email
+     * @example
+     * // Get one Email
+     * const email = await prisma.email.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmailFindFirstArgs>(args?: SelectSubset<T, EmailFindFirstArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Email that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailFindFirstOrThrowArgs} args - Arguments to find a Email
+     * @example
+     * // Get one Email
+     * const email = await prisma.email.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmailFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Emails that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Emails
+     * const emails = await prisma.email.findMany()
+     * 
+     * // Get first 10 Emails
+     * const emails = await prisma.email.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const emailWithIdOnly = await prisma.email.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmailFindManyArgs>(args?: SelectSubset<T, EmailFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Email.
+     * @param {EmailCreateArgs} args - Arguments to create a Email.
+     * @example
+     * // Create one Email
+     * const Email = await prisma.email.create({
+     *   data: {
+     *     // ... data to create a Email
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmailCreateArgs>(args: SelectSubset<T, EmailCreateArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Emails.
+     * @param {EmailCreateManyArgs} args - Arguments to create many Emails.
+     * @example
+     * // Create many Emails
+     * const email = await prisma.email.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmailCreateManyArgs>(args?: SelectSubset<T, EmailCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Emails and returns the data saved in the database.
+     * @param {EmailCreateManyAndReturnArgs} args - Arguments to create many Emails.
+     * @example
+     * // Create many Emails
+     * const email = await prisma.email.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Emails and only return the `id`
+     * const emailWithIdOnly = await prisma.email.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmailCreateManyAndReturnArgs>(args?: SelectSubset<T, EmailCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Email.
+     * @param {EmailDeleteArgs} args - Arguments to delete one Email.
+     * @example
+     * // Delete one Email
+     * const Email = await prisma.email.delete({
+     *   where: {
+     *     // ... filter to delete one Email
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmailDeleteArgs>(args: SelectSubset<T, EmailDeleteArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Email.
+     * @param {EmailUpdateArgs} args - Arguments to update one Email.
+     * @example
+     * // Update one Email
+     * const email = await prisma.email.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmailUpdateArgs>(args: SelectSubset<T, EmailUpdateArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Emails.
+     * @param {EmailDeleteManyArgs} args - Arguments to filter Emails to delete.
+     * @example
+     * // Delete a few Emails
+     * const { count } = await prisma.email.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmailDeleteManyArgs>(args?: SelectSubset<T, EmailDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Emails.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Emails
+     * const email = await prisma.email.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmailUpdateManyArgs>(args: SelectSubset<T, EmailUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Emails and returns the data updated in the database.
+     * @param {EmailUpdateManyAndReturnArgs} args - Arguments to update many Emails.
+     * @example
+     * // Update many Emails
+     * const email = await prisma.email.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Emails and only return the `id`
+     * const emailWithIdOnly = await prisma.email.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmailUpdateManyAndReturnArgs>(args: SelectSubset<T, EmailUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Email.
+     * @param {EmailUpsertArgs} args - Arguments to update or create a Email.
+     * @example
+     * // Update or create a Email
+     * const email = await prisma.email.upsert({
+     *   create: {
+     *     // ... data to create a Email
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Email we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmailUpsertArgs>(args: SelectSubset<T, EmailUpsertArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Emails.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailCountArgs} args - Arguments to filter Emails to count.
+     * @example
+     * // Count the number of Emails
+     * const count = await prisma.email.count({
+     *   where: {
+     *     // ... the filter for the Emails we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmailCountArgs>(
+      args?: Subset<T, EmailCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmailCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Email.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmailAggregateArgs>(args: Subset<T, EmailAggregateArgs>): Prisma.PrismaPromise<GetEmailAggregateType<T>>
+
+    /**
+     * Group by Email.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmailGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmailGroupByArgs['orderBy'] }
+        : { orderBy?: EmailGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmailGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Email model
+   */
+  readonly fields: EmailFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Email.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    unidade<T extends UnidadeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnidadeDefaultArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Email model
+   */
+  interface EmailFieldRefs {
+    readonly id: FieldRef<"Email", 'Int'>
+    readonly email: FieldRef<"Email", 'String'>
+    readonly nome: FieldRef<"Email", 'String'>
+    readonly setor: FieldRef<"Email", 'String'>
+    readonly unidadeId: FieldRef<"Email", 'Int'>
+    readonly createdAt: FieldRef<"Email", 'DateTime'>
+    readonly updatedAt: FieldRef<"Email", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Email findUnique
+   */
+  export type EmailFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * Filter, which Email to fetch.
+     */
+    where: EmailWhereUniqueInput
+  }
+
+  /**
+   * Email findUniqueOrThrow
+   */
+  export type EmailFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * Filter, which Email to fetch.
+     */
+    where: EmailWhereUniqueInput
+  }
+
+  /**
+   * Email findFirst
+   */
+  export type EmailFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * Filter, which Email to fetch.
+     */
+    where?: EmailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Emails to fetch.
+     */
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Emails.
+     */
+    cursor?: EmailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Emails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Emails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Emails.
+     */
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
+  }
+
+  /**
+   * Email findFirstOrThrow
+   */
+  export type EmailFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * Filter, which Email to fetch.
+     */
+    where?: EmailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Emails to fetch.
+     */
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Emails.
+     */
+    cursor?: EmailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Emails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Emails.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Emails.
+     */
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
+  }
+
+  /**
+   * Email findMany
+   */
+  export type EmailFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * Filter, which Emails to fetch.
+     */
+    where?: EmailWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Emails to fetch.
+     */
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Emails.
+     */
+    cursor?: EmailWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Emails from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Emails.
+     */
+    skip?: number
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
+  }
+
+  /**
+   * Email create
+   */
+  export type EmailCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Email.
+     */
+    data: XOR<EmailCreateInput, EmailUncheckedCreateInput>
+  }
+
+  /**
+   * Email createMany
+   */
+  export type EmailCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Emails.
+     */
+    data: EmailCreateManyInput | EmailCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Email createManyAndReturn
+   */
+  export type EmailCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * The data used to create many Emails.
+     */
+    data: EmailCreateManyInput | EmailCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Email update
+   */
+  export type EmailUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Email.
+     */
+    data: XOR<EmailUpdateInput, EmailUncheckedUpdateInput>
+    /**
+     * Choose, which Email to update.
+     */
+    where: EmailWhereUniqueInput
+  }
+
+  /**
+   * Email updateMany
+   */
+  export type EmailUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Emails.
+     */
+    data: XOR<EmailUpdateManyMutationInput, EmailUncheckedUpdateManyInput>
+    /**
+     * Filter which Emails to update
+     */
+    where?: EmailWhereInput
+    /**
+     * Limit how many Emails to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Email updateManyAndReturn
+   */
+  export type EmailUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * The data used to update Emails.
+     */
+    data: XOR<EmailUpdateManyMutationInput, EmailUncheckedUpdateManyInput>
+    /**
+     * Filter which Emails to update
+     */
+    where?: EmailWhereInput
+    /**
+     * Limit how many Emails to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Email upsert
+   */
+  export type EmailUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Email to update in case it exists.
+     */
+    where: EmailWhereUniqueInput
+    /**
+     * In case the Email found by the `where` argument doesn't exist, create a new Email with this data.
+     */
+    create: XOR<EmailCreateInput, EmailUncheckedCreateInput>
+    /**
+     * In case the Email was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailUpdateInput, EmailUncheckedUpdateInput>
+  }
+
+  /**
+   * Email delete
+   */
+  export type EmailDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * Filter which Email to delete.
+     */
+    where: EmailWhereUniqueInput
+  }
+
+  /**
+   * Email deleteMany
+   */
+  export type EmailDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Emails to delete
+     */
+    where?: EmailWhereInput
+    /**
+     * Limit how many Emails to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Email without action
+   */
+  export type EmailDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -5593,7 +9386,9 @@ export namespace Prisma {
     emailVerified: 'emailVerified',
     image: 'image',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    unidadeId: 'unidadeId',
+    role: 'role'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -5642,6 +9437,40 @@ export namespace Prisma {
   };
 
   export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+  export const UnidadeScalarFieldEnum: {
+    id: 'id',
+    nome: 'nome'
+  };
+
+  export type UnidadeScalarFieldEnum = (typeof UnidadeScalarFieldEnum)[keyof typeof UnidadeScalarFieldEnum]
+
+
+  export const RamalScalarFieldEnum: {
+    id: 'id',
+    numero: 'numero',
+    nome: 'nome',
+    setor: 'setor',
+    unidadeId: 'unidadeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RamalScalarFieldEnum = (typeof RamalScalarFieldEnum)[keyof typeof RamalScalarFieldEnum]
+
+
+  export const EmailScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    nome: 'nome',
+    setor: 'setor',
+    unidadeId: 'unidadeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type EmailScalarFieldEnum = (typeof EmailScalarFieldEnum)[keyof typeof EmailScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -5720,6 +9549,34 @@ export namespace Prisma {
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
+
+
+  /**
+   * Reference to a field of type 'UserRole'
+   */
+  export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRole[]'
+   */
+  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
   /**
    * Deep Input Types
    */
@@ -5736,6 +9593,9 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    unidadeId?: IntNullableFilter<"User"> | number | null
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    unidade?: XOR<UnidadeNullableScalarRelationFilter, UnidadeWhereInput> | null
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
   }
@@ -5748,6 +9608,9 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    unidadeId?: SortOrderInput | SortOrder
+    role?: SortOrder
+    unidade?: UnidadeOrderByWithRelationInput
     sessions?: SessionOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
   }
@@ -5763,6 +9626,9 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    unidadeId?: IntNullableFilter<"User"> | number | null
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    unidade?: XOR<UnidadeNullableScalarRelationFilter, UnidadeWhereInput> | null
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
   }, "id" | "email">
@@ -5775,9 +9641,13 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    unidadeId?: SortOrderInput | SortOrder
+    role?: SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -5791,6 +9661,8 @@ export namespace Prisma {
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    unidadeId?: IntNullableWithAggregatesFilter<"User"> | number | null
+    role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   }
 
   export type SessionWhereInput = {
@@ -6015,6 +9887,188 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Verification"> | Date | string
   }
 
+  export type UnidadeWhereInput = {
+    AND?: UnidadeWhereInput | UnidadeWhereInput[]
+    OR?: UnidadeWhereInput[]
+    NOT?: UnidadeWhereInput | UnidadeWhereInput[]
+    id?: IntFilter<"Unidade"> | number
+    nome?: StringFilter<"Unidade"> | string
+    ramais?: RamalListRelationFilter
+    emails?: EmailListRelationFilter
+    users?: UserListRelationFilter
+  }
+
+  export type UnidadeOrderByWithRelationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    ramais?: RamalOrderByRelationAggregateInput
+    emails?: EmailOrderByRelationAggregateInput
+    users?: UserOrderByRelationAggregateInput
+  }
+
+  export type UnidadeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: UnidadeWhereInput | UnidadeWhereInput[]
+    OR?: UnidadeWhereInput[]
+    NOT?: UnidadeWhereInput | UnidadeWhereInput[]
+    nome?: StringFilter<"Unidade"> | string
+    ramais?: RamalListRelationFilter
+    emails?: EmailListRelationFilter
+    users?: UserListRelationFilter
+  }, "id">
+
+  export type UnidadeOrderByWithAggregationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    _count?: UnidadeCountOrderByAggregateInput
+    _avg?: UnidadeAvgOrderByAggregateInput
+    _max?: UnidadeMaxOrderByAggregateInput
+    _min?: UnidadeMinOrderByAggregateInput
+    _sum?: UnidadeSumOrderByAggregateInput
+  }
+
+  export type UnidadeScalarWhereWithAggregatesInput = {
+    AND?: UnidadeScalarWhereWithAggregatesInput | UnidadeScalarWhereWithAggregatesInput[]
+    OR?: UnidadeScalarWhereWithAggregatesInput[]
+    NOT?: UnidadeScalarWhereWithAggregatesInput | UnidadeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Unidade"> | number
+    nome?: StringWithAggregatesFilter<"Unidade"> | string
+  }
+
+  export type RamalWhereInput = {
+    AND?: RamalWhereInput | RamalWhereInput[]
+    OR?: RamalWhereInput[]
+    NOT?: RamalWhereInput | RamalWhereInput[]
+    id?: IntFilter<"Ramal"> | number
+    numero?: StringFilter<"Ramal"> | string
+    nome?: StringNullableFilter<"Ramal"> | string | null
+    setor?: StringFilter<"Ramal"> | string
+    unidadeId?: IntFilter<"Ramal"> | number
+    createdAt?: DateTimeFilter<"Ramal"> | Date | string
+    updatedAt?: DateTimeFilter<"Ramal"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+  }
+
+  export type RamalOrderByWithRelationInput = {
+    id?: SortOrder
+    numero?: SortOrder
+    nome?: SortOrderInput | SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    unidade?: UnidadeOrderByWithRelationInput
+  }
+
+  export type RamalWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: RamalWhereInput | RamalWhereInput[]
+    OR?: RamalWhereInput[]
+    NOT?: RamalWhereInput | RamalWhereInput[]
+    numero?: StringFilter<"Ramal"> | string
+    nome?: StringNullableFilter<"Ramal"> | string | null
+    setor?: StringFilter<"Ramal"> | string
+    unidadeId?: IntFilter<"Ramal"> | number
+    createdAt?: DateTimeFilter<"Ramal"> | Date | string
+    updatedAt?: DateTimeFilter<"Ramal"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+  }, "id">
+
+  export type RamalOrderByWithAggregationInput = {
+    id?: SortOrder
+    numero?: SortOrder
+    nome?: SortOrderInput | SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RamalCountOrderByAggregateInput
+    _avg?: RamalAvgOrderByAggregateInput
+    _max?: RamalMaxOrderByAggregateInput
+    _min?: RamalMinOrderByAggregateInput
+    _sum?: RamalSumOrderByAggregateInput
+  }
+
+  export type RamalScalarWhereWithAggregatesInput = {
+    AND?: RamalScalarWhereWithAggregatesInput | RamalScalarWhereWithAggregatesInput[]
+    OR?: RamalScalarWhereWithAggregatesInput[]
+    NOT?: RamalScalarWhereWithAggregatesInput | RamalScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Ramal"> | number
+    numero?: StringWithAggregatesFilter<"Ramal"> | string
+    nome?: StringNullableWithAggregatesFilter<"Ramal"> | string | null
+    setor?: StringWithAggregatesFilter<"Ramal"> | string
+    unidadeId?: IntWithAggregatesFilter<"Ramal"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Ramal"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Ramal"> | Date | string
+  }
+
+  export type EmailWhereInput = {
+    AND?: EmailWhereInput | EmailWhereInput[]
+    OR?: EmailWhereInput[]
+    NOT?: EmailWhereInput | EmailWhereInput[]
+    id?: IntFilter<"Email"> | number
+    email?: StringFilter<"Email"> | string
+    nome?: StringNullableFilter<"Email"> | string | null
+    setor?: StringFilter<"Email"> | string
+    unidadeId?: IntFilter<"Email"> | number
+    createdAt?: DateTimeFilter<"Email"> | Date | string
+    updatedAt?: DateTimeFilter<"Email"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+  }
+
+  export type EmailOrderByWithRelationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    nome?: SortOrderInput | SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    unidade?: UnidadeOrderByWithRelationInput
+  }
+
+  export type EmailWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: EmailWhereInput | EmailWhereInput[]
+    OR?: EmailWhereInput[]
+    NOT?: EmailWhereInput | EmailWhereInput[]
+    email?: StringFilter<"Email"> | string
+    nome?: StringNullableFilter<"Email"> | string | null
+    setor?: StringFilter<"Email"> | string
+    unidadeId?: IntFilter<"Email"> | number
+    createdAt?: DateTimeFilter<"Email"> | Date | string
+    updatedAt?: DateTimeFilter<"Email"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+  }, "id">
+
+  export type EmailOrderByWithAggregationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    nome?: SortOrderInput | SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: EmailCountOrderByAggregateInput
+    _avg?: EmailAvgOrderByAggregateInput
+    _max?: EmailMaxOrderByAggregateInput
+    _min?: EmailMinOrderByAggregateInput
+    _sum?: EmailSumOrderByAggregateInput
+  }
+
+  export type EmailScalarWhereWithAggregatesInput = {
+    AND?: EmailScalarWhereWithAggregatesInput | EmailScalarWhereWithAggregatesInput[]
+    OR?: EmailScalarWhereWithAggregatesInput[]
+    NOT?: EmailScalarWhereWithAggregatesInput | EmailScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Email"> | number
+    email?: StringWithAggregatesFilter<"Email"> | string
+    nome?: StringNullableWithAggregatesFilter<"Email"> | string | null
+    setor?: StringWithAggregatesFilter<"Email"> | string
+    unidadeId?: IntWithAggregatesFilter<"Email"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Email"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Email"> | Date | string
+  }
+
   export type UserCreateInput = {
     id: string
     name: string
@@ -6023,6 +10077,8 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    role?: $Enums.UserRole
+    unidade?: UnidadeCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
   }
@@ -6035,6 +10091,8 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    unidadeId?: number | null
+    role?: $Enums.UserRole
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
   }
@@ -6047,6 +10105,8 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    unidade?: UnidadeUpdateOneWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
   }
@@ -6059,6 +10119,8 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -6071,6 +10133,8 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    unidadeId?: number | null
+    role?: $Enums.UserRole
   }
 
   export type UserUpdateManyMutationInput = {
@@ -6081,6 +10145,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -6091,6 +10156,8 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   }
 
   export type SessionCreateInput = {
@@ -6343,6 +10410,182 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UnidadeCreateInput = {
+    nome: string
+    ramais?: RamalCreateNestedManyWithoutUnidadeInput
+    emails?: EmailCreateNestedManyWithoutUnidadeInput
+    users?: UserCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateInput = {
+    id?: number
+    nome: string
+    ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
+    emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+    users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUpdateInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUpdateManyWithoutUnidadeNestedInput
+    users?: UserUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
+    users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeCreateManyInput = {
+    id?: number
+    nome: string
+  }
+
+  export type UnidadeUpdateManyMutationInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnidadeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type RamalCreateInput = {
+    numero: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutRamaisInput
+  }
+
+  export type RamalUncheckedCreateInput = {
+    id?: number
+    numero: string
+    nome?: string | null
+    setor: string
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RamalUpdateInput = {
+    numero?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutRamaisNestedInput
+  }
+
+  export type RamalUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    numero?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RamalCreateManyInput = {
+    id?: number
+    numero: string
+    nome?: string | null
+    setor: string
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RamalUpdateManyMutationInput = {
+    numero?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RamalUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    numero?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailCreateInput = {
+    email: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutEmailsInput
+  }
+
+  export type EmailUncheckedCreateInput = {
+    id?: number
+    email: string
+    nome?: string | null
+    setor: string
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailUpdateInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutEmailsNestedInput
+  }
+
+  export type EmailUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailCreateManyInput = {
+    id?: number
+    email: string
+    nome?: string | null
+    setor: string
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailUpdateManyMutationInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -6389,6 +10632,29 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
+  export type UnidadeNullableScalarRelationFilter = {
+    is?: UnidadeWhereInput | null
+    isNot?: UnidadeWhereInput | null
+  }
+
   export type SessionListRelationFilter = {
     every?: SessionWhereInput
     some?: SessionWhereInput
@@ -6422,6 +10688,12 @@ export namespace Prisma {
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    unidadeId?: SortOrder
+    role?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
+    unidadeId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -6432,6 +10704,8 @@ export namespace Prisma {
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    unidadeId?: SortOrder
+    role?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -6442,6 +10716,12 @@ export namespace Prisma {
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    unidadeId?: SortOrder
+    role?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    unidadeId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -6500,6 +10780,32 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -6640,6 +10946,177 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type RamalListRelationFilter = {
+    every?: RamalWhereInput
+    some?: RamalWhereInput
+    none?: RamalWhereInput
+  }
+
+  export type EmailListRelationFilter = {
+    every?: EmailWhereInput
+    some?: EmailWhereInput
+    none?: EmailWhereInput
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type RamalOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EmailOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UnidadeCountOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+  }
+
+  export type UnidadeAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type UnidadeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+  }
+
+  export type UnidadeMinOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+  }
+
+  export type UnidadeSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type UnidadeScalarRelationFilter = {
+    is?: UnidadeWhereInput
+    isNot?: UnidadeWhereInput
+  }
+
+  export type RamalCountOrderByAggregateInput = {
+    id?: SortOrder
+    numero?: SortOrder
+    nome?: SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RamalAvgOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RamalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    numero?: SortOrder
+    nome?: SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RamalMinOrderByAggregateInput = {
+    id?: SortOrder
+    numero?: SortOrder
+    nome?: SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RamalSumOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type EmailCountOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    nome?: SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmailAvgOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type EmailMaxOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    nome?: SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmailMinOrderByAggregateInput = {
+    id?: SortOrder
+    email?: SortOrder
+    nome?: SortOrder
+    setor?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmailSumOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type UnidadeCreateNestedOneWithoutUsersInput = {
+    create?: XOR<UnidadeCreateWithoutUsersInput, UnidadeUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutUsersInput
+    connect?: UnidadeWhereUniqueInput
+  }
+
   export type SessionCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -6684,6 +11161,20 @@ export namespace Prisma {
     set?: Date | string
   }
 
+  export type EnumUserRoleFieldUpdateOperationsInput = {
+    set?: $Enums.UserRole
+  }
+
+  export type UnidadeUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<UnidadeCreateWithoutUsersInput, UnidadeUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutUsersInput
+    upsert?: UnidadeUpsertWithoutUsersInput
+    disconnect?: UnidadeWhereInput | boolean
+    delete?: UnidadeWhereInput | boolean
+    connect?: UnidadeWhereUniqueInput
+    update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutUsersInput, UnidadeUpdateWithoutUsersInput>, UnidadeUncheckedUpdateWithoutUsersInput>
+  }
+
   export type SessionUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -6710,6 +11201,14 @@ export namespace Prisma {
     update?: AccountUpdateWithWhereUniqueWithoutUserInput | AccountUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: AccountUpdateManyWithWhereWithoutUserInput | AccountUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -6772,6 +11271,168 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
   }
 
+  export type RamalCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput> | RamalCreateWithoutUnidadeInput[] | RamalUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RamalCreateOrConnectWithoutUnidadeInput | RamalCreateOrConnectWithoutUnidadeInput[]
+    createMany?: RamalCreateManyUnidadeInputEnvelope
+    connect?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+  }
+
+  export type EmailCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<EmailCreateWithoutUnidadeInput, EmailUncheckedCreateWithoutUnidadeInput> | EmailCreateWithoutUnidadeInput[] | EmailUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUnidadeInput | EmailCreateOrConnectWithoutUnidadeInput[]
+    createMany?: EmailCreateManyUnidadeInputEnvelope
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+  }
+
+  export type UserCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<UserCreateWithoutUnidadeInput, UserUncheckedCreateWithoutUnidadeInput> | UserCreateWithoutUnidadeInput[] | UserUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutUnidadeInput | UserCreateOrConnectWithoutUnidadeInput[]
+    createMany?: UserCreateManyUnidadeInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type RamalUncheckedCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput> | RamalCreateWithoutUnidadeInput[] | RamalUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RamalCreateOrConnectWithoutUnidadeInput | RamalCreateOrConnectWithoutUnidadeInput[]
+    createMany?: RamalCreateManyUnidadeInputEnvelope
+    connect?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+  }
+
+  export type EmailUncheckedCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<EmailCreateWithoutUnidadeInput, EmailUncheckedCreateWithoutUnidadeInput> | EmailCreateWithoutUnidadeInput[] | EmailUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUnidadeInput | EmailCreateOrConnectWithoutUnidadeInput[]
+    createMany?: EmailCreateManyUnidadeInputEnvelope
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<UserCreateWithoutUnidadeInput, UserUncheckedCreateWithoutUnidadeInput> | UserCreateWithoutUnidadeInput[] | UserUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutUnidadeInput | UserCreateOrConnectWithoutUnidadeInput[]
+    createMany?: UserCreateManyUnidadeInputEnvelope
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type RamalUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput> | RamalCreateWithoutUnidadeInput[] | RamalUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RamalCreateOrConnectWithoutUnidadeInput | RamalCreateOrConnectWithoutUnidadeInput[]
+    upsert?: RamalUpsertWithWhereUniqueWithoutUnidadeInput | RamalUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: RamalCreateManyUnidadeInputEnvelope
+    set?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    disconnect?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    delete?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    connect?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    update?: RamalUpdateWithWhereUniqueWithoutUnidadeInput | RamalUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: RamalUpdateManyWithWhereWithoutUnidadeInput | RamalUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: RamalScalarWhereInput | RamalScalarWhereInput[]
+  }
+
+  export type EmailUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<EmailCreateWithoutUnidadeInput, EmailUncheckedCreateWithoutUnidadeInput> | EmailCreateWithoutUnidadeInput[] | EmailUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUnidadeInput | EmailCreateOrConnectWithoutUnidadeInput[]
+    upsert?: EmailUpsertWithWhereUniqueWithoutUnidadeInput | EmailUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: EmailCreateManyUnidadeInputEnvelope
+    set?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    disconnect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    delete?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    update?: EmailUpdateWithWhereUniqueWithoutUnidadeInput | EmailUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: EmailUpdateManyWithWhereWithoutUnidadeInput | EmailUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: EmailScalarWhereInput | EmailScalarWhereInput[]
+  }
+
+  export type UserUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<UserCreateWithoutUnidadeInput, UserUncheckedCreateWithoutUnidadeInput> | UserCreateWithoutUnidadeInput[] | UserUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutUnidadeInput | UserCreateOrConnectWithoutUnidadeInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutUnidadeInput | UserUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: UserCreateManyUnidadeInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutUnidadeInput | UserUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutUnidadeInput | UserUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type RamalUncheckedUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput> | RamalCreateWithoutUnidadeInput[] | RamalUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RamalCreateOrConnectWithoutUnidadeInput | RamalCreateOrConnectWithoutUnidadeInput[]
+    upsert?: RamalUpsertWithWhereUniqueWithoutUnidadeInput | RamalUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: RamalCreateManyUnidadeInputEnvelope
+    set?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    disconnect?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    delete?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    connect?: RamalWhereUniqueInput | RamalWhereUniqueInput[]
+    update?: RamalUpdateWithWhereUniqueWithoutUnidadeInput | RamalUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: RamalUpdateManyWithWhereWithoutUnidadeInput | RamalUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: RamalScalarWhereInput | RamalScalarWhereInput[]
+  }
+
+  export type EmailUncheckedUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<EmailCreateWithoutUnidadeInput, EmailUncheckedCreateWithoutUnidadeInput> | EmailCreateWithoutUnidadeInput[] | EmailUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUnidadeInput | EmailCreateOrConnectWithoutUnidadeInput[]
+    upsert?: EmailUpsertWithWhereUniqueWithoutUnidadeInput | EmailUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: EmailCreateManyUnidadeInputEnvelope
+    set?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    disconnect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    delete?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    update?: EmailUpdateWithWhereUniqueWithoutUnidadeInput | EmailUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: EmailUpdateManyWithWhereWithoutUnidadeInput | EmailUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: EmailScalarWhereInput | EmailScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<UserCreateWithoutUnidadeInput, UserUncheckedCreateWithoutUnidadeInput> | UserCreateWithoutUnidadeInput[] | UserUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutUnidadeInput | UserCreateOrConnectWithoutUnidadeInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutUnidadeInput | UserUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: UserCreateManyUnidadeInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutUnidadeInput | UserUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutUnidadeInput | UserUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type UnidadeCreateNestedOneWithoutRamaisInput = {
+    create?: XOR<UnidadeCreateWithoutRamaisInput, UnidadeUncheckedCreateWithoutRamaisInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutRamaisInput
+    connect?: UnidadeWhereUniqueInput
+  }
+
+  export type UnidadeUpdateOneRequiredWithoutRamaisNestedInput = {
+    create?: XOR<UnidadeCreateWithoutRamaisInput, UnidadeUncheckedCreateWithoutRamaisInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutRamaisInput
+    upsert?: UnidadeUpsertWithoutRamaisInput
+    connect?: UnidadeWhereUniqueInput
+    update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutRamaisInput, UnidadeUpdateWithoutRamaisInput>, UnidadeUncheckedUpdateWithoutRamaisInput>
+  }
+
+  export type UnidadeCreateNestedOneWithoutEmailsInput = {
+    create?: XOR<UnidadeCreateWithoutEmailsInput, UnidadeUncheckedCreateWithoutEmailsInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutEmailsInput
+    connect?: UnidadeWhereUniqueInput
+  }
+
+  export type UnidadeUpdateOneRequiredWithoutEmailsNestedInput = {
+    create?: XOR<UnidadeCreateWithoutEmailsInput, UnidadeUncheckedCreateWithoutEmailsInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutEmailsInput
+    upsert?: UnidadeUpsertWithoutEmailsInput
+    connect?: UnidadeWhereUniqueInput
+    update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutEmailsInput, UnidadeUpdateWithoutEmailsInput>, UnidadeUncheckedUpdateWithoutEmailsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -6814,6 +11475,24 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -6869,17 +11548,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6892,6 +11560,43 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -6917,6 +11622,51 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type UnidadeCreateWithoutUsersInput = {
+    nome: string
+    ramais?: RamalCreateNestedManyWithoutUnidadeInput
+    emails?: EmailCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateWithoutUsersInput = {
+    id?: number
+    nome: string
+    ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
+    emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeCreateOrConnectWithoutUsersInput = {
+    where: UnidadeWhereUniqueInput
+    create: XOR<UnidadeCreateWithoutUsersInput, UnidadeUncheckedCreateWithoutUsersInput>
   }
 
   export type SessionCreateWithoutUserInput = {
@@ -6987,6 +11737,30 @@ export namespace Prisma {
   export type AccountCreateManyUserInputEnvelope = {
     data: AccountCreateManyUserInput | AccountCreateManyUserInput[]
     skipDuplicates?: boolean
+  }
+
+  export type UnidadeUpsertWithoutUsersInput = {
+    update: XOR<UnidadeUpdateWithoutUsersInput, UnidadeUncheckedUpdateWithoutUsersInput>
+    create: XOR<UnidadeCreateWithoutUsersInput, UnidadeUncheckedCreateWithoutUsersInput>
+    where?: UnidadeWhereInput
+  }
+
+  export type UnidadeUpdateToOneWithWhereWithoutUsersInput = {
+    where?: UnidadeWhereInput
+    data: XOR<UnidadeUpdateWithoutUsersInput, UnidadeUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type UnidadeUpdateWithoutUsersInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -7062,6 +11836,8 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    role?: $Enums.UserRole
+    unidade?: UnidadeCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
   }
 
@@ -7073,6 +11849,8 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    unidadeId?: number | null
+    role?: $Enums.UserRole
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -7100,6 +11878,8 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    unidade?: UnidadeUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
   }
 
@@ -7111,6 +11891,8 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -7122,6 +11904,8 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    role?: $Enums.UserRole
+    unidade?: UnidadeCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
 
@@ -7133,6 +11917,8 @@ export namespace Prisma {
     image?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    unidadeId?: number | null
+    role?: $Enums.UserRole
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -7160,6 +11946,8 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    unidade?: UnidadeUpdateOneWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
 
@@ -7171,7 +11959,272 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type RamalCreateWithoutUnidadeInput = {
+    numero: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RamalUncheckedCreateWithoutUnidadeInput = {
+    id?: number
+    numero: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RamalCreateOrConnectWithoutUnidadeInput = {
+    where: RamalWhereUniqueInput
+    create: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type RamalCreateManyUnidadeInputEnvelope = {
+    data: RamalCreateManyUnidadeInput | RamalCreateManyUnidadeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EmailCreateWithoutUnidadeInput = {
+    email: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailUncheckedCreateWithoutUnidadeInput = {
+    id?: number
+    email: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailCreateOrConnectWithoutUnidadeInput = {
+    where: EmailWhereUniqueInput
+    create: XOR<EmailCreateWithoutUnidadeInput, EmailUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type EmailCreateManyUnidadeInputEnvelope = {
+    data: EmailCreateManyUnidadeInput | EmailCreateManyUnidadeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserCreateWithoutUnidadeInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.UserRole
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUnidadeInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.UserRole
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUnidadeInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUnidadeInput, UserUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type UserCreateManyUnidadeInputEnvelope = {
+    data: UserCreateManyUnidadeInput | UserCreateManyUnidadeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RamalUpsertWithWhereUniqueWithoutUnidadeInput = {
+    where: RamalWhereUniqueInput
+    update: XOR<RamalUpdateWithoutUnidadeInput, RamalUncheckedUpdateWithoutUnidadeInput>
+    create: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type RamalUpdateWithWhereUniqueWithoutUnidadeInput = {
+    where: RamalWhereUniqueInput
+    data: XOR<RamalUpdateWithoutUnidadeInput, RamalUncheckedUpdateWithoutUnidadeInput>
+  }
+
+  export type RamalUpdateManyWithWhereWithoutUnidadeInput = {
+    where: RamalScalarWhereInput
+    data: XOR<RamalUpdateManyMutationInput, RamalUncheckedUpdateManyWithoutUnidadeInput>
+  }
+
+  export type RamalScalarWhereInput = {
+    AND?: RamalScalarWhereInput | RamalScalarWhereInput[]
+    OR?: RamalScalarWhereInput[]
+    NOT?: RamalScalarWhereInput | RamalScalarWhereInput[]
+    id?: IntFilter<"Ramal"> | number
+    numero?: StringFilter<"Ramal"> | string
+    nome?: StringNullableFilter<"Ramal"> | string | null
+    setor?: StringFilter<"Ramal"> | string
+    unidadeId?: IntFilter<"Ramal"> | number
+    createdAt?: DateTimeFilter<"Ramal"> | Date | string
+    updatedAt?: DateTimeFilter<"Ramal"> | Date | string
+  }
+
+  export type EmailUpsertWithWhereUniqueWithoutUnidadeInput = {
+    where: EmailWhereUniqueInput
+    update: XOR<EmailUpdateWithoutUnidadeInput, EmailUncheckedUpdateWithoutUnidadeInput>
+    create: XOR<EmailCreateWithoutUnidadeInput, EmailUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type EmailUpdateWithWhereUniqueWithoutUnidadeInput = {
+    where: EmailWhereUniqueInput
+    data: XOR<EmailUpdateWithoutUnidadeInput, EmailUncheckedUpdateWithoutUnidadeInput>
+  }
+
+  export type EmailUpdateManyWithWhereWithoutUnidadeInput = {
+    where: EmailScalarWhereInput
+    data: XOR<EmailUpdateManyMutationInput, EmailUncheckedUpdateManyWithoutUnidadeInput>
+  }
+
+  export type EmailScalarWhereInput = {
+    AND?: EmailScalarWhereInput | EmailScalarWhereInput[]
+    OR?: EmailScalarWhereInput[]
+    NOT?: EmailScalarWhereInput | EmailScalarWhereInput[]
+    id?: IntFilter<"Email"> | number
+    email?: StringFilter<"Email"> | string
+    nome?: StringNullableFilter<"Email"> | string | null
+    setor?: StringFilter<"Email"> | string
+    unidadeId?: IntFilter<"Email"> | number
+    createdAt?: DateTimeFilter<"Email"> | Date | string
+    updatedAt?: DateTimeFilter<"Email"> | Date | string
+  }
+
+  export type UserUpsertWithWhereUniqueWithoutUnidadeInput = {
+    where: UserWhereUniqueInput
+    update: XOR<UserUpdateWithoutUnidadeInput, UserUncheckedUpdateWithoutUnidadeInput>
+    create: XOR<UserCreateWithoutUnidadeInput, UserUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type UserUpdateWithWhereUniqueWithoutUnidadeInput = {
+    where: UserWhereUniqueInput
+    data: XOR<UserUpdateWithoutUnidadeInput, UserUncheckedUpdateWithoutUnidadeInput>
+  }
+
+  export type UserUpdateManyWithWhereWithoutUnidadeInput = {
+    where: UserScalarWhereInput
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutUnidadeInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: StringFilter<"User"> | string
+    name?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    emailVerified?: BoolFilter<"User"> | boolean
+    image?: StringNullableFilter<"User"> | string | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+    unidadeId?: IntNullableFilter<"User"> | number | null
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+  }
+
+  export type UnidadeCreateWithoutRamaisInput = {
+    nome: string
+    emails?: EmailCreateNestedManyWithoutUnidadeInput
+    users?: UserCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateWithoutRamaisInput = {
+    id?: number
+    nome: string
+    emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+    users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeCreateOrConnectWithoutRamaisInput = {
+    where: UnidadeWhereUniqueInput
+    create: XOR<UnidadeCreateWithoutRamaisInput, UnidadeUncheckedCreateWithoutRamaisInput>
+  }
+
+  export type UnidadeUpsertWithoutRamaisInput = {
+    update: XOR<UnidadeUpdateWithoutRamaisInput, UnidadeUncheckedUpdateWithoutRamaisInput>
+    create: XOR<UnidadeCreateWithoutRamaisInput, UnidadeUncheckedCreateWithoutRamaisInput>
+    where?: UnidadeWhereInput
+  }
+
+  export type UnidadeUpdateToOneWithWhereWithoutRamaisInput = {
+    where?: UnidadeWhereInput
+    data: XOR<UnidadeUpdateWithoutRamaisInput, UnidadeUncheckedUpdateWithoutRamaisInput>
+  }
+
+  export type UnidadeUpdateWithoutRamaisInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    emails?: EmailUpdateManyWithoutUnidadeNestedInput
+    users?: UserUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateWithoutRamaisInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
+    users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeCreateWithoutEmailsInput = {
+    nome: string
+    ramais?: RamalCreateNestedManyWithoutUnidadeInput
+    users?: UserCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateWithoutEmailsInput = {
+    id?: number
+    nome: string
+    ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
+    users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeCreateOrConnectWithoutEmailsInput = {
+    where: UnidadeWhereUniqueInput
+    create: XOR<UnidadeCreateWithoutEmailsInput, UnidadeUncheckedCreateWithoutEmailsInput>
+  }
+
+  export type UnidadeUpsertWithoutEmailsInput = {
+    update: XOR<UnidadeUpdateWithoutEmailsInput, UnidadeUncheckedUpdateWithoutEmailsInput>
+    create: XOR<UnidadeCreateWithoutEmailsInput, UnidadeUncheckedCreateWithoutEmailsInput>
+    where?: UnidadeWhereInput
+  }
+
+  export type UnidadeUpdateToOneWithWhereWithoutEmailsInput = {
+    where?: UnidadeWhereInput
+    data: XOR<UnidadeUpdateWithoutEmailsInput, UnidadeUncheckedUpdateWithoutEmailsInput>
+  }
+
+  export type UnidadeUpdateWithoutEmailsInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUpdateManyWithoutUnidadeNestedInput
+    users?: UserUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateWithoutEmailsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
+    users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -7272,6 +12325,124 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RamalCreateManyUnidadeInput = {
+    id?: number
+    numero: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailCreateManyUnidadeInput = {
+    id?: number
+    email: string
+    nome?: string | null
+    setor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateManyUnidadeInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.UserRole
+  }
+
+  export type RamalUpdateWithoutUnidadeInput = {
+    numero?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RamalUncheckedUpdateWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    numero?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RamalUncheckedUpdateManyWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    numero?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailUpdateWithoutUnidadeInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailUncheckedUpdateWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailUncheckedUpdateManyWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    nome?: NullableStringFieldUpdateOperationsInput | string | null
+    setor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpdateWithoutUnidadeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUnidadeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateManyWithoutUnidadeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   }
 
 

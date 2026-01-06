@@ -63,13 +63,13 @@ export function SignupForm() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        callbackURL: "/authenticated",
+        callbackURL: "/admin/authenticated",
       },
       {
         onRequest: (ctx) => {},
         onSuccess: (ctx) => {
           console.log("SUCESSO AO CRIAR USUÁRIO: ", ctx);
-          router.replace("/authenticated");
+          router.replace("/admin/authenticated");
         },
         onError: (ctx) => {
           console.log("ERRO AO CRIAR USUÁRIO");

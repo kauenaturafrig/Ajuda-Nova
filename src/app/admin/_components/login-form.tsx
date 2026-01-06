@@ -47,13 +47,13 @@ export function LoginForm() {
       {
         email: formData.email,
         password: formData.password,
-        callbackURL: "/authenticated",
+        callbackURL: "/admin/authenticated",
       },
       {
         onRequest: (ctx) => {},
         onSuccess: (ctx) => {
           console.log("LOGADO", ctx);
-          router.replace("/authenticated");
+          router.replace("/admin/authenticated");
         },
         onError: (ctx) => {
           console.log("ERRO AO LOGAR");
