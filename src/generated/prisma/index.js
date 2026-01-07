@@ -206,7 +206,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\kaue.santos\\Desktop\\ajuda-nova\\src\\generated\\prisma",
+      "value": "C:\\Users\\Kaue\\Desktop\\Projetos\\NATURAFRIG\\Ajuda-Nova\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -220,7 +220,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\kaue.santos\\Desktop\\ajuda-nova\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\Kaue\\Desktop\\Projetos\\NATURAFRIG\\Ajuda-Nova\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
