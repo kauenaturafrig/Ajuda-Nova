@@ -1,0 +1,23 @@
+CREATE USER ramais_user WITH PASSWORD 'User#p@dr40';
+GRANT ALL PRIVILEGES ON DATABASE ramais_db TO ramais_user;
+
+-- garantir acesso ao banco
+GRANT ALL PRIVILEGES ON DATABASE ramais_db TO ramais_user;
+
+-- permitir uso do schema public
+GRANT USAGE ON SCHEMA public TO ramais_user;
+
+-- permitir criar tabelas
+GRANT CREATE ON SCHEMA public TO ramais_user;
+
+-- garantir privilégios em tabelas futuras
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL ON TABLES TO ramais_user;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT ALL ON SEQUENCES TO ramais_user;
+
+
+Para criar user inicial:
+
+    npm run create:owner
