@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "outDir": "dist-scripts",
+    "skipLibCheck": true,
+    "noEmitOnError": false
+  },
+  "include": ["scripts/create-initial-owner.ts"]
+}

@@ -1,4 +1,4 @@
-CREATE USER ramais_user WITH PASSWORD 'User#p@dr40';
+CREATE USER ramais_user WITH PASSWORD 'UserPadrao2026';
 GRANT ALL PRIVILEGES ON DATABASE ramais_db TO ramais_user;
 
 -- garantir acesso ao banco
@@ -17,7 +17,127 @@ GRANT ALL ON TABLES TO ramais_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT ALL ON SEQUENCES TO ramais_user;
 
+/////////////////////////////////////////////////////////////////////////
 
-Para criar user inicial:
+No servidor, o fluxo fica assim:
 
+Clonar o projeto e instalar deps
+
+bash
+    git clone ...
+    cd ajuda-nova
+    npm install
+
+
+Gerar o Prisma Client (mesmo com output em src/generated/prisma)
+Sim, ainda precisa rodar:
+
+bash
+    npx prisma generate
+
+O client é gerado para o SO do servidor; não é garantido que o client gerado no seu PC funcione lá.
+​
+
+Criar as tabelas no banco
+
+Em produção, em vez de migrate dev, use:
+
+bash
+    npx prisma migrate deploy
+
+Isso aplica todas as migrations que já estão na pasta prisma/migrations.
+​
+
+Rodar o script do OWNER (uma vez)
+
+Se estiver usando o fluxo compilado:
+
+bash
+    node dist-scripts/scripts/create-initial-owner.js
+
+(se ainda não tiver a pasta dist-scripts no servidor, suba ela no git ou repita o passo de tsc -p tsconfig.scripts.json lá e depois rode o node igual fez no seu PC).
+
+Exemplo:
+    PS C:\Users\kaue.santos\Desktop\ajuda-nova> npx tsc -p tsconfig.scripts.json
+    >> 
+
+    ***** ARRUME NO ARQUIVO dist-scripts/src/lib/prisma.js o caminho ../generated/prisma/client para ../../../src/generated/prisma/client *****
+
+    PS C:\Users\kaue.santos\Desktop\ajuda-nova> node dist-scripts/scripts/create-initial-owner.js
+    Criando/atualizando usuário owner inicial...
+    Usuário owner pronto: admin.teste@naturafrig.com.br
+
+Resumindo: no servidor você sempre precisa ao menos npm install, npx prisma generate, npx prisma migrate deploy e depois o script que cria o primeiro OWNER.
+
+////////////////////////////////////////////////////////////////////////////////
+
+Para criar user inicial (na raiz do projeto):
+
+    npx tsc -p tsconfig.scripts.json
+
+    node dist-scripts/scripts/create-initial-owner.js
+        ou
     npm run create:owner
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+kaue_santos@SrvLab01:~$ sudo -i -u postgres
+postgres@SrvLab01:~$ psql
+psql (17.6 (Debian 17.6-0+deb13u1))
+Digite "help" para obter ajuda.
+
+postgres=# CREATE USER ramais_user WITH PASSWORD 'UserPadrao2026';
+CREATE ROLE
+postgres=# CREATE DATABASE ramais_db OWNER ramais_user;
+CREATE DATABASE
+postgres=#
+
+
+
+
+
+
+
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+import "dotenv/config";
+import { prisma } from "../src/lib/prisma";
+
+async function main() {
+  const email = process.env.INIT_OWNER_EMAIL;
+  const name = process.env.INIT_OWNER_NAME ?? "Owner inicial";
+
+  if (!email) {
+    console.error("Defina INIT_OWNER_EMAIL no .env");
+    process.exit(1);
+  }
+
+  console.log("Criando/atualizando usuário owner inicial...");
+
+  const user = await prisma.user.upsert({
+    where: { email },
+    update: {
+      role: "OWNER",
+      unidadeId: 2,
+    },
+    create: {
+      id: crypto.randomUUID(), // ou outro gerador compatível com seu schema
+      name,
+      email,
+      role: "OWNER",
+      unidadeId: 2,
+      // se seu User tiver mais campos obrigatórios, adicione aqui
+    },
+  });
+
+  console.log("Usuário owner pronto:", user.email);
+}
+
+main()
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

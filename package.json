@@ -12,7 +12,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "create:owner": "ts-node scripts/create-initial-owner.ts"
+    "create:owner": "node dist-scripts/scripts/create-initial-owner.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -47,7 +47,8 @@
     "autoprefixer": "^10.4.23",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.3",
+    "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

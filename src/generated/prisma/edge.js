@@ -205,7 +205,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Kaue\\Desktop\\Projetos\\NATURAFRIG\\Ajuda-Nova\\src\\generated\\prisma",
+      "value": "C:\\Users\\kaue.santos\\Desktop\\ajuda-nova\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -219,7 +219,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Kaue\\Desktop\\Projetos\\NATURAFRIG\\Ajuda-Nova\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\kaue.santos\\Desktop\\ajuda-nova\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -233,6 +233,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

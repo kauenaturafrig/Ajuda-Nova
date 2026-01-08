@@ -3,6 +3,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "../../../lib/auth";
+import { prisma } from "../../../lib/prisma";
 import { ButtonSignOut } from "./_components/button-signout";
 
 export default async function Authenticated() {
@@ -14,7 +15,17 @@ export default async function Authenticated() {
     redirect("/admin/signin");
   }
 
-  const isOwner = session.user.role === "OWNER";
+  // carrega o usuário completo do Prisma, incluindo role/unidade
+  const dbUser = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true, unidadeId: true },
+  });
+
+  if (!dbUser) {
+    redirect("/admin/signin");
+  }
+
+  const isOwner = dbUser.role === "OWNER";
 
   return (
     <div className="container mx-auto min-h-screen flex flex-col gap-8 py-10">
@@ -22,8 +33,8 @@ export default async function Authenticated() {
         <h1 className="text-2xl font-bold mb-2">Área administrativa</h1>
         <p className="text-sm text-muted-foreground">
           Usuário logado:{" "}
-          <span className="font-semibold">{session.user.name}</span> (
-          {isOwner ? "Owner" : "Admin"})
+          <span className="font-semibold">{session.user.name}</span>{" "}
+          ({isOwner ? "Owner" : "Admin"})
         </p>
         <p className="text-sm text-muted-foreground mb-4">
           Email: {session.user.email}
