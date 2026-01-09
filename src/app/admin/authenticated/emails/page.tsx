@@ -47,7 +47,7 @@ export default function RamaisPage() {
     if (isPending) return;
 
     if (!session?.user) {
-      window.location.href = "/admin/signin";
+      window.location.href = "/admin";
       return;
     }
 
@@ -232,7 +232,7 @@ export default function RamaisPage() {
         <div className="flex justify-between">
           <h1 className="text-2xl font-semibold">Edição de Ramais</h1>
           <div>
-            <h3 className="font-bold">Usuário logado: {session.user.name}</h3>
+            <h3 className="font-bold">Usuário logado: {session?.user.name}</h3>
             <h4>Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
           </div>
         </div>

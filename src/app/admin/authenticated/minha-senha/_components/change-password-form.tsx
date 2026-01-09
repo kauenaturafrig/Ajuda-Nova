@@ -1,4 +1,4 @@
-// ex: src/app/admin/authenticated/minha-senha/_components/change-password-form.tsx
+// src/app/admin/authenticated/minha-senha/_components/change-password-form.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Eye, EyeOff } from "lucide-react";
+
 import { authClient } from "../../../../../lib/auth-client";
 import { Button } from "../../../../../components/ui/button";
 import { Input } from "../../../../../components/ui/input";
@@ -33,6 +35,12 @@ type FormValues = z.infer<typeof schema>;
 
 export function ChangePasswordForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -41,7 +49,6 @@ export function ChangePasswordForm() {
       confirmPassword: "",
     },
   });
-  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
@@ -49,24 +56,26 @@ export function ChangePasswordForm() {
     const { error } = await authClient.changePassword({
       currentPassword: values.currentPassword,
       newPassword: values.newPassword,
-      revokeOtherSessions: true, // opcional, derruba outras sessões
-    }); // [web:346]
-
-    setIsLoading(false);
+      revokeOtherSessions: true,
+    });
 
     if (error) {
+      setIsLoading(false);
       form.setError("currentPassword", {
         message: error.message ?? "Senha atual incorreta ou erro ao trocar senha",
       });
       return;
     }
 
-    router.replace("/admin/authenticated");
+    await authClient.signOut();
+    setIsLoading(false);
+    router.replace("/admin");
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Senha atual */}
         <FormField
           control={form.control}
           name="currentPassword"
@@ -74,13 +83,39 @@ export function ChangePasswordForm() {
             <FormItem>
               <FormLabel>Senha atual</FormLabel>
               <FormControl>
-                <Input type="password" autoComplete="current-password" {...field} />
+                <div className="relative">
+                  <Input
+                    placeholder="••••••••"
+                    type={showCurrent ? "text" : "password"}
+                    autoComplete="current-password"
+                    {...field}
+                    disabled={isLoading}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowCurrent((v) => !v)}
+                    disabled={isLoading}
+                  >
+                    {showCurrent ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                    <span className="sr-only">
+                      {showCurrent ? "Esconder senha" : "Mostrar senha"}
+                    </span>
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Nova senha */}
         <FormField
           control={form.control}
           name="newPassword"
@@ -88,13 +123,39 @@ export function ChangePasswordForm() {
             <FormItem>
               <FormLabel>Nova senha</FormLabel>
               <FormControl>
-                <Input type="password" autoComplete="new-password" {...field} />
+                <div className="relative">
+                  <Input
+                    placeholder="••••••••"
+                    type={showNew ? "text" : "password"}
+                    autoComplete="new-password"
+                    {...field}
+                    disabled={isLoading}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowNew((v) => !v)}
+                    disabled={isLoading}
+                  >
+                    {showNew ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                    <span className="sr-only">
+                      {showNew ? "Esconder senha" : "Mostrar senha"}
+                    </span>
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* Confirmar nova senha */}
         <FormField
           control={form.control}
           name="confirmPassword"
@@ -102,7 +163,32 @@ export function ChangePasswordForm() {
             <FormItem>
               <FormLabel>Confirmar nova senha</FormLabel>
               <FormControl>
-                <Input type="password" autoComplete="new-password" {...field} />
+                <div className="relative">
+                  <Input
+                    placeholder="••••••••"
+                    type={showConfirm ? "text" : "password"}
+                    autoComplete="new-password"
+                    {...field}
+                    disabled={isLoading}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowConfirm((v) => !v)}
+                    disabled={isLoading}
+                  >
+                    {showConfirm ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                    <span className="sr-only">
+                      {showConfirm ? "Esconder senha" : "Mostrar senha"}
+                    </span>
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

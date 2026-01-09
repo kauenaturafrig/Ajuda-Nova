@@ -7,7 +7,7 @@ import { ChangePasswordForm } from "./_components/change-password-form";
 export default async function MinhaSenhaPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
-    redirect("/admin/signin");
+    redirect("/admin");
   }
 
   return (

@@ -8,6 +8,7 @@ import { Button } from "../../../../components/ui/button";
 import Layout from "../../../../components/Layout";
 import { headers } from 'next/headers';
 import { auth } from '../../../../lib/auth';
+import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
 
 type Ramal = {
   id: number;
@@ -47,7 +48,7 @@ export default function RamaisPage() {
     if (isPending) return;
 
     if (!session?.user) {
-      window.location.href = "/admin/signin";
+      window.location.href = "/admin";
       return;
     }
 
@@ -205,34 +206,39 @@ export default function RamaisPage() {
       const term = normalize(search);
 
       return ramais.filter((r) => {
-        const texto = `${r.numero} ${r.nome ?? ""} ${r.setor} ${
-          r.unidade?.nome ?? ""
-        }`;
+        const texto = `${r.numero} ${r.nome ?? ""} ${r.setor} ${r.unidade?.nome ?? ""
+          }`;
         return normalize(texto).includes(term);
       });
     },
     [ramais, search]
   );
 
-  if (isPending || loading || !currentUser)
-    return 
+  if (isPending || loading || !currentUser) {
+    return (
       <Layout>
-        <p>Carregando ramais...</p>
+        <LoadingOverlay show={true} text="Carregando ramais..." />
       </Layout>
-  if (error)
-    return 
+    );
+  }
+
+  if (error) {
+    return (
       <Layout>
         <p>Erro ao carregar sessão</p>
       </Layout>
+    );
+  }
 
   return (
     <Layout>
+      <LoadingOverlay show={loading} />
       <div>
         {/*  className="space-y-4" */}
         <div className="flex justify-between">
           <h1 className="text-2xl font-semibold">Edição de Ramais</h1>
           <div>
-            <h3 className="font-bold">Usuário logado: {session.user.name}</h3>
+            <h3 className="font-bold">Usuário logado: {session?.user.name}</h3>
             <h4>Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
           </div>
         </div>
@@ -315,8 +321,8 @@ export default function RamaisPage() {
                   ? "Salvando..."
                   : "Salvar"
                 : creating
-                ? "Criando..."
-                : "Criar ramal"}
+                  ? "Criando..."
+                  : "Criar ramal"}
             </Button>
             {editingId && (
               <Button

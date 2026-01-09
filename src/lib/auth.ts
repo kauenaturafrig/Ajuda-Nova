@@ -8,6 +8,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    autoSignIn: false, // desabilita auto sign-in após cadastro
     requireEmailVerification: false,
   }
 });

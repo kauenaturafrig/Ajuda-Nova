@@ -65,40 +65,50 @@ export function SignupForm({ unidades }: Props) {
   async function onSubmit(values: SignupFormValues) {
     setIsLoading(true);
 
-    // aqui você pode chamar uma rota própria /admin/api/users
-    // em vez de usar signUp.email direto, se quiser mais controle
-    const { data, error } = await authClient.signUp.email(
+    // 1) cria o usuário no Better Auth
+    const { error } = await authClient.signUp.email(
       {
         name: values.name,
         email: values.email,
         password: values.password,
-        callbackURL: "/admin/authenticated",
-        // campos extras vão pelo body e você trata num hook ou rota custom
-        // por enquanto dá pra salvar depois com Prisma numa API sua
+        // sem callbackURL
       },
       {
-        onSuccess: async () => {
-          // depois de criado pelo Better Auth, você pode chamar uma API
-          // /admin/api/users/role-unidade para setar role/unidade
-          await fetch("/admin/api/usuarios/set-role-unidade", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: values.email,
-              role: values.role,
-              unidadeId: Number(values.unidadeId),
-            }),
-          });
-
-          router.replace("/admin/authenticated");
-        },
-        onError: (ctx) => {
-          console.log("ERRO AO CRIAR USUÁRIO", ctx);
-        },
         onRequest: () => setIsLoading(true),
         onResponse: () => setIsLoading(false),
       }
     );
+
+    if (error) {
+      console.log("ERRO AO CRIAR USUÁRIO", error);
+      setIsLoading(false);
+      return;
+    }
+
+    // 2) NÃO desloga aqui — você ainda é o OWNER
+    // await authClient.signOut();  // <- remove isso
+
+    // 3) seta role/unidade no User recém-criado
+    const res = await fetch("/admin/api/usuarios/set-role-unidade", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: values.email,
+        role: values.role,
+        unidadeId: Number(values.unidadeId),
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error("Erro ao setar role/unidade", err);
+      alert(`Erro ao salvar unidade/role: ${err.error ?? res.status}`);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(false);
+    router.replace("/admin/authenticated/usuarios");
   }
 
   return (

@@ -7,7 +7,7 @@ import { SignupForm } from "./_components/signup-form";
 
 export default async function CriarUserPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/admin/signin");
+  if (!session) redirect("/admin");
 
   const dbUser = await prisma.user.findUnique({
     where: { id: session.user.id },

@@ -11,11 +11,15 @@ export function ButtonSignOut() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.replace("/admin/signin");
+          router.replace("/admin");
         },
       },
     });
   }
 
-  return <Button onClick={signOut}>Sair da conta</Button>;
+  return (
+    <Button onClick={signOut} className="bg-red-500 text-white">
+      Sair da conta
+    </Button>
+    );
 }
