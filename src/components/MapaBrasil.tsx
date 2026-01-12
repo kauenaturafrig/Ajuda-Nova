@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-export default function RamaisMapaSVG() {
+type MapaBrasilProps = {
+  basePath: "/ramais" | "/emails"; // ou string genérica, se preferir
+};
+
+export default function RamaisMapaSVG({ basePath }: MapaBrasilProps) {
   const width = 900;
   const height = 900;
 
@@ -83,7 +87,7 @@ export default function RamaisMapaSVG() {
           {cityPoints.map((c) => (
             <Link
               key={c.slug}
-              href={`/ramais/${c.slug}`}
+              href={`${basePath}/${c.slug}`}
               onMouseEnter={() => setHovered(c.slug)}
               onMouseLeave={() => setHovered(null)}
               className="flex items-center border-l-4 border-green-700 mb-3 p-2 rounded text-2xl dark:text-white hover:text-white hover:bg-green-700 transition"

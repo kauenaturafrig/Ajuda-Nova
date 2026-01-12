@@ -1,7 +1,7 @@
 // src/app/admin/authenticated/ramais/page.tsx
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useSession } from "../../../../lib/auth-client";
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
@@ -35,6 +35,7 @@ export default function RamaisPage() {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [unidades, setUnidades] = useState<{ id: number; nome: string }[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const [formRamal, setFormRamal] = useState({
     id: null as number | null,
@@ -181,6 +182,15 @@ export default function RamaisPage() {
       setor: ramal.setor,
       unidadeId: ramal.unidadeId,
     });
+
+    // depois de setar o estado, rola até o formulário
+    // pequeno timeout garante que o React aplique o novo título "Editar email"
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 0);
   };
 
   const cancelEdit = () => {
@@ -233,7 +243,7 @@ export default function RamaisPage() {
   return (
     <Layout>
       <LoadingOverlay show={loading} />
-      <div>
+      <div className="w-[90%] mx-auto">
         {/*  className="space-y-4" */}
         <div className="flex justify-between">
           <h1 className="text-2xl font-semibold">Edição de Ramais</h1>
@@ -257,7 +267,9 @@ export default function RamaisPage() {
         <h2 className="font-medium text-lg mt-4 mb-2">
           {editingId ? "Editar ramal" : "Novo ramal"}
         </h2>
-        <div className="grid grid-cols-5 gap-2 items-center mb-10">
+        <div
+          className="grid grid-cols-5 gap-2 items-center mb-10"
+          ref={formRef}>
           <Input
             placeholder="Número"
             value={formRamal.numero}
@@ -348,15 +360,19 @@ export default function RamaisPage() {
             filteredRamais.map((ramal) => (
               <div
                 key={ramal.id}
-                className="grid grid-cols-5 gap-2 items-center border p-2 rounded"
+                className="
+                  grid gap-3 border p-3 rounded
+                  grid-cols-1
+                  md:grid-cols-[1fr_2fr_2fr_1fr_auto]                    
+                "
               >
-                <span className="font-mono">{ramal.numero}</span>
-                <span>{ramal.nome ?? "-"}</span>
-                <span>{ramal.setor}</span>
-                <span className="text-sm text-muted-foreground">
+                <span className="break-all"><strong>{ramal.numero}</strong></span>
+                <span className="break-words">{ramal.nome ?? "-"}</span>
+                <span className="break-words">{ramal.setor}</span>
+                <span className="text-sm text-muted-foreground break-words">
                   {ramal.unidade?.nome ?? `Unidade #${ramal.unidadeId}`}
                 </span>
-                <div className="flex gap-2 justify-end">
+                <div className="flex flex-wrap gap-2 justify-end mt-2 md:mt-0">
                   <Button
                     size="sm"
                     variant="outline"

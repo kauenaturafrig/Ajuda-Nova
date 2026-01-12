@@ -13,10 +13,22 @@ type DashboardItem = {
 
 const dashboardItems: DashboardItem[] = [
   {
+    title: "Links Úteis",
+    href: "/links-uteis",
+    color: "bg-gray-400",
+    icon: "/assets/images/icons/icons8-link-branco.png",
+  },
+  {
     title: "Ramais",
     href: "/ramais",
     color: "bg-yellow-500",
     icon: "/assets/images/icons/icons8-phone-branco.png",
+  },
+  {
+    title: "Emails",
+    href: "/emails",
+    color: "bg-blue-700",
+    icon: "/assets/images/icons/icons8-mail-branco.png",
   },
   {
     title: "Balanças",
@@ -65,69 +77,62 @@ export default function Dashboard() {
         </div>
 
         {/* Layout responsivo que evita esmagamento */}
-        <div className=" mx-auto mt-6 mb-6">
-          {/* Container flexível que quebra em linhas quando necessário */}
-          <div className="flex flex-wrap justify-center gap-6">
-            {/* Container dos primeiros 6 itens */}
-            <div className="flex flex-wrap justify-center gap-6 max-w-4xl">
-              {dashboardItems.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  <div
-                    className={`
-                  w-[300px] sm:w-[320px] md:w-[350px] lg:w-[380px] xl:w-[420px]
-                  h-[250px] 
-                  flex flex-col items-center justify-center 
-                  rounded-2xl text-white shadow-md p-6 
-                  text-lg font-semibold transition-all duration-300 
-                  cursor-pointer transform hover:scale-105 hover:shadow-xl 
-                  ${item.color} hover:brightness-110
-                `}
-                  >
-                    {item.icon && (
-                      <div className="w-16 h-16 mb-4 relative flex-shrink-0">
-                        <Image
-                          src={item.icon}
-                          alt={item.title}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                    )}
-                    <span className="text-center text-2xl sm:text-3xl lg:text-4xl leading-tight break-words px-2">
-                      {item.title}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* Item Links - cresce apenas em telas grandes */}
-            <div className="flex justify-center">
-              <Link href={"/links-uteis"}>
+        <div className="mx-auto mt-6 mb-6 w-[90%]">
+          <div
+            className="
+              grid gap-6 justify-center
+              sm:grid-cols-2
+              lg:grid-cols-3
+              xl:grid-cols-6
+            "
+          >
+            {dashboardItems.map((item, index) => (
+              <Link key={item.href} href={item.href} className="
+                flex
+                lg:[&:nth-last-child(1)]:col-span-3
+                lg:[&:nth-last-child(2)]:col-span-3
+                lg:[&:nth-last-child(3)]:col-span-2
+                lg:[&:nth-last-child(4)]:col-span-2
+                lg:[&:nth-last-child(5)]:col-span-2
+                lg:[&:nth-last-child(6)]:col-span-2
+                lg:[&:nth-last-child(7)]:col-span-2
+                lg:[&:nth-last-child(8)]:col-span-2
+                
+                xl:[&:nth-last-child(1)]:col-span-3
+                xl:[&:nth-last-child(2)]:col-span-3
+                xl:[&:nth-last-child(3)]:col-span-2
+                xl:[&:nth-last-child(4)]:col-span-2
+                xl:[&:nth-last-child(5)]:col-span-2
+                xl:[&:nth-last-child(6)]:col-span-2
+                xl:[&:nth-last-child(7)]:col-span-2
+                xl:[&:nth-last-child(8)]:col-span-2
+              ">
                 <div
                   className={`
-                w-[300px] sm:w-[320px] md:w-[350px] lg:w-[380px] xl:w-[862px]
-                h-[250px] lg:h-[520px] xl:h-[800px]
-                flex flex-col items-center justify-center 
-                rounded-2xl text-white shadow-md p-6 
-                text-lg bg-gray-400 font-semibold transition-all duration-300 
-                cursor-pointer transform hover:scale-105 hover:shadow-xl hover:brightness-110
-              `}
+                    group w-full h-[250px]
+                    flex flex-col items-center justify-center
+                    rounded-2xl text-white shadow-md p-6
+                    text-lg font-semibold transition-all duration-300
+                    cursor-pointer transform hover:scale-105 hover:shadow-xl
+                    ${item.color} hover:brightness-110
+                  `}
                 >
-                  <div className="w-16 h-16 mb-4 relative flex-shrink-0">
-                    <Image
-                      src={"/assets/images/icons/icons8-link-branco.png"}
-                      alt={"link"}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+                  {item.icon && (
+                    <div className="w-[80px] h-[80px] mb-4 relative flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
+                      <Image
+                        src={item.icon}
+                        alt={item.title}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  )}
                   <span className="text-center text-2xl sm:text-3xl lg:text-4xl leading-tight break-words px-2">
-                    Links
+                    {item.title}
                   </span>
                 </div>
               </Link>
-            </div>
+            ))}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 // src/app/admin/authenticated/minha-senha/_components/change-password-form.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../../../components/ui/form";
+import { LoadingOverlay } from "../../../../../components/ui/loading-overlay";
 
 const schema = z
   .object({
@@ -35,6 +36,7 @@ type FormValues = z.infer<typeof schema>;
 
 export function ChangePasswordForm() {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const [showCurrent, setShowCurrent] = useState(false);
@@ -72,133 +74,143 @@ export function ChangePasswordForm() {
     router.replace("/admin");
   }
 
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {/* Senha atual */}
-        <FormField
-          control={form.control}
-          name="currentPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Senha atual</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="••••••••"
-                    type={showCurrent ? "text" : "password"}
-                    autoComplete="current-password"
-                    {...field}
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => setShowCurrent((v) => !v)}
-                    disabled={isLoading}
-                  >
-                    {showCurrent ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span className="sr-only">
-                      {showCurrent ? "Esconder senha" : "Mostrar senha"}
-                    </span>
-                  </Button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div>
+      <LoadingOverlay show={loading} text="Carregando..." />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Senha atual */}
+          <FormField
+            control={form.control}
+            name="currentPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Senha atual</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="••••••••"
+                      type={showCurrent ? "text" : "password"}
+                      autoComplete="current-password"
+                      {...field}
+                      disabled={isLoading}
+                      className="border-2 rounded border-blue-500"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowCurrent((v) => !v)}
+                      disabled={isLoading}
+                    >
+                      {showCurrent ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <span className="sr-only">
+                        {showCurrent ? "Esconder senha" : "Mostrar senha"}
+                      </span>
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Nova senha */}
-        <FormField
-          control={form.control}
-          name="newPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nova senha</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="••••••••"
-                    type={showNew ? "text" : "password"}
-                    autoComplete="new-password"
-                    {...field}
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => setShowNew((v) => !v)}
-                    disabled={isLoading}
-                  >
-                    {showNew ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span className="sr-only">
-                      {showNew ? "Esconder senha" : "Mostrar senha"}
-                    </span>
-                  </Button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Nova senha */}
+          <FormField
+            control={form.control}
+            name="newPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nova senha</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="••••••••"
+                      type={showNew ? "text" : "password"}
+                      autoComplete="new-password"
+                      {...field}
+                      disabled={isLoading}
+                      className="border-2 rounded border-blue-500"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowNew((v) => !v)}
+                      disabled={isLoading}
+                    >
+                      {showNew ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <span className="sr-only">
+                        {showNew ? "Esconder senha" : "Mostrar senha"}
+                      </span>
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Confirmar nova senha */}
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirmar nova senha</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="••••••••"
-                    type={showConfirm ? "text" : "password"}
-                    autoComplete="new-password"
-                    {...field}
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                    onClick={() => setShowConfirm((v) => !v)}
-                    disabled={isLoading}
-                  >
-                    {showConfirm ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span className="sr-only">
-                      {showConfirm ? "Esconder senha" : "Mostrar senha"}
-                    </span>
-                  </Button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Confirmar nova senha */}
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirmar nova senha</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="••••••••"
+                      type={showConfirm ? "text" : "password"}
+                      autoComplete="new-password"
+                      {...field}
+                      disabled={isLoading}
+                      className="border-2 rounded border-blue-500"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowConfirm((v) => !v)}
+                      disabled={isLoading}
+                    >
+                      {showConfirm ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <span className="sr-only">
+                        {showConfirm ? "Esconder senha" : "Mostrar senha"}
+                      </span>
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Salvando..." : "Alterar senha"}
-        </Button>
-      </form>
-    </Form>
+          <Button type="submit" className="w-full border rouded bg-blue-600 text-white hover:scale-105" disabled={isLoading}>
+            {isLoading ? "Salvando..." : "Alterar senha"}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

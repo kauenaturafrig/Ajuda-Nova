@@ -1,11 +1,13 @@
 
+
+
 ALTER USER ramais_user WITH PASSWORD 'UserPadrao2026';
 
 ALTER USER ramais_user CREATEDB;
 
 select * from "user"
 
-select * from unidades
+select * from ramais
 
 delete from "user"
 where id = '8b8809ca-1009-48f5-a749-1369ea4b2514'
@@ -402,4 +404,36 @@ VALUES
     ('4910', 'Enfermaria', 'Enfermaria', 4, now(), now()),
     ('4920', 'Fisioterapia', 'Sergio Corazza', 4, now(), now()),
     ('4921', 'Fisioterapia', 'Sergio Corazza (Sala Fisio)', 4, now(), now());
+
+
+	
+INSERT INTO emails (email, nome, setor, "unidadeId", "createdAt", "updatedAt")
+VALUES
+-- Unidade 1
+('ana.silva@empresa.com', 'Ana Silva', 'RH', 1, NOW(), NOW()),
+('bruno.costa@empresa.com', 'Bruno Costa', 'TI', 1, NOW(), NOW()),
+('carla.souza@empresa.com', 'Carla Souza', 'Financeiro', 1, NOW(), NOW()),
+('diego.lima@empresa.com', 'Diego Lima', 'Vendas', 1, NOW(), NOW()),
+('elena.martins@empresa.com', 'Elena Martins', 'Marketing', 1, NOW(), NOW()),
+
+-- Unidade 2
+('fabio.gomes@empresa.com', 'Fabio Gomes', 'RH', 2, NOW(), NOW()),
+('gabriela.ferraz@empresa.com', 'Gabriela Ferraz', 'TI', 2, NOW(), NOW()),
+('helio.santos@empresa.com', 'Helio Santos', 'Financeiro', 2, NOW(), NOW()),
+('isabela.rocha@empresa.com', 'Isabela Rocha', 'Vendas', 2, NOW(), NOW()),
+('joao.mendes@empresa.com', 'Joao Mendes', 'Marketing', 2, NOW(), NOW()),
+
+-- Unidade 3
+('karen.oliveira@empresa.com', 'Karen Oliveira', 'RH', 3, NOW(), NOW()),
+('lucas.pereira@empresa.com', 'Lucas Pereira', 'TI', 3, NOW(), NOW()),
+('marina.alves@empresa.com', 'Marina Alves', 'Financeiro', 3, NOW(), NOW()),
+('nelson.dias@empresa.com', 'Nelson Dias', 'Vendas', 3, NOW(), NOW()),
+('olivia.ribeiro@empresa.com', 'Olivia Ribeiro', 'Marketing', 3, NOW(), NOW()),
+
+-- Unidade 4
+('paulo.vieira@empresa.com', 'Paulo Vieira', 'RH', 4, NOW(), NOW()),
+('quenia.lopes@empresa.com', 'Quenia Lopes', 'TI', 4, NOW(), NOW()),
+('ricardo.nunes@empresa.com', 'Ricardo Nunes', 'Financeiro', 4, NOW(), NOW()),
+('sandra.melo@empresa.com', 'Sandra Melo', 'Vendas', 4, NOW(), NOW()),
+('thiago.cardoso@empresa.com', 'Thiago Cardoso', 'Marketing', 4, NOW(), NOW());
 

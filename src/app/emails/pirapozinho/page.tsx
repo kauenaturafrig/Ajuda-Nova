@@ -1,27 +1,26 @@
-// src/app/ramais/nova-andradina/page.tsx
+// src/app/emails/pirapozinho/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { RamaisList } from "../_components/ramais-list"; // client para busca
+import { EmailsList } from "../_components/emails-list"; // client para busca
 
-export default async function RamaisPirapozinhoPage() {
+export default async function EmailsPirapozinhoPage() {
   // pega a unidade pelo nome (ou id fixo, como preferir)
   const unidade = await prisma.unidade.findFirst({
     where: { nome: "Pirapozinho-SP" },
-    include: { ramais: { orderBy: { setor: "asc" } } },
+    include: { emails: { orderBy: { setor: "asc" } } },
   });
 
   // se não achar unidade, mostra mensagem simples
-  const ramais = unidade?.ramais ?? [];
-
+  const emails = unidade?.emails ?? [];
   return (
     <Layout>
-      <RamaisList
+      <EmailsList
         titulo="Pirapozinho - SP"
         imagem="/assets/images/unidades/PIRAPOZINHO2023.jpg"
-        ramais={ramais.map((r) => ({
+        emails={emails.map((r) => ({
           nome: r.nome,
           setor: r.setor,
-          ramal: r.numero,
+          email: r.email,
         }))}
       />
     </Layout>

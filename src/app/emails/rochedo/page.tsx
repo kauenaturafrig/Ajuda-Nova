@@ -1,27 +1,26 @@
-// src/app/ramais/nova-andradina/page.tsx
+// src/app/emails/rochedo/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { RamaisList } from "../_components/ramais-list"; // client para busca
+import { EmailsList } from "../_components/emails-list"; // client para busca
 
-export default async function RamaisRochedoPage() {
+export default async function EmailsRochedoPage() {
   // pega a unidade pelo nome (ou id fixo, como preferir)
   const unidade = await prisma.unidade.findFirst({
     where: { nome: "Rochedo-MS" },
-    include: { ramais: { orderBy: { setor: "asc" } } },
+    include: { emails: { orderBy: { setor: "asc" } } },
   });
 
   // se não achar unidade, mostra mensagem simples
-  const ramais = unidade?.ramais ?? [];
-
+  const emails = unidade?.emails ?? [];
   return (
     <Layout>
-      <RamaisList
+      <EmailsList
         titulo="Rochedo - MS"
         imagem="/assets/images/unidades/ROCHEDO2023.jpg"
-        ramais={ramais.map((r) => ({
+        emails={emails.map((r) => ({
           nome: r.nome,
           setor: r.setor,
-          ramal: r.numero,
+          email: r.email,
         }))}
       />
     </Layout>

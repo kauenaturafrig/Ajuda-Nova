@@ -1,27 +1,26 @@
-// src/app/ramais/nova-andradina/page.tsx
+// src/app/emails/barra-dos-bugres/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { RamaisList } from "../_components/ramais-list"; // client para busca
+import { EmailsList } from "../_components/emails-list"; // client para busca
 
-export default async function RamaisBarradosBugresPage() {
+export default async function EmailsBarraDosBugresPage() {
   // pega a unidade pelo nome (ou id fixo, como preferir)
   const unidade = await prisma.unidade.findFirst({
     where: { nome: "Barra dos Bugres-MT" },
-    include: { ramais: { orderBy: { setor: "asc" } } },
+    include: { emails: { orderBy: { setor: "asc" } } },
   });
 
   // se não achar unidade, mostra mensagem simples
-  const ramais = unidade?.ramais ?? [];
-
+  const emails = unidade?.emails ?? [];
   return (
     <Layout>
-      <RamaisList
+      <EmailsList
         titulo="Barra dos Bugres - MT"
         imagem="/assets/images/unidades/BARRA2023.jpg"
-        ramais={ramais.map((r) => ({
+        emails={emails.map((r) => ({
           nome: r.nome,
           setor: r.setor,
-          ramal: r.numero,
+          email: r.email,
         }))}
       />
     </Layout>

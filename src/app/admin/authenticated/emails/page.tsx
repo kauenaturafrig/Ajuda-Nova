@@ -1,17 +1,18 @@
-// src/app/admin/authenticated/ramais/page.tsx
+// src/app/admin/authenticated/emails/page.tsx
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useSession } from "../../../../lib/auth-client";
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
 import Layout from "../../../../components/Layout";
 import { headers } from 'next/headers';
 import { auth } from '../../../../lib/auth';
+import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
 
-type Ramal = {
+type Email = {
   id: number;
-  numero: string;
+  email: string;
   nome: string | null;
   setor: string;
   unidadeId: number;
@@ -24,9 +25,9 @@ type CurrentUser = {
   unidadeNome?: string | null;
 };
 
-export default function RamaisPage() {
+export default function EmailsPage() {
   const { data: session, isPending, error } = useSession();
-  const [ramais, setRamais] = useState<Ramal[]>([]);
+  const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<number | null>(null);
   const [creating, setCreating] = useState(false);
@@ -34,10 +35,11 @@ export default function RamaisPage() {
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [unidades, setUnidades] = useState<{ id: number; nome: string }[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
 
-  const [formRamal, setFormRamal] = useState({
+  const [formEmail, setFormEmail] = useState({
     id: null as number | null,
-    numero: "",
+    email: "",
     nome: "",
     setor: "",
     unidadeId: "" as string | number,
@@ -52,10 +54,10 @@ export default function RamaisPage() {
     }
 
     (async () => {
-      // pega ramais
-      const res = await fetch("/admin/api/ramais");
+      // pega emails
+      const res = await fetch("/admin/api/emails");
       const data = await res.json();
-      setRamais(data);
+      setEmails(data);
 
       // pega usuário + unidades (pode ser uma rota /admin/api/me, aqui simplificado)
       const meRes = await fetch("/admin/api/usuarios/me");
@@ -72,22 +74,22 @@ export default function RamaisPage() {
     })();
   }, [isPending, session]);
 
-  const handleChange = (id: number, field: keyof Ramal, value: string) => {
-    setRamais((prev) =>
+  const handleChange = (id: number, field: keyof Email, value: string) => {
+    setEmails((prev) =>
       prev.map((r) => (r.id === id ? { ...r, [field]: value } : r))
     );
   };
 
-  const handleSave = async (ramal: Ramal) => {
-    setSavingId(ramal.id);
+  const handleSave = async (email: Email) => {
+    setSavingId(email.id);
     try {
-      const res = await fetch("/admin/api/ramais", {
+      const res = await fetch("/admin/api/emails", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(ramal),
+        body: JSON.stringify(email),
       });
       if (!res.ok) {
-        console.error("Erro ao salvar ramal");
+        console.error("Erro ao salvar email");
       }
     } finally {
       setSavingId(null);
@@ -95,16 +97,16 @@ export default function RamaisPage() {
   };
 
   const handleSubmitForm = async () => {
-    if (!formRamal.numero || !formRamal.setor) return;
+    if (!formEmail.email || !formEmail.setor) return;
 
     const payload: any = {
-      numero: formRamal.numero,
-      nome: formRamal.nome,
-      setor: formRamal.setor,
+      email: formEmail.email,
+      nome: formEmail.nome,
+      setor: formEmail.setor,
     };
 
     if (currentUser?.role === "OWNER") {
-      payload.unidadeId = formRamal.unidadeId;
+      payload.unidadeId = formEmail.unidadeId;
     }
 
     if (editingId) {
@@ -112,17 +114,17 @@ export default function RamaisPage() {
       payload.id = editingId;
       setSavingId(editingId);
       try {
-        const res = await fetch("/admin/api/ramais", {
+        const res = await fetch("/admin/api/emails", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
         if (!res.ok) {
-          console.error("Erro ao salvar ramal");
+          console.error("Erro ao salvar email");
           return;
         }
-        const updated: Ramal = await res.json();
-        setRamais((prev) =>
+        const updated: Email = await res.json();
+        setEmails((prev) =>
           prev.map((r) => (r.id === updated.id ? updated : r)),
         );
         cancelEdit();
@@ -133,17 +135,17 @@ export default function RamaisPage() {
       // CRIAR
       setCreating(true);
       try {
-        const res = await fetch("/admin/api/ramais", {
+        const res = await fetch("/admin/api/emails", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
         if (!res.ok) {
-          console.error("Erro ao criar ramal");
+          console.error("Erro ao criar email");
           return;
         }
-        const created: Ramal = await res.json();
-        setRamais((prev) => [...prev, created]);
+        const created: Email = await res.json();
+        setEmails((prev) => [...prev, created]);
         cancelEdit();
       } finally {
         setCreating(false);
@@ -152,41 +154,49 @@ export default function RamaisPage() {
   };
 
   const handleDelete = async (id: number) => {
-    const ok = window.confirm("Tem certeza que deseja excluir este ramal?");
+    const ok = window.confirm("Tem certeza que deseja excluir este email?");
     if (!ok) return;
 
-    const prev = ramais;
-    setRamais((r) => r.filter((ramal) => ramal.id !== id));
-
-    const res = await fetch("/admin/api/ramais", {
+    const prev = emails;
+    setEmails((r) => r.filter((email) => email.id !== id));
+    const res = await fetch("/admin/api/emails", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
 
     if (!res.ok) {
-      console.error("Erro ao excluir ramal");
+      console.error("Erro ao excluir email");
       // rollback em caso de erro
-      setRamais(prev);
+      setEmails(prev);
     }
   };
 
-  const startEdit = (ramal: Ramal) => {
-    setEditingId(ramal.id);
-    setFormRamal({
-      id: ramal.id,
-      numero: ramal.numero,
-      nome: ramal.nome ?? "",
-      setor: ramal.setor,
-      unidadeId: ramal.unidadeId,
+  const startEdit = (email: Email) => {
+    setEditingId(email.id);
+    setFormEmail({
+      id: email.id,
+      email: email.email,
+      nome: email.nome ?? "",
+      setor: email.setor,
+      unidadeId: email.unidadeId,
     });
+
+    // depois de setar o estado, rola até o formulário
+    // pequeno timeout garante que o React aplique o novo título "Editar email"
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 0);
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setFormRamal({
+    setFormEmail({
       id: null,
-      numero: "",
+      email: "",
       nome: "",
       setor: "",
       unidadeId: "",
@@ -200,37 +210,42 @@ export default function RamaisPage() {
       .toLowerCase();
   }
 
-  const filteredRamais = useMemo(
+  const filteredEmails = useMemo(
     () => {
       const term = normalize(search);
 
-      return ramais.filter((r) => {
-        const texto = `${r.numero} ${r.nome ?? ""} ${r.setor} ${
-          r.unidade?.nome ?? ""
-        }`;
+      return emails.filter((e) => {
+        const texto = `${e.email} ${e.nome ?? ""} ${e.setor} ${e.unidade?.nome ?? ""
+          }`;
         return normalize(texto).includes(term);
       });
     },
-    [ramais, search]
+    [emails, search]
   );
 
-  if (isPending || loading || !currentUser)
-    return 
+  if (isPending || loading || !currentUser) {
+    return (
       <Layout>
-        <p>Carregando ramais...</p>
+        <LoadingOverlay show={true} text="Carregando emails..." />
       </Layout>
-  if (error)
-    return 
+    );
+  }
+
+  if (error) {
+    return (
       <Layout>
         <p>Erro ao carregar sessão</p>
       </Layout>
+    );
+  }
 
   return (
     <Layout>
-      <div>
+      <LoadingOverlay show={loading} />
+      <div className="w-[90%] mx-auto">
         {/*  className="space-y-4" */}
         <div className="flex justify-between">
-          <h1 className="text-2xl font-semibold">Edição de Ramais</h1>
+          <h1 className="text-2xl font-semibold">Edição de Emails</h1>
           <div>
             <h3 className="font-bold">Usuário logado: {session?.user.name}</h3>
             <h4>Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
@@ -240,39 +255,41 @@ export default function RamaisPage() {
         {/* Barra de busca */}
         <div className="flex gap-2 items-center my-10">
           <Input
-            placeholder="Buscar por número, nome, setor ou unidade..."
+            placeholder="Buscar por emial, nome, setor ou unidade..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="border-[3px] rounded border-blue-500"
           />
         </div>
 
-        {/* Formulário de novo ramal */}
+        {/* Formulário de novo email */}
         <h2 className="font-medium text-lg mt-4 mb-2">
-          {editingId ? "Editar ramal" : "Novo ramal"}
+          {editingId ? "Editar email" : "Novo email"}
         </h2>
-        <div className="grid grid-cols-5 gap-2 items-center mb-10">
+        <div
+          className="grid grid-cols-5 gap-2 items-center mb-10"
+          ref={formRef}>
           <Input
-            placeholder="Número"
-            value={formRamal.numero}
+            placeholder="Email"
+            value={formEmail.email}
             onChange={(e) =>
-              setFormRamal((prev) => ({ ...prev, numero: e.target.value }))
+              setFormEmail((prev) => ({ ...prev, email: e.target.value }))
             }
             className="border-[3px] rounded border-blue-500"
           />
           <Input
             placeholder="Nome"
-            value={formRamal.nome}
+            value={formEmail.nome}
             onChange={(e) =>
-              setFormRamal((prev) => ({ ...prev, nome: e.target.value }))
+              setFormEmail((prev) => ({ ...prev, nome: e.target.value }))
             }
             className="border-[3px] rounded border-blue-500"
           />
           <Input
             placeholder="Setor"
-            value={formRamal.setor}
+            value={formEmail.setor}
             onChange={(e) =>
-              setFormRamal((prev) => ({ ...prev, setor: e.target.value }))
+              setFormEmail((prev) => ({ ...prev, setor: e.target.value }))
             }
             className="border-[3px] rounded border-blue-500"
           />
@@ -280,9 +297,9 @@ export default function RamaisPage() {
           {currentUser?.role === "OWNER" ? (
             <select
               className="border rounded px-2 py-1 text-sm"
-              value={formRamal.unidadeId}
+              value={formEmail.unidadeId}
               onChange={(e) =>
-                setFormRamal((prev) => ({
+                setFormEmail((prev) => ({
                   ...prev,
                   unidadeId: Number(e.target.value),
                 }))
@@ -315,8 +332,8 @@ export default function RamaisPage() {
                   ? "Salvando..."
                   : "Salvar"
                 : creating
-                ? "Criando..."
-                : "Criar ramal"}
+                  ? "Criando..."
+                  : "Criar email"}
             </Button>
             {editingId && (
               <Button
@@ -332,29 +349,33 @@ export default function RamaisPage() {
           </div>
         </div>
 
-        {/* Lista de ramais (somente leitura) */}
+        {/* Lista de emails (somente leitura) */}
         <div className="space-y-1 border-[3px] rounded border-blue-500 p-2">
-          {filteredRamais.length === 0 ? (
+          {filteredEmails.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              Nenhum ramal encontrado para “{search}”.
+              Nenhum email encontrado para “{search}”.
             </p>
           ) : (
-            filteredRamais.map((ramal) => (
+            filteredEmails.map((email) => (
               <div
-                key={ramal.id}
-                className="grid grid-cols-5 gap-2 items-center border p-2 rounded"
+                key={email.id}
+                className="
+                  grid gap-3 border p-3 rounded
+                  grid-cols-1
+                  md:grid-cols-[2fr_2fr_1fr_1fr_auto]
+                "
               >
-                <span className="font-mono">{ramal.numero}</span>
-                <span>{ramal.nome ?? "-"}</span>
-                <span>{ramal.setor}</span>
-                <span className="text-sm text-muted-foreground">
-                  {ramal.unidade?.nome ?? `Unidade #${ramal.unidadeId}`}
+                <span className="break-all font-semibold">{email.email}</span>
+                <span className="break-words">{email.nome ?? "-"}</span>
+                <span className="break-words">{email.setor}</span>
+                <span className="text-sm text-muted-foreground break-words">
+                  {email.unidade?.nome ?? `Unidade #${email.unidadeId}`}
                 </span>
-                <div className="flex gap-2 justify-end">
+                <div className="flex flex-wrap gap-2 justify-end mt-2 md:mt-0">
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => startEdit(ramal)}
+                    onClick={() => startEdit(email)}
                     className="bg-yellow-500"
                   >
                     Editar
@@ -362,7 +383,7 @@ export default function RamaisPage() {
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => handleDelete(ramal.id)}
+                    onClick={() => handleDelete(email.id)}
                     className="bg-red-500"
                   >
                     Excluir
