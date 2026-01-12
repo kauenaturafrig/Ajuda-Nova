@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useSession } from "../../../../lib/auth-client";
+import { useRouter } from "next/navigation";
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
 import Layout from "../../../../components/Layout";
@@ -26,6 +27,7 @@ type CurrentUser = {
 };
 
 export default function RamaisPage() {
+  const router = useRouter();
   const { data: session, isPending, error } = useSession();
   const [ramais, setRamais] = useState<Ramal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,12 @@ export default function RamaisPage() {
   const [unidades, setUnidades] = useState<{ id: number; nome: string }[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const [formErrors, setFormErrors] = useState({
+    numero: "",
+    nome: "",
+    setor: "",
+    unidadeId: "",
+  });
 
   const [formRamal, setFormRamal] = useState({
     id: null as number | null,
@@ -97,13 +105,61 @@ export default function RamaisPage() {
   };
 
   const handleSubmitForm = async () => {
-    if (!formRamal.numero || !formRamal.setor) return;
+    const errors = {
+      numero: "",
+      nome: "",
+      setor: "",
+      unidadeId: "",
+    };
+
+    // valida número
+    if (!formRamal.numero.trim()) {
+      errors.numero = "Informe o número do ramal.";
+    }
+
+    // valida nome (e se vier vazio, coloca 'Geral')
+    if (!formRamal.nome.trim()) {
+      // define 'Geral' como default
+      setFormRamal((prev) => ({ ...prev, nome: "Geral" }));
+      errors.nome = "Nome estava vazio, será usado 'Geral'.";
+    }
+
+    // valida setor
+    if (!formRamal.setor.trim()) {
+      errors.setor = "Informe o setor.";
+    }
+
+    // valida unidade quando for OWNER
+    if (currentUser?.role === "OWNER" && !formRamal.unidadeId) {
+      errors.unidadeId = "Selecione a unidade.";
+    }
+
+    // se tiver qualquer erro, não envia
+    if (
+      errors.numero ||
+      errors.nome ||
+      errors.setor ||
+      errors.unidadeId
+    ) {
+      setFormErrors(errors);
+      return;
+    }
+
+    // se passou, limpa erros
+    setFormErrors({
+      numero: "",
+      nome: "",
+      setor: "",
+      unidadeId: "",
+    });
 
     const payload: any = {
       numero: formRamal.numero,
-      nome: formRamal.nome,
+      nome: formRamal.nome || "Geral",
       setor: formRamal.setor,
     };
+
+    if (!formRamal.numero || !formRamal.setor) return;
 
     if (currentUser?.role === "OWNER") {
       payload.unidadeId = formRamal.unidadeId;
@@ -243,10 +299,19 @@ export default function RamaisPage() {
   return (
     <Layout>
       <LoadingOverlay show={loading} />
+      {/* Botão Voltar */}
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => router.back()}
+        className="bg-gray-500 text-white mb-5 ml-14"
+      >
+        ← Voltar
+      </Button>
       <div className="w-[90%] mx-auto">
         {/*  className="space-y-4" */}
         <div className="flex justify-between">
-          <h1 className="text-2xl font-semibold dark:text-white">Edição de Ramais</h1>
+          <h1 className="text-4xl font-semibold dark:text-white">Edição de Ramais</h1>
           <div>
             <h3 className="font-bold dark:text-white">Usuário logado: {session?.user.name}</h3>
             <h4 className="dark:text-white">Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
@@ -270,55 +335,83 @@ export default function RamaisPage() {
         <div
           className="grid grid-cols-5 gap-2 items-center mb-10"
           ref={formRef}>
-          <Input
-            placeholder="Número"
-            value={formRamal.numero}
-            onChange={(e) =>
-              setFormRamal((prev) => ({ ...prev, numero: e.target.value }))
-            }
-            className="border-[3px] rounded border-blue-500 dark:text-white"
-          />
-          <Input
-            placeholder="Nome"
-            value={formRamal.nome}
-            onChange={(e) =>
-              setFormRamal((prev) => ({ ...prev, nome: e.target.value }))
-            }
-            className="border-[3px] rounded border-blue-500 dark:text-white"
-          />
-          <Input
-            placeholder="Setor"
-            value={formRamal.setor}
-            onChange={(e) =>
-              setFormRamal((prev) => ({ ...prev, setor: e.target.value }))
-            }
-            className="border-[3px] rounded border-blue-500 dark:text-white"
-          />
+          {/* Número */}
+          <div>
+            <Input
+              placeholder="Número"
+              value={formRamal.numero}
+              onChange={(e) => {
+                const onlyDigits = e.target.value.replace(/\D/g, "");
+                setFormRamal((prev) => ({ ...prev, numero: e.target.value }))
+              }}
+              className="border-[3px] rounded border-blue-500 dark:text-white"
+            />
+            {formErrors.numero && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.numero}</p>
+            )}
+          </div>
 
-          {currentUser?.role === "OWNER" ? (
-            <select
-              className="border rounded px-2 py-1 text-sm"
-              value={formRamal.unidadeId}
+          {/* Nome */}
+          <div>
+            <Input
+              placeholder="Nome"
+              value={formRamal.nome}
               onChange={(e) =>
-                setFormRamal((prev) => ({
-                  ...prev,
-                  unidadeId: Number(e.target.value),
-                }))
+                setFormRamal((prev) => ({ ...prev, nome: e.target.value }))
               }
-            >
-              <option value="">Selecione a unidade</option>
-              {unidades.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.nome}
-                </option>
-              ))}
-            </select>
+              className="border-[3px] rounded border-blue-500 dark:text-white"
+            />
+            {formErrors.nome && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.nome}</p>
+            )}
+          </div>
+
+          {/* Setor */}
+          <div>
+            <Input
+              placeholder="Setor"
+              value={formRamal.setor}
+              onChange={(e) =>
+                setFormRamal((prev) => ({ ...prev, setor: e.target.value }))
+              }
+              className="border-[3px] rounded border-blue-500 dark:text-white"
+            />
+            {formErrors.setor && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.setor}</p>
+            )}
+          </div>
+
+          {/* Unidade (OWNER) */}
+          {currentUser?.role === "OWNER" ? (
+            <div>
+              <select
+                className="border rounded px-2 py-1 text-sm"
+                value={formRamal.unidadeId}
+                onChange={(e) =>
+                  setFormRamal((prev) => ({
+                    ...prev,
+                    unidadeId: Number(e.target.value),
+                  }))
+                }
+              >
+                <option value="">Selecione a unidade</option>
+                {unidades.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.nome}
+                  </option>
+                ))}
+              </select>
+              {formErrors.unidadeId && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.unidadeId}</p>
+              )}
+            </div>
           ) : (
             <Input
               disabled
               value={
                 currentUser?.unidadeNome ?? `Unidade #${currentUser?.unidadeId}`
               }
+              className="dark:text-white"
             />
           )}
 

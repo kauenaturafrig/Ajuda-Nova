@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState, useRef } from "react";
 import { useSession } from "../../../../lib/auth-client";
+import { useRouter } from "next/navigation";
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
 import Layout from "../../../../components/Layout";
@@ -26,6 +27,7 @@ type CurrentUser = {
 };
 
 export default function EmailsPage() {
+  const router = useRouter();
   const { data: session, isPending, error } = useSession();
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,12 @@ export default function EmailsPage() {
   const [unidades, setUnidades] = useState<{ id: number; nome: string }[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const formRef = useRef<HTMLDivElement | null>(null);
+  const [formErrors, setFormErrors] = useState({
+    email: "",
+    nome: "",
+    setor: "",
+    unidadeId: "",
+  });
 
   const [formEmail, setFormEmail] = useState({
     id: null as number | null,
@@ -97,11 +105,57 @@ export default function EmailsPage() {
   };
 
   const handleSubmitForm = async () => {
+    const errors = {
+      email: "",
+      nome: "",
+      setor: "",
+      unidadeId: "",
+    };
+
+    // valida email
+    if (!formEmail.email.trim()) {
+      errors.email = "Informe o email.";
+    }
+
+    // valida nome
+    if (!formEmail.nome.trim()) {
+      errors.nome = "Informe o nome.";
+    }
+
+    // valida setor
+    if (!formEmail.setor.trim()) {
+      errors.setor = "Informe o setor.";
+    }
+
+    // valida unidade quando for OWNER
+    if (currentUser?.role === "OWNER" && !formEmail.unidadeId) {
+      errors.unidadeId = "Selecione a unidade.";
+    }
+
+    // se tiver qualquer erro, não envia
+    if (
+      errors.email ||
+      errors.nome ||
+      errors.setor ||
+      errors.unidadeId
+    ) {
+      setFormErrors(errors);
+      return;
+    }
+
+    // se passou, limpa erros
+    setFormErrors({
+      email: "",
+      nome: "",
+      setor: "",
+      unidadeId: "",
+    });
+
     if (!formEmail.email || !formEmail.setor) return;
 
     const payload: any = {
       email: formEmail.email,
-      nome: formEmail.nome,
+      nome: formEmail.nome || "Geral",
       setor: formEmail.setor,
     };
 
@@ -242,10 +296,19 @@ export default function EmailsPage() {
   return (
     <Layout>
       <LoadingOverlay show={loading} />
+      {/* Botão Voltar */}
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => router.back()}
+        className="bg-gray-500 text-white mb-5 ml-14"
+      >
+        ← Voltar
+      </Button>
       <div className="w-[90%] mx-auto">
         {/*  className="space-y-4" */}
         <div className="flex justify-between">
-          <h1 className="text-2xl font-semibold dark:text-white">Edição de Emails</h1>
+          <h1 className="text-4xl font-semibold dark:text-white">Edição de Emails</h1>
           <div>
             <h3 className="font-bold dark:text-white">Usuário logado: {session?.user.name}</h3>
             <h4 className="dark:text-white">Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
@@ -269,55 +332,82 @@ export default function EmailsPage() {
         <div
           className="grid grid-cols-5 gap-2 items-center mb-10"
           ref={formRef}>
-          <Input
-            placeholder="Email"
-            value={formEmail.email}
-            onChange={(e) =>
-              setFormEmail((prev) => ({ ...prev, email: e.target.value }))
-            }
-            className="border-[3px] rounded border-blue-500 dark:text-white"
-          />
-          <Input
-            placeholder="Nome"
-            value={formEmail.nome}
-            onChange={(e) =>
-              setFormEmail((prev) => ({ ...prev, nome: e.target.value }))
-            }
-            className="border-[3px] rounded border-blue-500 dark:text-white"
-          />
-          <Input
-            placeholder="Setor"
-            value={formEmail.setor}
-            onChange={(e) =>
-              setFormEmail((prev) => ({ ...prev, setor: e.target.value }))
-            }
-            className="border-[3px] rounded border-blue-500 dark:text-white"
-          />
-
-          {currentUser?.role === "OWNER" ? (
-            <select
-              className="border rounded px-2 py-1 text-sm"
-              value={formEmail.unidadeId}
+          {/* Número */}
+          <div>
+            <Input
+              placeholder="Email"
+              value={formEmail.email}
               onChange={(e) =>
-                setFormEmail((prev) => ({
-                  ...prev,
-                  unidadeId: Number(e.target.value),
-                }))
+                setFormEmail((prev) => ({ ...prev, email: e.target.value }))
               }
-            >
-              <option value="">Selecione a unidade</option>
-              {unidades.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.nome}
-                </option>
-              ))}
-            </select>
+              className="border-[3px] rounded border-blue-500 dark:text-white"
+            />
+            {formErrors.email && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+            )}
+          </div>
+
+          {/* Nome */}
+          <div>
+            <Input
+              placeholder="Nome"
+              value={formEmail.nome}
+              onChange={(e) =>
+                setFormEmail((prev) => ({ ...prev, nome: e.target.value }))
+              }
+              className="border-[3px] rounded border-blue-500 dark:text-white"
+            />
+            {formErrors.nome && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.nome}</p>
+            )}
+          </div>
+
+          {/* Setor */}
+          <div>
+            <Input
+              placeholder="Setor"
+              value={formEmail.setor}
+              onChange={(e) =>
+                setFormEmail((prev) => ({ ...prev, setor: e.target.value }))
+              }
+              className="border-[3px] rounded border-blue-500 dark:text-white"
+            />
+            {formErrors.setor && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.setor}</p>
+            )}
+          </div>
+
+          {/* Unidade (OWNER) */}
+          {currentUser?.role === "OWNER" ? (
+            <div>
+              <select
+                className="border rounded px-2 py-1 text-sm"
+                value={formEmail.unidadeId}
+                onChange={(e) =>
+                  setFormEmail((prev) => ({
+                    ...prev,
+                    unidadeId: Number(e.target.value),
+                  }))
+                }
+              >
+                <option value="">Selecione a unidade</option>
+                {unidades.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.nome}
+                  </option>
+                ))}
+              </select>
+              {formErrors.unidadeId && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.unidadeId}</p>
+              )}
+            </div>
           ) : (
             <Input
               disabled
               value={
                 currentUser?.unidadeNome ?? `Unidade #${currentUser?.unidadeId}`
               }
+              className="dark:text-white"
             />
           )}
 

@@ -1,15 +1,24 @@
+"use client";
+
 import Layout from "../../../components/Layout";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "../../../components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function PrintHeadClean() {
+  const router = useRouter();
+  
   return (
     <Layout>
-      <Link href="/impressoras-termicas">
-        <span className="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-3xl ml-5">
-          ← Voltar
-        </span>
-      </Link>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => router.back()}
+        className="bg-gray-500 text-white mb-5"
+      >
+        ← Voltar
+      </Button>
       <div className="container mx-auto p-6 max-w-4xl bg-white shadow-lg rounded-lg my-8">
         <h1 className="text-4xl font-extrabold text-blue-800 mb-6 border-b-4 border-blue-200 pb-2">
           Limpeza de Cabeça de Impressão ZT-230/ZT-231/ZT411

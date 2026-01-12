@@ -1,15 +1,24 @@
+"use client";
+
 import Layout from "../../../components/Layout";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "../../../components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function CMDHelp() {
+  const router = useRouter();
+  
   return (
     <Layout>
-      <Link href="/windows-page">
-        <span className="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-3xl ml-5">
-          ← Voltar
-        </span>
-      </Link>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => router.back()}
+        className="bg-gray-500 text-white mb-5"
+      >
+        ← Voltar
+      </Button>
       <div className="max-w-[90%] mx-auto mt-9 pt-2">
         <div className="flex items-center mt-3 mb-7">
           <h1 className="font-bold text-5xl pr-4 dark:text-white">CMD</h1>

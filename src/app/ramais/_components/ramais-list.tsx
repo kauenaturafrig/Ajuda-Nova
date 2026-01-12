@@ -4,6 +4,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { Button } from "../../../components/ui/button";
+import { useRouter } from "next/navigation";
 
 type RamalView = {
     nome: string | null;
@@ -18,6 +20,7 @@ type Props = {
 };
 
 export function RamaisList({ titulo, imagem, ramais }: Props) {
+    const router = useRouter();
     const [busca, setBusca] = useState("");
 
     function normalize(str: string) {
@@ -40,14 +43,18 @@ export function RamaisList({ titulo, imagem, ramais }: Props) {
             ramal.includes(busca)
         );
     });
-    
+
     return (
         <div>
-            <Link href="/ramais">
-                <span className="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-3xl ml-5">
-                    ← Voltar
-                </span>
-            </Link>
+            {/* Botão Voltar */}
+            <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.back()}
+                className="bg-gray-500 text-white mb-5  "
+            >
+                ← Voltar
+            </Button>
 
             <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg my-8 max-h-[1000px]">
                 <h1 className="text-4xl font-extrabold text-blue-800 mb-6 border-b-4 border-blue-200 pb-2">
