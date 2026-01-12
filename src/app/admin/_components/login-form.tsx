@@ -72,7 +72,7 @@ export function LoginForm() {
   }
 
   return (
-    <>
+    <div>
       <LoadingOverlay show={isLoading} text="Entrando..." />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -81,16 +81,17 @@ export function LoginForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="dark:text-white">Email</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="seu@email.com"
                     type="email"
                     {...field}
                     disabled={isLoading}
+                    className="dark:text-white"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="!text-red-500" />
               </FormItem>
             )}
           />
@@ -100,7 +101,7 @@ export function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Senha</FormLabel>
+                <FormLabel className="dark:text-white">Senha</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
@@ -108,19 +109,20 @@ export function LoginForm() {
                       type={showPassword ? "text" : "password"}
                       {...field}
                       disabled={isLoading}
+                      className="dark:text-white"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent dark:text-white"
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading}
                     >
                       {showPassword ? (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        <EyeOff className="h-4 w-4 text-muted-foreground dark:text-white" />
                       ) : (
-                        <Eye className="h-4 w-4 text-muted-foreground" />
+                        <Eye className="h-4 w-4 text-muted-foreground dark:text-white" />
                       )}
                       <span className="sr-only">
                         {showPassword ? "Esconder senha" : "Mostrar senha"}
@@ -128,48 +130,27 @@ export function LoginForm() {
                     </Button>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="!text-red-500" />
               </FormItem>
             )}
           />
 
           <Button
             type="submit"
-            className="w-full"
+            className="w-full text-white bg-blue-500 rounded hover:scale-110"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />
                 Entrando...
               </>
             ) : (
               "Entrar"
             )}
           </Button>
-
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Ou continue com
-              </span>
-            </div>
-          </div>
-
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full bg-[#9146FF] text-white hover:bg-[#7d3bdf] hover:text-white"
-            onClick={async () => { }}
-          >
-            <TwitchLogo className="mr-2 h-4 w-4" />
-            Entrar com Twitch
-          </Button>
         </form>
       </Form>
-    </>
+    </div>
   );
 }

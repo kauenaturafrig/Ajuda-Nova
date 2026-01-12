@@ -29,18 +29,18 @@ export function UsuariosClient({ usuarios, unidades }: Props) {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="container mx-auto min-h-screen py-10 space-y-6">
+    <div className="container mx-auto min-h-screen py-10 space-y-6 w-[90%]">
       <LoadingOverlay show={loading} text="Processando..." />
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold mb-1">Usuários</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-bold mb-1 dark:text-white">Usuários</h1>
+          <p className="text-sm text-muted-foreground dark:text-white">
             Gerencie perfis, unidades e senha dos usuários.
           </p>
         </div>
         <Link href="/admin/authenticated/criar-user">
-          <Button>Criar novo usuário</Button>
+          <Button className="bg-green-500 text-white">Criar novo usuário</Button>
         </Link>
       </div>
 

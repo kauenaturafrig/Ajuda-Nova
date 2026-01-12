@@ -82,7 +82,7 @@ export function ChangePasswordForm() {
     <div>
       <LoadingOverlay show={loading} text="Carregando..." />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 dark:text-white">
           {/* Senha atual */}
           <FormField
             control={form.control}
@@ -119,7 +119,7 @@ export function ChangePasswordForm() {
                     </Button>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="!text-red-500" />
               </FormItem>
             )}
           />
@@ -160,7 +160,7 @@ export function ChangePasswordForm() {
                     </Button>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="!text-red-500" />
               </FormItem>
             )}
           />
@@ -201,12 +201,12 @@ export function ChangePasswordForm() {
                     </Button>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="!text-red-500" />
               </FormItem>
             )}
           />
 
-          <Button type="submit" className="w-full border rouded bg-blue-600 text-white hover:scale-105" disabled={isLoading}>
+          <Button type="submit" className="w-full rouded bg-blue-600 text-white hover:scale-105" disabled={isLoading}>
             {isLoading ? "Salvando..." : "Alterar senha"}
           </Button>
         </form>

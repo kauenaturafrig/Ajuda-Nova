@@ -88,15 +88,16 @@ export function SignupForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel className="dark:text-white">Nome</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Seu nome completo"
                   {...field}
                   disabled={isLoading}
+                  className="dark:text-white"
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="!text-red-500" />
             </FormItem>
           )}
         />
@@ -106,16 +107,17 @@ export function SignupForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="dark:text-white">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="seu@email.com"
                   type="email"
                   {...field}
                   disabled={isLoading}
+                  className="dark:text-white"
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="!text-red-500" />
             </FormItem>
           )}
         />
@@ -125,7 +127,7 @@ export function SignupForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
+              <FormLabel className="dark:text-white">Senha</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
@@ -133,19 +135,20 @@ export function SignupForm() {
                     type={showPassword ? "text" : "password"}
                     {...field}
                     disabled={isLoading}
+                    className="dark:text-white"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent dark:text-white"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLoading}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground dark:text-white" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                      <Eye className="h-4 w-4 text-muted-foreground dark:text-white" />
                     )}
                     <span className="sr-only">
                       {showPassword ? "Esconder senha" : "Mostrar senha"}
@@ -153,7 +156,7 @@ export function SignupForm() {
                   </Button>
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="!text-red-500" />
             </FormItem>
           )}
         />
@@ -163,7 +166,7 @@ export function SignupForm() {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmar Senha</FormLabel>
+              <FormLabel className="dark:text-white">Confirmar Senha</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
@@ -171,19 +174,20 @@ export function SignupForm() {
                     type={showConfirmPassword ? "text" : "password"}
                     {...field}
                     disabled={isLoading}
+                    className="dark:text-white"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent dark:text-white"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     disabled={isLoading}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      <EyeOff className="h-4 w-4 text-muted-foreground dark:text-white" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                      <Eye className="h-4 w-4 text-muted-foreground dark:text-white" />
                     )}
                     <span className="sr-only">
                       {showConfirmPassword ? "Esconder senha" : "Mostrar senha"}
@@ -191,12 +195,12 @@ export function SignupForm() {
                   </Button>
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="!text-red-500" />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full text-white rounded bg-blue-500 hover:scale-110" disabled={isLoading}>
           {form.formState.isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

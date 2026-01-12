@@ -52,7 +52,7 @@ export default async function Authenticated() {
         <nav className="grid gap-4 md:grid-cols-3">
           <Link
             href="/admin/authenticated/ramais"
-            className="group h-[250px] rounded-lg border bg-yellow-600 text-white 
+            className="group h-[250px] rounded-lg bg-yellow-600 text-white 
                transition-transform duration-200 hover:scale-105 hover:shadow-lg"
           >
             <div className="flex h-full flex-col items-center justify-center text-center px-4">
@@ -70,7 +70,7 @@ export default async function Authenticated() {
 
           <Link
             href="/admin/authenticated/emails"
-            className="group h-[250px] rounded-lg border bg-purple-600 text-white 
+            className="group h-[250px] rounded-lg bg-purple-600 text-white 
                transition-transform duration-200 hover:scale-105 hover:shadow-lg"
           >
             <div className="flex h-full flex-col items-center justify-center text-center px-4">
@@ -88,7 +88,7 @@ export default async function Authenticated() {
 
           <Link
             href="/admin/authenticated/minha-senha"
-            className="group h-[250px] rounded-lg border bg-green-600 text-white 
+            className="group h-[250px] rounded-lg bg-green-600 text-white 
                transition-transform duration-200 hover:scale-105 hover:shadow-lg"
           >
             <div className="flex h-full flex-col items-center justify-center text-center px-4">
@@ -127,7 +127,7 @@ export default async function Authenticated() {
           {isOwner && (
             <Link
               href="/admin/authenticated/usuarios"
-              className="group h-[250px] rounded-lg border bg-red-600 text-white 
+              className="group h-[250px] rounded-lg bg-red-600 text-white 
                  transition-transform duration-200 hover:scale-105 hover:shadow-lg"
             >
               <div className="flex h-full flex-col items-center justify-center text-center px-4">

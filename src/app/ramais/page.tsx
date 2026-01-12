@@ -16,6 +16,12 @@ export default function Ramais() {
             height={50}
             className="mr-5 dark:invert"
           />
+          <Link
+            href="/admin"
+            className="ml-auto rounded bg-blue-500 px-4 py-2 text-white hover:scale-110"
+          >
+            Editar ramais
+          </Link>
         </div>
         <section className="max-w-[90%] mx-auto">
           <MapaBrasil  basePath="/ramais" />

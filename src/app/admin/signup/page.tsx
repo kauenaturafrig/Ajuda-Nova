@@ -7,16 +7,16 @@ export default function Signup() {
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Cadastro</h1>
-          <p className="mt-2 text-sm text-muted-foreground">Crie sua conta para começar</p>
+          <h1 className="text-3xl font-bold dark:text-white">Cadastro</h1>
+          <p className="mt-2 text-sm text-muted-foreground dark:text-white">Crie sua conta para começar</p>
         </div>
 
         <SignupForm />
 
-        <div className="text-center text-sm">
+        <div className="text-center text-sm dark:text-white">
           <p>
             Já tem uma conta?{" "}
-            <Link href="/admin" className="font-medium text-primary hover:underline">
+            <Link href="/admin" className="font-medium text-primary hover:underline dark:text-white">
               Faça login
             </Link>
           </p>

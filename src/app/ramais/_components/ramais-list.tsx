@@ -42,7 +42,7 @@ export function RamaisList({ titulo, imagem, ramais }: Props) {
     });
     
     return (
-        <>
+        <div>
             <Link href="/ramais">
                 <span className="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-3xl ml-5">
                     ← Voltar
@@ -97,6 +97,6 @@ export function RamaisList({ titulo, imagem, ramais }: Props) {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

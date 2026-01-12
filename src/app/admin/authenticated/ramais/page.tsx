@@ -246,10 +246,10 @@ export default function RamaisPage() {
       <div className="w-[90%] mx-auto">
         {/*  className="space-y-4" */}
         <div className="flex justify-between">
-          <h1 className="text-2xl font-semibold">Edição de Ramais</h1>
+          <h1 className="text-2xl font-semibold dark:text-white">Edição de Ramais</h1>
           <div>
-            <h3 className="font-bold">Usuário logado: {session?.user.name}</h3>
-            <h4>Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
+            <h3 className="font-bold dark:text-white">Usuário logado: {session?.user.name}</h3>
+            <h4 className="dark:text-white">Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
           </div>
         </div>
 
@@ -259,12 +259,12 @@ export default function RamaisPage() {
             placeholder="Buscar por número, nome, setor ou unidade..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border-[3px] rounded border-blue-500"
+            className="border-[3px] rounded border-blue-500 dark:text-white"
           />
         </div>
 
         {/* Formulário de novo ramal */}
-        <h2 className="font-medium text-lg mt-4 mb-2">
+        <h2 className="font-medium text-lg mt-4 mb-2 dark:text-white">
           {editingId ? "Editar ramal" : "Novo ramal"}
         </h2>
         <div
@@ -276,7 +276,7 @@ export default function RamaisPage() {
             onChange={(e) =>
               setFormRamal((prev) => ({ ...prev, numero: e.target.value }))
             }
-            className="border-[3px] rounded border-blue-500"
+            className="border-[3px] rounded border-blue-500 dark:text-white"
           />
           <Input
             placeholder="Nome"
@@ -284,7 +284,7 @@ export default function RamaisPage() {
             onChange={(e) =>
               setFormRamal((prev) => ({ ...prev, nome: e.target.value }))
             }
-            className="border-[3px] rounded border-blue-500"
+            className="border-[3px] rounded border-blue-500 dark:text-white"
           />
           <Input
             placeholder="Setor"
@@ -292,7 +292,7 @@ export default function RamaisPage() {
             onChange={(e) =>
               setFormRamal((prev) => ({ ...prev, setor: e.target.value }))
             }
-            className="border-[3px] rounded border-blue-500"
+            className="border-[3px] rounded border-blue-500 dark:text-white"
           />
 
           {currentUser?.role === "OWNER" ? (
@@ -351,9 +351,9 @@ export default function RamaisPage() {
         </div>
 
         {/* Lista de ramais (somente leitura) */}
-        <div className="space-y-1 border-[3px] rounded border-blue-500 p-2">
+        <div className="space-y-1 p-2">
           {filteredRamais.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground dark:text-white">
               Nenhum ramal encontrado para “{search}”.
             </p>
           ) : (
@@ -363,7 +363,8 @@ export default function RamaisPage() {
                 className="
                   grid gap-3 border p-3 rounded
                   grid-cols-1
-                  md:grid-cols-[1fr_2fr_2fr_1fr_auto]                    
+                  md:grid-cols-[1fr_2fr_2fr_1fr_auto]
+                  border-black align-middle items-center dark:text-white dark:border-white              
                 "
               >
                 <span className="break-all"><strong>{ramal.numero}</strong></span>

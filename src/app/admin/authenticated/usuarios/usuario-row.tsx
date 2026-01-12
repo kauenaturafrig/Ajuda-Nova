@@ -102,23 +102,23 @@ export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-5 gap-2 items-center border p-2 rounded">
+    <div className="grid grid-cols-5 gap-3 items-center border p-2 rounded border-black md:grid-cols-[1fr_2fr_1fr_1fr_auto]">
       <div>
-        <div className="text-xs text-muted-foreground">Nome</div>
+        <div className="text-xs text-muted-foreground font-bold dark:text-white">Nome</div>
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="h-8"
+          className="h-8 dark:text-white"
         />
       </div>
 
       <div>
-        <div className="text-xs text-muted-foreground">Email</div>
-        <div className="text-sm truncate">{usuario.email}</div>
+        <div className="text-xs text-muted-foreground font-bold dark:text-white">Email</div>
+        <div className="text-sm truncate dark:text-white">{usuario.email}</div>
       </div>
 
       <div>
-        <div className="text-xs text-muted-foreground">Perfil</div>
+        <div className="text-xs text-muted-foreground font-bold dark:text-white">Perfil</div>
         <select
           value={role}
           onChange={(e) => setRole(e.target.value as "OWNER" | "ADMIN")}
@@ -130,7 +130,7 @@ export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
       </div>
 
       <div>
-        <div className="text-xs text-muted-foreground">Unidade</div>
+        <div className="text-xs text-muted-foreground font-bold dark:text-white">Unidade</div>
         <select
           value={unidadeId}
           onChange={(e) => setUnidadeId(e.target.value)}
@@ -146,7 +146,7 @@ export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
       </div>
 
       <div className="flex gap-2 justify-end">
-        <Button size="sm" variant="outline" onClick={salvar} disabled={saving}>
+        <Button size="sm" variant="outline" onClick={salvar} disabled={saving} className="bg-blue-500 text-white">
           {saving ? "Salvando..." : "Salvar"}
         </Button>
         <Button
@@ -154,6 +154,7 @@ export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
           variant="destructive"
           onClick={resetSenha}
           disabled={resetting}
+          className="bg-yellow-500"
         >
           {resetting ? "Resetando..." : "Resetar senha"}
         </Button>
@@ -162,6 +163,7 @@ export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
           variant="destructive"
           onClick={deletar}
           disabled={deleting}
+          className="bg-red-500"
         >
           {deleting ? "Excluindo..." : "Excluir"}
         </Button>

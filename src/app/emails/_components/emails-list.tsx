@@ -42,7 +42,7 @@ export function EmailsList({ titulo, imagem, emails }: Props) {
     });
 
     return (
-        <>
+        <div>
             <Link href="/emails">
                 <span className="text-blue-600 dark:text-blue-400 hover:underline font-semibold text-3xl ml-5">
                     ← Voltar
@@ -101,6 +101,6 @@ export function EmailsList({ titulo, imagem, emails }: Props) {
                 </div>
 
             </div>
-        </>
+        </div>
     );
 }
