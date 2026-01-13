@@ -28,6 +28,9 @@ bash
     cd ajuda-nova
     npm install
 
+Alterar o ip para o arquivo:
+
+  src/lib/auth-client
 
 Gerar o Prisma Client (mesmo com output em src/generated/prisma)
 Sim, ainda precisa rodar:
@@ -81,6 +84,12 @@ Para criar user inicial (na raiz do projeto):
 
 ///////////////////////////////////////////////////////////////////////////////
 
+# 1) Build de produção
+npm run build
+
+# 2) Subir com PM2 usando o script "start"
+pm2 start npm --name "ajuda-nova" -- run start
+
 
 kaue_santos@SrvLab01:~$ sudo -i -u postgres
 postgres@SrvLab01:~$ psql
@@ -94,8 +103,10 @@ CREATE DATABASE
 postgres=#
 
 
-
-
+sudo ufw status
+sudo ufw allow 5050/tcp
+sudo ufw disallow 5000/tcp
+sudo ufw delete allow 5000/tcp
 
 
 
