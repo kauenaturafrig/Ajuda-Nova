@@ -68,9 +68,9 @@ export async function POST(req: NextRequest) {
       email: body.email,
       nome: body.nome,
       setor: body.setor,
-      unidadeId, // aqui sempre tem um Int
-      // NÃO passar `unidade: { ... }`
+      unidadeId,
     },
+    include: { unidade: true },
   });
 
   return NextResponse.json(created, { status: 201 });
@@ -99,6 +99,7 @@ export async function PUT(req: NextRequest) {
       setor: body.setor,
       unidadeId: body.unidadeId,
     },
+    include: { unidade: true },
   });
 
   return NextResponse.json(updated);

@@ -184,6 +184,9 @@ export default function RamaisPage() {
           prev.map((r) => (r.id === updated.id ? updated : r)),
         );
         cancelEdit();
+
+        // força a rota atual a buscar dados de novo no servidor
+        router.refresh();
       } finally {
         setSavingId(null);
       }
@@ -203,6 +206,9 @@ export default function RamaisPage() {
         const created: Ramal = await res.json();
         setRamais((prev) => [...prev, created]);
         cancelEdit();
+
+        // recarrega a rota e força nova busca de dados
+        router.refresh();
       } finally {
         setCreating(false);
       }
@@ -342,7 +348,7 @@ export default function RamaisPage() {
               value={formRamal.numero}
               onChange={(e) => {
                 const onlyDigits = e.target.value.replace(/\D/g, "");
-                setFormRamal((prev) => ({ ...prev, numero: e.target.value }))
+                setFormRamal((prev) => ({ ...prev, numero: onlyDigits }));
               }}
               className="border-[3px] rounded border-blue-500 dark:text-white"
             />
