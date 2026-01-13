@@ -2,6 +2,8 @@
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
 import { RamaisList } from "../_components/ramais-list";
+import Link from "next/link";
+import { Button } from "../../../components/ui/button";
 
 // desabilita cache e SSG
 export const dynamic = "force-dynamic";
@@ -18,6 +20,11 @@ export default async function RamaisRochedoPage() {
 
   return (
     <Layout>
+      <Link href="/ramais" prefetch={false}>
+        <Button variant="outline" className="mb-4 bg-gray-500 text-white">
+          ← Voltar
+        </Button>
+      </Link>
       <RamaisList
         titulo="Rochedo - MS"
         imagem="/assets/images/unidades/ROCHEDO2023.jpg"
