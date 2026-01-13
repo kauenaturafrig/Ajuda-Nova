@@ -4,6 +4,8 @@ import { prisma } from "../../../../lib/prisma";
 import { auth } from "../../../../lib/auth";
 import { hashPassword } from "better-auth/crypto"; // <- novo import [web:365]
 
+export const dynamic = "force-dynamic";
+
 // só OWNER pode mexer
 async function requireOwner(req: NextRequest) {
   const session = await auth.api.getSession({ headers: req.headers });

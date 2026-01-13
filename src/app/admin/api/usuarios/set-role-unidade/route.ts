@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../lib/prisma";
 import { auth } from "../../../../../lib/auth";
 
+export const dynamic = "force-dynamic";
+
 async function requireOwner(req: NextRequest) {
   const session = await auth.api.getSession({ headers: req.headers });
   if (!session) return null;
