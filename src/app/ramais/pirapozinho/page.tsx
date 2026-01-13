@@ -1,7 +1,12 @@
 // src/app/ramais/nova-andradina/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { RamaisList } from "../_components/ramais-list"; // client para busca
+import { RamaisList } from "../_components/ramais-list";
+
+// desabilita cache e SSG
+export const dynamic = "force-dynamic";
+// ou, alternativamente:
+// export const revalidate = 0;
 
 export default async function RamaisPirapozinhoPage() {
   // pega a unidade pelo nome (ou id fixo, como preferir)
