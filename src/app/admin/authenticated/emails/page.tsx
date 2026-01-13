@@ -10,6 +10,7 @@ import Layout from "../../../../components/Layout";
 import { headers } from 'next/headers';
 import { auth } from '../../../../lib/auth';
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
+import { useToast } from "../../../../components/ui/use-toast";
 
 type Email = {
   id: number;
@@ -28,6 +29,7 @@ type CurrentUser = {
 
 export default function EmailsPage() {
   const router = useRouter();
+  const { showToast } = useToast();
   const { data: session, isPending, error } = useSession();
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
@@ -182,6 +184,14 @@ export default function EmailsPage() {
           prev.map((r) => (r.id === updated.id ? updated : r)),
         );
         cancelEdit();
+
+        showToast({
+          title: "Email atualizado",
+          message: `Email ${updated.email} salvo com sucesso.`,
+        });
+
+        // força a rota atual a buscar dados de novo no servidor
+        router.refresh();
       } finally {
         setSavingId(null);
       }
@@ -201,6 +211,14 @@ export default function EmailsPage() {
         const created: Email = await res.json();
         setEmails((prev) => [...prev, created]);
         cancelEdit();
+
+        showToast({
+          title: "Email criado",
+          message: `Email ${created.email} criado com sucesso.`,
+        });
+
+        // recarrega a rota e força nova busca de dados
+        router.refresh();
       } finally {
         setCreating(false);
       }

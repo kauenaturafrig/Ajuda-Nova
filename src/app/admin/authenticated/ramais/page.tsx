@@ -10,6 +10,7 @@ import Layout from "../../../../components/Layout";
 import { headers } from 'next/headers';
 import { auth } from '../../../../lib/auth';
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
+import { useToast } from "../../../../components/ui/use-toast";
 
 type Ramal = {
   id: number;
@@ -28,6 +29,7 @@ type CurrentUser = {
 
 export default function RamaisPage() {
   const router = useRouter();
+  const { showToast } = useToast();
   const { data: session, isPending, error } = useSession();
   const [ramais, setRamais] = useState<Ramal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -185,6 +187,11 @@ export default function RamaisPage() {
         );
         cancelEdit();
 
+        showToast({
+          title: "Ramal atualizado",
+          message: `Ramal ${updated.numero} salvo com sucesso.`,
+        });
+
         // força a rota atual a buscar dados de novo no servidor
         router.refresh();
       } finally {
@@ -206,6 +213,11 @@ export default function RamaisPage() {
         const created: Ramal = await res.json();
         setRamais((prev) => [...prev, created]);
         cancelEdit();
+
+        showToast({
+          title: "Ramal criado",
+          message: `Ramal ${created.numero} criado com sucesso.`,
+        });
 
         // recarrega a rota e força nova busca de dados
         router.refresh();

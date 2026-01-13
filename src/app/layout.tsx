@@ -2,6 +2,7 @@
 import './globals.css'
 import Layout from '../components/Layout'
 import localFont from 'next/font/local'
+import { ToastProvider } from "../components/ui/use-toast";
 
 const aleo = localFont({
   src: [
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${aleo.variable} font-aleo`}>
-        <Layout>{children}</Layout>
+        <ToastProvider>
+          <Layout>{children}</Layout>
+        </ToastProvider>
       </body>
     </html>
   )
