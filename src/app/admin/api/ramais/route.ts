@@ -68,12 +68,13 @@ export async function POST(req: NextRequest) {
       numero: body.numero,
       nome: body.nome,
       setor: body.setor,
-      unidadeId, // aqui sempre tem um Int
-      // NÃO passar `unidade: { ... }`
+      unidadeId,
     },
+    include: { unidade: true }, // <- importante
   });
 
   return NextResponse.json(created, { status: 201 });
+
 }
 
 export async function PUT(req: NextRequest) {
@@ -99,9 +100,11 @@ export async function PUT(req: NextRequest) {
       setor: body.setor,
       unidadeId: body.unidadeId,
     },
+    include: { unidade: true }, // <- idem
   });
 
   return NextResponse.json(updated);
+
 }
 
 export async function DELETE(req: NextRequest) {
