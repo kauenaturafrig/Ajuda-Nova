@@ -336,7 +336,7 @@ export default function EmailsPage() {
         {/* Barra de busca */}
         <div className="flex gap-2 items-center my-10">
           <Input
-            placeholder="Buscar por emial, nome, setor ou unidade..."
+            placeholder="Buscar por email, nome, setor ou unidade..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="border-[3px] rounded border-blue-500 dark:text-white"
