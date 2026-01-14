@@ -110,45 +110,11 @@ sudo ufw delete allow 5000/tcp
 
 
 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-import "dotenv/config";
-import { prisma } from "../src/lib/prisma";
+/////////////////////////////////////////////////////////////////////
 
-async function main() {
-  const email = process.env.INIT_OWNER_EMAIL;
-  const name = process.env.INIT_OWNER_NAME ?? "Owner inicial";
+COMO ATUALIZAR O SERVER:
 
-  if (!email) {
-    console.error("Defina INIT_OWNER_EMAIL no .env");
-    process.exit(1);
-  }
-
-  console.log("Criando/atualizando usuário owner inicial...");
-
-  const user = await prisma.user.upsert({
-    where: { email },
-    update: {
-      role: "OWNER",
-      unidadeId: 2,
-    },
-    create: {
-      id: crypto.randomUUID(), // ou outro gerador compatível com seu schema
-      name,
-      email,
-      role: "OWNER",
-      unidadeId: 2,
-      // se seu User tiver mais campos obrigatórios, adicione aqui
-    },
-  });
-
-  console.log("Usuário owner pronto:", user.email);
-}
-
-main()
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  pm2 delete ajuda-nova
+  git pull origin main
+  npm run build
+  pm2 start npm --name "ajuda-nova" -- run start

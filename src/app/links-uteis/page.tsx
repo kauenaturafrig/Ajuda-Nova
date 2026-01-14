@@ -19,6 +19,32 @@ export default function LinksUtil() {
         <p className="mb-8 text-2xl dark:text-white">O que você busca?</p>
         <section className="max-w-[90%] mx-auto">
           <Link
+            href={"https://helpdesk.naturafrig.com.br/"}
+            className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
+          >
+            <Image
+              src={"/assets/images/logos/glpi.png"}
+              alt="Logo GLPI"
+              width={100}
+              height={100}
+              className="mr-5 dark:invert"
+            />
+            <span>Chamados TI</span>
+          </Link>
+          <Link
+            href={"https://suporte.naturafrig.com.br/"}
+            className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
+          >
+            <Image
+              src={"/assets/images/logos/helpdesk.png"}
+              alt="Logo Helpdesk"
+              width={50}
+              height={50}
+              className="mr-9"
+            />
+            <span>Chamados Tanuresoft, Protheus, TI Pirapozinho e Sênior</span>
+          </Link>
+          <Link
             href={"http://172.16.10.4:8220/webapp/"}
             className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
           >
@@ -32,6 +58,19 @@ export default function LinksUtil() {
             <span>PROTHEUS</span>
           </Link>
           <Link
+            href={"http://172.16.8.5:6969/"}
+            className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
+          >
+            <Image
+              src={"/assets/images/icons/icons8-magnifying-glass-96.png"}
+              alt="Logo Protheus"
+              width={50}
+              height={50}
+              className="mr-5"
+            />
+            <span>Sistema de Busca de Itens PROTHEUS</span>
+          </Link>
+          <Link
             href={"http://172.16.10.4:7017/login"}
             className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
           >
@@ -43,32 +82,6 @@ export default function LinksUtil() {
               className="mr-5 dark:invert"
             />
             <span>Smartview</span>
-          </Link>
-          <Link
-            href={"https://helpdesk.naturafrig.com.br/"}
-            className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
-          >
-            <Image
-              src={"/assets/images/logos/glpi.png"}
-              alt="Logo GLPI"
-              width={100}
-              height={100}
-              className="mr-5 dark:invert"
-            />
-            <span>Chamados TI Nova Andradina</span>
-          </Link>
-          <Link
-            href={"https://suporte.naturafrig.com.br/"}
-            className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
-          >
-            <Image
-              src={"/assets/images/logos/helpdesk.png"}
-              alt="Logo Helpdesk"
-              width={50}
-              height={50}
-              className="mr-9"
-            />
-            <span>Chamados Tanuresoft, Protheus, TI Pirapó</span>
           </Link>
           <Link
             href={"https://webmail.naturafrig.com.br/"}
