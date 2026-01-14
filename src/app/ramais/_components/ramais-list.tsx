@@ -22,6 +22,30 @@ type Props = {
 export function RamaisList({ titulo, imagem, ramais }: Props) {
     const router = useRouter();
     const [busca, setBusca] = useState("");
+    const [copiedRamal, setCopiedRamal] = useState<string | null>(null);
+
+    async function handleCopy(ramal: string) {
+        try {
+            if (navigator && "clipboard" in navigator) {
+                await navigator.clipboard.writeText(ramal);
+            } else {
+                // fallback simples
+                const textarea = document.createElement("textarea");
+                textarea.value = ramal;
+                textarea.style.position = "fixed";
+                textarea.style.left = "-9999px";
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+            }
+
+            setCopiedRamal(ramal);
+            setTimeout(() => setCopiedRamal(null), 1500);
+        } catch (err) {
+            console.error("Erro ao copiar ramal", err);
+        }
+    }
 
     function normalize(str: string) {
         return str
@@ -64,16 +88,35 @@ export function RamaisList({ titulo, imagem, ramais }: Props) {
                         <ul className="divide-y divide-gray-200 pr-4">
                             {filtrados.length > 0 ? (
                                 filtrados.map((r, idx) => (
-                                    <li key={idx} className="py-3 flex justify-between min-w-96">
+                                    <li
+                                        key={idx}
+                                        className="py-3 flex justify-between min-w-96 space-x-20"
+                                    >
                                         <div>
                                             <p className="font-semibold text-lg text-gray-800">
                                                 {r.setor}
                                                 {r.nome ? ` - ${r.nome}` : ""}
                                             </p>
                                         </div>
-                                        <span className="text-xl font-bold text-blue-700">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleCopy(r.ramal)}
+                                            className="relative group text-xl font-bold text-blue-700"
+                                        >
                                             {r.ramal}
-                                        </span>
+
+                                            <span
+                                                className={`
+                                                    absolute -bottom-7 right-0 z-50
+                                                    rounded bg-gray-800 px-2 py-1 text-xs text-white
+                                                    opacity-0 scale-95 -translate-y-1
+                                                    group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0
+                                                    transition-all
+                                                `}
+                                            >
+                                                {copiedRamal === r.ramal ? "Copiado!" : "Copiar"}
+                                            </span>
+                                        </button>
                                     </li>
                                 ))
                             ) : (
