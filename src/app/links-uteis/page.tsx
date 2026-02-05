@@ -96,19 +96,6 @@ export default function LinksUtil() {
             />
             <span>Webmail</span>
           </Link>
-          <Link
-            href={"https://assinatura.naturafrig.com.br/"}
-            className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
-          >
-            <Image
-              src={"/assets/images/logos/assinatura.png"}
-              alt="Logo Assinatura"
-              width={50}
-              height={50}
-              className="mr-5 dark:invert"
-            />
-            <span>Assinatura digital para email</span>
-          </Link>
         </section>
       </div>
     </Layout>

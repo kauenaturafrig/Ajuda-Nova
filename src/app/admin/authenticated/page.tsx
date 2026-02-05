@@ -104,6 +104,24 @@ export default async function Authenticated() {
             </div>
           </Link>
 
+          <Link
+            href="https://assinatura.naturafrig.com.br/"
+            className="group h-[250px] rounded-lg bg-blue-600 text-white 
+               transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+          >
+            <div className="flex h-full flex-col items-center justify-center text-center px-4">
+              <img
+                src="/assets/images/logos/assinatura.png"
+                alt="Minha senha"
+                className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110 invert"
+              />
+              <h2 className="font-semibold text-3xl mb-2">Criar Assinatura</h2>
+              <p className="text-sm opacity-90">
+                Criar assinatura email.
+              </p>
+            </div>
+          </Link>
+
           {isOwner && (
             <Link
               href="/admin/authenticated/criar-user"
