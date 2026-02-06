@@ -113,6 +113,7 @@ model Ramal {
   updatedAt DateTime @updatedAt
 
   @@map("ramais")
+  @@unique([unidadeId, numero])
 }
 
 model Email {
@@ -126,4 +127,5 @@ model Email {
   updatedAt DateTime @updatedAt
 
   @@map("emails")
+  @@unique([unidadeId, email])
 }

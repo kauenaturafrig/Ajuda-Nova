@@ -7,10 +7,9 @@ import { useRouter } from "next/navigation";
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
 import Layout from "../../../../components/Layout";
-import { headers } from 'next/headers';
-import { auth } from '../../../../lib/auth';
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
 import { useToast } from "../../../../components/ui/use-toast";
+import UploadRamaisImport from "./_components/UploadRamaisImport";
 
 type Ramal = {
   id: number;
@@ -457,8 +456,31 @@ export default function RamaisPage() {
               >
                 Cancelar
               </Button>
+
             )}
           </div>
+          {/* Exportar */}
+            <Button
+              variant="outline"
+              onClick={async () => {
+                const res = await fetch("/admin/api/ramais/export");
+                const csv = await res.text();
+
+                const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", "ramais.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="bg-blue-500 border-none text-white"
+            >
+              Exportar CSV
+            </Button>
+
+            {/* Importar */}
+            <UploadRamaisImport />
         </div>
 
         {/* Lista de ramais (somente leitura) */}

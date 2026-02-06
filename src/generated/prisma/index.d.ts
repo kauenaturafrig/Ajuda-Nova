@@ -9962,6 +9962,7 @@ export namespace Prisma {
 
   export type RamalWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    unidadeId_numero?: RamalUnidadeIdNumeroCompoundUniqueInput
     AND?: RamalWhereInput | RamalWhereInput[]
     OR?: RamalWhereInput[]
     NOT?: RamalWhereInput | RamalWhereInput[]
@@ -9972,7 +9973,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Ramal"> | Date | string
     updatedAt?: DateTimeFilter<"Ramal"> | Date | string
     unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
-  }, "id">
+  }, "id" | "unidadeId_numero">
 
   export type RamalOrderByWithAggregationInput = {
     id?: SortOrder
@@ -10029,6 +10030,7 @@ export namespace Prisma {
 
   export type EmailWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    unidadeId_email?: EmailUnidadeIdEmailCompoundUniqueInput
     AND?: EmailWhereInput | EmailWhereInput[]
     OR?: EmailWhereInput[]
     NOT?: EmailWhereInput | EmailWhereInput[]
@@ -10039,7 +10041,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Email"> | Date | string
     updatedAt?: DateTimeFilter<"Email"> | Date | string
     unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
-  }, "id">
+  }, "id" | "unidadeId_email">
 
   export type EmailOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11031,6 +11033,11 @@ export namespace Prisma {
     isNot?: UnidadeWhereInput
   }
 
+  export type RamalUnidadeIdNumeroCompoundUniqueInput = {
+    unidadeId: number
+    numero: string
+  }
+
   export type RamalCountOrderByAggregateInput = {
     id?: SortOrder
     numero?: SortOrder
@@ -11069,6 +11076,11 @@ export namespace Prisma {
   export type RamalSumOrderByAggregateInput = {
     id?: SortOrder
     unidadeId?: SortOrder
+  }
+
+  export type EmailUnidadeIdEmailCompoundUniqueInput = {
+    unidadeId: number
+    email: string
   }
 
   export type EmailCountOrderByAggregateInput = {
