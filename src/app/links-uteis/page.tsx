@@ -53,7 +53,7 @@ export default function LinksUtil() {
               alt="Logo Protheus"
               width={50}
               height={50}
-              className="mr-5"
+              className="ml-7 mr-10"
             />
             <span>Sistema de Busca de Itens PROTHEUS</span>
           </Link>
@@ -69,6 +69,19 @@ export default function LinksUtil() {
               className="mr-5 dark:invert"
             />
             <span>Smartview</span>
+          </Link>
+          <Link
+            href={"https://platform.senior.com.br/"}
+            className="flex items-center border-l-4 border-green-700 mb-5 space-x-2 dark:text-white hover:text-white hover:bg-green-700 p-2 rounded text-2xl"
+          >
+            <Image
+              src={"/assets/images/logos/logo-senior.png"}
+              alt="Logo Sênior X"
+              width={100}
+              height={100}
+              className="mr-5"
+            />
+            <span>SeniorX</span>
           </Link>
           <Link
             href={"https://webmail.naturafrig.com.br/"}
