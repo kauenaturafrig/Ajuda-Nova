@@ -1,7 +1,7 @@
 // src/app/admin/authenticated/ramais/page.tsx
 "use client";
 
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import { useSession } from "../../../../lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Input } from "../../../../components/ui/input";
@@ -53,6 +53,13 @@ export default function RamaisPage() {
     setor: "",
     unidadeId: "" as string | number,
   });
+
+  // Função para recarregar ramais
+  const refreshRamais = useCallback(async () => {
+    const res = await fetch("/admin/api/ramais");
+    const data = await res.json();
+    setRamais(data);
+  }, []);
 
   useEffect(() => {
     if (isPending) return;
@@ -328,7 +335,7 @@ export default function RamaisPage() {
       <div className="w-[90%] mx-auto">
         {/*  className="space-y-4" */}
         <div className="flex justify-between">
-          <h1 className="text-4xl font-semibold dark:text-white">Edição de Ramais</h1>
+          <h1 className="text-4xl font-semibold dark:text-white mt-2">Edição de Ramais</h1>
           <div>
             <h3 className="font-bold dark:text-white">Usuário logado: {session?.user.name}</h3>
             <h4 className="dark:text-white">Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
@@ -347,10 +354,10 @@ export default function RamaisPage() {
 
         {/* Formulário de novo ramal */}
         <h2 className="font-medium text-lg mt-4 mb-2 dark:text-white">
-          {editingId ? "Editar ramal" : "Novo ramal"}
+          {editingId ? "Editar ramal" : "Criar novo ramal"}
         </h2>
         <div
-          className="grid grid-cols-5 gap-2 items-center mb-10"
+          className="grid grid-cols-5 gap-2 items-center"
           ref={formRef}>
           {/* Número */}
           <div>
@@ -459,28 +466,29 @@ export default function RamaisPage() {
 
             )}
           </div>
+        </div>
+
+        <div className="flex items-center gap-2 mt-4 mb-10 w-[100%] justify-end">
           {/* Exportar */}
-            <Button
-              variant="outline"
-              onClick={async () => {
-                const res = await fetch("/admin/api/ramais/export");
-                const csv = await res.text();
-
-                const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.setAttribute("download", "ramais.csv");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-              }}
-              className="bg-blue-500 border-none text-white"
-            >
-              Exportar CSV
-            </Button>
-
-            {/* Importar */}
-            <UploadRamaisImport />
+          <Button
+            variant="outline"
+            onClick={async () => {
+              const res = await fetch("/admin/api/ramais/export");
+              const csv = await res.text();
+              const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+              const link = document.createElement("a");
+              link.href = URL.createObjectURL(blob);
+              link.setAttribute("download", "ramais.csv");
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+            className="bg-blue-500 border-none text-white"
+          >
+            Exportar CSV
+          </Button>
+          {/* Importar */}
+          <UploadRamaisImport onImportSuccess={refreshRamais} />
         </div>
 
         {/* Lista de ramais (somente leitura) */}

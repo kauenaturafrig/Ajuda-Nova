@@ -1,4 +1,4 @@
-// src/app/admin/authenticated/ramais/_components/UploadRamaisImport.tsx
+// src/app/admin/authenticated/emails/_components/UploadEmailsImport.tsx
 "use client";
 
 import { useState } from "react";
@@ -10,7 +10,7 @@ interface Props {
   onImportSuccess?: () => Promise<void>;
 }
 
-export default function UploadRamaisImport({ onImportSuccess }: Props) {
+export default function UploadEmailsImport({ onImportSuccess }: Props) {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const { showToast } = useToast();
@@ -21,7 +21,7 @@ export default function UploadRamaisImport({ onImportSuccess }: Props) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("/admin/api/ramais/import", {
+    const res = await fetch("/admin/api/emails/import", {
       method: "POST",
       body: formData,
     });
@@ -30,7 +30,7 @@ export default function UploadRamaisImport({ onImportSuccess }: Props) {
       const data = await res.json();
       showToast({
         title: "Importação concluída",
-        message: `${data.imported} ramais importados.`,
+        message: `${data.imported} emails importados.`,
       });
       let fileInput = document.getElementById("file-upload") as HTMLInputElement;
       fileInput.value = "";

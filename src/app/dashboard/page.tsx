@@ -13,7 +13,7 @@ type DashboardItem = {
 
 const dashboardItems: DashboardItem[] = [
   {
-    title: "Links Úteis",
+    title: "Sistemas Naturafrig",
     href: "/links-uteis",
     color: "bg-gray-400",
     icon: "/assets/images/icons/icons8-link-branco.png",
@@ -68,7 +68,7 @@ export default function Dashboard() {
       <div className="min-h-screen pt-9 p-6 my-auto">
         <div className="flex align-middle flex-wrap justify-between max-w-8xl mx-auto">
           <h1 className="text-5xl font-bold text-center text-gray-800 dark:text-white pt-9 pb-9">
-            Painel de Controle
+            Bem vindo!
           </h1>
           <div className="flex align-middle items-center">
             <p className="text-xl dark:text-white mr-5">Tema</p>

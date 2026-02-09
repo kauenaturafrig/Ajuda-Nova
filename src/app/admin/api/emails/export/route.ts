@@ -1,4 +1,4 @@
-// src/app/admin/api/ramais/export/route.ts
+// src/app/admin/api/emails/export/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../lib/prisma";
 import { auth } from "../../../../../lib/auth";
@@ -23,16 +23,16 @@ export async function GET(req: NextRequest) {
   const where =
     user.role === "OWNER" ? {} : { unidadeId: user.unidadeId ?? -1 };
 
-  const ramais = await prisma.ramal.findMany({
+  const emails = await prisma.email.findMany({
     where,
     include: { unidade: true },
-    orderBy: { numero: "asc" },
+    orderBy: { email: "asc" },
   });
 
   // monta CSV: cabeçalho
-  const headers = ["Número", "Nome", "Setor", "Unidade"];
-  const rows = ramais.map((r) => [
-    r.numero,
+  const headers = ["Email", "Nome", "Setor", "Unidade"];
+  const rows = emails.map((r) => [
+    r.email,
     r.nome || "",
     r.setor,
     r.unidade?.nome || "",
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
   return new NextResponse(bom + csv, {
     headers: {
       "Content-Type": "text/csv;charset=utf-8",
-      "Content-Disposition": 'attachment; filename="ramais.csv"',
+      "Content-Disposition": 'attachment; filename="emails.csv"',
     },
   });
 }
