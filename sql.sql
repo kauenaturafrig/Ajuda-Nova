@@ -1,16 +1,25 @@
 
 
 
+
+
+
+
+
 ALTER USER ramais_user WITH PASSWORD 'UserPadrao2026';
 
 ALTER USER ramais_user CREATEDB;
 
 select * from "user"
 
-select * from ramais
+select * from ramais where numero = '1580'
 
 delete from "user"
 where id = '8b8809ca-1009-48f5-a749-1369ea4b2514'
+
+update "user"
+set role='ADMIN'
+where id='g0QhT6pYujJMxebtX8v9lw714aY0IbYt'
 
 TRUNCATE TABLE ramais RESTART IDENTITY CASCADE;
 
@@ -70,7 +79,7 @@ VALUES
     ('1400', 'Portaria', 'Portaria', 1, now(), now()),
     ('1510', 'PCM', NULL, 1, now(), now()),
     ('1560', 'Refeitório', 'Neiza Donatoni', 1, now(), now()),
-    ('1580', 'Manutenção', 'Amauri Nunes', 1, now(), now()),
+    ('1581', 'Manutenção', 'Amauri Nunes', 1, now(), now()),
     ('1590', 'Elétrica', 'Edinei Schipanski', 1, now(), now()),
     ('1940', 'Berçario', NULL, 1, now(), now()),
     ('1980', 'Motoristas Dormitório', NULL, 1, now(), now()),

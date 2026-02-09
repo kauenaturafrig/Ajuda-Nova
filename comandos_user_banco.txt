@@ -19,6 +19,8 @@ GRANT ALL ON SEQUENCES TO ramais_user;
 
 /////////////////////////////////////////////////////////////////////////
 
+COMO CONFIGURAR SERVIDOR:
+
 No servidor, o fluxo fica assim:
 
 Clonar o projeto e instalar deps
@@ -72,7 +74,7 @@ Exemplo:
 
 Resumindo: no servidor você sempre precisa ao menos npm install, npx prisma generate, npx prisma migrate deploy e depois o script que cria o primeiro OWNER.
 
-////////////////////////////////////////////////////////////////////////////////
+/----------------------------------------------------------------------------------------------------------------------
 
 Para criar user inicial (na raiz do projeto):
 
@@ -82,7 +84,7 @@ Para criar user inicial (na raiz do projeto):
         ou
     npm run create:owner
 
-///////////////////////////////////////////////////////////////////////////////
+/----------------------------------------------------------------------------------------------------------------------
 
 # 1) Build de produção
 npm run build
@@ -107,6 +109,77 @@ sudo ufw status
 sudo ufw allow 5050/tcp
 sudo ufw disallow 5000/tcp
 sudo ufw delete allow 5000/tcp
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+
+COMO ALTERAR BANCO DE DADOS (ADICIONAR/ALTERAR ALGO NAS TABELAS)
+
+1. Passo 1 – Alterar o schema
+No seu prisma/schema.prisma, atualize o modelo Ramal:
+
+EXEMPLO:
+model Ramal {
+  id        Int      @id @default(autoincrement())
+  numero    String
+  nome      String?
+  setor     String
+  unidadeId Int
+  unidade   Unidade  @relation(fields: [unidadeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ramais")
+  @@unique([unidadeId, numero]) // adiciona chave única
+}
+Isso só muda o schema lógico do Prisma; ainda não alterou o banco.
+​
+
+2. Passo 2 – Gerar a migração
+Na raiz do projeto, rode:
+
+bash
+    npx prisma migrate dev --name add_unique_ramal_unidade_numero
+
+O Prisma vai:
+
+Comparar o schema atual com o banco.
+Gerar um arquivo .sql em prisma/migrations/... que adiciona a constraint UNIQUE (unidadeId, numero) na tabela ramais.
+​Se ele tentar dropar a tabela, é porque você está em ambiente de desenvolvimento com --create-only ou porque o Prisma não consegue inferir a alteração sem recriar; nesse caso, você pode:
+Deixar ele gerar a migração e depois ajustar o SQL à mão, trocando DROP TABLE por ALTER TABLE ... ADD CONSTRAINT ..., ou
+Em desenvolvimento, aceitar o reset (se os dados não forem críticos) e depois recriar os registros.
+
+3. Passo 3 – Aplicar a migração no banco
+Depois de gerar a migração, o comando acima já aplica no banco se você estiver em dev.
+Em produção, você normalmente faz:
+
+bash
+    npx prisma migrate deploy
+
+Esse comando aplica todas as migrações pendentes no banco PostgreSQL configurado em DATABASE_URL.
+​
+
+4. Passo 4 – Regenerar o Prisma Client
+Sempre que alterar o schema:
+
+bash
+    npx prisma generate
+
+Isso atualiza o client em src/generated/prisma para refletir o novo schema.
+​
+
+5. Se quiser ver o SQL antes de aplicar
+Você pode gerar a migração sem aplicar:
+
+bash
+    npx prisma migrate dev --name add_unique_ramal_unidade_numero --create-only
+Depois abre o arquivo .sql em prisma/migrations/... e verifica se está fazendo algo seguro (ex.: ALTER TABLE ramais ADD CONSTRAINT ...).
+​
+
+
 
 
 

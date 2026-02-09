@@ -112,6 +112,7 @@ model Ramal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([unidadeId, numero])
   @@map("ramais")
 }
 
@@ -125,5 +126,6 @@ model Email {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([unidadeId, email])
   @@map("emails")
 }

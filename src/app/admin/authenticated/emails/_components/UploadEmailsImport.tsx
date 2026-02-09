@@ -1,0 +1,63 @@
+// src/app/admin/authenticated/emails/_components/UploadEmailsImport.tsx
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "../../../../../components/ui/button";
+import { useToast } from "../../../../../components/ui/use-toast";
+
+interface Props {
+  onImportSuccess?: () => Promise<void>;
+}
+
+export default function UploadEmailsImport({ onImportSuccess }: Props) {
+  const router = useRouter();
+  const [file, setFile] = useState<File | null>(null);
+  const { showToast } = useToast();
+
+  const handleUpload = async () => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/admin/api/emails/import", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      showToast({
+        title: "Importação concluída",
+        message: `${data.imported} emails importados.`,
+      });
+      let fileInput = document.getElementById("file-upload") as HTMLInputElement;
+      fileInput.value = "";
+      
+      await onImportSuccess?.();
+    } else {
+      const error = await res.json();
+      showToast({
+        title: "Erro ao importar",
+        message: error.error,
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-2 border-[1px] border-purple-500 w-fit p-2 rounded">
+      <input
+        id="file-upload"
+        type="file"
+        accept=".csv"
+        onChange={(e) => setFile(e.target.files?.[0] || null)}
+        className="text-sm file:bg-gray-500 file:border-none file:rounded file:px-9 file:py-2 file:text-white cursor-pointer dark:text-white"
+      />
+      <Button onClick={handleUpload} disabled={!file} className="bg-purple-500 border-none text-white">
+        Importar CSV
+      </Button>
+    </div>
+  );
+}
