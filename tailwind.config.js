@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        aleo: ['var(--font-aleo)', 'sans-serif'],
+        rubik: ['var(--font-rubik)', 'sans-serif'],
       },
       animation: {
         'gradient-pulse': 'gradient-pulse 5s ease-in-out infinite',
