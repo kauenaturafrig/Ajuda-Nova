@@ -66,7 +66,7 @@ export default function Dashboard() {
     <Layout>
       <div className="min-h-screen pt-9 p-6 my-auto">
         <div className="flex align-middle flex-wrap justify-between max-w-8xl mx-auto">
-          <h1 className="text-5xl font-bold text-center text-gray-800 dark:text-white pt-9 pb-9 ml-24">
+          <h1 className="text-5xl font-bold text-center text-gray-800 dark:text-white pt-9 pb-9 ml-14">
             Bem vindo!
           </h1>
           <div className="flex align-middle items-center">
