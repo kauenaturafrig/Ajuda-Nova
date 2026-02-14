@@ -6,13 +6,18 @@
 
 
 
+
+
+
+
+
 ALTER USER ramais_user WITH PASSWORD 'UserPadrao2026';
 
 ALTER USER ramais_user CREATEDB;
 
 select * from "user"
 
-select * from ramais where numero = '1580'
+select * from jornais where "unidadeId" = 3
 
 delete from "user"
 where id = '8b8809ca-1009-48f5-a749-1369ea4b2514'
@@ -22,6 +27,17 @@ set role='ADMIN'
 where id='g0QhT6pYujJMxebtX8v9lw714aY0IbYt'
 
 TRUNCATE TABLE ramais RESTART IDENTITY CASCADE;
+
+CREATE TABLE jornais (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    imagem VARCHAR(255) NOT NULL,
+    url TEXT NOT NULL,
+    "dataLancamento" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 INSERT INTO unidades (nome)
 VALUES

@@ -48,6 +48,11 @@ export type Ramal = $Result.DefaultSelection<Prisma.$RamalPayload>
  * 
  */
 export type Email = $Result.DefaultSelection<Prisma.$EmailPayload>
+/**
+ * Model Jornal
+ * 
+ */
+export type Jornal = $Result.DefaultSelection<Prisma.$JornalPayload>
 
 /**
  * Enums
@@ -253,6 +258,16 @@ export class PrismaClient<
     * ```
     */
   get email(): Prisma.EmailDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.jornal`: Exposes CRUD operations for the **Jornal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Jornals
+    * const jornals = await prisma.jornal.findMany()
+    * ```
+    */
+  get jornal(): Prisma.JornalDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -700,7 +715,8 @@ export namespace Prisma {
     Verification: 'Verification',
     Unidade: 'Unidade',
     Ramal: 'Ramal',
-    Email: 'Email'
+    Email: 'Email',
+    Jornal: 'Jornal'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -719,7 +735,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email"
+      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1241,6 +1257,80 @@ export namespace Prisma {
           }
         }
       }
+      Jornal: {
+        payload: Prisma.$JornalPayload<ExtArgs>
+        fields: Prisma.JornalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.JornalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.JornalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>
+          }
+          findFirst: {
+            args: Prisma.JornalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.JornalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>
+          }
+          findMany: {
+            args: Prisma.JornalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>[]
+          }
+          create: {
+            args: Prisma.JornalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>
+          }
+          createMany: {
+            args: Prisma.JornalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.JornalCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>[]
+          }
+          delete: {
+            args: Prisma.JornalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>
+          }
+          update: {
+            args: Prisma.JornalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>
+          }
+          deleteMany: {
+            args: Prisma.JornalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.JornalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.JornalUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>[]
+          }
+          upsert: {
+            args: Prisma.JornalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$JornalPayload>
+          }
+          aggregate: {
+            args: Prisma.JornalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateJornal>
+          }
+          groupBy: {
+            args: Prisma.JornalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<JornalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.JornalCountArgs<ExtArgs>
+            result: $Utils.Optional<JornalCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1344,6 +1434,7 @@ export namespace Prisma {
     unidade?: UnidadeOmit
     ramal?: RamalOmit
     email?: EmailOmit
+    jornal?: JornalOmit
   }
 
   /* Types for Logging */
@@ -9366,6 +9457,1074 @@ export namespace Prisma {
 
 
   /**
+   * Model Jornal
+   */
+
+  export type AggregateJornal = {
+    _count: JornalCountAggregateOutputType | null
+    _avg: JornalAvgAggregateOutputType | null
+    _sum: JornalSumAggregateOutputType | null
+    _min: JornalMinAggregateOutputType | null
+    _max: JornalMaxAggregateOutputType | null
+  }
+
+  export type JornalAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type JornalSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type JornalMinAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    descricao: string | null
+    imagem: string | null
+    url: string | null
+    dataLancamento: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type JornalMaxAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    descricao: string | null
+    imagem: string | null
+    url: string | null
+    dataLancamento: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type JornalCountAggregateOutputType = {
+    id: number
+    titulo: number
+    descricao: number
+    imagem: number
+    url: number
+    dataLancamento: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type JornalAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type JornalSumAggregateInputType = {
+    id?: true
+  }
+
+  export type JornalMinAggregateInputType = {
+    id?: true
+    titulo?: true
+    descricao?: true
+    imagem?: true
+    url?: true
+    dataLancamento?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type JornalMaxAggregateInputType = {
+    id?: true
+    titulo?: true
+    descricao?: true
+    imagem?: true
+    url?: true
+    dataLancamento?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type JornalCountAggregateInputType = {
+    id?: true
+    titulo?: true
+    descricao?: true
+    imagem?: true
+    url?: true
+    dataLancamento?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type JornalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Jornal to aggregate.
+     */
+    where?: JornalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Jornals to fetch.
+     */
+    orderBy?: JornalOrderByWithRelationInput | JornalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: JornalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Jornals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Jornals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Jornals
+    **/
+    _count?: true | JornalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: JornalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: JornalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: JornalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: JornalMaxAggregateInputType
+  }
+
+  export type GetJornalAggregateType<T extends JornalAggregateArgs> = {
+        [P in keyof T & keyof AggregateJornal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateJornal[P]>
+      : GetScalarType<T[P], AggregateJornal[P]>
+  }
+
+
+
+
+  export type JornalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: JornalWhereInput
+    orderBy?: JornalOrderByWithAggregationInput | JornalOrderByWithAggregationInput[]
+    by: JornalScalarFieldEnum[] | JornalScalarFieldEnum
+    having?: JornalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: JornalCountAggregateInputType | true
+    _avg?: JornalAvgAggregateInputType
+    _sum?: JornalSumAggregateInputType
+    _min?: JornalMinAggregateInputType
+    _max?: JornalMaxAggregateInputType
+  }
+
+  export type JornalGroupByOutputType = {
+    id: number
+    titulo: string
+    descricao: string
+    imagem: string
+    url: string
+    dataLancamento: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: JornalCountAggregateOutputType | null
+    _avg: JornalAvgAggregateOutputType | null
+    _sum: JornalSumAggregateOutputType | null
+    _min: JornalMinAggregateOutputType | null
+    _max: JornalMaxAggregateOutputType | null
+  }
+
+  type GetJornalGroupByPayload<T extends JornalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<JornalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof JornalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], JornalGroupByOutputType[P]>
+            : GetScalarType<T[P], JornalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type JornalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    url?: boolean
+    dataLancamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["jornal"]>
+
+  export type JornalSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    url?: boolean
+    dataLancamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["jornal"]>
+
+  export type JornalSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    url?: boolean
+    dataLancamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["jornal"]>
+
+  export type JornalSelectScalar = {
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    imagem?: boolean
+    url?: boolean
+    dataLancamento?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type JornalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "descricao" | "imagem" | "url" | "dataLancamento" | "createdAt" | "updatedAt", ExtArgs["result"]["jornal"]>
+
+  export type $JornalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Jornal"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      titulo: string
+      descricao: string
+      imagem: string
+      url: string
+      dataLancamento: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["jornal"]>
+    composites: {}
+  }
+
+  type JornalGetPayload<S extends boolean | null | undefined | JornalDefaultArgs> = $Result.GetResult<Prisma.$JornalPayload, S>
+
+  type JornalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<JornalFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: JornalCountAggregateInputType | true
+    }
+
+  export interface JornalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Jornal'], meta: { name: 'Jornal' } }
+    /**
+     * Find zero or one Jornal that matches the filter.
+     * @param {JornalFindUniqueArgs} args - Arguments to find a Jornal
+     * @example
+     * // Get one Jornal
+     * const jornal = await prisma.jornal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends JornalFindUniqueArgs>(args: SelectSubset<T, JornalFindUniqueArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Jornal that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {JornalFindUniqueOrThrowArgs} args - Arguments to find a Jornal
+     * @example
+     * // Get one Jornal
+     * const jornal = await prisma.jornal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends JornalFindUniqueOrThrowArgs>(args: SelectSubset<T, JornalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Jornal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JornalFindFirstArgs} args - Arguments to find a Jornal
+     * @example
+     * // Get one Jornal
+     * const jornal = await prisma.jornal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends JornalFindFirstArgs>(args?: SelectSubset<T, JornalFindFirstArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Jornal that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JornalFindFirstOrThrowArgs} args - Arguments to find a Jornal
+     * @example
+     * // Get one Jornal
+     * const jornal = await prisma.jornal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends JornalFindFirstOrThrowArgs>(args?: SelectSubset<T, JornalFindFirstOrThrowArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Jornals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JornalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Jornals
+     * const jornals = await prisma.jornal.findMany()
+     * 
+     * // Get first 10 Jornals
+     * const jornals = await prisma.jornal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const jornalWithIdOnly = await prisma.jornal.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends JornalFindManyArgs>(args?: SelectSubset<T, JornalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Jornal.
+     * @param {JornalCreateArgs} args - Arguments to create a Jornal.
+     * @example
+     * // Create one Jornal
+     * const Jornal = await prisma.jornal.create({
+     *   data: {
+     *     // ... data to create a Jornal
+     *   }
+     * })
+     * 
+     */
+    create<T extends JornalCreateArgs>(args: SelectSubset<T, JornalCreateArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Jornals.
+     * @param {JornalCreateManyArgs} args - Arguments to create many Jornals.
+     * @example
+     * // Create many Jornals
+     * const jornal = await prisma.jornal.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends JornalCreateManyArgs>(args?: SelectSubset<T, JornalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Jornals and returns the data saved in the database.
+     * @param {JornalCreateManyAndReturnArgs} args - Arguments to create many Jornals.
+     * @example
+     * // Create many Jornals
+     * const jornal = await prisma.jornal.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Jornals and only return the `id`
+     * const jornalWithIdOnly = await prisma.jornal.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends JornalCreateManyAndReturnArgs>(args?: SelectSubset<T, JornalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Jornal.
+     * @param {JornalDeleteArgs} args - Arguments to delete one Jornal.
+     * @example
+     * // Delete one Jornal
+     * const Jornal = await prisma.jornal.delete({
+     *   where: {
+     *     // ... filter to delete one Jornal
+     *   }
+     * })
+     * 
+     */
+    delete<T extends JornalDeleteArgs>(args: SelectSubset<T, JornalDeleteArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Jornal.
+     * @param {JornalUpdateArgs} args - Arguments to update one Jornal.
+     * @example
+     * // Update one Jornal
+     * const jornal = await prisma.jornal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends JornalUpdateArgs>(args: SelectSubset<T, JornalUpdateArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Jornals.
+     * @param {JornalDeleteManyArgs} args - Arguments to filter Jornals to delete.
+     * @example
+     * // Delete a few Jornals
+     * const { count } = await prisma.jornal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends JornalDeleteManyArgs>(args?: SelectSubset<T, JornalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Jornals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JornalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Jornals
+     * const jornal = await prisma.jornal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends JornalUpdateManyArgs>(args: SelectSubset<T, JornalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Jornals and returns the data updated in the database.
+     * @param {JornalUpdateManyAndReturnArgs} args - Arguments to update many Jornals.
+     * @example
+     * // Update many Jornals
+     * const jornal = await prisma.jornal.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Jornals and only return the `id`
+     * const jornalWithIdOnly = await prisma.jornal.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends JornalUpdateManyAndReturnArgs>(args: SelectSubset<T, JornalUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Jornal.
+     * @param {JornalUpsertArgs} args - Arguments to update or create a Jornal.
+     * @example
+     * // Update or create a Jornal
+     * const jornal = await prisma.jornal.upsert({
+     *   create: {
+     *     // ... data to create a Jornal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Jornal we want to update
+     *   }
+     * })
+     */
+    upsert<T extends JornalUpsertArgs>(args: SelectSubset<T, JornalUpsertArgs<ExtArgs>>): Prisma__JornalClient<$Result.GetResult<Prisma.$JornalPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Jornals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JornalCountArgs} args - Arguments to filter Jornals to count.
+     * @example
+     * // Count the number of Jornals
+     * const count = await prisma.jornal.count({
+     *   where: {
+     *     // ... the filter for the Jornals we want to count
+     *   }
+     * })
+    **/
+    count<T extends JornalCountArgs>(
+      args?: Subset<T, JornalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], JornalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Jornal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JornalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends JornalAggregateArgs>(args: Subset<T, JornalAggregateArgs>): Prisma.PrismaPromise<GetJornalAggregateType<T>>
+
+    /**
+     * Group by Jornal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {JornalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends JornalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: JornalGroupByArgs['orderBy'] }
+        : { orderBy?: JornalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, JornalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetJornalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Jornal model
+   */
+  readonly fields: JornalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Jornal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__JornalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Jornal model
+   */
+  interface JornalFieldRefs {
+    readonly id: FieldRef<"Jornal", 'Int'>
+    readonly titulo: FieldRef<"Jornal", 'String'>
+    readonly descricao: FieldRef<"Jornal", 'String'>
+    readonly imagem: FieldRef<"Jornal", 'String'>
+    readonly url: FieldRef<"Jornal", 'String'>
+    readonly dataLancamento: FieldRef<"Jornal", 'DateTime'>
+    readonly createdAt: FieldRef<"Jornal", 'DateTime'>
+    readonly updatedAt: FieldRef<"Jornal", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Jornal findUnique
+   */
+  export type JornalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * Filter, which Jornal to fetch.
+     */
+    where: JornalWhereUniqueInput
+  }
+
+  /**
+   * Jornal findUniqueOrThrow
+   */
+  export type JornalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * Filter, which Jornal to fetch.
+     */
+    where: JornalWhereUniqueInput
+  }
+
+  /**
+   * Jornal findFirst
+   */
+  export type JornalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * Filter, which Jornal to fetch.
+     */
+    where?: JornalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Jornals to fetch.
+     */
+    orderBy?: JornalOrderByWithRelationInput | JornalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Jornals.
+     */
+    cursor?: JornalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Jornals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Jornals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Jornals.
+     */
+    distinct?: JornalScalarFieldEnum | JornalScalarFieldEnum[]
+  }
+
+  /**
+   * Jornal findFirstOrThrow
+   */
+  export type JornalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * Filter, which Jornal to fetch.
+     */
+    where?: JornalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Jornals to fetch.
+     */
+    orderBy?: JornalOrderByWithRelationInput | JornalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Jornals.
+     */
+    cursor?: JornalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Jornals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Jornals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Jornals.
+     */
+    distinct?: JornalScalarFieldEnum | JornalScalarFieldEnum[]
+  }
+
+  /**
+   * Jornal findMany
+   */
+  export type JornalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * Filter, which Jornals to fetch.
+     */
+    where?: JornalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Jornals to fetch.
+     */
+    orderBy?: JornalOrderByWithRelationInput | JornalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Jornals.
+     */
+    cursor?: JornalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Jornals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Jornals.
+     */
+    skip?: number
+    distinct?: JornalScalarFieldEnum | JornalScalarFieldEnum[]
+  }
+
+  /**
+   * Jornal create
+   */
+  export type JornalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Jornal.
+     */
+    data: XOR<JornalCreateInput, JornalUncheckedCreateInput>
+  }
+
+  /**
+   * Jornal createMany
+   */
+  export type JornalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Jornals.
+     */
+    data: JornalCreateManyInput | JornalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Jornal createManyAndReturn
+   */
+  export type JornalCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * The data used to create many Jornals.
+     */
+    data: JornalCreateManyInput | JornalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Jornal update
+   */
+  export type JornalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Jornal.
+     */
+    data: XOR<JornalUpdateInput, JornalUncheckedUpdateInput>
+    /**
+     * Choose, which Jornal to update.
+     */
+    where: JornalWhereUniqueInput
+  }
+
+  /**
+   * Jornal updateMany
+   */
+  export type JornalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Jornals.
+     */
+    data: XOR<JornalUpdateManyMutationInput, JornalUncheckedUpdateManyInput>
+    /**
+     * Filter which Jornals to update
+     */
+    where?: JornalWhereInput
+    /**
+     * Limit how many Jornals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Jornal updateManyAndReturn
+   */
+  export type JornalUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * The data used to update Jornals.
+     */
+    data: XOR<JornalUpdateManyMutationInput, JornalUncheckedUpdateManyInput>
+    /**
+     * Filter which Jornals to update
+     */
+    where?: JornalWhereInput
+    /**
+     * Limit how many Jornals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Jornal upsert
+   */
+  export type JornalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Jornal to update in case it exists.
+     */
+    where: JornalWhereUniqueInput
+    /**
+     * In case the Jornal found by the `where` argument doesn't exist, create a new Jornal with this data.
+     */
+    create: XOR<JornalCreateInput, JornalUncheckedCreateInput>
+    /**
+     * In case the Jornal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<JornalUpdateInput, JornalUncheckedUpdateInput>
+  }
+
+  /**
+   * Jornal delete
+   */
+  export type JornalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+    /**
+     * Filter which Jornal to delete.
+     */
+    where: JornalWhereUniqueInput
+  }
+
+  /**
+   * Jornal deleteMany
+   */
+  export type JornalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Jornals to delete
+     */
+    where?: JornalWhereInput
+    /**
+     * Limit how many Jornals to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Jornal without action
+   */
+  export type JornalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Jornal
+     */
+    select?: JornalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Jornal
+     */
+    omit?: JornalOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9471,6 +10630,20 @@ export namespace Prisma {
   };
 
   export type EmailScalarFieldEnum = (typeof EmailScalarFieldEnum)[keyof typeof EmailScalarFieldEnum]
+
+
+  export const JornalScalarFieldEnum: {
+    id: 'id',
+    titulo: 'titulo',
+    descricao: 'descricao',
+    imagem: 'imagem',
+    url: 'url',
+    dataLancamento: 'dataLancamento',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type JornalScalarFieldEnum = (typeof JornalScalarFieldEnum)[keyof typeof JornalScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -10071,6 +11244,75 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Email"> | Date | string
   }
 
+  export type JornalWhereInput = {
+    AND?: JornalWhereInput | JornalWhereInput[]
+    OR?: JornalWhereInput[]
+    NOT?: JornalWhereInput | JornalWhereInput[]
+    id?: IntFilter<"Jornal"> | number
+    titulo?: StringFilter<"Jornal"> | string
+    descricao?: StringFilter<"Jornal"> | string
+    imagem?: StringFilter<"Jornal"> | string
+    url?: StringFilter<"Jornal"> | string
+    dataLancamento?: DateTimeFilter<"Jornal"> | Date | string
+    createdAt?: DateTimeFilter<"Jornal"> | Date | string
+    updatedAt?: DateTimeFilter<"Jornal"> | Date | string
+  }
+
+  export type JornalOrderByWithRelationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    url?: SortOrder
+    dataLancamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type JornalWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: JornalWhereInput | JornalWhereInput[]
+    OR?: JornalWhereInput[]
+    NOT?: JornalWhereInput | JornalWhereInput[]
+    titulo?: StringFilter<"Jornal"> | string
+    descricao?: StringFilter<"Jornal"> | string
+    imagem?: StringFilter<"Jornal"> | string
+    url?: StringFilter<"Jornal"> | string
+    dataLancamento?: DateTimeFilter<"Jornal"> | Date | string
+    createdAt?: DateTimeFilter<"Jornal"> | Date | string
+    updatedAt?: DateTimeFilter<"Jornal"> | Date | string
+  }, "id">
+
+  export type JornalOrderByWithAggregationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    url?: SortOrder
+    dataLancamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: JornalCountOrderByAggregateInput
+    _avg?: JornalAvgOrderByAggregateInput
+    _max?: JornalMaxOrderByAggregateInput
+    _min?: JornalMinOrderByAggregateInput
+    _sum?: JornalSumOrderByAggregateInput
+  }
+
+  export type JornalScalarWhereWithAggregatesInput = {
+    AND?: JornalScalarWhereWithAggregatesInput | JornalScalarWhereWithAggregatesInput[]
+    OR?: JornalScalarWhereWithAggregatesInput[]
+    NOT?: JornalScalarWhereWithAggregatesInput | JornalScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Jornal"> | number
+    titulo?: StringWithAggregatesFilter<"Jornal"> | string
+    descricao?: StringWithAggregatesFilter<"Jornal"> | string
+    imagem?: StringWithAggregatesFilter<"Jornal"> | string
+    url?: StringWithAggregatesFilter<"Jornal"> | string
+    dataLancamento?: DateTimeWithAggregatesFilter<"Jornal"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Jornal"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Jornal"> | Date | string
+  }
+
   export type UserCreateInput = {
     id: string
     name: string
@@ -10584,6 +11826,80 @@ export namespace Prisma {
     nome?: NullableStringFieldUpdateOperationsInput | string | null
     setor?: StringFieldUpdateOperationsInput | string
     unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type JornalCreateInput = {
+    titulo: string
+    descricao: string
+    imagem: string
+    url: string
+    dataLancamento?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type JornalUncheckedCreateInput = {
+    id?: number
+    titulo: string
+    descricao: string
+    imagem: string
+    url: string
+    dataLancamento?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type JornalUpdateInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    dataLancamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type JornalUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    dataLancamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type JornalCreateManyInput = {
+    id?: number
+    titulo: string
+    descricao: string
+    imagem: string
+    url: string
+    dataLancamento?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type JornalUpdateManyMutationInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    dataLancamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type JornalUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: StringFieldUpdateOperationsInput | string
+    imagem?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    dataLancamento?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11121,6 +12437,47 @@ export namespace Prisma {
   export type EmailSumOrderByAggregateInput = {
     id?: SortOrder
     unidadeId?: SortOrder
+  }
+
+  export type JornalCountOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    url?: SortOrder
+    dataLancamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type JornalAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type JornalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    url?: SortOrder
+    dataLancamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type JornalMinOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    imagem?: SortOrder
+    url?: SortOrder
+    dataLancamento?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type JornalSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type UnidadeCreateNestedOneWithoutUsersInput = {
