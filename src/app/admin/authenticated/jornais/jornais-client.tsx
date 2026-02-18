@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "../../../../components/ui/button";
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
@@ -15,7 +15,7 @@ interface Jornal {
   descricao: string | null;
   imagem: string;
   url: string;
-  dataLancamento: Date;  
+  dataLancamento: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,7 +44,18 @@ export function JornaisClient({ jornais }: Props) {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold mb-1 dark:text-white">📰 Jornais</h1>
+          <div className="flex items-center mt-3 mb-7">
+            <h1 className="font-bold text-5xl dark:text-white pr-4">
+              Conexão Naturafrig
+            </h1>
+            <Image
+              src={"/assets/images/icons/icons8-news-preto.png"}
+              alt="Logo Jornais"
+              width={50}
+              height={50}
+              className="mr-5 dark:invert"
+            />
+          </div>
           <p className="text-sm text-muted-foreground dark:text-white">
             Gerencie jornais, imagens e links externos.
           </p>
@@ -80,7 +91,7 @@ export function JornaisClient({ jornais }: Props) {
             setGlobalLoading={setLoading}
           />
         ))}
-        
+
         {jornais.length === 0 && !showNewForm && (
           <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-xl dark:border-gray-600">
             <div className="w-20 h-20 bg-gray-200 dark:bg-gray-800 rounded-2xl mx-auto mb-4 flex items-center justify-center">

@@ -171,7 +171,7 @@ export function JornalRow({ jornal, setGlobalLoading }: Props) {
             <Input
               value={titulo}
               onChange={(e) => setTitulo(e.target.value)}
-              className="h-12 text-lg"
+              className="h-12 text-lg dark:text-white"
               disabled={!editing}
             />
           </div>
@@ -198,7 +198,7 @@ export function JornalRow({ jornal, setGlobalLoading }: Props) {
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              className="h-12"
+              className="h-12  dark:text-white"
               disabled={!editing}
               placeholder="https://jornal.naturafrig.com.br/..."
             />
@@ -228,14 +228,14 @@ export function JornalRow({ jornal, setGlobalLoading }: Props) {
               <>
                 <Button
                   onClick={toggleEdit}
-                  className="bg-blue-500 hover:bg-blue-600 flex-1 h-12"
+                  className="bg-blue-500 hover:bg-blue-600 text-white flex-1 h-12"
                 >
                   Editar
                 </Button>
                 <Button
                   onClick={deletar}
                   variant="destructive"
-                  className="h-12 px-6"
+                  className="h-12 px-6 bg-red-500 hover:bg-red-600 text-white"
                   disabled={deleting}
                 >
                   {deleting ? "Excluindo..." : "Excluir"}
