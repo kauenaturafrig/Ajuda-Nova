@@ -194,6 +194,17 @@ exports.Prisma.EmailScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.JornalScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  imagem: 'imagem',
+  url: 'url',
+  dataLancamento: 'dataLancamento',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -220,7 +231,8 @@ exports.Prisma.ModelName = {
   Verification: 'Verification',
   Unidade: 'Unidade',
   Ramal: 'Ramal',
-  Email: 'Email'
+  Email: 'Email',
+  Jornal: 'Jornal'
 };
 
 /**

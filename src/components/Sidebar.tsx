@@ -12,6 +12,7 @@ export default function Sidebar() {
     { label: 'Sistemas', path: '/links-uteis', icon: '/assets/images/icons/icons8-link-branco.png' },
     { label: 'Ramais', path: '/ramais', icon: '/assets/images/icons/icons8-phone-branco.png' },
     { label: 'Emails', path: '/emails', icon: '/assets/images/icons/icons8-mail-branco.png' },
+    { label: 'Conexão Naturafrig', path: '/jornais', icon: '/assets/images/icons/icons8-news-branco.png' },
   ];
 
   const submenuItems = [
@@ -40,6 +41,8 @@ export default function Sidebar() {
           alt="Naturafrig Logo"
           className='mb-6 mx-auto'
         />
+
+        <p>INTRANET</p>
       </div>
 
       {/* Menu Principal + Submenu */}

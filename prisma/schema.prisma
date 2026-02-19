@@ -129,3 +129,16 @@ model Email {
   @@map("emails")
   @@unique([unidadeId, email])
 }
+
+model Jornal {
+  id          Int      @id @default(autoincrement())
+  titulo      String
+  descricao   String
+  imagem      String   // nome do arquivo: "jornal1.jpg"
+  url         String
+  dataLancamento DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("jornais")
+}
