@@ -1,5 +1,5 @@
 // src/app/jornais/page.tsx
-// src/app/jornais/page.tsx
+export const dynamic = 'force-dynamic';
 import Image from "next/image";
 import { prisma } from "@/src/lib/prisma";
 
