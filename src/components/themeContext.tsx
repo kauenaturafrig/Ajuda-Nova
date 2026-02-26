@@ -14,27 +14,41 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const storedTheme = localStorage.getItem('theme');
-      return storedTheme === 'dark';
-    }
-    return false;
-  });
+  // ✅ Inicializa CORRETAMENTE do localStorage
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+    // ✅ Carrega do localStorage no mount
+    if (typeof window !== 'undefined') {
+      const storedTheme = localStorage.getItem('theme') || 'light';
+      const initialDarkMode = storedTheme === 'dark';
+      setIsDarkMode(initialDarkMode);
+      setMounted(true);
     }
-  }, [isDarkMode]);
+  }, []);
+
+  // ✅ Aplica tema ao HTML
+  useEffect(() => {
+    if (mounted) {
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+  }, [isDarkMode, mounted]);
 
   const toggleDarkMode = () => {
-    setIsDarkMode(prevMode => !prevMode);
+    setIsDarkMode(prev => !prev);
   };
+
+  // ✅ Não renderiza até mounted
+  if (!mounted) {
+    return <div className="animate-pulse h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800" />;
+  }
 
   return (
     <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
@@ -42,7 +56,6 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     </ThemeContext.Provider>
   );
 };
-
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);

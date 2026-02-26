@@ -8,7 +8,7 @@ export default function Sidebar() {
   const [openSubmenu, setOpenSubmenu] = useState(false);
 
   const menuItems = [
-    { label: 'Dashboard', path: '/dashboard', icon: '/assets/images/icons/icons8-dashboard-branco.png' },
+    { label: 'Início', path: '/dashboard', icon: '/assets/images/icons/icons8-dashboard-branco.png' },
     { label: 'Sistemas', path: '/links-uteis', icon: '/assets/images/icons/icons8-link-branco.png' },
     { label: 'Ramais', path: '/ramais', icon: '/assets/images/icons/icons8-phone-branco.png' },
     { label: 'Emails', path: '/emails', icon: '/assets/images/icons/icons8-mail-branco.png' },
