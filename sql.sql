@@ -1,13 +1,28 @@
 
 
+CREATE TABLE noticias (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    conteudo TEXT NOT NULL,
+    imagem VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
+CREATE TABLE recados (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    conteudo TEXT NOT NULL,
+    unidade_id INTEGER NOT NULL REFERENCES unidades(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-
-
-
-
-
-
+-- Dar permissão ao ramais_user
+GRANT ALL ON noticias TO ramais_user;
+GRANT ALL ON recados TO ramais_user;
+GRANT ALL ON noticias_id_seq TO ramais_user;
+GRANT ALL ON recados_id_seq TO ramais_user;
 
 
 
@@ -15,7 +30,8 @@ ALTER USER ramais_user WITH PASSWORD 'UserPadrao2026';
 
 ALTER USER ramais_user CREATEDB;
 
-select * from "user"
+select * from "noticias"
+ALTER TABLE "noticias" RENAME COLUMN "updated_at" TO "updatedAt";
 
 select * from jornais where "unidadeId" = 3
 

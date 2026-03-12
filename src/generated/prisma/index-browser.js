@@ -205,6 +205,25 @@ exports.Prisma.JornalScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NoticiaScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  conteudo: 'conteudo',
+  imagem: 'imagem',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RecadoScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  conteudo: 'conteudo',
+  imagem: 'imagem',
+  unidadeId: 'unidadeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -221,7 +240,11 @@ exports.Prisma.NullsOrder = {
 };
 exports.UserRole = exports.$Enums.UserRole = {
   OWNER: 'OWNER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  RECADOS_UNIDADE: 'RECADOS_UNIDADE',
+  NOTICIAS_UNIDADE: 'NOTICIAS_UNIDADE',
+  NOTICIAS_RECADOS_UNIDADE: 'NOTICIAS_RECADOS_UNIDADE',
+  NOTICIAS_RECADOS_TODAS: 'NOTICIAS_RECADOS_TODAS'
 };
 
 exports.Prisma.ModelName = {
@@ -232,7 +255,9 @@ exports.Prisma.ModelName = {
   Unidade: 'Unidade',
   Ramal: 'Ramal',
   Email: 'Email',
-  Jornal: 'Jornal'
+  Jornal: 'Jornal',
+  Noticia: 'Noticia',
+  Recado: 'Recado'
 };
 
 /**

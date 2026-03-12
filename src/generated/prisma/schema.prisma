@@ -40,6 +40,10 @@ model User {
 enum UserRole {
   OWNER
   ADMIN
+  RECADOS_UNIDADE
+  NOTICIAS_UNIDADE
+  NOTICIAS_RECADOS_UNIDADE
+  NOTICIAS_RECADOS_TODAS
 }
 
 model Session {
@@ -95,9 +99,10 @@ model Unidade {
   nome String
 
   // relacionamentos
-  ramais Ramal[]
-  emails Email[]
-  users  User[]
+  ramais  Ramal[]
+  emails  Email[]
+  users   User[]
+  recados Recado[]
 
   @@map("unidades")
 }
@@ -141,4 +146,28 @@ model Jornal {
   updatedAt      DateTime @updatedAt
 
   @@map("jornais")
+}
+
+model Noticia {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  conteudo  String
+  imagem    String? // /uploads/noticias/nome.jpg
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("noticias")
+}
+
+model Recado {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  conteudo  String
+  imagem    String? // ✅ NOVO: opcional como Noticia
+  unidadeId Int
+  unidade   Unidade  @relation(fields: [unidadeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("recados")
 }
