@@ -13,18 +13,25 @@ export default async function NoticiasPage() {
   return (
     <Layout>
       <div className="container mx-auto py-12 w-[90%]">
-        <div className="flex justify-between items-center mb-12">
-          <h1 className="text-5xl font-bold dark:text-white">📰 Notícias</h1>
+        <div className="flex items-center mb-12">
+          <Image
+            src={"/assets/images/icons/icons8-news-preto.png"}
+            alt="Icon news"
+            width={50}
+            height={50}
+            className="mr-5 dark:invert"
+          />
+          <h1 className="text-5xl font-bold dark:text-white">Notícias</h1>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {noticias.map((noticia) => (
             <article key={noticia.id} className="group bg-white/60 dark:bg-gray-900/60 backdrop-blur-md rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border border-white/30 hover:-translate-y-2">
               {noticia.imagem && (
                 <div className="w-full h-48 rounded-xl overflow-hidden mb-6 group-hover:scale-105 transition-transform duration-300">
-                  <Image 
-                    src={`/uploads/noticias/${noticia.imagem}`} 
-                    alt={noticia.titulo} 
-                    fill className="object-cover" 
+                  <Image
+                    src={`/uploads/noticias/${noticia.imagem}`}
+                    alt={noticia.titulo}
+                    fill className="object-cover"
                   />
                 </div>
               )}

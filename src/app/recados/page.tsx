@@ -17,7 +17,7 @@ export default async function RecadosPage() {
     return (
       <Layout>
         <div className="container mx-auto py-20 text-center">
-          <h1 className="text-4xl font-bold mb-4 dark:text-white">📢 Recados</h1>
+          <h1 className="text-4xl font-bold mb-4 dark:text-white">Recados</h1>
           <div className="bg-red-100 dark:bg-red-900/50 p-6 rounded-xl mb-4">
             <p className="font-mono text-sm mb-2">IP: <span className="font-bold">{ip || 'N/A'}</span></p>
             <p className="font-mono text-sm">Unidade: <span className="font-bold text-red-600">NÃO IDENTIFICADA</span></p>
@@ -40,7 +40,16 @@ export default async function RecadosPage() {
     <Layout>
       <div className="container mx-auto py-12 w-[90%]">
         <div className="flex justify-between items-center mb-12">
-          <h1 className="text-5xl font-bold dark:text-white">📢 Recados</h1>
+          <div className="flex">
+            <Image
+              src={"/assets/images/icons/icons8-megaphone-preto.png"}
+              alt="Icon phone"
+              width={50}
+              height={50}
+              className="mr-5 dark:invert"
+            />
+            <h1 className="text-5xl font-bold dark:text-white">Recados</h1>
+          </div>
           <div className="text-sm text-muted-foreground">
             Unidade {unidadeId} • {recados.length} recados
           </div>
@@ -83,9 +92,6 @@ export default async function RecadosPage() {
 
         {recados.length === 0 && (
           <div className="text-center py-20">
-            <div className="w-24 h-24 mx-auto mb-6 p-6 bg-orange-100 dark:bg-orange-900/50 rounded-2xl">
-              📢
-            </div>
             <h3 className="text-3xl font-bold mb-4 dark:text-white">Nenhum recado</h3>
             <p className="text-muted-foreground">Nenhum recado para esta unidade</p>
           </div>

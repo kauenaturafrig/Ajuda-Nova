@@ -33,15 +33,14 @@ const dashboardItems: DashboardItem[] = [
     color: "bg-gradient-to-br from-sky-500 to-sky-700",
     icon: "/assets/images/icons/icons8-mail-branco.png",
   },
-  // ✅ NOVOS CARDS
   {
-    title: "📰 Notícias",
+    title: "Notícias",
     href: "/noticias",
     color: "bg-gradient-to-br from-blue-500 to-indigo-600",
     icon: "/assets/images/icons/icons8-news-branco.png",
   },
   {
-    title: "📢 Recados",
+    title: "Recados",
     href: "/recados", 
     color: "bg-gradient-to-br from-orange-500 to-red-600",
     icon: "/assets/images/icons/icons8-megaphone-branco.png",

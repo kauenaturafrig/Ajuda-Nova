@@ -1,11 +1,12 @@
 // src/app/admin/authenticated/recados/page.tsx
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/src/components/Layout";
 import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
+import { X } from "lucide-react";
 
 interface Recado {
   id: number;
@@ -31,6 +32,12 @@ export default function GerenciarRecados() {
   const [unidades, setUnidades] = useState<{ id: number; nome: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [imagemRecado, setImagemRecado] = useState<File | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
     titulo: "",
     conteudo: "",
@@ -99,7 +106,7 @@ export default function GerenciarRecados() {
       conteudo: recado.conteudo,
       unidadeId: recado.unidadeId,
       imagem: null,
-      imagemPreview: recado.imagem || "",
+      imagemPreview: recado.imagem ? `/uploads/recados/${recado.imagem}` : "",
       imagemAntiga: recado.imagem || ""
     });
   };
@@ -110,20 +117,94 @@ export default function GerenciarRecados() {
     fetchRecados();
   };
 
+  // ✅ DRAG & DROP HANDLERS (igual NewJornalForm)
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDragIn = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }, []);
+
+  const handleDragOut = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  }, []);
+
+  const handleImageUpload = useCallback((file: File) => {
+    const preview = URL.createObjectURL(file);
+    setFormData(prev => ({
+      ...prev,
+      imagem: file,
+      imagemPreview: preview,
+      imagemAntiga: ""
+    }));
+    setImagemRecado(file);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) { // 5MB
+        handleImageUpload(file); // ✅ Agora sincroniza formData!
+      }
+    }
+  }, [handleImageUpload]);
+
+  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
+      handleImageUpload(file);
+      e.target.value = "";
+    }
+  }, [handleImageUpload]);
+
+  const openFileDialog = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const removeImage = useCallback(() => {
+    setImagemRecado(null);
+    setFormData(prev => ({
+      ...prev,
+      imagem: null,
+      imagemPreview: editingId ? prev.imagemAntiga : ""
+    }));
+  }, [editingId]);
+
+  const toggleEdit = () => {
+    setEditing(!editing);
+  };
+
   if (loading) return <LoadingOverlay show={true} />;
 
   return (
     <Layout>
       <div className="container mx-auto py-12 w-[90%]">
         <div className="flex justify-between items-center mb-12">
-          <h1 className="text-5xl font-bold dark:text-white">📢 Gerenciar Recados</h1>
-          <Button onClick={() => router.back()} className="bg-gray-600 hover:bg-gray-700">
+          <Image
+            src={"/assets/images/icons/icons8-megaphone-preto.png"}
+            alt="Icon phone"
+            width={50}
+            height={50}
+            className="mr-5 dark:invert"
+          />
+          <h1 className="text-5xl font-bold dark:text-white">Gerenciar Recados</h1>
+          <Button onClick={() => router.back()} className="bg-gray-600 hover:bg-gray-700 text-white">
             ← Voltar
           </Button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white/60 dark:bg-gray-900/60 backdrop-blur p-8 rounded-2xl mb-12">
+        <form onSubmit={handleSubmit} className="bg-white/60 dark:bg-gray-500 backdrop-blur p-8 rounded-2xl mb-12">
           <div className="grid md:grid-cols-2 gap-6">
             <input
               value={formData.titulo}
@@ -147,21 +228,65 @@ export default function GerenciarRecados() {
             </select>
           </div>
           <div className="grid md:grid-cols-2 gap-6 mt-6">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  setFormData({
-                    ...formData,
-                    imagem: file,
-                    imagemPreview: URL.createObjectURL(file)
-                  });
-                }
-              }}
-              className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
-            />
+            {/* ✅ UPLOAD Drag & Drop */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Nova Imagem (opcional)
+              </label>
+              <div
+                className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 w-full ${dragActive
+                    ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                    : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  }`}
+                onDragEnter={handleDragIn}
+                onDragLeave={handleDragOut}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 pointer-events-auto"
+                />
+
+                <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center h-full">
+                  <svg className="w-10 h-10 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  <p className="text-sm font-medium text-gray-700 mb-1">
+                    {dragActive ? "✅ Solte aqui!" : "Clique ou arraste nova imagem"}
+                  </p>
+                  <p className="text-xs text-gray-500">PNG, JPG (máx. 5MB)</p>
+                </div>
+
+                {/* ✅ PREVIEW DA IMAGEM ARRASTADA */}
+                {imagemRecado && (
+                  <div className="absolute inset-0 bg-white/95 dark:bg-black/95 flex flex-col items-center justify-center z-30 rounded-xl">
+                    <div className="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/50 p-4 rounded-lg border border-blue-200 dark:border-blue-800 w-full max-w-md">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-blue-800 dark:text-blue-200 truncate">
+                          {imagemRecado.name}
+                        </p>
+                        <p className="text-xs text-blue-700 dark:text-blue-300">
+                          {Math.round(imagemRecado.size / 1024)} KB
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={removeImage}
+                        className="h-9 w-9 p-0 hover:bg-red-500 hover:text-white"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
             <textarea
               value={formData.conteudo}
               onChange={(e) => setFormData({ ...formData, conteudo: e.target.value })}
@@ -176,7 +301,7 @@ export default function GerenciarRecados() {
               <img src={formData.imagemPreview} alt="Preview" className="w-32 h-32 object-cover rounded-lg" />
             </div>
           )}
-          <Button type="submit" className="mt-6 w-full bg-orange-600 hover:bg-orange-700">
+          <Button type="submit" className="mt-6 w-full bg-orange-600 hover:bg-orange-700 text-white">
             {editingId ? "Atualizar" : "Criar"} Recado
           </Button>
         </form>
@@ -193,16 +318,16 @@ export default function GerenciarRecados() {
               <div key={recado.id} className="p-6 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/50 rounded-2xl border">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-2xl font-bold">{recado.titulo}</h3>
-                    <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">
+                    <h3 className="text-2xl font-bold dark:text-white">{recado.titulo}</h3>
+                    <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
                       📍 {recado.unidade.nome} • {new Date(recado.createdAt).toLocaleDateString('pt-BR')}
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button onClick={() => handleEdit(recado)} size="sm" className="bg-green-600">
+                    <Button onClick={() => handleEdit(recado)} size="sm" className="bg-green-600 text-white">
                       Editar
                     </Button>
-                    <Button onClick={() => handleDelete(recado.id)} size="sm" variant="destructive">
+                    <Button onClick={() => handleDelete(recado.id)} size="sm" variant="destructive" className="bg-red-600 text-white">
                       Excluir
                     </Button>
                   </div>

@@ -12,7 +12,8 @@ export default function Sidebar() {
     { label: 'Sistemas', path: '/links-uteis', icon: '/assets/images/icons/icons8-link-branco.png' },
     { label: 'Ramais', path: '/ramais', icon: '/assets/images/icons/icons8-phone-branco.png' },
     { label: 'Emails', path: '/emails', icon: '/assets/images/icons/icons8-mail-branco.png' },
-    { label: 'Conexão Naturafrig', path: '/jornais', icon: '/assets/images/icons/icons8-news-branco.png' },
+    { label: 'Notícias', path: '/noticias', icon: '/assets/images/icons/icons8-news-branco.png' },
+    { label: 'Recados', path: '/recados', icon: '/assets/images/icons/icons8-megaphone-branco.png' },
   ];
 
   const submenuItems = [
