@@ -6,6 +6,15 @@ import { prisma } from "../../../../lib/prisma";
 import Layout from "@/src/components/Layout";
 import { UsuariosClient } from "./usuarios-client";
 
+type Usuario = {
+  id: string;
+  name: string | null;
+  email: string;
+  role: string;
+  unidadeId: number | null;
+  unidade: { id: number; nome: string } | null;
+};
+
 export default async function UsuariosPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) redirect("/admin");
@@ -19,7 +28,8 @@ export default async function UsuariosPage() {
     redirect("/admin/authenticated");
   }
 
-  const [usuarios, unidades] = await Promise.all([
+  // ✅ REMOVIDO: Promise.all duplicado e variável não usada
+  const [usuariosRaw, unidades] = await Promise.all([
     prisma.user.findMany({
       orderBy: { createdAt: "desc" },
       include: { unidade: true },
@@ -28,6 +38,15 @@ export default async function UsuariosPage() {
       orderBy: { nome: "asc" },
     }),
   ]);
+
+  const usuarios: Usuario[] = usuariosRaw.map(u => ({
+    id: u.id,
+    name: u.name,
+    email: u.email,
+    role: u.role,
+    unidadeId: u.unidadeId,
+    unidade: u.unidade,
+  }));
 
   return (
     <Layout>
