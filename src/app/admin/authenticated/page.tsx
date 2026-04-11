@@ -27,6 +27,10 @@ export default async function Authenticated() {
   }
 
   const isOwner = dbUser.role === "OWNER";
+  const isAdmin = dbUser.role === "ADMIN";
+  const isNewsOnly = dbUser.role === "NEWSONLY"
+  const isMessageOnly = dbUser.role === "MESSAGEONLY"
+  const isMessageNews = dbUser.role === "MESSAGENEWS"
 
   return (
     <Layout>
@@ -39,7 +43,7 @@ export default async function Authenticated() {
                 <p className="text-sm text-muted-foreground dark:text-white">
                   <strong>Usuário logado:</strong>{" "}
                   <span>{session.user.name}</span>{" "}
-                  ({isOwner ? "Owner" : "Admin"})
+                  ({dbUser.role})
                 </p>
                 <p className="text-sm text-muted-foreground mb-4 dark:text-white">
                   <strong>Email:</strong> {session.user.email}
@@ -50,77 +54,65 @@ export default async function Authenticated() {
           </div>
         </div>
         <nav className="grid gap-4 md:grid-cols-3">
-          <Link
-            href="/admin/authenticated/ramais"
-            className="group h-[250px] rounded-lg bg-yellow-600 text-white 
+          {(isOwner || isAdmin) && (
+            <Link
+              href="/admin/authenticated/ramais"
+              className="group h-[250px] rounded-lg bg-yellow-600 text-white 
                transition-transform duration-200 hover:scale-105 hover:shadow-lg"
-          >
-            <div className="flex h-full flex-col items-center justify-center text-center px-4">
-              <img
-                src="/assets/images/icons/icons8-phone-branco.png"
-                alt="Ramais"
-                className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
-              />
-              <h2 className="font-semibold text-3xl mb-2">Ramais</h2>
-              <p className="text-sm opacity-90">
-                Ver e editar ramais da sua unidade.
-              </p>
-            </div>
-          </Link>
+            >
+              <div className="flex h-full flex-col items-center justify-center text-center px-4">
+                <img
+                  src="/assets/images/icons/icons8-phone-branco.png"
+                  alt="Ramais"
+                  className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
+                />
+                <h2 className="font-semibold text-3xl mb-2">Ramais</h2>
+                <p className="text-sm opacity-90">
+                  Ver e editar ramais da sua unidade.
+                </p>
+              </div>
+            </Link>
+          )}
 
-          <Link
-            href="/admin/authenticated/emails"
-            className="group h-[250px] rounded-lg bg-purple-600 text-white 
+          {(isOwner || isAdmin) && (
+            <Link
+              href="/admin/authenticated/emails"
+              className="group h-[250px] rounded-lg bg-purple-600 text-white 
                transition-transform duration-200 hover:scale-105 hover:shadow-lg"
-          >
-            <div className="flex h-full flex-col items-center justify-center text-center px-4">
-              <img
-                src="/assets/images/icons/icons8-mail-branco.png"
-                alt="E-mails"
-                className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
-              />
-              <h2 className="font-semibold text-3xl mb-2">E-mails</h2>
-              <p className="text-sm opacity-90">
-                Gerenciar lista de e-mails corporativos.
-              </p>
-            </div>
-          </Link>
+            >
+              <div className="flex h-full flex-col items-center justify-center text-center px-4">
+                <img
+                  src="/assets/images/icons/icons8-mail-branco.png"
+                  alt="E-mails"
+                  className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
+                />
+                <h2 className="font-semibold text-3xl mb-2">E-mails</h2>
+                <p className="text-sm opacity-90">
+                  Gerenciar lista de e-mails corporativos.
+                </p>
+              </div>
+            </Link>
+          )}
 
-          <Link
-            href="/admin/authenticated/minha-senha"
-            className="group h-[250px] rounded-lg bg-green-600 text-white 
+          {(isOwner || isAdmin) && (
+            <Link
+              href="https://assinatura.naturafrig.com.br/"
+              className="group h-[250px] rounded-lg bg-blue-600 text-white 
                transition-transform duration-200 hover:scale-105 hover:shadow-lg"
-          >
-            <div className="flex h-full flex-col items-center justify-center text-center px-4">
-              <img
-                src="/assets/images/icons/icons8-password-branco.png"
-                alt="Minha senha"
-                className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
-              />
-              <h2 className="font-semibold text-3xl mb-2">Minha senha</h2>
-              <p className="text-sm opacity-90">
-                Alterar sua senha.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="https://assinatura.naturafrig.com.br/"
-            className="group h-[250px] rounded-lg bg-blue-600 text-white 
-               transition-transform duration-200 hover:scale-105 hover:shadow-lg"
-          >
-            <div className="flex h-full flex-col items-center justify-center text-center px-4">
-              <img
-                src="/assets/images/logos/assinatura.png"
-                alt="Minha senha"
-                className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110 invert"
-              />
-              <h2 className="font-semibold text-3xl mb-2">Criar Assinatura</h2>
-              <p className="text-sm opacity-90">
-                Criar assinatura email.
-              </p>
-            </div>
-          </Link>
+            >
+              <div className="flex h-full flex-col items-center justify-center text-center px-4">
+                <img
+                  src="/assets/images/logos/assinatura.png"
+                  alt="Minha senha"
+                  className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110 invert"
+                />
+                <h2 className="font-semibold text-3xl mb-2">Criar Assinatura</h2>
+                <p className="text-sm opacity-90">
+                  Criar assinatura email.
+                </p>
+              </div>
+            </Link>
+          )}
 
           {isOwner && (
             <Link
@@ -162,20 +154,41 @@ export default async function Authenticated() {
             </Link>
           )}
 
-          {/* ✅ NOVOS CARDS - visíveis baseado em role */}
-          <Link href="/admin/authenticated/noticias" className="group h-[250px] rounded-lg bg-blue-600 text-white transition-transform duration-200 hover:scale-105 hover:shadow-lg">
-            <div className="flex h-full flex-col items-center justify-center text-center px-4">
-              <img src="/assets/images/icons/icons8-news-branco.png" alt="Notícias" className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110" />
-              <h2 className="font-semibold text-3xl mb-2">Notícias</h2>
-              <p className="text-sm opacity-90">Gerenciar notícias (global)</p>
-            </div>
-          </Link>
+          {(isOwner || isNewsOnly || isMessageNews) && (
+            <Link href="/admin/authenticated/noticias" className="group h-[250px] rounded-lg bg-blue-600 text-white transition-transform duration-200 hover:scale-105 hover:shadow-lg">
+              <div className="flex h-full flex-col items-center justify-center text-center px-4">
+                <img src="/assets/images/icons/icons8-news-branco.png" alt="Notícias" className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110" />
+                <h2 className="font-semibold text-3xl mb-2">Notícias</h2>
+                <p className="text-sm opacity-90">Gerenciar notícias (global)</p>
+              </div>
+            </Link>
+          )}
 
-          <Link href="/admin/authenticated/recados" className="group h-[250px] rounded-lg bg-orange-600 text-white transition-transform duration-200 hover:scale-105 hover:shadow-lg">
+          {(isOwner || isAdmin || isMessageOnly || isMessageNews) && (
+            <Link href="/admin/authenticated/recados" className="group h-[250px] rounded-lg bg-orange-600 text-white transition-transform duration-200 hover:scale-105 hover:shadow-lg">
+              <div className="flex h-full flex-col items-center justify-center text-center px-4">
+                <img src="/assets/images/icons/icons8-megaphone-branco.png" alt="Recados" className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110" />
+                <h2 className="font-semibold text-3xl mb-2">Recados</h2>
+                <p className="text-sm opacity-90">{isOwner ? 'Todas unidades' : 'Minha unidade'}</p>
+              </div>
+            </Link>
+          )}
+
+          <Link
+            href="/admin/authenticated/minha-senha"
+            className="group h-[250px] rounded-lg bg-green-600 text-white 
+               transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+          >
             <div className="flex h-full flex-col items-center justify-center text-center px-4">
-              <img src="/assets/images/icons/icons8-megaphone-branco.png" alt="Recados" className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110" />
-              <h2 className="font-semibold text-3xl mb-2">Recados</h2>
-              <p className="text-sm opacity-90">{isOwner ? 'Todas unidades' : 'Minha unidade'}</p>
+              <img
+                src="/assets/images/icons/icons8-password-branco.png"
+                alt="Minha senha"
+                className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
+              />
+              <h2 className="font-semibold text-3xl mb-2">Minha senha</h2>
+              <p className="text-sm opacity-90">
+                Alterar sua senha.
+              </p>
             </div>
           </Link>
         </nav>

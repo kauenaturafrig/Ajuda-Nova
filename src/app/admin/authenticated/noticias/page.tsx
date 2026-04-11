@@ -17,7 +17,7 @@ export default async function GerenciarNoticiasPage() {
   });
 
   // ✅ Permite OWNER, ADMIN, NEWSONLY, MESSAGENEWS
-  const allowedRoles: AppUserRole[] = ["OWNER", "ADMIN", "NEWSONLY", "MESSAGENEWS"];
+  const allowedRoles: AppUserRole[] = ["OWNER", "NEWSONLY", "MESSAGENEWS"];
   if (!dbUser || !allowedRoles.includes(dbUser.role)) {
     redirect("/admin/authenticated");
   }

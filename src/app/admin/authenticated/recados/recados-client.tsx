@@ -49,7 +49,7 @@ export default function RecadosClient({
     const [formData, setFormData] = useState({
         titulo: "",
         conteudo: "",
-        unidadeIds: userRole === "MESSAGEONLY" && userUnidadeId ? [userUnidadeId] : [] as number[],
+        unidadeIds: (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId ? [userUnidadeId] : [] as number[],
         imagem: null as File | null,
         imagemPreview: "",
         imagemAntiga: ""
@@ -57,7 +57,7 @@ export default function RecadosClient({
 
     const [imagemRecado, setImagemRecado] = useState<File | null>(null);
     const [selectedUnidades, setSelectedUnidades] = useState<Record<number, boolean>>(
-        userRole === "MESSAGEONLY" && userUnidadeId ? { [userUnidadeId]: true } : {}
+        (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId ? { [userUnidadeId]: true } : {}
     );
 
     const router = useRouter();
@@ -258,7 +258,7 @@ export default function RecadosClient({
                         />
 
                         {/* Checkboxes de unidades */}
-                        {userRole === "MESSAGEONLY" ? (
+                        {(userRole === "MESSAGEONLY" || userRole === "ADMIN") ? (
                             <div className="p-6 border-2 border-green-200 bg-green-50 rounded-2xl text-center">
                                 <Check className="w-12 h-12 text-green-600 mx-auto mb-4" />
                                 <p className="text-lg font-bold text-green-800">✅ Unidade própria selecionada</p>
