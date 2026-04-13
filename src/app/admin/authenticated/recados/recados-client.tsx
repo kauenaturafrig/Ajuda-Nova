@@ -16,7 +16,8 @@ interface Recado {
     conteudo: string;
     imagem?: string;
     unidadeId: number;
-    unidade: { nome: string };
+    unidadeIds: number[];
+    unidade: { id: number; nome: string };
     createdAt: Date;
 }
 
@@ -26,10 +27,10 @@ interface Unidade {
 }
 
 interface Props {
-  initialRecados: Recado[];
-  initialUnidades: Unidade[];
-  userRole: UserRole; 
-  userUnidadeId: number | null;
+    initialRecados: Recado[];
+    initialUnidades: Unidade[];
+    userRole: UserRole;
+    userUnidadeId: number | null;
 }
 
 export default function RecadosClient({
@@ -83,22 +84,53 @@ export default function RecadosClient({
         }));
     };
 
+    // ✅ ADD: Função para verificar se pode editar/excluir
+    const canManageRecado = useCallback((recado: Recado) => {
+        // OWNER e MESSAGENEWS podem tudo
+        if (userRole === "OWNER" || userRole === "MESSAGENEWS") {
+            return true;
+        }
+
+        // ADMIN e MESSAGEONLY só podem gerenciar recados da SUA unidade
+        // (que têm apenas 1 unidade e é igual a sua)
+        const ehMultiUnidade = recado.unidadeIds.length > 1;
+        const ehSuaUnidade = recado.unidadeId === userUnidadeId;
+
+        return !ehMultiUnidade && ehSuaUnidade;
+    }, [userRole, userUnidadeId]);
+
     // ✅ ADD: handleEdit
     const handleEdit = (recado: Recado) => {
+        if (!canManageRecado(recado)) {
+            alert("⛔ Você só pode editar recados da sua própria unidade!");
+            return;
+        }
+
         setEditingId(recado.id);
+        const ids = recado.unidadeIds.length > 0 ? recado.unidadeIds : [recado.unidadeId];
+
         setFormData({
             titulo: recado.titulo,
             conteudo: recado.conteudo,
-            unidadeIds: [recado.unidadeId],
+            unidadeIds: ids,
             imagem: null,
             imagemPreview: recado.imagem ? `/uploads/recados/${recado.imagem}` : "",
             imagemAntiga: recado.imagem || ""
         });
-        setSelectedUnidades({ [recado.unidadeId]: true });
-    };
+
+        const selected: Record<number, boolean> = {};
+        ids.forEach(id => { selected[id] = true; });
+        setSelectedUnidades(selected);
+    }
 
     // ✅ ADD: handleDelete
     const handleDelete = async (id: number) => {
+        const recado = recados.find(r => r.id === id);
+        if (recado && !canManageRecado(recado)) {
+            alert("⛔ Você só pode excluir recados da sua própria unidade!");
+            return;
+        }
+
         if (!confirm("Confirmar exclusão?")) return;
         try {
             await fetch(`/admin/api/recados/${id}`, { method: "DELETE" });
@@ -159,7 +191,8 @@ export default function RecadosClient({
             setRecados(Array.isArray(refreshed) ? refreshed.map((r: any) => ({
                 ...r,
                 imagem: r.imagem || undefined,
-                unidade: r.unidade!
+                unidade: r.unidade,
+                unidadeIds: r.unidadeIds || []
             })) : []);
         } catch (error) {
             alert("Erro de conexão");
@@ -383,27 +416,49 @@ export default function RecadosClient({
                             <p>Crie o primeiro recado acima!</p>
                         </div>
                     ) : (
-                        recados.map((recado) => (
-                            <div key={recado.id} className="p-6 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/50 rounded-2xl border">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
-                                        📍 {recado.unidade?.nome || 'Unidade não encontrada'} • {new Date(recado.createdAt).toLocaleDateString('pt-BR')}
+                        recados.map((recado) => {
+                            const podeGerenciar = canManageRecado(recado);
+                            const unidadesExibicao = unidades.filter(u =>
+                                recado.unidadeIds.length > 0
+                                    ? recado.unidadeIds.includes(u.id)
+                                    : u.id === recado.unidadeId
+                            );
+
+                            return (
+                                <div key={recado.id} className="p-6 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/50 rounded-2xl border">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
+                                            📍 {unidadesExibicao.map(u => u.nome).join(", ")} - {new Date(recado.createdAt).toLocaleDateString('pt-BR')}
+                                            {!podeGerenciar && (
+                                                <span className="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-full">
+                                                    🔒 Global
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            {podeGerenciar ? (
+                                                <>
+                                                    <Button onClick={() => handleEdit(recado)} size="sm" className="bg-green-600 text-white">
+                                                        Editar
+                                                    </Button>
+                                                    <Button onClick={() => handleDelete(recado.id)} size="sm" variant="destructive" className="bg-red-600 text-white">
+                                                        Excluir
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <span className="text-xs text-gray-500 italic">
+                                                    🔒 Somente leitura
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Button onClick={() => handleEdit(recado)} size="sm" className="bg-green-600 text-white">
-                                            Editar
-                                        </Button>
-                                        <Button onClick={() => handleDelete(recado.id)} size="sm" variant="destructive" className="bg-red-600 text-white">
-                                            Excluir
-                                        </Button>
-                                    </div>
+                                    {recado.imagem && (
+                                        <img src={`/uploads/recados/${recado.imagem}`} alt={recado.titulo} className="w-24 h-24 object-cover rounded-lg mb-4" />
+                                    )}
+                                    <p className="text-gray-700 dark:text-gray-300 mb-2">{recado.conteudo.slice(0, 200)}...</p>
                                 </div>
-                                {recado.imagem && (
-                                    <img src={`/uploads/recados/${recado.imagem}`} alt={recado.titulo} className="w-24 h-24 object-cover rounded-lg mb-4" />
-                                )}
-                                <p className="text-gray-700 dark:text-gray-300 mb-2">{recado.conteudo.slice(0, 200)}...</p>
-                            </div>
-                        ))
+                            );
+                        })
                     )}
                 </div>
             </div>

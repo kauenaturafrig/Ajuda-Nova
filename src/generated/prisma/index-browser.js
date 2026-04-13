@@ -224,9 +224,31 @@ exports.Prisma.RecadoScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RecadoUnidadeScalarFieldEnum = {
+  id: 'id',
+  recadoId: 'recadoId',
+  unidadeId: 'unidadeId'
+};
+
+exports.Prisma.RecadoAuditScalarFieldEnum = {
+  id: 'id',
+  recadoId: 'recadoId',
+  userId: 'userId',
+  userNome: 'userNome',
+  acao: 'acao',
+  dadosAntigos: 'dadosAntigos',
+  dadosNovos: 'dadosNovos',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -237,6 +259,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.UserRole = exports.$Enums.UserRole = {
   OWNER: 'OWNER',
@@ -256,7 +284,9 @@ exports.Prisma.ModelName = {
   Email: 'Email',
   Jornal: 'Jornal',
   Noticia: 'Noticia',
-  Recado: 'Recado'
+  Recado: 'Recado',
+  RecadoUnidade: 'RecadoUnidade',
+  RecadoAudit: 'RecadoAudit'
 };
 
 /**

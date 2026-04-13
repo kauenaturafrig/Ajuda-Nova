@@ -16,29 +16,41 @@ export default async function GerenciarRecadosPage() {
     select: { role: true, unidadeId: true },
   });
 
-  // 🚫 BLOQUEIA NEWSONLY - comparação string simples
   if (!dbUser || dbUser.role === "NEWSONLY") {
     redirect("/admin/authenticated");
   }
 
+  const recadosWhere =
+    dbUser.role === "OWNER" || dbUser.role === "MESSAGENEWS"
+      ? {} // Vê tudo
+      : { unidadeId: dbUser.unidadeId! }; // Só vê da sua unidade
+
   const [recadosRaw, unidades] = await Promise.all([
     prisma.recado.findMany({
+      where: recadosWhere,
       orderBy: { createdAt: "desc" },
-      include: { unidade: { select: { nome: true } } }
+      include: {
+        unidade: { select: { id: true, nome: true } },
+        unidades: {
+          include: {
+            unidade: { select: { id: true, nome: true } }
+          }
+        }
+      }
     }),
     prisma.unidade.findMany({
       orderBy: { nome: "asc" }
     }),
   ]);
 
-  // ✅ Transforma para interface Recado
   const recados = recadosRaw.map(recado => ({
     id: recado.id,
     titulo: recado.titulo,
     conteudo: recado.conteudo,
     imagem: recado.imagem || undefined,
     unidadeId: recado.unidadeId,
-    unidade: recado.unidade!,
+    unidade: recado.unidade,
+    unidadeIds: recado.unidades.map(u => u.unidade.id), // ✅ Array de IDs
     createdAt: recado.createdAt
   }));
 
@@ -47,7 +59,7 @@ export default async function GerenciarRecadosPage() {
       <RecadosClient
         initialRecados={recados}
         initialUnidades={unidades}
-        userRole={dbUser.role as AppUserRole} // ✅ TypeScript infere automaticamente
+        userRole={dbUser.role as AppUserRole}
         userUnidadeId={dbUser.unidadeId || null}
       />
     </Layout>

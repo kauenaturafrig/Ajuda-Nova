@@ -94,14 +94,15 @@ model Verification {
 }
 
 model Unidade {
-  id   Int    @id @default(autoincrement())
-  nome String
+  id            Int             @id @default(autoincrement())
+  nome          String
 
   // relacionamentos
-  ramais  Ramal[]
-  emails  Email[]
-  users   User[]
-  recados Recado[]
+  ramais        Ramal[]
+  emails        Email[]
+  users         User[]
+  recados       Recado[]        @relation("RecadoUnidadePrincipal") // Nomeia a relação principal
+  recadosMulti  RecadoUnidade[] // NOVO: Relação Many-to-Many
 
   @@map("unidades")
 }
@@ -159,15 +160,50 @@ model Noticia {
 }
 
 model Recado {
-  id        Int      @id @default(autoincrement())
+  id        Int              @id @default(autoincrement())
   titulo    String
   conteudo  String
-  imagem    String?  // ✅ NOVO: opcional como Noticia
-  unidadeId Int
-  unidade   Unidade  @relation(fields: [unidadeId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  imagem    String?
+  unidadeId Int              // Unidade principal (para legenda/backup)
+  unidade   Unidade          @relation("RecadoUnidadePrincipal", fields: [unidadeId], references: [id])
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  
+  // Relação Many-to-Many com Unidades
+  unidades  RecadoUnidade[]
 
   @@map("recados")
 }
 
+model RecadoUnidade {
+  id        Int      @id @default(autoincrement())
+  recadoId  Int
+  unidadeId Int
+  
+  recado    Recado   @relation(fields: [recadoId], references: [id], onDelete: Cascade)
+  unidade   Unidade  @relation(fields: [unidadeId], references: [id], onDelete: Cascade)
+
+  // Impede duplicação (mesmo recado + mesma unidade)
+  @@unique([recadoId, unidadeId])
+  @@index([recadoId])
+  @@index([unidadeId])
+  
+  @@map("recados_unidades")
+}
+
+model RecadoAudit {
+  id          Int      @id @default(autoincrement())
+  recadoId    Int
+  userId      String
+  userNome    String
+  acao        String   // "CREATE", "UPDATE", "DELETE"
+  dadosAntigos Json?   // Snapshot antes da mudança
+  dadosNovos  Json?   // Snapshot depois da mudança
+  createdAt   DateTime @default(now())
+
+  @@index([recadoId])
+  @@index([userId])
+  @@index([createdAt])
+  
+  @@map("recados_audits")
+}
