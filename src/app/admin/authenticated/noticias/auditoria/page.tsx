@@ -1,13 +1,13 @@
-// src/app/admin/authenticated/recados/auditoria/page.tsx
+// src/app/admin/authenticated/noticias/auditoria/page.tsx
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import Link from "next/link";  // ✅ Server-side Link
+import Link from "next/link";
 import { auth } from "@/src/lib/auth";
 import { prisma } from "@/src/lib/prisma";
 import Layout from "@/src/components/Layout";
 import Image from "next/image";
 
-export default async function AuditoriaRecadosPage() {
+export default async function AuditoriaNoticiasPage() {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session) redirect("/admin");
 
@@ -16,16 +16,17 @@ export default async function AuditoriaRecadosPage() {
         select: { role: true }
     });
 
+    // ✅ SÓ OWNER
     if (dbUser?.role !== "OWNER") {
         redirect("/admin/authenticated");
     }
 
-    const audits = await prisma.recadoAudit.findMany({
+    const audits = await prisma.noticiaAudit.findMany({
         orderBy: { createdAt: 'desc' },
         take: 100,
         select: {
             id: true,
-            recadoId: true,
+            noticiaId: true,
             userId: true,
             userNome: true,
             acao: true,
@@ -48,14 +49,14 @@ export default async function AuditoriaRecadosPage() {
                     </Link>
                     <div className="flex">
                         <Image
-                            src="/assets/images/icons/icons8-megaphone-preto.png"
-                            alt="Icon megaphone"
+                            src="/assets/images/icons/icons8-news-preto.png"
+                            alt="Icon news"
                             width={50}
                             height={50}
                             className="mr-5 dark:invert"
                         />
                         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent flex-1">
-                            Auditoria Recados
+                            Auditoria Notícias
                         </h1>
                     </div>
                     <span className="px-4 py-2 bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200 text-sm font-bold rounded-full">
@@ -66,11 +67,11 @@ export default async function AuditoriaRecadosPage() {
                 <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-white/50 dark:border-gray-700/50 shadow-2xl overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gradient-to-r from-orange-500/20 to-red-500/20 dark:from-orange-500/30 dark:to-red-500/30 border-b border-orange-200 dark:border-orange-800/50">
+                            <thead className="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 dark:from-blue-500/30 dark:to-indigo-500/30 border-b border-blue-200 dark:border-blue-800/50">
                                 <tr>
                                     <th className="p-6 text-left font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wider">Data/Hora</th>
                                     <th className="p-6 text-left font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wider">Usuário</th>
-                                    <th className="p-6 text-left font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wider">Recado ID</th>
+                                    <th className="p-6 text-left font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wider">Notícia ID</th>
                                     <th className="p-6 text-left font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wider">Ação</th>
                                     <th className="p-6 text-left font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wider">Antes</th>
                                     <th className="p-6 text-left font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wider">Depois</th>
@@ -86,8 +87,8 @@ export default async function AuditoriaRecadosPage() {
                                             {audit.userNome}
                                         </td>
                                         <td className="p-6">
-                                            <span className="font-mono bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200 px-3 py-1 rounded-full text-sm font-bold">
-                                                #{audit.recadoId}
+                                            <span className="font-mono bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-bold">
+                                                #{audit.noticiaId}
                                             </span>
                                         </td>
                                         <td className="p-6">

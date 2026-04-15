@@ -115,11 +115,31 @@ export default async function Authenticated() {
           )}
 
           {(isOwner || isNewsOnly || isMessageNews) && (
-            <Link href="/admin/authenticated/noticias" className="group h-[250px] rounded-lg bg-blue-600 text-white transition-transform duration-200 hover:scale-105 hover:shadow-lg">
+            <Link href="/admin/authenticated/noticias" className="group h-[250px] rounded-lg bg-blue-700 text-white transition-transform duration-200 hover:scale-105 hover:shadow-lg">
               <div className="flex h-full flex-col items-center justify-center text-center px-4">
                 <img src="/assets/images/icons/icons8-news-branco.png" alt="Notícias" className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110" />
                 <h2 className="font-semibold text-3xl mb-2">Notícias</h2>
                 <p className="text-sm opacity-90">Gerenciar notícias (global)</p>
+              </div>
+            </Link>
+          )}
+
+          {isOwner && (
+            <Link
+              href="/admin/authenticated/noticias/auditoria"
+              className="group h-[250px] rounded-lg border bg-blue-800 text-white 
+                 transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+            >
+              <div className="flex h-full flex-col items-center justify-center text-center px-4">
+                <img
+                  src="/assets/images/icons/icons8-news-branco.png"
+                  alt="Log de noticias"
+                  className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
+                />
+                <h2 className="font-semibold text-3xl mb-2">Log de Noticias</h2>
+                <p className="text-sm opacity-90">
+                  Auditoria
+                </p>
               </div>
             </Link>
           )}
@@ -130,6 +150,26 @@ export default async function Authenticated() {
                 <img src="/assets/images/icons/icons8-megaphone-branco.png" alt="Recados" className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110" />
                 <h2 className="font-semibold text-3xl mb-2">Recados</h2>
                 <p className="text-sm opacity-90">{isOwner ? 'Todas unidades' : 'Minha unidade'}</p>
+              </div>
+            </Link>
+          )}
+
+          {isOwner && (
+            <Link
+              href="/admin/authenticated/recados/auditoria"
+              className="group h-[250px] rounded-lg border bg-orange-800 text-white 
+                 transition-transform duration-200 hover:scale-105 hover:shadow-lg"
+            >
+              <div className="flex h-full flex-col items-center justify-center text-center px-4">
+                <img
+                  src="/assets/images/icons/icons8-megaphone-branco.png"
+                  alt="Log de noticias"
+                  className="w-[90px] h-[90px] mb-3 transition-transform duration-200 group-hover:scale-110"
+                />
+                <h2 className="font-semibold text-3xl mb-2">Log de Recados</h2>
+                <p className="text-sm opacity-90">
+                  Auditoria
+                </p>
               </div>
             </Link>
           )}

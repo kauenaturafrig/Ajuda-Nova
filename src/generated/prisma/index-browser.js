@@ -214,6 +214,17 @@ exports.Prisma.NoticiaScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NoticiaAuditScalarFieldEnum = {
+  id: 'id',
+  noticiaId: 'noticiaId',
+  userId: 'userId',
+  userNome: 'userNome',
+  acao: 'acao',
+  dadosAntigos: 'dadosAntigos',
+  dadosNovos: 'dadosNovos',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.RecadoScalarFieldEnum = {
   id: 'id',
   titulo: 'titulo',
@@ -284,6 +295,7 @@ exports.Prisma.ModelName = {
   Email: 'Email',
   Jornal: 'Jornal',
   Noticia: 'Noticia',
+  NoticiaAudit: 'NoticiaAudit',
   Recado: 'Recado',
   RecadoUnidade: 'RecadoUnidade',
   RecadoAudit: 'RecadoAudit'

@@ -152,11 +152,27 @@ model Noticia {
   id        Int      @id @default(autoincrement())
   titulo    String
   conteudo  String
-  imagem    String? // /uploads/noticias/nome.jpg
+  imagem    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("noticias")
+}
+
+model NoticiaAudit {
+  id          Int      @id @default(autoincrement())
+  noticiaId   Int
+  userId      String
+  userNome    String
+  acao        String
+  dadosAntigos Json?
+  dadosNovos  Json?
+  createdAt   DateTime @default(now())
+
+  @@index([noticiaId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("noticias_audits")
 }
 
 model Recado {

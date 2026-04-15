@@ -38,7 +38,7 @@ export function getUnidadeByIp(ip: string | null): number | null {
     '172.16.25': 2,  // Nova Andradina
     '172.16.26': 2,  // Nova Andradina
     '172.16.27': 2,  // Nova Andradina
-    '192.168.0': 3,
+    '192.168.0': 4,
   
     '172.16.28': 3,  // Rochedo
     '172.16.29': 3,  // Rochedo

@@ -59,6 +59,11 @@ export type Jornal = $Result.DefaultSelection<Prisma.$JornalPayload>
  */
 export type Noticia = $Result.DefaultSelection<Prisma.$NoticiaPayload>
 /**
+ * Model NoticiaAudit
+ * 
+ */
+export type NoticiaAudit = $Result.DefaultSelection<Prisma.$NoticiaAuditPayload>
+/**
  * Model Recado
  * 
  */
@@ -301,6 +306,16 @@ export class PrismaClient<
     * ```
     */
   get noticia(): Prisma.NoticiaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.noticiaAudit`: Exposes CRUD operations for the **NoticiaAudit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NoticiaAudits
+    * const noticiaAudits = await prisma.noticiaAudit.findMany()
+    * ```
+    */
+  get noticiaAudit(): Prisma.NoticiaAuditDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.recado`: Exposes CRUD operations for the **Recado** model.
@@ -781,6 +796,7 @@ export namespace Prisma {
     Email: 'Email',
     Jornal: 'Jornal',
     Noticia: 'Noticia',
+    NoticiaAudit: 'NoticiaAudit',
     Recado: 'Recado',
     RecadoUnidade: 'RecadoUnidade',
     RecadoAudit: 'RecadoAudit'
@@ -802,7 +818,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal" | "noticia" | "recado" | "recadoUnidade" | "recadoAudit"
+      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal" | "noticia" | "noticiaAudit" | "recado" | "recadoUnidade" | "recadoAudit"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1472,6 +1488,80 @@ export namespace Prisma {
           }
         }
       }
+      NoticiaAudit: {
+        payload: Prisma.$NoticiaAuditPayload<ExtArgs>
+        fields: Prisma.NoticiaAuditFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NoticiaAuditFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NoticiaAuditFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          findFirst: {
+            args: Prisma.NoticiaAuditFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NoticiaAuditFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          findMany: {
+            args: Prisma.NoticiaAuditFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>[]
+          }
+          create: {
+            args: Prisma.NoticiaAuditCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          createMany: {
+            args: Prisma.NoticiaAuditCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NoticiaAuditCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>[]
+          }
+          delete: {
+            args: Prisma.NoticiaAuditDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          update: {
+            args: Prisma.NoticiaAuditUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          deleteMany: {
+            args: Prisma.NoticiaAuditDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NoticiaAuditUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NoticiaAuditUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>[]
+          }
+          upsert: {
+            args: Prisma.NoticiaAuditUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          aggregate: {
+            args: Prisma.NoticiaAuditAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNoticiaAudit>
+          }
+          groupBy: {
+            args: Prisma.NoticiaAuditGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NoticiaAuditGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NoticiaAuditCountArgs<ExtArgs>
+            result: $Utils.Optional<NoticiaAuditCountAggregateOutputType> | number
+          }
+        }
+      }
       Recado: {
         payload: Prisma.$RecadoPayload<ExtArgs>
         fields: Prisma.RecadoFieldRefs
@@ -1799,6 +1889,7 @@ export namespace Prisma {
     email?: EmailOmit
     jornal?: JornalOmit
     noticia?: NoticiaOmit
+    noticiaAudit?: NoticiaAuditOmit
     recado?: RecadoOmit
     recadoUnidade?: RecadoUnidadeOmit
     recadoAudit?: RecadoAuditOmit
@@ -12039,6 +12130,1070 @@ export namespace Prisma {
 
 
   /**
+   * Model NoticiaAudit
+   */
+
+  export type AggregateNoticiaAudit = {
+    _count: NoticiaAuditCountAggregateOutputType | null
+    _avg: NoticiaAuditAvgAggregateOutputType | null
+    _sum: NoticiaAuditSumAggregateOutputType | null
+    _min: NoticiaAuditMinAggregateOutputType | null
+    _max: NoticiaAuditMaxAggregateOutputType | null
+  }
+
+  export type NoticiaAuditAvgAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+  }
+
+  export type NoticiaAuditSumAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+  }
+
+  export type NoticiaAuditMinAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type NoticiaAuditMaxAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type NoticiaAuditCountAggregateOutputType = {
+    id: number
+    noticiaId: number
+    userId: number
+    userNome: number
+    acao: number
+    dadosAntigos: number
+    dadosNovos: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NoticiaAuditAvgAggregateInputType = {
+    id?: true
+    noticiaId?: true
+  }
+
+  export type NoticiaAuditSumAggregateInputType = {
+    id?: true
+    noticiaId?: true
+  }
+
+  export type NoticiaAuditMinAggregateInputType = {
+    id?: true
+    noticiaId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type NoticiaAuditMaxAggregateInputType = {
+    id?: true
+    noticiaId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type NoticiaAuditCountAggregateInputType = {
+    id?: true
+    noticiaId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    dadosAntigos?: true
+    dadosNovos?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NoticiaAuditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoticiaAudit to aggregate.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NoticiaAudits
+    **/
+    _count?: true | NoticiaAuditCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NoticiaAuditAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NoticiaAuditSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NoticiaAuditMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NoticiaAuditMaxAggregateInputType
+  }
+
+  export type GetNoticiaAuditAggregateType<T extends NoticiaAuditAggregateArgs> = {
+        [P in keyof T & keyof AggregateNoticiaAudit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNoticiaAudit[P]>
+      : GetScalarType<T[P], AggregateNoticiaAudit[P]>
+  }
+
+
+
+
+  export type NoticiaAuditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NoticiaAuditWhereInput
+    orderBy?: NoticiaAuditOrderByWithAggregationInput | NoticiaAuditOrderByWithAggregationInput[]
+    by: NoticiaAuditScalarFieldEnum[] | NoticiaAuditScalarFieldEnum
+    having?: NoticiaAuditScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NoticiaAuditCountAggregateInputType | true
+    _avg?: NoticiaAuditAvgAggregateInputType
+    _sum?: NoticiaAuditSumAggregateInputType
+    _min?: NoticiaAuditMinAggregateInputType
+    _max?: NoticiaAuditMaxAggregateInputType
+  }
+
+  export type NoticiaAuditGroupByOutputType = {
+    id: number
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos: JsonValue | null
+    dadosNovos: JsonValue | null
+    createdAt: Date
+    _count: NoticiaAuditCountAggregateOutputType | null
+    _avg: NoticiaAuditAvgAggregateOutputType | null
+    _sum: NoticiaAuditSumAggregateOutputType | null
+    _min: NoticiaAuditMinAggregateOutputType | null
+    _max: NoticiaAuditMaxAggregateOutputType | null
+  }
+
+  type GetNoticiaAuditGroupByPayload<T extends NoticiaAuditGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NoticiaAuditGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NoticiaAuditGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NoticiaAuditGroupByOutputType[P]>
+            : GetScalarType<T[P], NoticiaAuditGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NoticiaAuditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["noticiaAudit"]>
+
+  export type NoticiaAuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["noticiaAudit"]>
+
+  export type NoticiaAuditSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["noticiaAudit"]>
+
+  export type NoticiaAuditSelectScalar = {
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }
+
+  export type NoticiaAuditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "noticiaId" | "userId" | "userNome" | "acao" | "dadosAntigos" | "dadosNovos" | "createdAt", ExtArgs["result"]["noticiaAudit"]>
+
+  export type $NoticiaAuditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NoticiaAudit"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      noticiaId: number
+      userId: string
+      userNome: string
+      acao: string
+      dadosAntigos: Prisma.JsonValue | null
+      dadosNovos: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["noticiaAudit"]>
+    composites: {}
+  }
+
+  type NoticiaAuditGetPayload<S extends boolean | null | undefined | NoticiaAuditDefaultArgs> = $Result.GetResult<Prisma.$NoticiaAuditPayload, S>
+
+  type NoticiaAuditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NoticiaAuditFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NoticiaAuditCountAggregateInputType | true
+    }
+
+  export interface NoticiaAuditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NoticiaAudit'], meta: { name: 'NoticiaAudit' } }
+    /**
+     * Find zero or one NoticiaAudit that matches the filter.
+     * @param {NoticiaAuditFindUniqueArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NoticiaAuditFindUniqueArgs>(args: SelectSubset<T, NoticiaAuditFindUniqueArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NoticiaAudit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NoticiaAuditFindUniqueOrThrowArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NoticiaAuditFindUniqueOrThrowArgs>(args: SelectSubset<T, NoticiaAuditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NoticiaAudit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditFindFirstArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NoticiaAuditFindFirstArgs>(args?: SelectSubset<T, NoticiaAuditFindFirstArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NoticiaAudit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditFindFirstOrThrowArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NoticiaAuditFindFirstOrThrowArgs>(args?: SelectSubset<T, NoticiaAuditFindFirstOrThrowArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NoticiaAudits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NoticiaAudits
+     * const noticiaAudits = await prisma.noticiaAudit.findMany()
+     * 
+     * // Get first 10 NoticiaAudits
+     * const noticiaAudits = await prisma.noticiaAudit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const noticiaAuditWithIdOnly = await prisma.noticiaAudit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NoticiaAuditFindManyArgs>(args?: SelectSubset<T, NoticiaAuditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NoticiaAudit.
+     * @param {NoticiaAuditCreateArgs} args - Arguments to create a NoticiaAudit.
+     * @example
+     * // Create one NoticiaAudit
+     * const NoticiaAudit = await prisma.noticiaAudit.create({
+     *   data: {
+     *     // ... data to create a NoticiaAudit
+     *   }
+     * })
+     * 
+     */
+    create<T extends NoticiaAuditCreateArgs>(args: SelectSubset<T, NoticiaAuditCreateArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NoticiaAudits.
+     * @param {NoticiaAuditCreateManyArgs} args - Arguments to create many NoticiaAudits.
+     * @example
+     * // Create many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NoticiaAuditCreateManyArgs>(args?: SelectSubset<T, NoticiaAuditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NoticiaAudits and returns the data saved in the database.
+     * @param {NoticiaAuditCreateManyAndReturnArgs} args - Arguments to create many NoticiaAudits.
+     * @example
+     * // Create many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NoticiaAudits and only return the `id`
+     * const noticiaAuditWithIdOnly = await prisma.noticiaAudit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NoticiaAuditCreateManyAndReturnArgs>(args?: SelectSubset<T, NoticiaAuditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NoticiaAudit.
+     * @param {NoticiaAuditDeleteArgs} args - Arguments to delete one NoticiaAudit.
+     * @example
+     * // Delete one NoticiaAudit
+     * const NoticiaAudit = await prisma.noticiaAudit.delete({
+     *   where: {
+     *     // ... filter to delete one NoticiaAudit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NoticiaAuditDeleteArgs>(args: SelectSubset<T, NoticiaAuditDeleteArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NoticiaAudit.
+     * @param {NoticiaAuditUpdateArgs} args - Arguments to update one NoticiaAudit.
+     * @example
+     * // Update one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NoticiaAuditUpdateArgs>(args: SelectSubset<T, NoticiaAuditUpdateArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NoticiaAudits.
+     * @param {NoticiaAuditDeleteManyArgs} args - Arguments to filter NoticiaAudits to delete.
+     * @example
+     * // Delete a few NoticiaAudits
+     * const { count } = await prisma.noticiaAudit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NoticiaAuditDeleteManyArgs>(args?: SelectSubset<T, NoticiaAuditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NoticiaAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NoticiaAuditUpdateManyArgs>(args: SelectSubset<T, NoticiaAuditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NoticiaAudits and returns the data updated in the database.
+     * @param {NoticiaAuditUpdateManyAndReturnArgs} args - Arguments to update many NoticiaAudits.
+     * @example
+     * // Update many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NoticiaAudits and only return the `id`
+     * const noticiaAuditWithIdOnly = await prisma.noticiaAudit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NoticiaAuditUpdateManyAndReturnArgs>(args: SelectSubset<T, NoticiaAuditUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NoticiaAudit.
+     * @param {NoticiaAuditUpsertArgs} args - Arguments to update or create a NoticiaAudit.
+     * @example
+     * // Update or create a NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.upsert({
+     *   create: {
+     *     // ... data to create a NoticiaAudit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NoticiaAudit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NoticiaAuditUpsertArgs>(args: SelectSubset<T, NoticiaAuditUpsertArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NoticiaAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditCountArgs} args - Arguments to filter NoticiaAudits to count.
+     * @example
+     * // Count the number of NoticiaAudits
+     * const count = await prisma.noticiaAudit.count({
+     *   where: {
+     *     // ... the filter for the NoticiaAudits we want to count
+     *   }
+     * })
+    **/
+    count<T extends NoticiaAuditCountArgs>(
+      args?: Subset<T, NoticiaAuditCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NoticiaAuditCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NoticiaAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NoticiaAuditAggregateArgs>(args: Subset<T, NoticiaAuditAggregateArgs>): Prisma.PrismaPromise<GetNoticiaAuditAggregateType<T>>
+
+    /**
+     * Group by NoticiaAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NoticiaAuditGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NoticiaAuditGroupByArgs['orderBy'] }
+        : { orderBy?: NoticiaAuditGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NoticiaAuditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNoticiaAuditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NoticiaAudit model
+   */
+  readonly fields: NoticiaAuditFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NoticiaAudit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NoticiaAuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NoticiaAudit model
+   */
+  interface NoticiaAuditFieldRefs {
+    readonly id: FieldRef<"NoticiaAudit", 'Int'>
+    readonly noticiaId: FieldRef<"NoticiaAudit", 'Int'>
+    readonly userId: FieldRef<"NoticiaAudit", 'String'>
+    readonly userNome: FieldRef<"NoticiaAudit", 'String'>
+    readonly acao: FieldRef<"NoticiaAudit", 'String'>
+    readonly dadosAntigos: FieldRef<"NoticiaAudit", 'Json'>
+    readonly dadosNovos: FieldRef<"NoticiaAudit", 'Json'>
+    readonly createdAt: FieldRef<"NoticiaAudit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NoticiaAudit findUnique
+   */
+  export type NoticiaAuditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit findUniqueOrThrow
+   */
+  export type NoticiaAuditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit findFirst
+   */
+  export type NoticiaAuditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoticiaAudits.
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoticiaAudits.
+     */
+    distinct?: NoticiaAuditScalarFieldEnum | NoticiaAuditScalarFieldEnum[]
+  }
+
+  /**
+   * NoticiaAudit findFirstOrThrow
+   */
+  export type NoticiaAuditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoticiaAudits.
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoticiaAudits.
+     */
+    distinct?: NoticiaAuditScalarFieldEnum | NoticiaAuditScalarFieldEnum[]
+  }
+
+  /**
+   * NoticiaAudit findMany
+   */
+  export type NoticiaAuditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudits to fetch.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NoticiaAudits.
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    distinct?: NoticiaAuditScalarFieldEnum | NoticiaAuditScalarFieldEnum[]
+  }
+
+  /**
+   * NoticiaAudit create
+   */
+  export type NoticiaAuditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to create a NoticiaAudit.
+     */
+    data: XOR<NoticiaAuditCreateInput, NoticiaAuditUncheckedCreateInput>
+  }
+
+  /**
+   * NoticiaAudit createMany
+   */
+  export type NoticiaAuditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NoticiaAudits.
+     */
+    data: NoticiaAuditCreateManyInput | NoticiaAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NoticiaAudit createManyAndReturn
+   */
+  export type NoticiaAuditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data used to create many NoticiaAudits.
+     */
+    data: NoticiaAuditCreateManyInput | NoticiaAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NoticiaAudit update
+   */
+  export type NoticiaAuditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to update a NoticiaAudit.
+     */
+    data: XOR<NoticiaAuditUpdateInput, NoticiaAuditUncheckedUpdateInput>
+    /**
+     * Choose, which NoticiaAudit to update.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit updateMany
+   */
+  export type NoticiaAuditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NoticiaAudits.
+     */
+    data: XOR<NoticiaAuditUpdateManyMutationInput, NoticiaAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which NoticiaAudits to update
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * Limit how many NoticiaAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NoticiaAudit updateManyAndReturn
+   */
+  export type NoticiaAuditUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data used to update NoticiaAudits.
+     */
+    data: XOR<NoticiaAuditUpdateManyMutationInput, NoticiaAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which NoticiaAudits to update
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * Limit how many NoticiaAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NoticiaAudit upsert
+   */
+  export type NoticiaAuditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The filter to search for the NoticiaAudit to update in case it exists.
+     */
+    where: NoticiaAuditWhereUniqueInput
+    /**
+     * In case the NoticiaAudit found by the `where` argument doesn't exist, create a new NoticiaAudit with this data.
+     */
+    create: XOR<NoticiaAuditCreateInput, NoticiaAuditUncheckedCreateInput>
+    /**
+     * In case the NoticiaAudit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NoticiaAuditUpdateInput, NoticiaAuditUncheckedUpdateInput>
+  }
+
+  /**
+   * NoticiaAudit delete
+   */
+  export type NoticiaAuditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter which NoticiaAudit to delete.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit deleteMany
+   */
+  export type NoticiaAuditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoticiaAudits to delete
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * Limit how many NoticiaAudits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NoticiaAudit without action
+   */
+  export type NoticiaAuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model Recado
    */
 
@@ -15470,6 +16625,20 @@ export namespace Prisma {
   export type NoticiaScalarFieldEnum = (typeof NoticiaScalarFieldEnum)[keyof typeof NoticiaScalarFieldEnum]
 
 
+  export const NoticiaAuditScalarFieldEnum: {
+    id: 'id',
+    noticiaId: 'noticiaId',
+    userId: 'userId',
+    userNome: 'userNome',
+    acao: 'acao',
+    dadosAntigos: 'dadosAntigos',
+    dadosNovos: 'dadosNovos',
+    createdAt: 'createdAt'
+  };
+
+  export type NoticiaAuditScalarFieldEnum = (typeof NoticiaAuditScalarFieldEnum)[keyof typeof NoticiaAuditScalarFieldEnum]
+
+
   export const RecadoScalarFieldEnum: {
     id: 'id',
     titulo: 'titulo',
@@ -16267,6 +17436,75 @@ export namespace Prisma {
     imagem?: StringNullableWithAggregatesFilter<"Noticia"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Noticia"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Noticia"> | Date | string
+  }
+
+  export type NoticiaAuditWhereInput = {
+    AND?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    OR?: NoticiaAuditWhereInput[]
+    NOT?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    id?: IntFilter<"NoticiaAudit"> | number
+    noticiaId?: IntFilter<"NoticiaAudit"> | number
+    userId?: StringFilter<"NoticiaAudit"> | string
+    userNome?: StringFilter<"NoticiaAudit"> | string
+    acao?: StringFilter<"NoticiaAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"NoticiaAudit">
+    dadosNovos?: JsonNullableFilter<"NoticiaAudit">
+    createdAt?: DateTimeFilter<"NoticiaAudit"> | Date | string
+  }
+
+  export type NoticiaAuditOrderByWithRelationInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    OR?: NoticiaAuditWhereInput[]
+    NOT?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    noticiaId?: IntFilter<"NoticiaAudit"> | number
+    userId?: StringFilter<"NoticiaAudit"> | string
+    userNome?: StringFilter<"NoticiaAudit"> | string
+    acao?: StringFilter<"NoticiaAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"NoticiaAudit">
+    dadosNovos?: JsonNullableFilter<"NoticiaAudit">
+    createdAt?: DateTimeFilter<"NoticiaAudit"> | Date | string
+  }, "id">
+
+  export type NoticiaAuditOrderByWithAggregationInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: NoticiaAuditCountOrderByAggregateInput
+    _avg?: NoticiaAuditAvgOrderByAggregateInput
+    _max?: NoticiaAuditMaxOrderByAggregateInput
+    _min?: NoticiaAuditMinOrderByAggregateInput
+    _sum?: NoticiaAuditSumOrderByAggregateInput
+  }
+
+  export type NoticiaAuditScalarWhereWithAggregatesInput = {
+    AND?: NoticiaAuditScalarWhereWithAggregatesInput | NoticiaAuditScalarWhereWithAggregatesInput[]
+    OR?: NoticiaAuditScalarWhereWithAggregatesInput[]
+    NOT?: NoticiaAuditScalarWhereWithAggregatesInput | NoticiaAuditScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"NoticiaAudit"> | number
+    noticiaId?: IntWithAggregatesFilter<"NoticiaAudit"> | number
+    userId?: StringWithAggregatesFilter<"NoticiaAudit"> | string
+    userNome?: StringWithAggregatesFilter<"NoticiaAudit"> | string
+    acao?: StringWithAggregatesFilter<"NoticiaAudit"> | string
+    dadosAntigos?: JsonNullableWithAggregatesFilter<"NoticiaAudit">
+    dadosNovos?: JsonNullableWithAggregatesFilter<"NoticiaAudit">
+    createdAt?: DateTimeWithAggregatesFilter<"NoticiaAudit"> | Date | string
   }
 
   export type RecadoWhereInput = {
@@ -17118,6 +18356,80 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NoticiaAuditCreateInput = {
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NoticiaAuditUncheckedCreateInput = {
+    id?: number
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NoticiaAuditUpdateInput = {
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaAuditUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaAuditCreateManyInput = {
+    id?: number
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NoticiaAuditUpdateManyMutationInput = {
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaAuditUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RecadoCreateInput = {
     titulo: string
     conteudo: string
@@ -17930,6 +19242,94 @@ export namespace Prisma {
   export type NoticiaSumOrderByAggregateInput = {
     id?: SortOrder
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NoticiaAuditCountOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrder
+    dadosNovos?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditAvgOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+  }
+
+  export type NoticiaAuditMaxOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditMinOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditSumOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
 
   export type RecadoCountOrderByAggregateInput = {
     id?: SortOrder
@@ -18010,29 +19410,6 @@ export namespace Prisma {
     recadoId?: SortOrder
     unidadeId?: SortOrder
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type RecadoAuditCountOrderByAggregateInput = {
     id?: SortOrder
@@ -18071,32 +19448,6 @@ export namespace Prisma {
   export type RecadoAuditSumOrderByAggregateInput = {
     id?: SortOrder
     recadoId?: SortOrder
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type UnidadeCreateNestedOneWithoutUsersInput = {

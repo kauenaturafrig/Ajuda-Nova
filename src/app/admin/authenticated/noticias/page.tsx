@@ -29,9 +29,9 @@ export default async function GerenciarNoticiasPage() {
   return (
     <Layout>
       <NoticiasClient
-        initialNoticias={noticias}
-        userRole={dbUser.role as AppUserRole}
-        userUnidadeId={dbUser.unidadeId || null}
+        initialNoticias={noticias as any[]} // ✅ Fix temporário
+        userRole={dbUser!.role as "OWNER" | "NEWSONLY" | "MESSAGENEWS"} // ✅ Tipos exatos
+        userUnidadeId={dbUser!.unidadeId || null}
       />
     </Layout>
   );

@@ -40,9 +40,10 @@ export default function RecadosClient({
     userUnidadeId
 }: Props) {
     const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false); // ✅ CREATE/UPDATE
+    const [deletingId, setDeletingId] = useState<number | null>(null); // ✅ DELETE específico
     const [recados, setRecados] = useState<Recado[]>(initialRecados);
     const [unidades, setUnidades] = useState<Unidade[]>(initialUnidades);
-    const [saving, setSaving] = useState(false);
     const [dragActive, setDragActive] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -132,11 +133,15 @@ export default function RecadosClient({
         }
 
         if (!confirm("Confirmar exclusão?")) return;
+
+        setDeletingId(id); // ✅ ATIVA LOADING ESPECÍFICO
         try {
             await fetch(`/admin/api/recados/${id}`, { method: "DELETE" });
             setRecados(prev => prev.filter(r => r.id !== id));
         } catch (error) {
             alert("Erro ao excluir");
+        } finally {
+            setDeletingId(null); // ✅ DESATIVA LOADING
         }
     };
 
@@ -181,10 +186,11 @@ export default function RecadosClient({
                 unidadeIds: [],
                 imagem: null,
                 imagemPreview: "",
-                imagemAntiga: ""
+                imagemAntiga: "",
             });
             setEditingId(null);
             setSelectedUnidades({});
+            setImagemRecado(null)
 
             // Refresh lista
             const refreshed = await fetch("/admin/api/recados").then(r => r.json());
@@ -266,6 +272,10 @@ export default function RecadosClient({
         <Layout>
             <div className="container mx-auto py-12 w-[90%]">
                 <div className="flex justify-between items-center mb-12">
+                    <Button onClick={() => router.back()} className="bg-gray-600 hover:bg-gray-700 text-white">
+                        ← Voltar
+                    </Button>
+                    <h1 className="text-5xl font-bold dark:text-white">Gerenciar Recados</h1>
                     <Image
                         src={"/assets/images/icons/icons8-megaphone-preto.png"}
                         alt="Icon phone"
@@ -273,10 +283,6 @@ export default function RecadosClient({
                         height={50}
                         className="mr-5 dark:invert"
                     />
-                    <h1 className="text-5xl font-bold dark:text-white">Gerenciar Recados</h1>
-                    <Button onClick={() => router.back()} className="bg-gray-600 hover:bg-gray-700 text-white">
-                        ← Voltar
-                    </Button>
                 </div>
 
                 {/* Form */}
@@ -417,6 +423,8 @@ export default function RecadosClient({
                         </div>
                     ) : (
                         recados.map((recado) => {
+                            // ✅ ESTADO LOCAL: está deletando este recado?
+                            const isDeleting = deletingId === recado.id;
                             const podeGerenciar = canManageRecado(recado);
                             const unidadesExibicao = unidades.filter(u =>
                                 recado.unidadeIds.length > 0
@@ -425,37 +433,85 @@ export default function RecadosClient({
                             );
 
                             return (
-                                <div key={recado.id} className="p-6 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/50 rounded-2xl border">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
-                                            📍 {unidadesExibicao.map(u => u.nome).join(", ")} - {new Date(recado.createdAt).toLocaleDateString('pt-BR')}
-                                            {!podeGerenciar && (
-                                                <span className="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-full">
-                                                    🔒 Global
-                                                </span>
-                                            )}
+                                <div
+                                    key={recado.id}
+                                    className="p-6 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/50 rounded-2xl border relative group"
+                                >
+                                    {/* ✅ OVERLAY LOADING LOCAL (só neste recado) */}
+                                    {isDeleting && (
+                                        <div className="absolute inset-0 bg-white/90 dark:bg-black/80 backdrop-blur-md flex items-center justify-center rounded-2xl z-20 border-2 border-orange-400 animate-pulse">
+                                            <div className="flex items-center gap-3 bg-white/95 dark:bg-gray-900/95 p-6 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
+                                                <div className="animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
+                                                <div>
+                                                    <p className="font-bold text-lg text-gray-800 dark:text-gray-100">Excluindo recado...</p>
+                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Aguarde alguns segundos</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex gap-2">
-                                            {podeGerenciar ? (
-                                                <>
-                                                    <Button onClick={() => handleEdit(recado)} size="sm" className="bg-green-600 text-white">
-                                                        Editar
-                                                    </Button>
-                                                    <Button onClick={() => handleDelete(recado.id)} size="sm" variant="destructive" className="bg-red-600 text-white">
-                                                        Excluir
-                                                    </Button>
-                                                </>
-                                            ) : (
-                                                <span className="text-xs text-gray-500 italic">
-                                                    🔒 Somente leitura
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                    {recado.imagem && (
-                                        <img src={`/uploads/recados/${recado.imagem}`} alt={recado.titulo} className="w-24 h-24 object-cover rounded-lg mb-4" />
                                     )}
-                                    <p className="text-gray-700 dark:text-gray-300 mb-2">{recado.conteudo.slice(0, 200)}...</p>
+
+                                    {/* ✅ CONTEÚDO (opaco durante delete) */}
+                                    <div className={`transition-all duration-200 ${isDeleting ? 'opacity-50 blur-sm pointer-events-none' : ''}`}>
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
+                                                📍 {unidadesExibicao.map(u => u.nome).join(", ")} - {new Date(recado.createdAt).toLocaleDateString('pt-BR')}
+                                                {!podeGerenciar && (
+                                                    <span className="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-full">
+                                                        🔒 Global
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex gap-2">
+                                                {podeGerenciar ? (
+                                                    <>
+                                                        <Button
+                                                            onClick={() => handleEdit(recado)}
+                                                            size="sm"
+                                                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 transition-all"
+                                                            disabled={isDeleting}
+                                                        >
+                                                            Editar
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => handleDelete(recado.id)}
+                                                            size="sm"
+                                                            variant="destructive"
+                                                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 transition-all flex items-center gap-2"
+                                                            disabled={isDeleting}
+                                                        >
+                                                            {isDeleting ? (
+                                                                <>
+                                                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                                                                    Excluindo...
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <X className="w-4 h-4" />
+                                                                    Excluir
+                                                                </>
+                                                            )}
+                                                        </Button>
+                                                    </>
+                                                ) : (
+                                                    <span className="text-xs text-gray-500 italic px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full">
+                                                        🔒 Somente leitura
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {recado.imagem && (
+                                            <img
+                                                src={`/uploads/recados/${recado.imagem}`}
+                                                alt={recado.titulo}
+                                                className="w-28 h-28 object-cover rounded-xl mb-4 shadow-md hover:shadow-xl transition-all cursor-pointer group-hover:scale-105"
+                                            />
+                                        )}
+
+                                        <p className="text-gray-700 dark:text-gray-300 mb-2 leading-relaxed">
+                                            {recado.conteudo.slice(0, 200)}{recado.conteudo.length > 200 ? "..." : ""}
+                                        </p>
+                                    </div>
                                 </div>
                             );
                         })
