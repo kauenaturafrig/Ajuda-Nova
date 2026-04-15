@@ -115,6 +115,8 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
 
       const refreshed = await fetch("/admin/api/noticias").then(r => r.json());
       setNoticias(Array.isArray(refreshed) ? refreshed : []);
+
+      setTimeout(() => window.location.reload(), 500);
     } catch (error) {
       alert("Erro de conexão");
     } finally {
@@ -220,8 +222,8 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
                 </label>
                 <div
                   className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 w-full ${dragActive
-                      ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
-                      : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                    ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                    : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     }`}
                   onDragEnter={handleDragIn}
                   onDragLeave={handleDragOut}
@@ -348,7 +350,16 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
                         </div>
                       </div>
                       {noticia.imagem && (
-                        <img src={`/uploads/noticias/${noticia.imagem}`} alt={noticia.titulo} className="w-28 h-28 object-cover rounded-xl mb-4 shadow-md" />
+                        <img
+                          src={`/uploads/noticias/${noticia.imagem}`}
+                          alt={noticia.titulo}
+                          loading="lazy"
+                          onError={(e) => {
+                            console.log('❌ NOTÍCIA IMAGEM FALHOU:', noticia.imagem);  // ✅ DEBUG
+                            (e.target as HTMLImageElement).src = '/placeholder.png';
+                          }}
+                          className="w-28 h-28 object-cover rounded-xl mb-4 shadow-md hover:shadow-xl transition-all cursor-pointer group-hover:scale-105"
+                        />
                       )}
                       <h3 className="text-xl font-bold mb-2 dark:text-white">{noticia.titulo}</h3>
                       <p className="text-gray-700 dark:text-gray-300">{noticia.conteudo.slice(0, 200)}...</p>
