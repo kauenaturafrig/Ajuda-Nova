@@ -5,15 +5,16 @@ import { auth } from "../../../../lib/auth";
 import { prisma } from "../../../../lib/prisma";
 import Layout from "@/src/components/Layout";
 import { UsuariosClient } from "./usuarios-client";
+import { Usuario } from "@/src/types/usuario";
 
-type Usuario = {
-  id: string;
-  name: string | null;
-  email: string;
-  role: string;
-  unidadeId: number | null;
-  unidade: { id: number; nome: string } | null;
-};
+// type Usuario = {
+//   id: string;
+//   name: string | null;
+//   email: string;
+//   role: string;
+//   unidadeId: number | null;
+//   unidade: { id: number; nome: string } | null;
+// };
 
 export default async function UsuariosPage() {
   const session = await auth.api.getSession({ headers: await headers() });

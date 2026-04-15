@@ -7,27 +7,27 @@ import { useRouter } from "next/navigation";
 import { Button } from "../../../../components/ui/button";
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
 import { UsuarioRow } from "./usuario-row";
-import { User } from "better-auth";
+import { Usuario } from "@/src/types/usuario"; 
 
 type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS";
 
-type Usuario = {
-  id: string;
-  name: string | null;
-  email: string;
-  role: UserRole;
-  unidadeId: number | null;
-};
+// type Usuario = {
+//   id: string;
+//   name: string | null;
+//   email: string;
+//   role: UserRole;
+//   unidadeId: number | null;
+// };
 
 type Unidade = {
   id: number;
   nome: string;
 };
 
-type Props = {
-  usuarios: Usuario[];
-  unidades: Unidade[];
-};
+interface Props {
+  usuarios: Usuario[];  // ✅ Type único
+  unidades: any[];
+}
 
 export function UsuariosClient({ usuarios, unidades }: Props) {
   const [loading, setLoading] = useState(false);
