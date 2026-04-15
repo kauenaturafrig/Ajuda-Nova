@@ -5,6 +5,7 @@ import { prisma } from "@/src/lib/prisma";
 import { headers } from "next/headers";
 import { getUnidadeByIp } from "@/src/lib/getUnidadeByIp";
 import RecadosClient from "./recados-client"; // ✅ Client separado
+export const dynamic = "force-dynamic";
 
 interface Recado {
     id: number;

@@ -1,4 +1,5 @@
 // src/app/admin/authenticated/recados/page.tsx
+export const dynamic = "force-dynamic";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "../../../../lib/auth";
