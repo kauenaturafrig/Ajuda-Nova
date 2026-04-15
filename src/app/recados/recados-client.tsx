@@ -1,6 +1,5 @@
 // src/app/recados/recados-client.tsx
 "use client";
-export const dynamic = "force-dynamic";
 import { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import Layout from "@/src/components/Layout";

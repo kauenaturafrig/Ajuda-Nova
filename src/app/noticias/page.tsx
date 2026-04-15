@@ -1,5 +1,6 @@
 // src/app/noticias/page.tsx - VERSÃO SIMPLES (RECOMENDADA)
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
+export const dynamicParams = true;
 import { prisma } from "@/src/lib/prisma";
 import NoticiasPublica from "./noticias-client";
 
