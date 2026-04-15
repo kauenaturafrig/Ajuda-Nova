@@ -1,11 +1,11 @@
 // src/app/recados/page.tsx
+export const dynamic = "force-dynamic";
 import Layout from "@/src/components/Layout";
 import Image from "next/image";
 import { prisma } from "@/src/lib/prisma";
 import { headers } from "next/headers";
 import { getUnidadeByIp } from "@/src/lib/getUnidadeByIp";
 import RecadosClient from "./recados-client"; // ✅ Client separado
-export const dynamic = "force-dynamic";
 
 interface Recado {
     id: number;

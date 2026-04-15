@@ -1,7 +1,7 @@
 // src/app/noticias/page.tsx - VERSÃO SIMPLES (RECOMENDADA)
+export const dynamic = "force-dynamic";
 import { prisma } from "@/src/lib/prisma";
 import NoticiasPublica from "./noticias-client";
-export const dynamic = "force-dynamic";
 
 interface Noticia {
     id: number;
