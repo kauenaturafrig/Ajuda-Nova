@@ -1,4 +1,5 @@
 // src/app/admin/authenticated/recados/auditoria/page.tsx
+export const dynamic = "force-dynamic";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";  // ✅ Server-side Link
