@@ -1,6 +1,6 @@
 // src/app/admin/authenticated/noticias/auditoria/page.tsx
-export const revalidate = 30;
-export const dynamicParams = true;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";

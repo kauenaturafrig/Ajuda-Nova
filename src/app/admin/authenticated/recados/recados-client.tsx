@@ -1,4 +1,4 @@
-// src/app/admin/authenticated/recados/page.tsx
+// src/app/admin/authenticated/recados/recados-client.tsx
 "use client";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -200,6 +200,8 @@ export default function RecadosClient({
                 unidade: r.unidade,
                 unidadeIds: r.unidadeIds || []
             })) : []);
+
+            setTimeout(() => window.location.reload(), 500);
         } catch (error) {
             alert("Erro de conexão");
         } finally {
@@ -504,6 +506,11 @@ export default function RecadosClient({
                                             <img
                                                 src={`/uploads/recados/${recado.imagem}`}
                                                 alt={recado.titulo}
+                                                loading="lazy"
+                                                onError={(e) => {
+                                                    console.log('❌ IMAGEM FALHOU:', recado.imagem);  // ✅ DEBUG
+                                                    (e.target as HTMLImageElement).src = '/placeholder.png';
+                                                }}
                                                 className="w-28 h-28 object-cover rounded-xl mb-4 shadow-md hover:shadow-xl transition-all cursor-pointer group-hover:scale-105"
                                             />
                                         )}
