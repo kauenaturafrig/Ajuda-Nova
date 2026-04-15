@@ -1,5 +1,6 @@
 // src/app/admin/authenticated/noticias/noticias-client.tsx
 "use client";
+export const dynamic = "force-dynamic";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";

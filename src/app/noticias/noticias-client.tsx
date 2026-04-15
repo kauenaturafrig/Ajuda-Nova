@@ -1,6 +1,7 @@
 // src/app/noticias/noticias-client.tsx
 "use client";
 
+export const dynamic = "force-dynamic";
 import { useState, useCallback, useRef, useEffect } from "react";
 import Layout from "@/src/components/Layout";
 import Image from "next/image";
