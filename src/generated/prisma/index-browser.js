@@ -205,9 +205,61 @@ exports.Prisma.JornalScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NoticiaScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  conteudo: 'conteudo',
+  imagem: 'imagem',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NoticiaAuditScalarFieldEnum = {
+  id: 'id',
+  noticiaId: 'noticiaId',
+  userId: 'userId',
+  userNome: 'userNome',
+  acao: 'acao',
+  dadosAntigos: 'dadosAntigos',
+  dadosNovos: 'dadosNovos',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RecadoScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  conteudo: 'conteudo',
+  imagem: 'imagem',
+  unidadeId: 'unidadeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RecadoUnidadeScalarFieldEnum = {
+  id: 'id',
+  recadoId: 'recadoId',
+  unidadeId: 'unidadeId'
+};
+
+exports.Prisma.RecadoAuditScalarFieldEnum = {
+  id: 'id',
+  recadoId: 'recadoId',
+  userId: 'userId',
+  userNome: 'userNome',
+  acao: 'acao',
+  dadosAntigos: 'dadosAntigos',
+  dadosNovos: 'dadosNovos',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -219,9 +271,18 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.UserRole = exports.$Enums.UserRole = {
   OWNER: 'OWNER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  MESSAGEONLY: 'MESSAGEONLY',
+  NEWSONLY: 'NEWSONLY',
+  MESSAGENEWS: 'MESSAGENEWS'
 };
 
 exports.Prisma.ModelName = {
@@ -232,7 +293,12 @@ exports.Prisma.ModelName = {
   Unidade: 'Unidade',
   Ramal: 'Ramal',
   Email: 'Email',
-  Jornal: 'Jornal'
+  Jornal: 'Jornal',
+  Noticia: 'Noticia',
+  NoticiaAudit: 'NoticiaAudit',
+  Recado: 'Recado',
+  RecadoUnidade: 'RecadoUnidade',
+  RecadoAudit: 'RecadoAudit'
 };
 
 /**

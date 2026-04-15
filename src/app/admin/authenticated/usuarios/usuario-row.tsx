@@ -4,11 +4,13 @@ import { useState } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 
+type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS";
+
 type Usuario = {
   id: string;
   name: string | null;
   email: string;
-  role: "OWNER" | "ADMIN";
+  role: UserRole;
   unidadeId: number | null;
 };
 
@@ -25,7 +27,7 @@ type Props = {
 
 export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
   const [name, setName] = useState(usuario.name ?? "");
-  const [role, setRole] = useState<"OWNER" | "ADMIN">(usuario.role);
+  const [role, setRole] = useState<UserRole>(usuario.role);
   const [unidadeId, setUnidadeId] = useState<string>(
     usuario.unidadeId ? String(usuario.unidadeId) : ""
   );
@@ -121,11 +123,14 @@ export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
         <div className="text-xs text-muted-foreground font-bold dark:text-white">Perfil</div>
         <select
           value={role}
-          onChange={(e) => setRole(e.target.value as "OWNER" | "ADMIN")}
+          onChange={(e) => setRole(e.target.value as UserRole)}
           className="border rounded px-2 py-1 text-sm w-full"
         >
-          <option value="ADMIN">Admin</option>
           <option value="OWNER">Owner</option>
+          <option value="ADMIN">Admin</option>
+          <option value="MESSAGEONLY">Recados Unidade</option>
+          <option value="NEWSONLY">Apenas Notícias</option>
+          <option value="MESSAGENEWS">Notícias + Recados Multi</option>
         </select>
       </div>
 

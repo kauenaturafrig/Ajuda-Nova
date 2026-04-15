@@ -7,12 +7,15 @@ import { useRouter } from "next/navigation";
 import { Button } from "../../../../components/ui/button";
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
 import { UsuarioRow } from "./usuario-row";
+import { User } from "better-auth";
+
+type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS";
 
 type Usuario = {
   id: string;
   name: string | null;
   email: string;
-  role: "OWNER" | "ADMIN";
+  role: UserRole;
   unidadeId: number | null;
 };
 

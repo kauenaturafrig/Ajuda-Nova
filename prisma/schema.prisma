@@ -40,6 +40,9 @@ model User {
 enum UserRole {
   OWNER
   ADMIN
+  MESSAGEONLY
+  NEWSONLY
+  MESSAGENEWS
 }
 
 model Session {
@@ -91,13 +94,15 @@ model Verification {
 }
 
 model Unidade {
-  id   Int    @id @default(autoincrement())
-  nome String
+  id            Int             @id @default(autoincrement())
+  nome          String
 
   // relacionamentos
-  ramais Ramal[]
-  emails Email[]
-  users  User[]
+  ramais        Ramal[]
+  emails        Email[]
+  users         User[]
+  recados       Recado[]        @relation("RecadoUnidadePrincipal") // Nomeia a relação principal
+  recadosMulti  RecadoUnidade[] // NOVO: Relação Many-to-Many
 
   @@map("unidades")
 }
@@ -112,8 +117,8 @@ model Ramal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("ramais")
   @@unique([unidadeId, numero])
+  @@map("ramais")
 }
 
 model Email {
@@ -126,19 +131,95 @@ model Email {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("emails")
   @@unique([unidadeId, email])
+  @@map("emails")
 }
 
 model Jornal {
-  id          Int      @id @default(autoincrement())
-  titulo      String
-  descricao   String
-  imagem      String   // nome do arquivo: "jornal1.jpg"
-  url         String
+  id             Int      @id @default(autoincrement())
+  titulo         String
+  descricao      String
+  imagem         String // nome do arquivo: "jornal1.jpg"
+  url            String
   dataLancamento DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("jornais")
+}
+
+model Noticia {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  conteudo  String
+  imagem    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("noticias")
+}
+
+model NoticiaAudit {
+  id          Int      @id @default(autoincrement())
+  noticiaId   Int
+  userId      String
+  userNome    String
+  acao        String
+  dadosAntigos Json?
+  dadosNovos  Json?
+  createdAt   DateTime @default(now())
+
+  @@index([noticiaId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("noticias_audits")
+}
+
+model Recado {
+  id        Int              @id @default(autoincrement())
+  titulo    String
+  conteudo  String
+  imagem    String?
+  unidadeId Int              // Unidade principal (para legenda/backup)
+  unidade   Unidade          @relation("RecadoUnidadePrincipal", fields: [unidadeId], references: [id])
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  
+  // Relação Many-to-Many com Unidades
+  unidades  RecadoUnidade[]
+
+  @@map("recados")
+}
+
+model RecadoUnidade {
+  id        Int      @id @default(autoincrement())
+  recadoId  Int
+  unidadeId Int
+  
+  recado    Recado   @relation(fields: [recadoId], references: [id], onDelete: Cascade)
+  unidade   Unidade  @relation(fields: [unidadeId], references: [id], onDelete: Cascade)
+
+  // Impede duplicação (mesmo recado + mesma unidade)
+  @@unique([recadoId, unidadeId])
+  @@index([recadoId])
+  @@index([unidadeId])
+  
+  @@map("recados_unidades")
+}
+
+model RecadoAudit {
+  id          Int      @id @default(autoincrement())
+  recadoId    Int
+  userId      String
+  userNome    String
+  acao        String   // "CREATE", "UPDATE", "DELETE"
+  dadosAntigos Json?   // Snapshot antes da mudança
+  dadosNovos  Json?   // Snapshot depois da mudança
+  createdAt   DateTime @default(now())
+
+  @@index([recadoId])
+  @@index([userId])
+  @@index([createdAt])
+  
+  @@map("recados_audits")
 }

@@ -28,7 +28,7 @@ const signupSchema = z
     confirmPassword: z
       .string()
       .min(8, { message: "A confirmação de senha deve ter pelo menos 8 caracteres" }),
-    role: z.enum(["OWNER", "ADMIN"]),
+    role: z.enum(["OWNER", "ADMIN", "NEWSONLY", "MESSAGEONLY", "MESSAGENEWS"], { message: "Selecione um perfil" }),
     unidadeId: z.string().min(1, { message: "Selecione uma unidade" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -246,6 +246,9 @@ export function SignupForm({ unidades }: Props) {
                 >
                   <option value="ADMIN">Admin</option>
                   <option value="OWNER">Owner</option>
+                  <option value="NEWSONLY">Newsonly</option>
+                  <option value="MESSAGEONLY">Messageonly</option>
+                  <option value="MESSAGENEWS">Messagenews</option>
                 </select>
               </FormControl>
               <FormMessage className="!text-red-500" />

@@ -53,6 +53,31 @@ export type Email = $Result.DefaultSelection<Prisma.$EmailPayload>
  * 
  */
 export type Jornal = $Result.DefaultSelection<Prisma.$JornalPayload>
+/**
+ * Model Noticia
+ * 
+ */
+export type Noticia = $Result.DefaultSelection<Prisma.$NoticiaPayload>
+/**
+ * Model NoticiaAudit
+ * 
+ */
+export type NoticiaAudit = $Result.DefaultSelection<Prisma.$NoticiaAuditPayload>
+/**
+ * Model Recado
+ * 
+ */
+export type Recado = $Result.DefaultSelection<Prisma.$RecadoPayload>
+/**
+ * Model RecadoUnidade
+ * 
+ */
+export type RecadoUnidade = $Result.DefaultSelection<Prisma.$RecadoUnidadePayload>
+/**
+ * Model RecadoAudit
+ * 
+ */
+export type RecadoAudit = $Result.DefaultSelection<Prisma.$RecadoAuditPayload>
 
 /**
  * Enums
@@ -60,7 +85,10 @@ export type Jornal = $Result.DefaultSelection<Prisma.$JornalPayload>
 export namespace $Enums {
   export const UserRole: {
   OWNER: 'OWNER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  MESSAGEONLY: 'MESSAGEONLY',
+  NEWSONLY: 'NEWSONLY',
+  MESSAGENEWS: 'MESSAGENEWS'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -268,6 +296,56 @@ export class PrismaClient<
     * ```
     */
   get jornal(): Prisma.JornalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.noticia`: Exposes CRUD operations for the **Noticia** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Noticias
+    * const noticias = await prisma.noticia.findMany()
+    * ```
+    */
+  get noticia(): Prisma.NoticiaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.noticiaAudit`: Exposes CRUD operations for the **NoticiaAudit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NoticiaAudits
+    * const noticiaAudits = await prisma.noticiaAudit.findMany()
+    * ```
+    */
+  get noticiaAudit(): Prisma.NoticiaAuditDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.recado`: Exposes CRUD operations for the **Recado** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Recados
+    * const recados = await prisma.recado.findMany()
+    * ```
+    */
+  get recado(): Prisma.RecadoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.recadoUnidade`: Exposes CRUD operations for the **RecadoUnidade** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RecadoUnidades
+    * const recadoUnidades = await prisma.recadoUnidade.findMany()
+    * ```
+    */
+  get recadoUnidade(): Prisma.RecadoUnidadeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.recadoAudit`: Exposes CRUD operations for the **RecadoAudit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RecadoAudits
+    * const recadoAudits = await prisma.recadoAudit.findMany()
+    * ```
+    */
+  get recadoAudit(): Prisma.RecadoAuditDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -716,7 +794,12 @@ export namespace Prisma {
     Unidade: 'Unidade',
     Ramal: 'Ramal',
     Email: 'Email',
-    Jornal: 'Jornal'
+    Jornal: 'Jornal',
+    Noticia: 'Noticia',
+    NoticiaAudit: 'NoticiaAudit',
+    Recado: 'Recado',
+    RecadoUnidade: 'RecadoUnidade',
+    RecadoAudit: 'RecadoAudit'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -735,7 +818,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal"
+      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal" | "noticia" | "noticiaAudit" | "recado" | "recadoUnidade" | "recadoAudit"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1331,6 +1414,376 @@ export namespace Prisma {
           }
         }
       }
+      Noticia: {
+        payload: Prisma.$NoticiaPayload<ExtArgs>
+        fields: Prisma.NoticiaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NoticiaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NoticiaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>
+          }
+          findFirst: {
+            args: Prisma.NoticiaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NoticiaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>
+          }
+          findMany: {
+            args: Prisma.NoticiaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>[]
+          }
+          create: {
+            args: Prisma.NoticiaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>
+          }
+          createMany: {
+            args: Prisma.NoticiaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NoticiaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>[]
+          }
+          delete: {
+            args: Prisma.NoticiaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>
+          }
+          update: {
+            args: Prisma.NoticiaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>
+          }
+          deleteMany: {
+            args: Prisma.NoticiaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NoticiaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NoticiaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>[]
+          }
+          upsert: {
+            args: Prisma.NoticiaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaPayload>
+          }
+          aggregate: {
+            args: Prisma.NoticiaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNoticia>
+          }
+          groupBy: {
+            args: Prisma.NoticiaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NoticiaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NoticiaCountArgs<ExtArgs>
+            result: $Utils.Optional<NoticiaCountAggregateOutputType> | number
+          }
+        }
+      }
+      NoticiaAudit: {
+        payload: Prisma.$NoticiaAuditPayload<ExtArgs>
+        fields: Prisma.NoticiaAuditFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NoticiaAuditFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NoticiaAuditFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          findFirst: {
+            args: Prisma.NoticiaAuditFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NoticiaAuditFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          findMany: {
+            args: Prisma.NoticiaAuditFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>[]
+          }
+          create: {
+            args: Prisma.NoticiaAuditCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          createMany: {
+            args: Prisma.NoticiaAuditCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NoticiaAuditCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>[]
+          }
+          delete: {
+            args: Prisma.NoticiaAuditDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          update: {
+            args: Prisma.NoticiaAuditUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          deleteMany: {
+            args: Prisma.NoticiaAuditDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NoticiaAuditUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NoticiaAuditUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>[]
+          }
+          upsert: {
+            args: Prisma.NoticiaAuditUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NoticiaAuditPayload>
+          }
+          aggregate: {
+            args: Prisma.NoticiaAuditAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNoticiaAudit>
+          }
+          groupBy: {
+            args: Prisma.NoticiaAuditGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NoticiaAuditGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NoticiaAuditCountArgs<ExtArgs>
+            result: $Utils.Optional<NoticiaAuditCountAggregateOutputType> | number
+          }
+        }
+      }
+      Recado: {
+        payload: Prisma.$RecadoPayload<ExtArgs>
+        fields: Prisma.RecadoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RecadoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RecadoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>
+          }
+          findFirst: {
+            args: Prisma.RecadoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RecadoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>
+          }
+          findMany: {
+            args: Prisma.RecadoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>[]
+          }
+          create: {
+            args: Prisma.RecadoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>
+          }
+          createMany: {
+            args: Prisma.RecadoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RecadoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>[]
+          }
+          delete: {
+            args: Prisma.RecadoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>
+          }
+          update: {
+            args: Prisma.RecadoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>
+          }
+          deleteMany: {
+            args: Prisma.RecadoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RecadoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RecadoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>[]
+          }
+          upsert: {
+            args: Prisma.RecadoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoPayload>
+          }
+          aggregate: {
+            args: Prisma.RecadoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRecado>
+          }
+          groupBy: {
+            args: Prisma.RecadoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RecadoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RecadoCountArgs<ExtArgs>
+            result: $Utils.Optional<RecadoCountAggregateOutputType> | number
+          }
+        }
+      }
+      RecadoUnidade: {
+        payload: Prisma.$RecadoUnidadePayload<ExtArgs>
+        fields: Prisma.RecadoUnidadeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RecadoUnidadeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RecadoUnidadeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>
+          }
+          findFirst: {
+            args: Prisma.RecadoUnidadeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RecadoUnidadeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>
+          }
+          findMany: {
+            args: Prisma.RecadoUnidadeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>[]
+          }
+          create: {
+            args: Prisma.RecadoUnidadeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>
+          }
+          createMany: {
+            args: Prisma.RecadoUnidadeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RecadoUnidadeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>[]
+          }
+          delete: {
+            args: Prisma.RecadoUnidadeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>
+          }
+          update: {
+            args: Prisma.RecadoUnidadeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>
+          }
+          deleteMany: {
+            args: Prisma.RecadoUnidadeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RecadoUnidadeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RecadoUnidadeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>[]
+          }
+          upsert: {
+            args: Prisma.RecadoUnidadeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoUnidadePayload>
+          }
+          aggregate: {
+            args: Prisma.RecadoUnidadeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRecadoUnidade>
+          }
+          groupBy: {
+            args: Prisma.RecadoUnidadeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RecadoUnidadeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RecadoUnidadeCountArgs<ExtArgs>
+            result: $Utils.Optional<RecadoUnidadeCountAggregateOutputType> | number
+          }
+        }
+      }
+      RecadoAudit: {
+        payload: Prisma.$RecadoAuditPayload<ExtArgs>
+        fields: Prisma.RecadoAuditFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RecadoAuditFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RecadoAuditFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>
+          }
+          findFirst: {
+            args: Prisma.RecadoAuditFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RecadoAuditFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>
+          }
+          findMany: {
+            args: Prisma.RecadoAuditFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>[]
+          }
+          create: {
+            args: Prisma.RecadoAuditCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>
+          }
+          createMany: {
+            args: Prisma.RecadoAuditCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RecadoAuditCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>[]
+          }
+          delete: {
+            args: Prisma.RecadoAuditDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>
+          }
+          update: {
+            args: Prisma.RecadoAuditUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>
+          }
+          deleteMany: {
+            args: Prisma.RecadoAuditDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RecadoAuditUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.RecadoAuditUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>[]
+          }
+          upsert: {
+            args: Prisma.RecadoAuditUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RecadoAuditPayload>
+          }
+          aggregate: {
+            args: Prisma.RecadoAuditAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRecadoAudit>
+          }
+          groupBy: {
+            args: Prisma.RecadoAuditGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RecadoAuditGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RecadoAuditCountArgs<ExtArgs>
+            result: $Utils.Optional<RecadoAuditCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1435,6 +1888,11 @@ export namespace Prisma {
     ramal?: RamalOmit
     email?: EmailOmit
     jornal?: JornalOmit
+    noticia?: NoticiaOmit
+    noticiaAudit?: NoticiaAuditOmit
+    recado?: RecadoOmit
+    recadoUnidade?: RecadoUnidadeOmit
+    recadoAudit?: RecadoAuditOmit
   }
 
   /* Types for Logging */
@@ -1558,12 +2016,16 @@ export namespace Prisma {
     ramais: number
     emails: number
     users: number
+    recados: number
+    recadosMulti: number
   }
 
   export type UnidadeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ramais?: boolean | UnidadeCountOutputTypeCountRamaisArgs
     emails?: boolean | UnidadeCountOutputTypeCountEmailsArgs
     users?: boolean | UnidadeCountOutputTypeCountUsersArgs
+    recados?: boolean | UnidadeCountOutputTypeCountRecadosArgs
+    recadosMulti?: boolean | UnidadeCountOutputTypeCountRecadosMultiArgs
   }
 
   // Custom InputTypes
@@ -1596,6 +2058,51 @@ export namespace Prisma {
    */
   export type UnidadeCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserWhereInput
+  }
+
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeCountRecadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecadoWhereInput
+  }
+
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeCountRecadosMultiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecadoUnidadeWhereInput
+  }
+
+
+  /**
+   * Count Type RecadoCountOutputType
+   */
+
+  export type RecadoCountOutputType = {
+    unidades: number
+  }
+
+  export type RecadoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidades?: boolean | RecadoCountOutputTypeCountUnidadesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * RecadoCountOutputType without action
+   */
+  export type RecadoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoCountOutputType
+     */
+    select?: RecadoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RecadoCountOutputType without action
+   */
+  export type RecadoCountOutputTypeCountUnidadesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecadoUnidadeWhereInput
   }
 
 
@@ -6268,6 +6775,8 @@ export namespace Prisma {
     ramais?: boolean | Unidade$ramaisArgs<ExtArgs>
     emails?: boolean | Unidade$emailsArgs<ExtArgs>
     users?: boolean | Unidade$usersArgs<ExtArgs>
+    recados?: boolean | Unidade$recadosArgs<ExtArgs>
+    recadosMulti?: boolean | Unidade$recadosMultiArgs<ExtArgs>
     _count?: boolean | UnidadeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["unidade"]>
 
@@ -6291,6 +6800,8 @@ export namespace Prisma {
     ramais?: boolean | Unidade$ramaisArgs<ExtArgs>
     emails?: boolean | Unidade$emailsArgs<ExtArgs>
     users?: boolean | Unidade$usersArgs<ExtArgs>
+    recados?: boolean | Unidade$recadosArgs<ExtArgs>
+    recadosMulti?: boolean | Unidade$recadosMultiArgs<ExtArgs>
     _count?: boolean | UnidadeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UnidadeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6302,6 +6813,8 @@ export namespace Prisma {
       ramais: Prisma.$RamalPayload<ExtArgs>[]
       emails: Prisma.$EmailPayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
+      recados: Prisma.$RecadoPayload<ExtArgs>[]
+      recadosMulti: Prisma.$RecadoUnidadePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6703,6 +7216,8 @@ export namespace Prisma {
     ramais<T extends Unidade$ramaisArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$ramaisArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RamalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     emails<T extends Unidade$emailsArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Unidade$usersArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recados<T extends Unidade$recadosArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$recadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recadosMulti<T extends Unidade$recadosMultiArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$recadosMultiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7191,6 +7706,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade.recados
+   */
+  export type Unidade$recadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    where?: RecadoWhereInput
+    orderBy?: RecadoOrderByWithRelationInput | RecadoOrderByWithRelationInput[]
+    cursor?: RecadoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecadoScalarFieldEnum | RecadoScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade.recadosMulti
+   */
+  export type Unidade$recadosMultiArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    where?: RecadoUnidadeWhereInput
+    orderBy?: RecadoUnidadeOrderByWithRelationInput | RecadoUnidadeOrderByWithRelationInput[]
+    cursor?: RecadoUnidadeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecadoUnidadeScalarFieldEnum | RecadoUnidadeScalarFieldEnum[]
   }
 
   /**
@@ -10525,6 +11088,5410 @@ export namespace Prisma {
 
 
   /**
+   * Model Noticia
+   */
+
+  export type AggregateNoticia = {
+    _count: NoticiaCountAggregateOutputType | null
+    _avg: NoticiaAvgAggregateOutputType | null
+    _sum: NoticiaSumAggregateOutputType | null
+    _min: NoticiaMinAggregateOutputType | null
+    _max: NoticiaMaxAggregateOutputType | null
+  }
+
+  export type NoticiaAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type NoticiaSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type NoticiaMinAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    conteudo: string | null
+    imagem: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NoticiaMaxAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    conteudo: string | null
+    imagem: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NoticiaCountAggregateOutputType = {
+    id: number
+    titulo: number
+    conteudo: number
+    imagem: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NoticiaAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type NoticiaSumAggregateInputType = {
+    id?: true
+  }
+
+  export type NoticiaMinAggregateInputType = {
+    id?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NoticiaMaxAggregateInputType = {
+    id?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NoticiaCountAggregateInputType = {
+    id?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NoticiaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Noticia to aggregate.
+     */
+    where?: NoticiaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Noticias to fetch.
+     */
+    orderBy?: NoticiaOrderByWithRelationInput | NoticiaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NoticiaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Noticias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Noticias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Noticias
+    **/
+    _count?: true | NoticiaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NoticiaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NoticiaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NoticiaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NoticiaMaxAggregateInputType
+  }
+
+  export type GetNoticiaAggregateType<T extends NoticiaAggregateArgs> = {
+        [P in keyof T & keyof AggregateNoticia]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNoticia[P]>
+      : GetScalarType<T[P], AggregateNoticia[P]>
+  }
+
+
+
+
+  export type NoticiaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NoticiaWhereInput
+    orderBy?: NoticiaOrderByWithAggregationInput | NoticiaOrderByWithAggregationInput[]
+    by: NoticiaScalarFieldEnum[] | NoticiaScalarFieldEnum
+    having?: NoticiaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NoticiaCountAggregateInputType | true
+    _avg?: NoticiaAvgAggregateInputType
+    _sum?: NoticiaSumAggregateInputType
+    _min?: NoticiaMinAggregateInputType
+    _max?: NoticiaMaxAggregateInputType
+  }
+
+  export type NoticiaGroupByOutputType = {
+    id: number
+    titulo: string
+    conteudo: string
+    imagem: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: NoticiaCountAggregateOutputType | null
+    _avg: NoticiaAvgAggregateOutputType | null
+    _sum: NoticiaSumAggregateOutputType | null
+    _min: NoticiaMinAggregateOutputType | null
+    _max: NoticiaMaxAggregateOutputType | null
+  }
+
+  type GetNoticiaGroupByPayload<T extends NoticiaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NoticiaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NoticiaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NoticiaGroupByOutputType[P]>
+            : GetScalarType<T[P], NoticiaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NoticiaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["noticia"]>
+
+  export type NoticiaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["noticia"]>
+
+  export type NoticiaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["noticia"]>
+
+  export type NoticiaSelectScalar = {
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NoticiaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "conteudo" | "imagem" | "createdAt" | "updatedAt", ExtArgs["result"]["noticia"]>
+
+  export type $NoticiaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Noticia"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      titulo: string
+      conteudo: string
+      imagem: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["noticia"]>
+    composites: {}
+  }
+
+  type NoticiaGetPayload<S extends boolean | null | undefined | NoticiaDefaultArgs> = $Result.GetResult<Prisma.$NoticiaPayload, S>
+
+  type NoticiaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NoticiaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NoticiaCountAggregateInputType | true
+    }
+
+  export interface NoticiaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Noticia'], meta: { name: 'Noticia' } }
+    /**
+     * Find zero or one Noticia that matches the filter.
+     * @param {NoticiaFindUniqueArgs} args - Arguments to find a Noticia
+     * @example
+     * // Get one Noticia
+     * const noticia = await prisma.noticia.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NoticiaFindUniqueArgs>(args: SelectSubset<T, NoticiaFindUniqueArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Noticia that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NoticiaFindUniqueOrThrowArgs} args - Arguments to find a Noticia
+     * @example
+     * // Get one Noticia
+     * const noticia = await prisma.noticia.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NoticiaFindUniqueOrThrowArgs>(args: SelectSubset<T, NoticiaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Noticia that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaFindFirstArgs} args - Arguments to find a Noticia
+     * @example
+     * // Get one Noticia
+     * const noticia = await prisma.noticia.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NoticiaFindFirstArgs>(args?: SelectSubset<T, NoticiaFindFirstArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Noticia that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaFindFirstOrThrowArgs} args - Arguments to find a Noticia
+     * @example
+     * // Get one Noticia
+     * const noticia = await prisma.noticia.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NoticiaFindFirstOrThrowArgs>(args?: SelectSubset<T, NoticiaFindFirstOrThrowArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Noticias that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Noticias
+     * const noticias = await prisma.noticia.findMany()
+     * 
+     * // Get first 10 Noticias
+     * const noticias = await prisma.noticia.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const noticiaWithIdOnly = await prisma.noticia.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NoticiaFindManyArgs>(args?: SelectSubset<T, NoticiaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Noticia.
+     * @param {NoticiaCreateArgs} args - Arguments to create a Noticia.
+     * @example
+     * // Create one Noticia
+     * const Noticia = await prisma.noticia.create({
+     *   data: {
+     *     // ... data to create a Noticia
+     *   }
+     * })
+     * 
+     */
+    create<T extends NoticiaCreateArgs>(args: SelectSubset<T, NoticiaCreateArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Noticias.
+     * @param {NoticiaCreateManyArgs} args - Arguments to create many Noticias.
+     * @example
+     * // Create many Noticias
+     * const noticia = await prisma.noticia.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NoticiaCreateManyArgs>(args?: SelectSubset<T, NoticiaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Noticias and returns the data saved in the database.
+     * @param {NoticiaCreateManyAndReturnArgs} args - Arguments to create many Noticias.
+     * @example
+     * // Create many Noticias
+     * const noticia = await prisma.noticia.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Noticias and only return the `id`
+     * const noticiaWithIdOnly = await prisma.noticia.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NoticiaCreateManyAndReturnArgs>(args?: SelectSubset<T, NoticiaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Noticia.
+     * @param {NoticiaDeleteArgs} args - Arguments to delete one Noticia.
+     * @example
+     * // Delete one Noticia
+     * const Noticia = await prisma.noticia.delete({
+     *   where: {
+     *     // ... filter to delete one Noticia
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NoticiaDeleteArgs>(args: SelectSubset<T, NoticiaDeleteArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Noticia.
+     * @param {NoticiaUpdateArgs} args - Arguments to update one Noticia.
+     * @example
+     * // Update one Noticia
+     * const noticia = await prisma.noticia.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NoticiaUpdateArgs>(args: SelectSubset<T, NoticiaUpdateArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Noticias.
+     * @param {NoticiaDeleteManyArgs} args - Arguments to filter Noticias to delete.
+     * @example
+     * // Delete a few Noticias
+     * const { count } = await prisma.noticia.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NoticiaDeleteManyArgs>(args?: SelectSubset<T, NoticiaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Noticias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Noticias
+     * const noticia = await prisma.noticia.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NoticiaUpdateManyArgs>(args: SelectSubset<T, NoticiaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Noticias and returns the data updated in the database.
+     * @param {NoticiaUpdateManyAndReturnArgs} args - Arguments to update many Noticias.
+     * @example
+     * // Update many Noticias
+     * const noticia = await prisma.noticia.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Noticias and only return the `id`
+     * const noticiaWithIdOnly = await prisma.noticia.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NoticiaUpdateManyAndReturnArgs>(args: SelectSubset<T, NoticiaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Noticia.
+     * @param {NoticiaUpsertArgs} args - Arguments to update or create a Noticia.
+     * @example
+     * // Update or create a Noticia
+     * const noticia = await prisma.noticia.upsert({
+     *   create: {
+     *     // ... data to create a Noticia
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Noticia we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NoticiaUpsertArgs>(args: SelectSubset<T, NoticiaUpsertArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Noticias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaCountArgs} args - Arguments to filter Noticias to count.
+     * @example
+     * // Count the number of Noticias
+     * const count = await prisma.noticia.count({
+     *   where: {
+     *     // ... the filter for the Noticias we want to count
+     *   }
+     * })
+    **/
+    count<T extends NoticiaCountArgs>(
+      args?: Subset<T, NoticiaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NoticiaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Noticia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NoticiaAggregateArgs>(args: Subset<T, NoticiaAggregateArgs>): Prisma.PrismaPromise<GetNoticiaAggregateType<T>>
+
+    /**
+     * Group by Noticia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NoticiaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NoticiaGroupByArgs['orderBy'] }
+        : { orderBy?: NoticiaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NoticiaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNoticiaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Noticia model
+   */
+  readonly fields: NoticiaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Noticia.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NoticiaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Noticia model
+   */
+  interface NoticiaFieldRefs {
+    readonly id: FieldRef<"Noticia", 'Int'>
+    readonly titulo: FieldRef<"Noticia", 'String'>
+    readonly conteudo: FieldRef<"Noticia", 'String'>
+    readonly imagem: FieldRef<"Noticia", 'String'>
+    readonly createdAt: FieldRef<"Noticia", 'DateTime'>
+    readonly updatedAt: FieldRef<"Noticia", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Noticia findUnique
+   */
+  export type NoticiaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Filter, which Noticia to fetch.
+     */
+    where: NoticiaWhereUniqueInput
+  }
+
+  /**
+   * Noticia findUniqueOrThrow
+   */
+  export type NoticiaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Filter, which Noticia to fetch.
+     */
+    where: NoticiaWhereUniqueInput
+  }
+
+  /**
+   * Noticia findFirst
+   */
+  export type NoticiaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Filter, which Noticia to fetch.
+     */
+    where?: NoticiaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Noticias to fetch.
+     */
+    orderBy?: NoticiaOrderByWithRelationInput | NoticiaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Noticias.
+     */
+    cursor?: NoticiaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Noticias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Noticias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Noticias.
+     */
+    distinct?: NoticiaScalarFieldEnum | NoticiaScalarFieldEnum[]
+  }
+
+  /**
+   * Noticia findFirstOrThrow
+   */
+  export type NoticiaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Filter, which Noticia to fetch.
+     */
+    where?: NoticiaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Noticias to fetch.
+     */
+    orderBy?: NoticiaOrderByWithRelationInput | NoticiaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Noticias.
+     */
+    cursor?: NoticiaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Noticias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Noticias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Noticias.
+     */
+    distinct?: NoticiaScalarFieldEnum | NoticiaScalarFieldEnum[]
+  }
+
+  /**
+   * Noticia findMany
+   */
+  export type NoticiaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Filter, which Noticias to fetch.
+     */
+    where?: NoticiaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Noticias to fetch.
+     */
+    orderBy?: NoticiaOrderByWithRelationInput | NoticiaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Noticias.
+     */
+    cursor?: NoticiaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Noticias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Noticias.
+     */
+    skip?: number
+    distinct?: NoticiaScalarFieldEnum | NoticiaScalarFieldEnum[]
+  }
+
+  /**
+   * Noticia create
+   */
+  export type NoticiaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Noticia.
+     */
+    data: XOR<NoticiaCreateInput, NoticiaUncheckedCreateInput>
+  }
+
+  /**
+   * Noticia createMany
+   */
+  export type NoticiaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Noticias.
+     */
+    data: NoticiaCreateManyInput | NoticiaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Noticia createManyAndReturn
+   */
+  export type NoticiaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * The data used to create many Noticias.
+     */
+    data: NoticiaCreateManyInput | NoticiaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Noticia update
+   */
+  export type NoticiaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Noticia.
+     */
+    data: XOR<NoticiaUpdateInput, NoticiaUncheckedUpdateInput>
+    /**
+     * Choose, which Noticia to update.
+     */
+    where: NoticiaWhereUniqueInput
+  }
+
+  /**
+   * Noticia updateMany
+   */
+  export type NoticiaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Noticias.
+     */
+    data: XOR<NoticiaUpdateManyMutationInput, NoticiaUncheckedUpdateManyInput>
+    /**
+     * Filter which Noticias to update
+     */
+    where?: NoticiaWhereInput
+    /**
+     * Limit how many Noticias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Noticia updateManyAndReturn
+   */
+  export type NoticiaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * The data used to update Noticias.
+     */
+    data: XOR<NoticiaUpdateManyMutationInput, NoticiaUncheckedUpdateManyInput>
+    /**
+     * Filter which Noticias to update
+     */
+    where?: NoticiaWhereInput
+    /**
+     * Limit how many Noticias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Noticia upsert
+   */
+  export type NoticiaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Noticia to update in case it exists.
+     */
+    where: NoticiaWhereUniqueInput
+    /**
+     * In case the Noticia found by the `where` argument doesn't exist, create a new Noticia with this data.
+     */
+    create: XOR<NoticiaCreateInput, NoticiaUncheckedCreateInput>
+    /**
+     * In case the Noticia was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NoticiaUpdateInput, NoticiaUncheckedUpdateInput>
+  }
+
+  /**
+   * Noticia delete
+   */
+  export type NoticiaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Filter which Noticia to delete.
+     */
+    where: NoticiaWhereUniqueInput
+  }
+
+  /**
+   * Noticia deleteMany
+   */
+  export type NoticiaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Noticias to delete
+     */
+    where?: NoticiaWhereInput
+    /**
+     * Limit how many Noticias to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Noticia without action
+   */
+  export type NoticiaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NoticiaAudit
+   */
+
+  export type AggregateNoticiaAudit = {
+    _count: NoticiaAuditCountAggregateOutputType | null
+    _avg: NoticiaAuditAvgAggregateOutputType | null
+    _sum: NoticiaAuditSumAggregateOutputType | null
+    _min: NoticiaAuditMinAggregateOutputType | null
+    _max: NoticiaAuditMaxAggregateOutputType | null
+  }
+
+  export type NoticiaAuditAvgAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+  }
+
+  export type NoticiaAuditSumAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+  }
+
+  export type NoticiaAuditMinAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type NoticiaAuditMaxAggregateOutputType = {
+    id: number | null
+    noticiaId: number | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type NoticiaAuditCountAggregateOutputType = {
+    id: number
+    noticiaId: number
+    userId: number
+    userNome: number
+    acao: number
+    dadosAntigos: number
+    dadosNovos: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NoticiaAuditAvgAggregateInputType = {
+    id?: true
+    noticiaId?: true
+  }
+
+  export type NoticiaAuditSumAggregateInputType = {
+    id?: true
+    noticiaId?: true
+  }
+
+  export type NoticiaAuditMinAggregateInputType = {
+    id?: true
+    noticiaId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type NoticiaAuditMaxAggregateInputType = {
+    id?: true
+    noticiaId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type NoticiaAuditCountAggregateInputType = {
+    id?: true
+    noticiaId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    dadosAntigos?: true
+    dadosNovos?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NoticiaAuditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoticiaAudit to aggregate.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NoticiaAudits
+    **/
+    _count?: true | NoticiaAuditCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NoticiaAuditAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NoticiaAuditSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NoticiaAuditMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NoticiaAuditMaxAggregateInputType
+  }
+
+  export type GetNoticiaAuditAggregateType<T extends NoticiaAuditAggregateArgs> = {
+        [P in keyof T & keyof AggregateNoticiaAudit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNoticiaAudit[P]>
+      : GetScalarType<T[P], AggregateNoticiaAudit[P]>
+  }
+
+
+
+
+  export type NoticiaAuditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NoticiaAuditWhereInput
+    orderBy?: NoticiaAuditOrderByWithAggregationInput | NoticiaAuditOrderByWithAggregationInput[]
+    by: NoticiaAuditScalarFieldEnum[] | NoticiaAuditScalarFieldEnum
+    having?: NoticiaAuditScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NoticiaAuditCountAggregateInputType | true
+    _avg?: NoticiaAuditAvgAggregateInputType
+    _sum?: NoticiaAuditSumAggregateInputType
+    _min?: NoticiaAuditMinAggregateInputType
+    _max?: NoticiaAuditMaxAggregateInputType
+  }
+
+  export type NoticiaAuditGroupByOutputType = {
+    id: number
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos: JsonValue | null
+    dadosNovos: JsonValue | null
+    createdAt: Date
+    _count: NoticiaAuditCountAggregateOutputType | null
+    _avg: NoticiaAuditAvgAggregateOutputType | null
+    _sum: NoticiaAuditSumAggregateOutputType | null
+    _min: NoticiaAuditMinAggregateOutputType | null
+    _max: NoticiaAuditMaxAggregateOutputType | null
+  }
+
+  type GetNoticiaAuditGroupByPayload<T extends NoticiaAuditGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NoticiaAuditGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NoticiaAuditGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NoticiaAuditGroupByOutputType[P]>
+            : GetScalarType<T[P], NoticiaAuditGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NoticiaAuditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["noticiaAudit"]>
+
+  export type NoticiaAuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["noticiaAudit"]>
+
+  export type NoticiaAuditSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["noticiaAudit"]>
+
+  export type NoticiaAuditSelectScalar = {
+    id?: boolean
+    noticiaId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }
+
+  export type NoticiaAuditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "noticiaId" | "userId" | "userNome" | "acao" | "dadosAntigos" | "dadosNovos" | "createdAt", ExtArgs["result"]["noticiaAudit"]>
+
+  export type $NoticiaAuditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NoticiaAudit"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      noticiaId: number
+      userId: string
+      userNome: string
+      acao: string
+      dadosAntigos: Prisma.JsonValue | null
+      dadosNovos: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["noticiaAudit"]>
+    composites: {}
+  }
+
+  type NoticiaAuditGetPayload<S extends boolean | null | undefined | NoticiaAuditDefaultArgs> = $Result.GetResult<Prisma.$NoticiaAuditPayload, S>
+
+  type NoticiaAuditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NoticiaAuditFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NoticiaAuditCountAggregateInputType | true
+    }
+
+  export interface NoticiaAuditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NoticiaAudit'], meta: { name: 'NoticiaAudit' } }
+    /**
+     * Find zero or one NoticiaAudit that matches the filter.
+     * @param {NoticiaAuditFindUniqueArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NoticiaAuditFindUniqueArgs>(args: SelectSubset<T, NoticiaAuditFindUniqueArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NoticiaAudit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NoticiaAuditFindUniqueOrThrowArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NoticiaAuditFindUniqueOrThrowArgs>(args: SelectSubset<T, NoticiaAuditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NoticiaAudit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditFindFirstArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NoticiaAuditFindFirstArgs>(args?: SelectSubset<T, NoticiaAuditFindFirstArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NoticiaAudit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditFindFirstOrThrowArgs} args - Arguments to find a NoticiaAudit
+     * @example
+     * // Get one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NoticiaAuditFindFirstOrThrowArgs>(args?: SelectSubset<T, NoticiaAuditFindFirstOrThrowArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NoticiaAudits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NoticiaAudits
+     * const noticiaAudits = await prisma.noticiaAudit.findMany()
+     * 
+     * // Get first 10 NoticiaAudits
+     * const noticiaAudits = await prisma.noticiaAudit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const noticiaAuditWithIdOnly = await prisma.noticiaAudit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NoticiaAuditFindManyArgs>(args?: SelectSubset<T, NoticiaAuditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NoticiaAudit.
+     * @param {NoticiaAuditCreateArgs} args - Arguments to create a NoticiaAudit.
+     * @example
+     * // Create one NoticiaAudit
+     * const NoticiaAudit = await prisma.noticiaAudit.create({
+     *   data: {
+     *     // ... data to create a NoticiaAudit
+     *   }
+     * })
+     * 
+     */
+    create<T extends NoticiaAuditCreateArgs>(args: SelectSubset<T, NoticiaAuditCreateArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NoticiaAudits.
+     * @param {NoticiaAuditCreateManyArgs} args - Arguments to create many NoticiaAudits.
+     * @example
+     * // Create many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NoticiaAuditCreateManyArgs>(args?: SelectSubset<T, NoticiaAuditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NoticiaAudits and returns the data saved in the database.
+     * @param {NoticiaAuditCreateManyAndReturnArgs} args - Arguments to create many NoticiaAudits.
+     * @example
+     * // Create many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NoticiaAudits and only return the `id`
+     * const noticiaAuditWithIdOnly = await prisma.noticiaAudit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NoticiaAuditCreateManyAndReturnArgs>(args?: SelectSubset<T, NoticiaAuditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NoticiaAudit.
+     * @param {NoticiaAuditDeleteArgs} args - Arguments to delete one NoticiaAudit.
+     * @example
+     * // Delete one NoticiaAudit
+     * const NoticiaAudit = await prisma.noticiaAudit.delete({
+     *   where: {
+     *     // ... filter to delete one NoticiaAudit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NoticiaAuditDeleteArgs>(args: SelectSubset<T, NoticiaAuditDeleteArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NoticiaAudit.
+     * @param {NoticiaAuditUpdateArgs} args - Arguments to update one NoticiaAudit.
+     * @example
+     * // Update one NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NoticiaAuditUpdateArgs>(args: SelectSubset<T, NoticiaAuditUpdateArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NoticiaAudits.
+     * @param {NoticiaAuditDeleteManyArgs} args - Arguments to filter NoticiaAudits to delete.
+     * @example
+     * // Delete a few NoticiaAudits
+     * const { count } = await prisma.noticiaAudit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NoticiaAuditDeleteManyArgs>(args?: SelectSubset<T, NoticiaAuditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NoticiaAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NoticiaAuditUpdateManyArgs>(args: SelectSubset<T, NoticiaAuditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NoticiaAudits and returns the data updated in the database.
+     * @param {NoticiaAuditUpdateManyAndReturnArgs} args - Arguments to update many NoticiaAudits.
+     * @example
+     * // Update many NoticiaAudits
+     * const noticiaAudit = await prisma.noticiaAudit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NoticiaAudits and only return the `id`
+     * const noticiaAuditWithIdOnly = await prisma.noticiaAudit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NoticiaAuditUpdateManyAndReturnArgs>(args: SelectSubset<T, NoticiaAuditUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NoticiaAudit.
+     * @param {NoticiaAuditUpsertArgs} args - Arguments to update or create a NoticiaAudit.
+     * @example
+     * // Update or create a NoticiaAudit
+     * const noticiaAudit = await prisma.noticiaAudit.upsert({
+     *   create: {
+     *     // ... data to create a NoticiaAudit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NoticiaAudit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NoticiaAuditUpsertArgs>(args: SelectSubset<T, NoticiaAuditUpsertArgs<ExtArgs>>): Prisma__NoticiaAuditClient<$Result.GetResult<Prisma.$NoticiaAuditPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NoticiaAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditCountArgs} args - Arguments to filter NoticiaAudits to count.
+     * @example
+     * // Count the number of NoticiaAudits
+     * const count = await prisma.noticiaAudit.count({
+     *   where: {
+     *     // ... the filter for the NoticiaAudits we want to count
+     *   }
+     * })
+    **/
+    count<T extends NoticiaAuditCountArgs>(
+      args?: Subset<T, NoticiaAuditCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NoticiaAuditCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NoticiaAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NoticiaAuditAggregateArgs>(args: Subset<T, NoticiaAuditAggregateArgs>): Prisma.PrismaPromise<GetNoticiaAuditAggregateType<T>>
+
+    /**
+     * Group by NoticiaAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NoticiaAuditGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NoticiaAuditGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NoticiaAuditGroupByArgs['orderBy'] }
+        : { orderBy?: NoticiaAuditGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NoticiaAuditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNoticiaAuditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NoticiaAudit model
+   */
+  readonly fields: NoticiaAuditFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NoticiaAudit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NoticiaAuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NoticiaAudit model
+   */
+  interface NoticiaAuditFieldRefs {
+    readonly id: FieldRef<"NoticiaAudit", 'Int'>
+    readonly noticiaId: FieldRef<"NoticiaAudit", 'Int'>
+    readonly userId: FieldRef<"NoticiaAudit", 'String'>
+    readonly userNome: FieldRef<"NoticiaAudit", 'String'>
+    readonly acao: FieldRef<"NoticiaAudit", 'String'>
+    readonly dadosAntigos: FieldRef<"NoticiaAudit", 'Json'>
+    readonly dadosNovos: FieldRef<"NoticiaAudit", 'Json'>
+    readonly createdAt: FieldRef<"NoticiaAudit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NoticiaAudit findUnique
+   */
+  export type NoticiaAuditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit findUniqueOrThrow
+   */
+  export type NoticiaAuditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit findFirst
+   */
+  export type NoticiaAuditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoticiaAudits.
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoticiaAudits.
+     */
+    distinct?: NoticiaAuditScalarFieldEnum | NoticiaAuditScalarFieldEnum[]
+  }
+
+  /**
+   * NoticiaAudit findFirstOrThrow
+   */
+  export type NoticiaAuditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudit to fetch.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NoticiaAudits.
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NoticiaAudits.
+     */
+    distinct?: NoticiaAuditScalarFieldEnum | NoticiaAuditScalarFieldEnum[]
+  }
+
+  /**
+   * NoticiaAudit findMany
+   */
+  export type NoticiaAuditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which NoticiaAudits to fetch.
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NoticiaAudits to fetch.
+     */
+    orderBy?: NoticiaAuditOrderByWithRelationInput | NoticiaAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NoticiaAudits.
+     */
+    cursor?: NoticiaAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NoticiaAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NoticiaAudits.
+     */
+    skip?: number
+    distinct?: NoticiaAuditScalarFieldEnum | NoticiaAuditScalarFieldEnum[]
+  }
+
+  /**
+   * NoticiaAudit create
+   */
+  export type NoticiaAuditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to create a NoticiaAudit.
+     */
+    data: XOR<NoticiaAuditCreateInput, NoticiaAuditUncheckedCreateInput>
+  }
+
+  /**
+   * NoticiaAudit createMany
+   */
+  export type NoticiaAuditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NoticiaAudits.
+     */
+    data: NoticiaAuditCreateManyInput | NoticiaAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NoticiaAudit createManyAndReturn
+   */
+  export type NoticiaAuditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data used to create many NoticiaAudits.
+     */
+    data: NoticiaAuditCreateManyInput | NoticiaAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NoticiaAudit update
+   */
+  export type NoticiaAuditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to update a NoticiaAudit.
+     */
+    data: XOR<NoticiaAuditUpdateInput, NoticiaAuditUncheckedUpdateInput>
+    /**
+     * Choose, which NoticiaAudit to update.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit updateMany
+   */
+  export type NoticiaAuditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NoticiaAudits.
+     */
+    data: XOR<NoticiaAuditUpdateManyMutationInput, NoticiaAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which NoticiaAudits to update
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * Limit how many NoticiaAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NoticiaAudit updateManyAndReturn
+   */
+  export type NoticiaAuditUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The data used to update NoticiaAudits.
+     */
+    data: XOR<NoticiaAuditUpdateManyMutationInput, NoticiaAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which NoticiaAudits to update
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * Limit how many NoticiaAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NoticiaAudit upsert
+   */
+  export type NoticiaAuditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * The filter to search for the NoticiaAudit to update in case it exists.
+     */
+    where: NoticiaAuditWhereUniqueInput
+    /**
+     * In case the NoticiaAudit found by the `where` argument doesn't exist, create a new NoticiaAudit with this data.
+     */
+    create: XOR<NoticiaAuditCreateInput, NoticiaAuditUncheckedCreateInput>
+    /**
+     * In case the NoticiaAudit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NoticiaAuditUpdateInput, NoticiaAuditUncheckedUpdateInput>
+  }
+
+  /**
+   * NoticiaAudit delete
+   */
+  export type NoticiaAuditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+    /**
+     * Filter which NoticiaAudit to delete.
+     */
+    where: NoticiaAuditWhereUniqueInput
+  }
+
+  /**
+   * NoticiaAudit deleteMany
+   */
+  export type NoticiaAuditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NoticiaAudits to delete
+     */
+    where?: NoticiaAuditWhereInput
+    /**
+     * Limit how many NoticiaAudits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NoticiaAudit without action
+   */
+  export type NoticiaAuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaAudit
+     */
+    select?: NoticiaAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NoticiaAudit
+     */
+    omit?: NoticiaAuditOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Recado
+   */
+
+  export type AggregateRecado = {
+    _count: RecadoCountAggregateOutputType | null
+    _avg: RecadoAvgAggregateOutputType | null
+    _sum: RecadoSumAggregateOutputType | null
+    _min: RecadoMinAggregateOutputType | null
+    _max: RecadoMaxAggregateOutputType | null
+  }
+
+  export type RecadoAvgAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type RecadoSumAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type RecadoMinAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    conteudo: string | null
+    imagem: string | null
+    unidadeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RecadoMaxAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    conteudo: string | null
+    imagem: string | null
+    unidadeId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RecadoCountAggregateOutputType = {
+    id: number
+    titulo: number
+    conteudo: number
+    imagem: number
+    unidadeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RecadoAvgAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type RecadoSumAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type RecadoMinAggregateInputType = {
+    id?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RecadoMaxAggregateInputType = {
+    id?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RecadoCountAggregateInputType = {
+    id?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    unidadeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RecadoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Recado to aggregate.
+     */
+    where?: RecadoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recados to fetch.
+     */
+    orderBy?: RecadoOrderByWithRelationInput | RecadoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RecadoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recados.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Recados
+    **/
+    _count?: true | RecadoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RecadoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RecadoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RecadoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RecadoMaxAggregateInputType
+  }
+
+  export type GetRecadoAggregateType<T extends RecadoAggregateArgs> = {
+        [P in keyof T & keyof AggregateRecado]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRecado[P]>
+      : GetScalarType<T[P], AggregateRecado[P]>
+  }
+
+
+
+
+  export type RecadoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecadoWhereInput
+    orderBy?: RecadoOrderByWithAggregationInput | RecadoOrderByWithAggregationInput[]
+    by: RecadoScalarFieldEnum[] | RecadoScalarFieldEnum
+    having?: RecadoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RecadoCountAggregateInputType | true
+    _avg?: RecadoAvgAggregateInputType
+    _sum?: RecadoSumAggregateInputType
+    _min?: RecadoMinAggregateInputType
+    _max?: RecadoMaxAggregateInputType
+  }
+
+  export type RecadoGroupByOutputType = {
+    id: number
+    titulo: string
+    conteudo: string
+    imagem: string | null
+    unidadeId: number
+    createdAt: Date
+    updatedAt: Date
+    _count: RecadoCountAggregateOutputType | null
+    _avg: RecadoAvgAggregateOutputType | null
+    _sum: RecadoSumAggregateOutputType | null
+    _min: RecadoMinAggregateOutputType | null
+    _max: RecadoMaxAggregateOutputType | null
+  }
+
+  type GetRecadoGroupByPayload<T extends RecadoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RecadoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RecadoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RecadoGroupByOutputType[P]>
+            : GetScalarType<T[P], RecadoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RecadoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    unidades?: boolean | Recado$unidadesArgs<ExtArgs>
+    _count?: boolean | RecadoCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recado"]>
+
+  export type RecadoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recado"]>
+
+  export type RecadoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recado"]>
+
+  export type RecadoSelectScalar = {
+    id?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    unidadeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RecadoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "conteudo" | "imagem" | "unidadeId" | "createdAt" | "updatedAt", ExtArgs["result"]["recado"]>
+  export type RecadoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    unidades?: boolean | Recado$unidadesArgs<ExtArgs>
+    _count?: boolean | RecadoCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type RecadoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+  export type RecadoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+
+  export type $RecadoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Recado"
+    objects: {
+      unidade: Prisma.$UnidadePayload<ExtArgs>
+      unidades: Prisma.$RecadoUnidadePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      titulo: string
+      conteudo: string
+      imagem: string | null
+      unidadeId: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["recado"]>
+    composites: {}
+  }
+
+  type RecadoGetPayload<S extends boolean | null | undefined | RecadoDefaultArgs> = $Result.GetResult<Prisma.$RecadoPayload, S>
+
+  type RecadoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RecadoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RecadoCountAggregateInputType | true
+    }
+
+  export interface RecadoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Recado'], meta: { name: 'Recado' } }
+    /**
+     * Find zero or one Recado that matches the filter.
+     * @param {RecadoFindUniqueArgs} args - Arguments to find a Recado
+     * @example
+     * // Get one Recado
+     * const recado = await prisma.recado.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RecadoFindUniqueArgs>(args: SelectSubset<T, RecadoFindUniqueArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Recado that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RecadoFindUniqueOrThrowArgs} args - Arguments to find a Recado
+     * @example
+     * // Get one Recado
+     * const recado = await prisma.recado.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RecadoFindUniqueOrThrowArgs>(args: SelectSubset<T, RecadoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Recado that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoFindFirstArgs} args - Arguments to find a Recado
+     * @example
+     * // Get one Recado
+     * const recado = await prisma.recado.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RecadoFindFirstArgs>(args?: SelectSubset<T, RecadoFindFirstArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Recado that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoFindFirstOrThrowArgs} args - Arguments to find a Recado
+     * @example
+     * // Get one Recado
+     * const recado = await prisma.recado.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RecadoFindFirstOrThrowArgs>(args?: SelectSubset<T, RecadoFindFirstOrThrowArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Recados that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Recados
+     * const recados = await prisma.recado.findMany()
+     * 
+     * // Get first 10 Recados
+     * const recados = await prisma.recado.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const recadoWithIdOnly = await prisma.recado.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RecadoFindManyArgs>(args?: SelectSubset<T, RecadoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Recado.
+     * @param {RecadoCreateArgs} args - Arguments to create a Recado.
+     * @example
+     * // Create one Recado
+     * const Recado = await prisma.recado.create({
+     *   data: {
+     *     // ... data to create a Recado
+     *   }
+     * })
+     * 
+     */
+    create<T extends RecadoCreateArgs>(args: SelectSubset<T, RecadoCreateArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Recados.
+     * @param {RecadoCreateManyArgs} args - Arguments to create many Recados.
+     * @example
+     * // Create many Recados
+     * const recado = await prisma.recado.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RecadoCreateManyArgs>(args?: SelectSubset<T, RecadoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Recados and returns the data saved in the database.
+     * @param {RecadoCreateManyAndReturnArgs} args - Arguments to create many Recados.
+     * @example
+     * // Create many Recados
+     * const recado = await prisma.recado.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Recados and only return the `id`
+     * const recadoWithIdOnly = await prisma.recado.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RecadoCreateManyAndReturnArgs>(args?: SelectSubset<T, RecadoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Recado.
+     * @param {RecadoDeleteArgs} args - Arguments to delete one Recado.
+     * @example
+     * // Delete one Recado
+     * const Recado = await prisma.recado.delete({
+     *   where: {
+     *     // ... filter to delete one Recado
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RecadoDeleteArgs>(args: SelectSubset<T, RecadoDeleteArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Recado.
+     * @param {RecadoUpdateArgs} args - Arguments to update one Recado.
+     * @example
+     * // Update one Recado
+     * const recado = await prisma.recado.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RecadoUpdateArgs>(args: SelectSubset<T, RecadoUpdateArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Recados.
+     * @param {RecadoDeleteManyArgs} args - Arguments to filter Recados to delete.
+     * @example
+     * // Delete a few Recados
+     * const { count } = await prisma.recado.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RecadoDeleteManyArgs>(args?: SelectSubset<T, RecadoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Recados.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Recados
+     * const recado = await prisma.recado.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RecadoUpdateManyArgs>(args: SelectSubset<T, RecadoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Recados and returns the data updated in the database.
+     * @param {RecadoUpdateManyAndReturnArgs} args - Arguments to update many Recados.
+     * @example
+     * // Update many Recados
+     * const recado = await prisma.recado.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Recados and only return the `id`
+     * const recadoWithIdOnly = await prisma.recado.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RecadoUpdateManyAndReturnArgs>(args: SelectSubset<T, RecadoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Recado.
+     * @param {RecadoUpsertArgs} args - Arguments to update or create a Recado.
+     * @example
+     * // Update or create a Recado
+     * const recado = await prisma.recado.upsert({
+     *   create: {
+     *     // ... data to create a Recado
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Recado we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RecadoUpsertArgs>(args: SelectSubset<T, RecadoUpsertArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Recados.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoCountArgs} args - Arguments to filter Recados to count.
+     * @example
+     * // Count the number of Recados
+     * const count = await prisma.recado.count({
+     *   where: {
+     *     // ... the filter for the Recados we want to count
+     *   }
+     * })
+    **/
+    count<T extends RecadoCountArgs>(
+      args?: Subset<T, RecadoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RecadoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Recado.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RecadoAggregateArgs>(args: Subset<T, RecadoAggregateArgs>): Prisma.PrismaPromise<GetRecadoAggregateType<T>>
+
+    /**
+     * Group by Recado.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RecadoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RecadoGroupByArgs['orderBy'] }
+        : { orderBy?: RecadoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RecadoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRecadoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Recado model
+   */
+  readonly fields: RecadoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Recado.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RecadoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    unidade<T extends UnidadeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnidadeDefaultArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    unidades<T extends Recado$unidadesArgs<ExtArgs> = {}>(args?: Subset<T, Recado$unidadesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Recado model
+   */
+  interface RecadoFieldRefs {
+    readonly id: FieldRef<"Recado", 'Int'>
+    readonly titulo: FieldRef<"Recado", 'String'>
+    readonly conteudo: FieldRef<"Recado", 'String'>
+    readonly imagem: FieldRef<"Recado", 'String'>
+    readonly unidadeId: FieldRef<"Recado", 'Int'>
+    readonly createdAt: FieldRef<"Recado", 'DateTime'>
+    readonly updatedAt: FieldRef<"Recado", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Recado findUnique
+   */
+  export type RecadoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * Filter, which Recado to fetch.
+     */
+    where: RecadoWhereUniqueInput
+  }
+
+  /**
+   * Recado findUniqueOrThrow
+   */
+  export type RecadoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * Filter, which Recado to fetch.
+     */
+    where: RecadoWhereUniqueInput
+  }
+
+  /**
+   * Recado findFirst
+   */
+  export type RecadoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * Filter, which Recado to fetch.
+     */
+    where?: RecadoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recados to fetch.
+     */
+    orderBy?: RecadoOrderByWithRelationInput | RecadoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Recados.
+     */
+    cursor?: RecadoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recados.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Recados.
+     */
+    distinct?: RecadoScalarFieldEnum | RecadoScalarFieldEnum[]
+  }
+
+  /**
+   * Recado findFirstOrThrow
+   */
+  export type RecadoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * Filter, which Recado to fetch.
+     */
+    where?: RecadoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recados to fetch.
+     */
+    orderBy?: RecadoOrderByWithRelationInput | RecadoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Recados.
+     */
+    cursor?: RecadoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recados.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Recados.
+     */
+    distinct?: RecadoScalarFieldEnum | RecadoScalarFieldEnum[]
+  }
+
+  /**
+   * Recado findMany
+   */
+  export type RecadoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * Filter, which Recados to fetch.
+     */
+    where?: RecadoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Recados to fetch.
+     */
+    orderBy?: RecadoOrderByWithRelationInput | RecadoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Recados.
+     */
+    cursor?: RecadoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Recados from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Recados.
+     */
+    skip?: number
+    distinct?: RecadoScalarFieldEnum | RecadoScalarFieldEnum[]
+  }
+
+  /**
+   * Recado create
+   */
+  export type RecadoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Recado.
+     */
+    data: XOR<RecadoCreateInput, RecadoUncheckedCreateInput>
+  }
+
+  /**
+   * Recado createMany
+   */
+  export type RecadoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Recados.
+     */
+    data: RecadoCreateManyInput | RecadoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Recado createManyAndReturn
+   */
+  export type RecadoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * The data used to create many Recados.
+     */
+    data: RecadoCreateManyInput | RecadoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Recado update
+   */
+  export type RecadoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Recado.
+     */
+    data: XOR<RecadoUpdateInput, RecadoUncheckedUpdateInput>
+    /**
+     * Choose, which Recado to update.
+     */
+    where: RecadoWhereUniqueInput
+  }
+
+  /**
+   * Recado updateMany
+   */
+  export type RecadoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Recados.
+     */
+    data: XOR<RecadoUpdateManyMutationInput, RecadoUncheckedUpdateManyInput>
+    /**
+     * Filter which Recados to update
+     */
+    where?: RecadoWhereInput
+    /**
+     * Limit how many Recados to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Recado updateManyAndReturn
+   */
+  export type RecadoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * The data used to update Recados.
+     */
+    data: XOR<RecadoUpdateManyMutationInput, RecadoUncheckedUpdateManyInput>
+    /**
+     * Filter which Recados to update
+     */
+    where?: RecadoWhereInput
+    /**
+     * Limit how many Recados to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Recado upsert
+   */
+  export type RecadoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Recado to update in case it exists.
+     */
+    where: RecadoWhereUniqueInput
+    /**
+     * In case the Recado found by the `where` argument doesn't exist, create a new Recado with this data.
+     */
+    create: XOR<RecadoCreateInput, RecadoUncheckedCreateInput>
+    /**
+     * In case the Recado was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RecadoUpdateInput, RecadoUncheckedUpdateInput>
+  }
+
+  /**
+   * Recado delete
+   */
+  export type RecadoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    /**
+     * Filter which Recado to delete.
+     */
+    where: RecadoWhereUniqueInput
+  }
+
+  /**
+   * Recado deleteMany
+   */
+  export type RecadoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Recados to delete
+     */
+    where?: RecadoWhereInput
+    /**
+     * Limit how many Recados to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Recado.unidades
+   */
+  export type Recado$unidadesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    where?: RecadoUnidadeWhereInput
+    orderBy?: RecadoUnidadeOrderByWithRelationInput | RecadoUnidadeOrderByWithRelationInput[]
+    cursor?: RecadoUnidadeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecadoUnidadeScalarFieldEnum | RecadoUnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * Recado without action
+   */
+  export type RecadoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RecadoUnidade
+   */
+
+  export type AggregateRecadoUnidade = {
+    _count: RecadoUnidadeCountAggregateOutputType | null
+    _avg: RecadoUnidadeAvgAggregateOutputType | null
+    _sum: RecadoUnidadeSumAggregateOutputType | null
+    _min: RecadoUnidadeMinAggregateOutputType | null
+    _max: RecadoUnidadeMaxAggregateOutputType | null
+  }
+
+  export type RecadoUnidadeAvgAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    unidadeId: number | null
+  }
+
+  export type RecadoUnidadeSumAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    unidadeId: number | null
+  }
+
+  export type RecadoUnidadeMinAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    unidadeId: number | null
+  }
+
+  export type RecadoUnidadeMaxAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    unidadeId: number | null
+  }
+
+  export type RecadoUnidadeCountAggregateOutputType = {
+    id: number
+    recadoId: number
+    unidadeId: number
+    _all: number
+  }
+
+
+  export type RecadoUnidadeAvgAggregateInputType = {
+    id?: true
+    recadoId?: true
+    unidadeId?: true
+  }
+
+  export type RecadoUnidadeSumAggregateInputType = {
+    id?: true
+    recadoId?: true
+    unidadeId?: true
+  }
+
+  export type RecadoUnidadeMinAggregateInputType = {
+    id?: true
+    recadoId?: true
+    unidadeId?: true
+  }
+
+  export type RecadoUnidadeMaxAggregateInputType = {
+    id?: true
+    recadoId?: true
+    unidadeId?: true
+  }
+
+  export type RecadoUnidadeCountAggregateInputType = {
+    id?: true
+    recadoId?: true
+    unidadeId?: true
+    _all?: true
+  }
+
+  export type RecadoUnidadeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecadoUnidade to aggregate.
+     */
+    where?: RecadoUnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoUnidades to fetch.
+     */
+    orderBy?: RecadoUnidadeOrderByWithRelationInput | RecadoUnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RecadoUnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoUnidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoUnidades.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RecadoUnidades
+    **/
+    _count?: true | RecadoUnidadeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RecadoUnidadeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RecadoUnidadeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RecadoUnidadeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RecadoUnidadeMaxAggregateInputType
+  }
+
+  export type GetRecadoUnidadeAggregateType<T extends RecadoUnidadeAggregateArgs> = {
+        [P in keyof T & keyof AggregateRecadoUnidade]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRecadoUnidade[P]>
+      : GetScalarType<T[P], AggregateRecadoUnidade[P]>
+  }
+
+
+
+
+  export type RecadoUnidadeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecadoUnidadeWhereInput
+    orderBy?: RecadoUnidadeOrderByWithAggregationInput | RecadoUnidadeOrderByWithAggregationInput[]
+    by: RecadoUnidadeScalarFieldEnum[] | RecadoUnidadeScalarFieldEnum
+    having?: RecadoUnidadeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RecadoUnidadeCountAggregateInputType | true
+    _avg?: RecadoUnidadeAvgAggregateInputType
+    _sum?: RecadoUnidadeSumAggregateInputType
+    _min?: RecadoUnidadeMinAggregateInputType
+    _max?: RecadoUnidadeMaxAggregateInputType
+  }
+
+  export type RecadoUnidadeGroupByOutputType = {
+    id: number
+    recadoId: number
+    unidadeId: number
+    _count: RecadoUnidadeCountAggregateOutputType | null
+    _avg: RecadoUnidadeAvgAggregateOutputType | null
+    _sum: RecadoUnidadeSumAggregateOutputType | null
+    _min: RecadoUnidadeMinAggregateOutputType | null
+    _max: RecadoUnidadeMaxAggregateOutputType | null
+  }
+
+  type GetRecadoUnidadeGroupByPayload<T extends RecadoUnidadeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RecadoUnidadeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RecadoUnidadeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RecadoUnidadeGroupByOutputType[P]>
+            : GetScalarType<T[P], RecadoUnidadeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RecadoUnidadeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recadoId?: boolean
+    unidadeId?: boolean
+    recado?: boolean | RecadoDefaultArgs<ExtArgs>
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recadoUnidade"]>
+
+  export type RecadoUnidadeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recadoId?: boolean
+    unidadeId?: boolean
+    recado?: boolean | RecadoDefaultArgs<ExtArgs>
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recadoUnidade"]>
+
+  export type RecadoUnidadeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recadoId?: boolean
+    unidadeId?: boolean
+    recado?: boolean | RecadoDefaultArgs<ExtArgs>
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["recadoUnidade"]>
+
+  export type RecadoUnidadeSelectScalar = {
+    id?: boolean
+    recadoId?: boolean
+    unidadeId?: boolean
+  }
+
+  export type RecadoUnidadeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recadoId" | "unidadeId", ExtArgs["result"]["recadoUnidade"]>
+  export type RecadoUnidadeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recado?: boolean | RecadoDefaultArgs<ExtArgs>
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+  export type RecadoUnidadeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recado?: boolean | RecadoDefaultArgs<ExtArgs>
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+  export type RecadoUnidadeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recado?: boolean | RecadoDefaultArgs<ExtArgs>
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+  }
+
+  export type $RecadoUnidadePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RecadoUnidade"
+    objects: {
+      recado: Prisma.$RecadoPayload<ExtArgs>
+      unidade: Prisma.$UnidadePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      recadoId: number
+      unidadeId: number
+    }, ExtArgs["result"]["recadoUnidade"]>
+    composites: {}
+  }
+
+  type RecadoUnidadeGetPayload<S extends boolean | null | undefined | RecadoUnidadeDefaultArgs> = $Result.GetResult<Prisma.$RecadoUnidadePayload, S>
+
+  type RecadoUnidadeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RecadoUnidadeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RecadoUnidadeCountAggregateInputType | true
+    }
+
+  export interface RecadoUnidadeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RecadoUnidade'], meta: { name: 'RecadoUnidade' } }
+    /**
+     * Find zero or one RecadoUnidade that matches the filter.
+     * @param {RecadoUnidadeFindUniqueArgs} args - Arguments to find a RecadoUnidade
+     * @example
+     * // Get one RecadoUnidade
+     * const recadoUnidade = await prisma.recadoUnidade.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RecadoUnidadeFindUniqueArgs>(args: SelectSubset<T, RecadoUnidadeFindUniqueArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RecadoUnidade that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RecadoUnidadeFindUniqueOrThrowArgs} args - Arguments to find a RecadoUnidade
+     * @example
+     * // Get one RecadoUnidade
+     * const recadoUnidade = await prisma.recadoUnidade.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RecadoUnidadeFindUniqueOrThrowArgs>(args: SelectSubset<T, RecadoUnidadeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecadoUnidade that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUnidadeFindFirstArgs} args - Arguments to find a RecadoUnidade
+     * @example
+     * // Get one RecadoUnidade
+     * const recadoUnidade = await prisma.recadoUnidade.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RecadoUnidadeFindFirstArgs>(args?: SelectSubset<T, RecadoUnidadeFindFirstArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecadoUnidade that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUnidadeFindFirstOrThrowArgs} args - Arguments to find a RecadoUnidade
+     * @example
+     * // Get one RecadoUnidade
+     * const recadoUnidade = await prisma.recadoUnidade.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RecadoUnidadeFindFirstOrThrowArgs>(args?: SelectSubset<T, RecadoUnidadeFindFirstOrThrowArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RecadoUnidades that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUnidadeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RecadoUnidades
+     * const recadoUnidades = await prisma.recadoUnidade.findMany()
+     * 
+     * // Get first 10 RecadoUnidades
+     * const recadoUnidades = await prisma.recadoUnidade.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const recadoUnidadeWithIdOnly = await prisma.recadoUnidade.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RecadoUnidadeFindManyArgs>(args?: SelectSubset<T, RecadoUnidadeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RecadoUnidade.
+     * @param {RecadoUnidadeCreateArgs} args - Arguments to create a RecadoUnidade.
+     * @example
+     * // Create one RecadoUnidade
+     * const RecadoUnidade = await prisma.recadoUnidade.create({
+     *   data: {
+     *     // ... data to create a RecadoUnidade
+     *   }
+     * })
+     * 
+     */
+    create<T extends RecadoUnidadeCreateArgs>(args: SelectSubset<T, RecadoUnidadeCreateArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RecadoUnidades.
+     * @param {RecadoUnidadeCreateManyArgs} args - Arguments to create many RecadoUnidades.
+     * @example
+     * // Create many RecadoUnidades
+     * const recadoUnidade = await prisma.recadoUnidade.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RecadoUnidadeCreateManyArgs>(args?: SelectSubset<T, RecadoUnidadeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RecadoUnidades and returns the data saved in the database.
+     * @param {RecadoUnidadeCreateManyAndReturnArgs} args - Arguments to create many RecadoUnidades.
+     * @example
+     * // Create many RecadoUnidades
+     * const recadoUnidade = await prisma.recadoUnidade.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RecadoUnidades and only return the `id`
+     * const recadoUnidadeWithIdOnly = await prisma.recadoUnidade.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RecadoUnidadeCreateManyAndReturnArgs>(args?: SelectSubset<T, RecadoUnidadeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RecadoUnidade.
+     * @param {RecadoUnidadeDeleteArgs} args - Arguments to delete one RecadoUnidade.
+     * @example
+     * // Delete one RecadoUnidade
+     * const RecadoUnidade = await prisma.recadoUnidade.delete({
+     *   where: {
+     *     // ... filter to delete one RecadoUnidade
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RecadoUnidadeDeleteArgs>(args: SelectSubset<T, RecadoUnidadeDeleteArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RecadoUnidade.
+     * @param {RecadoUnidadeUpdateArgs} args - Arguments to update one RecadoUnidade.
+     * @example
+     * // Update one RecadoUnidade
+     * const recadoUnidade = await prisma.recadoUnidade.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RecadoUnidadeUpdateArgs>(args: SelectSubset<T, RecadoUnidadeUpdateArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RecadoUnidades.
+     * @param {RecadoUnidadeDeleteManyArgs} args - Arguments to filter RecadoUnidades to delete.
+     * @example
+     * // Delete a few RecadoUnidades
+     * const { count } = await prisma.recadoUnidade.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RecadoUnidadeDeleteManyArgs>(args?: SelectSubset<T, RecadoUnidadeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecadoUnidades.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUnidadeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RecadoUnidades
+     * const recadoUnidade = await prisma.recadoUnidade.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RecadoUnidadeUpdateManyArgs>(args: SelectSubset<T, RecadoUnidadeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecadoUnidades and returns the data updated in the database.
+     * @param {RecadoUnidadeUpdateManyAndReturnArgs} args - Arguments to update many RecadoUnidades.
+     * @example
+     * // Update many RecadoUnidades
+     * const recadoUnidade = await prisma.recadoUnidade.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RecadoUnidades and only return the `id`
+     * const recadoUnidadeWithIdOnly = await prisma.recadoUnidade.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RecadoUnidadeUpdateManyAndReturnArgs>(args: SelectSubset<T, RecadoUnidadeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RecadoUnidade.
+     * @param {RecadoUnidadeUpsertArgs} args - Arguments to update or create a RecadoUnidade.
+     * @example
+     * // Update or create a RecadoUnidade
+     * const recadoUnidade = await prisma.recadoUnidade.upsert({
+     *   create: {
+     *     // ... data to create a RecadoUnidade
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RecadoUnidade we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RecadoUnidadeUpsertArgs>(args: SelectSubset<T, RecadoUnidadeUpsertArgs<ExtArgs>>): Prisma__RecadoUnidadeClient<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RecadoUnidades.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUnidadeCountArgs} args - Arguments to filter RecadoUnidades to count.
+     * @example
+     * // Count the number of RecadoUnidades
+     * const count = await prisma.recadoUnidade.count({
+     *   where: {
+     *     // ... the filter for the RecadoUnidades we want to count
+     *   }
+     * })
+    **/
+    count<T extends RecadoUnidadeCountArgs>(
+      args?: Subset<T, RecadoUnidadeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RecadoUnidadeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RecadoUnidade.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUnidadeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RecadoUnidadeAggregateArgs>(args: Subset<T, RecadoUnidadeAggregateArgs>): Prisma.PrismaPromise<GetRecadoUnidadeAggregateType<T>>
+
+    /**
+     * Group by RecadoUnidade.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoUnidadeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RecadoUnidadeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RecadoUnidadeGroupByArgs['orderBy'] }
+        : { orderBy?: RecadoUnidadeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RecadoUnidadeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRecadoUnidadeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RecadoUnidade model
+   */
+  readonly fields: RecadoUnidadeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RecadoUnidade.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RecadoUnidadeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    recado<T extends RecadoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RecadoDefaultArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    unidade<T extends UnidadeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnidadeDefaultArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RecadoUnidade model
+   */
+  interface RecadoUnidadeFieldRefs {
+    readonly id: FieldRef<"RecadoUnidade", 'Int'>
+    readonly recadoId: FieldRef<"RecadoUnidade", 'Int'>
+    readonly unidadeId: FieldRef<"RecadoUnidade", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RecadoUnidade findUnique
+   */
+  export type RecadoUnidadeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which RecadoUnidade to fetch.
+     */
+    where: RecadoUnidadeWhereUniqueInput
+  }
+
+  /**
+   * RecadoUnidade findUniqueOrThrow
+   */
+  export type RecadoUnidadeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which RecadoUnidade to fetch.
+     */
+    where: RecadoUnidadeWhereUniqueInput
+  }
+
+  /**
+   * RecadoUnidade findFirst
+   */
+  export type RecadoUnidadeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which RecadoUnidade to fetch.
+     */
+    where?: RecadoUnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoUnidades to fetch.
+     */
+    orderBy?: RecadoUnidadeOrderByWithRelationInput | RecadoUnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecadoUnidades.
+     */
+    cursor?: RecadoUnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoUnidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoUnidades.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecadoUnidades.
+     */
+    distinct?: RecadoUnidadeScalarFieldEnum | RecadoUnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * RecadoUnidade findFirstOrThrow
+   */
+  export type RecadoUnidadeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which RecadoUnidade to fetch.
+     */
+    where?: RecadoUnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoUnidades to fetch.
+     */
+    orderBy?: RecadoUnidadeOrderByWithRelationInput | RecadoUnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecadoUnidades.
+     */
+    cursor?: RecadoUnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoUnidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoUnidades.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecadoUnidades.
+     */
+    distinct?: RecadoUnidadeScalarFieldEnum | RecadoUnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * RecadoUnidade findMany
+   */
+  export type RecadoUnidadeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * Filter, which RecadoUnidades to fetch.
+     */
+    where?: RecadoUnidadeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoUnidades to fetch.
+     */
+    orderBy?: RecadoUnidadeOrderByWithRelationInput | RecadoUnidadeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RecadoUnidades.
+     */
+    cursor?: RecadoUnidadeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoUnidades from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoUnidades.
+     */
+    skip?: number
+    distinct?: RecadoUnidadeScalarFieldEnum | RecadoUnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * RecadoUnidade create
+   */
+  export type RecadoUnidadeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RecadoUnidade.
+     */
+    data: XOR<RecadoUnidadeCreateInput, RecadoUnidadeUncheckedCreateInput>
+  }
+
+  /**
+   * RecadoUnidade createMany
+   */
+  export type RecadoUnidadeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RecadoUnidades.
+     */
+    data: RecadoUnidadeCreateManyInput | RecadoUnidadeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RecadoUnidade createManyAndReturn
+   */
+  export type RecadoUnidadeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * The data used to create many RecadoUnidades.
+     */
+    data: RecadoUnidadeCreateManyInput | RecadoUnidadeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecadoUnidade update
+   */
+  export type RecadoUnidadeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RecadoUnidade.
+     */
+    data: XOR<RecadoUnidadeUpdateInput, RecadoUnidadeUncheckedUpdateInput>
+    /**
+     * Choose, which RecadoUnidade to update.
+     */
+    where: RecadoUnidadeWhereUniqueInput
+  }
+
+  /**
+   * RecadoUnidade updateMany
+   */
+  export type RecadoUnidadeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RecadoUnidades.
+     */
+    data: XOR<RecadoUnidadeUpdateManyMutationInput, RecadoUnidadeUncheckedUpdateManyInput>
+    /**
+     * Filter which RecadoUnidades to update
+     */
+    where?: RecadoUnidadeWhereInput
+    /**
+     * Limit how many RecadoUnidades to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecadoUnidade updateManyAndReturn
+   */
+  export type RecadoUnidadeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * The data used to update RecadoUnidades.
+     */
+    data: XOR<RecadoUnidadeUpdateManyMutationInput, RecadoUnidadeUncheckedUpdateManyInput>
+    /**
+     * Filter which RecadoUnidades to update
+     */
+    where?: RecadoUnidadeWhereInput
+    /**
+     * Limit how many RecadoUnidades to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RecadoUnidade upsert
+   */
+  export type RecadoUnidadeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RecadoUnidade to update in case it exists.
+     */
+    where: RecadoUnidadeWhereUniqueInput
+    /**
+     * In case the RecadoUnidade found by the `where` argument doesn't exist, create a new RecadoUnidade with this data.
+     */
+    create: XOR<RecadoUnidadeCreateInput, RecadoUnidadeUncheckedCreateInput>
+    /**
+     * In case the RecadoUnidade was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RecadoUnidadeUpdateInput, RecadoUnidadeUncheckedUpdateInput>
+  }
+
+  /**
+   * RecadoUnidade delete
+   */
+  export type RecadoUnidadeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+    /**
+     * Filter which RecadoUnidade to delete.
+     */
+    where: RecadoUnidadeWhereUniqueInput
+  }
+
+  /**
+   * RecadoUnidade deleteMany
+   */
+  export type RecadoUnidadeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecadoUnidades to delete
+     */
+    where?: RecadoUnidadeWhereInput
+    /**
+     * Limit how many RecadoUnidades to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecadoUnidade without action
+   */
+  export type RecadoUnidadeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoUnidade
+     */
+    select?: RecadoUnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoUnidade
+     */
+    omit?: RecadoUnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoUnidadeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RecadoAudit
+   */
+
+  export type AggregateRecadoAudit = {
+    _count: RecadoAuditCountAggregateOutputType | null
+    _avg: RecadoAuditAvgAggregateOutputType | null
+    _sum: RecadoAuditSumAggregateOutputType | null
+    _min: RecadoAuditMinAggregateOutputType | null
+    _max: RecadoAuditMaxAggregateOutputType | null
+  }
+
+  export type RecadoAuditAvgAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+  }
+
+  export type RecadoAuditSumAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+  }
+
+  export type RecadoAuditMinAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type RecadoAuditMaxAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type RecadoAuditCountAggregateOutputType = {
+    id: number
+    recadoId: number
+    userId: number
+    userNome: number
+    acao: number
+    dadosAntigos: number
+    dadosNovos: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type RecadoAuditAvgAggregateInputType = {
+    id?: true
+    recadoId?: true
+  }
+
+  export type RecadoAuditSumAggregateInputType = {
+    id?: true
+    recadoId?: true
+  }
+
+  export type RecadoAuditMinAggregateInputType = {
+    id?: true
+    recadoId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type RecadoAuditMaxAggregateInputType = {
+    id?: true
+    recadoId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type RecadoAuditCountAggregateInputType = {
+    id?: true
+    recadoId?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    dadosAntigos?: true
+    dadosNovos?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type RecadoAuditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecadoAudit to aggregate.
+     */
+    where?: RecadoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoAudits to fetch.
+     */
+    orderBy?: RecadoAuditOrderByWithRelationInput | RecadoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RecadoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RecadoAudits
+    **/
+    _count?: true | RecadoAuditCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RecadoAuditAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RecadoAuditSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RecadoAuditMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RecadoAuditMaxAggregateInputType
+  }
+
+  export type GetRecadoAuditAggregateType<T extends RecadoAuditAggregateArgs> = {
+        [P in keyof T & keyof AggregateRecadoAudit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRecadoAudit[P]>
+      : GetScalarType<T[P], AggregateRecadoAudit[P]>
+  }
+
+
+
+
+  export type RecadoAuditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecadoAuditWhereInput
+    orderBy?: RecadoAuditOrderByWithAggregationInput | RecadoAuditOrderByWithAggregationInput[]
+    by: RecadoAuditScalarFieldEnum[] | RecadoAuditScalarFieldEnum
+    having?: RecadoAuditScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RecadoAuditCountAggregateInputType | true
+    _avg?: RecadoAuditAvgAggregateInputType
+    _sum?: RecadoAuditSumAggregateInputType
+    _min?: RecadoAuditMinAggregateInputType
+    _max?: RecadoAuditMaxAggregateInputType
+  }
+
+  export type RecadoAuditGroupByOutputType = {
+    id: number
+    recadoId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos: JsonValue | null
+    dadosNovos: JsonValue | null
+    createdAt: Date
+    _count: RecadoAuditCountAggregateOutputType | null
+    _avg: RecadoAuditAvgAggregateOutputType | null
+    _sum: RecadoAuditSumAggregateOutputType | null
+    _min: RecadoAuditMinAggregateOutputType | null
+    _max: RecadoAuditMaxAggregateOutputType | null
+  }
+
+  type GetRecadoAuditGroupByPayload<T extends RecadoAuditGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RecadoAuditGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RecadoAuditGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RecadoAuditGroupByOutputType[P]>
+            : GetScalarType<T[P], RecadoAuditGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RecadoAuditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recadoId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["recadoAudit"]>
+
+  export type RecadoAuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recadoId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["recadoAudit"]>
+
+  export type RecadoAuditSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recadoId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["recadoAudit"]>
+
+  export type RecadoAuditSelectScalar = {
+    id?: boolean
+    recadoId?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }
+
+  export type RecadoAuditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recadoId" | "userId" | "userNome" | "acao" | "dadosAntigos" | "dadosNovos" | "createdAt", ExtArgs["result"]["recadoAudit"]>
+
+  export type $RecadoAuditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RecadoAudit"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      recadoId: number
+      userId: string
+      userNome: string
+      acao: string
+      dadosAntigos: Prisma.JsonValue | null
+      dadosNovos: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["recadoAudit"]>
+    composites: {}
+  }
+
+  type RecadoAuditGetPayload<S extends boolean | null | undefined | RecadoAuditDefaultArgs> = $Result.GetResult<Prisma.$RecadoAuditPayload, S>
+
+  type RecadoAuditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RecadoAuditFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RecadoAuditCountAggregateInputType | true
+    }
+
+  export interface RecadoAuditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RecadoAudit'], meta: { name: 'RecadoAudit' } }
+    /**
+     * Find zero or one RecadoAudit that matches the filter.
+     * @param {RecadoAuditFindUniqueArgs} args - Arguments to find a RecadoAudit
+     * @example
+     * // Get one RecadoAudit
+     * const recadoAudit = await prisma.recadoAudit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RecadoAuditFindUniqueArgs>(args: SelectSubset<T, RecadoAuditFindUniqueArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RecadoAudit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RecadoAuditFindUniqueOrThrowArgs} args - Arguments to find a RecadoAudit
+     * @example
+     * // Get one RecadoAudit
+     * const recadoAudit = await prisma.recadoAudit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RecadoAuditFindUniqueOrThrowArgs>(args: SelectSubset<T, RecadoAuditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecadoAudit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAuditFindFirstArgs} args - Arguments to find a RecadoAudit
+     * @example
+     * // Get one RecadoAudit
+     * const recadoAudit = await prisma.recadoAudit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RecadoAuditFindFirstArgs>(args?: SelectSubset<T, RecadoAuditFindFirstArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RecadoAudit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAuditFindFirstOrThrowArgs} args - Arguments to find a RecadoAudit
+     * @example
+     * // Get one RecadoAudit
+     * const recadoAudit = await prisma.recadoAudit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RecadoAuditFindFirstOrThrowArgs>(args?: SelectSubset<T, RecadoAuditFindFirstOrThrowArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RecadoAudits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAuditFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RecadoAudits
+     * const recadoAudits = await prisma.recadoAudit.findMany()
+     * 
+     * // Get first 10 RecadoAudits
+     * const recadoAudits = await prisma.recadoAudit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const recadoAuditWithIdOnly = await prisma.recadoAudit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RecadoAuditFindManyArgs>(args?: SelectSubset<T, RecadoAuditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RecadoAudit.
+     * @param {RecadoAuditCreateArgs} args - Arguments to create a RecadoAudit.
+     * @example
+     * // Create one RecadoAudit
+     * const RecadoAudit = await prisma.recadoAudit.create({
+     *   data: {
+     *     // ... data to create a RecadoAudit
+     *   }
+     * })
+     * 
+     */
+    create<T extends RecadoAuditCreateArgs>(args: SelectSubset<T, RecadoAuditCreateArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RecadoAudits.
+     * @param {RecadoAuditCreateManyArgs} args - Arguments to create many RecadoAudits.
+     * @example
+     * // Create many RecadoAudits
+     * const recadoAudit = await prisma.recadoAudit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RecadoAuditCreateManyArgs>(args?: SelectSubset<T, RecadoAuditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RecadoAudits and returns the data saved in the database.
+     * @param {RecadoAuditCreateManyAndReturnArgs} args - Arguments to create many RecadoAudits.
+     * @example
+     * // Create many RecadoAudits
+     * const recadoAudit = await prisma.recadoAudit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RecadoAudits and only return the `id`
+     * const recadoAuditWithIdOnly = await prisma.recadoAudit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RecadoAuditCreateManyAndReturnArgs>(args?: SelectSubset<T, RecadoAuditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a RecadoAudit.
+     * @param {RecadoAuditDeleteArgs} args - Arguments to delete one RecadoAudit.
+     * @example
+     * // Delete one RecadoAudit
+     * const RecadoAudit = await prisma.recadoAudit.delete({
+     *   where: {
+     *     // ... filter to delete one RecadoAudit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RecadoAuditDeleteArgs>(args: SelectSubset<T, RecadoAuditDeleteArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RecadoAudit.
+     * @param {RecadoAuditUpdateArgs} args - Arguments to update one RecadoAudit.
+     * @example
+     * // Update one RecadoAudit
+     * const recadoAudit = await prisma.recadoAudit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RecadoAuditUpdateArgs>(args: SelectSubset<T, RecadoAuditUpdateArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RecadoAudits.
+     * @param {RecadoAuditDeleteManyArgs} args - Arguments to filter RecadoAudits to delete.
+     * @example
+     * // Delete a few RecadoAudits
+     * const { count } = await prisma.recadoAudit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RecadoAuditDeleteManyArgs>(args?: SelectSubset<T, RecadoAuditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecadoAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAuditUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RecadoAudits
+     * const recadoAudit = await prisma.recadoAudit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RecadoAuditUpdateManyArgs>(args: SelectSubset<T, RecadoAuditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RecadoAudits and returns the data updated in the database.
+     * @param {RecadoAuditUpdateManyAndReturnArgs} args - Arguments to update many RecadoAudits.
+     * @example
+     * // Update many RecadoAudits
+     * const recadoAudit = await prisma.recadoAudit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more RecadoAudits and only return the `id`
+     * const recadoAuditWithIdOnly = await prisma.recadoAudit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends RecadoAuditUpdateManyAndReturnArgs>(args: SelectSubset<T, RecadoAuditUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one RecadoAudit.
+     * @param {RecadoAuditUpsertArgs} args - Arguments to update or create a RecadoAudit.
+     * @example
+     * // Update or create a RecadoAudit
+     * const recadoAudit = await prisma.recadoAudit.upsert({
+     *   create: {
+     *     // ... data to create a RecadoAudit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RecadoAudit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RecadoAuditUpsertArgs>(args: SelectSubset<T, RecadoAuditUpsertArgs<ExtArgs>>): Prisma__RecadoAuditClient<$Result.GetResult<Prisma.$RecadoAuditPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RecadoAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAuditCountArgs} args - Arguments to filter RecadoAudits to count.
+     * @example
+     * // Count the number of RecadoAudits
+     * const count = await prisma.recadoAudit.count({
+     *   where: {
+     *     // ... the filter for the RecadoAudits we want to count
+     *   }
+     * })
+    **/
+    count<T extends RecadoAuditCountArgs>(
+      args?: Subset<T, RecadoAuditCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RecadoAuditCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RecadoAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAuditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RecadoAuditAggregateArgs>(args: Subset<T, RecadoAuditAggregateArgs>): Prisma.PrismaPromise<GetRecadoAuditAggregateType<T>>
+
+    /**
+     * Group by RecadoAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RecadoAuditGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RecadoAuditGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RecadoAuditGroupByArgs['orderBy'] }
+        : { orderBy?: RecadoAuditGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RecadoAuditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRecadoAuditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RecadoAudit model
+   */
+  readonly fields: RecadoAuditFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RecadoAudit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RecadoAuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RecadoAudit model
+   */
+  interface RecadoAuditFieldRefs {
+    readonly id: FieldRef<"RecadoAudit", 'Int'>
+    readonly recadoId: FieldRef<"RecadoAudit", 'Int'>
+    readonly userId: FieldRef<"RecadoAudit", 'String'>
+    readonly userNome: FieldRef<"RecadoAudit", 'String'>
+    readonly acao: FieldRef<"RecadoAudit", 'String'>
+    readonly dadosAntigos: FieldRef<"RecadoAudit", 'Json'>
+    readonly dadosNovos: FieldRef<"RecadoAudit", 'Json'>
+    readonly createdAt: FieldRef<"RecadoAudit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RecadoAudit findUnique
+   */
+  export type RecadoAuditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which RecadoAudit to fetch.
+     */
+    where: RecadoAuditWhereUniqueInput
+  }
+
+  /**
+   * RecadoAudit findUniqueOrThrow
+   */
+  export type RecadoAuditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which RecadoAudit to fetch.
+     */
+    where: RecadoAuditWhereUniqueInput
+  }
+
+  /**
+   * RecadoAudit findFirst
+   */
+  export type RecadoAuditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which RecadoAudit to fetch.
+     */
+    where?: RecadoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoAudits to fetch.
+     */
+    orderBy?: RecadoAuditOrderByWithRelationInput | RecadoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecadoAudits.
+     */
+    cursor?: RecadoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecadoAudits.
+     */
+    distinct?: RecadoAuditScalarFieldEnum | RecadoAuditScalarFieldEnum[]
+  }
+
+  /**
+   * RecadoAudit findFirstOrThrow
+   */
+  export type RecadoAuditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which RecadoAudit to fetch.
+     */
+    where?: RecadoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoAudits to fetch.
+     */
+    orderBy?: RecadoAuditOrderByWithRelationInput | RecadoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RecadoAudits.
+     */
+    cursor?: RecadoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RecadoAudits.
+     */
+    distinct?: RecadoAuditScalarFieldEnum | RecadoAuditScalarFieldEnum[]
+  }
+
+  /**
+   * RecadoAudit findMany
+   */
+  export type RecadoAuditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which RecadoAudits to fetch.
+     */
+    where?: RecadoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RecadoAudits to fetch.
+     */
+    orderBy?: RecadoAuditOrderByWithRelationInput | RecadoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RecadoAudits.
+     */
+    cursor?: RecadoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RecadoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RecadoAudits.
+     */
+    skip?: number
+    distinct?: RecadoAuditScalarFieldEnum | RecadoAuditScalarFieldEnum[]
+  }
+
+  /**
+   * RecadoAudit create
+   */
+  export type RecadoAuditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to create a RecadoAudit.
+     */
+    data: XOR<RecadoAuditCreateInput, RecadoAuditUncheckedCreateInput>
+  }
+
+  /**
+   * RecadoAudit createMany
+   */
+  export type RecadoAuditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RecadoAudits.
+     */
+    data: RecadoAuditCreateManyInput | RecadoAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RecadoAudit createManyAndReturn
+   */
+  export type RecadoAuditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * The data used to create many RecadoAudits.
+     */
+    data: RecadoAuditCreateManyInput | RecadoAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RecadoAudit update
+   */
+  export type RecadoAuditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to update a RecadoAudit.
+     */
+    data: XOR<RecadoAuditUpdateInput, RecadoAuditUncheckedUpdateInput>
+    /**
+     * Choose, which RecadoAudit to update.
+     */
+    where: RecadoAuditWhereUniqueInput
+  }
+
+  /**
+   * RecadoAudit updateMany
+   */
+  export type RecadoAuditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RecadoAudits.
+     */
+    data: XOR<RecadoAuditUpdateManyMutationInput, RecadoAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which RecadoAudits to update
+     */
+    where?: RecadoAuditWhereInput
+    /**
+     * Limit how many RecadoAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecadoAudit updateManyAndReturn
+   */
+  export type RecadoAuditUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * The data used to update RecadoAudits.
+     */
+    data: XOR<RecadoAuditUpdateManyMutationInput, RecadoAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which RecadoAudits to update
+     */
+    where?: RecadoAuditWhereInput
+    /**
+     * Limit how many RecadoAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecadoAudit upsert
+   */
+  export type RecadoAuditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * The filter to search for the RecadoAudit to update in case it exists.
+     */
+    where: RecadoAuditWhereUniqueInput
+    /**
+     * In case the RecadoAudit found by the `where` argument doesn't exist, create a new RecadoAudit with this data.
+     */
+    create: XOR<RecadoAuditCreateInput, RecadoAuditUncheckedCreateInput>
+    /**
+     * In case the RecadoAudit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RecadoAuditUpdateInput, RecadoAuditUncheckedUpdateInput>
+  }
+
+  /**
+   * RecadoAudit delete
+   */
+  export type RecadoAuditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+    /**
+     * Filter which RecadoAudit to delete.
+     */
+    where: RecadoAuditWhereUniqueInput
+  }
+
+  /**
+   * RecadoAudit deleteMany
+   */
+  export type RecadoAuditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RecadoAudits to delete
+     */
+    where?: RecadoAuditWhereInput
+    /**
+     * Limit how many RecadoAudits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RecadoAudit without action
+   */
+  export type RecadoAuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RecadoAudit
+     */
+    select?: RecadoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RecadoAudit
+     */
+    omit?: RecadoAuditOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -10646,12 +16613,82 @@ export namespace Prisma {
   export type JornalScalarFieldEnum = (typeof JornalScalarFieldEnum)[keyof typeof JornalScalarFieldEnum]
 
 
+  export const NoticiaScalarFieldEnum: {
+    id: 'id',
+    titulo: 'titulo',
+    conteudo: 'conteudo',
+    imagem: 'imagem',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NoticiaScalarFieldEnum = (typeof NoticiaScalarFieldEnum)[keyof typeof NoticiaScalarFieldEnum]
+
+
+  export const NoticiaAuditScalarFieldEnum: {
+    id: 'id',
+    noticiaId: 'noticiaId',
+    userId: 'userId',
+    userNome: 'userNome',
+    acao: 'acao',
+    dadosAntigos: 'dadosAntigos',
+    dadosNovos: 'dadosNovos',
+    createdAt: 'createdAt'
+  };
+
+  export type NoticiaAuditScalarFieldEnum = (typeof NoticiaAuditScalarFieldEnum)[keyof typeof NoticiaAuditScalarFieldEnum]
+
+
+  export const RecadoScalarFieldEnum: {
+    id: 'id',
+    titulo: 'titulo',
+    conteudo: 'conteudo',
+    imagem: 'imagem',
+    unidadeId: 'unidadeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RecadoScalarFieldEnum = (typeof RecadoScalarFieldEnum)[keyof typeof RecadoScalarFieldEnum]
+
+
+  export const RecadoUnidadeScalarFieldEnum: {
+    id: 'id',
+    recadoId: 'recadoId',
+    unidadeId: 'unidadeId'
+  };
+
+  export type RecadoUnidadeScalarFieldEnum = (typeof RecadoUnidadeScalarFieldEnum)[keyof typeof RecadoUnidadeScalarFieldEnum]
+
+
+  export const RecadoAuditScalarFieldEnum: {
+    id: 'id',
+    recadoId: 'recadoId',
+    userId: 'userId',
+    userNome: 'userNome',
+    acao: 'acao',
+    dadosAntigos: 'dadosAntigos',
+    dadosNovos: 'dadosNovos',
+    createdAt: 'createdAt'
+  };
+
+  export type RecadoAuditScalarFieldEnum = (typeof RecadoAuditScalarFieldEnum)[keyof typeof RecadoAuditScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const QueryMode: {
@@ -10668,6 +16705,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -10735,6 +16781,20 @@ export namespace Prisma {
    * Reference to a field of type 'UserRole[]'
    */
   export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -11069,6 +17129,8 @@ export namespace Prisma {
     ramais?: RamalListRelationFilter
     emails?: EmailListRelationFilter
     users?: UserListRelationFilter
+    recados?: RecadoListRelationFilter
+    recadosMulti?: RecadoUnidadeListRelationFilter
   }
 
   export type UnidadeOrderByWithRelationInput = {
@@ -11077,6 +17139,8 @@ export namespace Prisma {
     ramais?: RamalOrderByRelationAggregateInput
     emails?: EmailOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
+    recados?: RecadoOrderByRelationAggregateInput
+    recadosMulti?: RecadoUnidadeOrderByRelationAggregateInput
   }
 
   export type UnidadeWhereUniqueInput = Prisma.AtLeast<{
@@ -11088,6 +17152,8 @@ export namespace Prisma {
     ramais?: RamalListRelationFilter
     emails?: EmailListRelationFilter
     users?: UserListRelationFilter
+    recados?: RecadoListRelationFilter
+    recadosMulti?: RecadoUnidadeListRelationFilter
   }, "id">
 
   export type UnidadeOrderByWithAggregationInput = {
@@ -11311,6 +17377,324 @@ export namespace Prisma {
     dataLancamento?: DateTimeWithAggregatesFilter<"Jornal"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"Jornal"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Jornal"> | Date | string
+  }
+
+  export type NoticiaWhereInput = {
+    AND?: NoticiaWhereInput | NoticiaWhereInput[]
+    OR?: NoticiaWhereInput[]
+    NOT?: NoticiaWhereInput | NoticiaWhereInput[]
+    id?: IntFilter<"Noticia"> | number
+    titulo?: StringFilter<"Noticia"> | string
+    conteudo?: StringFilter<"Noticia"> | string
+    imagem?: StringNullableFilter<"Noticia"> | string | null
+    createdAt?: DateTimeFilter<"Noticia"> | Date | string
+    updatedAt?: DateTimeFilter<"Noticia"> | Date | string
+  }
+
+  export type NoticiaOrderByWithRelationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoticiaWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: NoticiaWhereInput | NoticiaWhereInput[]
+    OR?: NoticiaWhereInput[]
+    NOT?: NoticiaWhereInput | NoticiaWhereInput[]
+    titulo?: StringFilter<"Noticia"> | string
+    conteudo?: StringFilter<"Noticia"> | string
+    imagem?: StringNullableFilter<"Noticia"> | string | null
+    createdAt?: DateTimeFilter<"Noticia"> | Date | string
+    updatedAt?: DateTimeFilter<"Noticia"> | Date | string
+  }, "id">
+
+  export type NoticiaOrderByWithAggregationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NoticiaCountOrderByAggregateInput
+    _avg?: NoticiaAvgOrderByAggregateInput
+    _max?: NoticiaMaxOrderByAggregateInput
+    _min?: NoticiaMinOrderByAggregateInput
+    _sum?: NoticiaSumOrderByAggregateInput
+  }
+
+  export type NoticiaScalarWhereWithAggregatesInput = {
+    AND?: NoticiaScalarWhereWithAggregatesInput | NoticiaScalarWhereWithAggregatesInput[]
+    OR?: NoticiaScalarWhereWithAggregatesInput[]
+    NOT?: NoticiaScalarWhereWithAggregatesInput | NoticiaScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Noticia"> | number
+    titulo?: StringWithAggregatesFilter<"Noticia"> | string
+    conteudo?: StringWithAggregatesFilter<"Noticia"> | string
+    imagem?: StringNullableWithAggregatesFilter<"Noticia"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Noticia"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Noticia"> | Date | string
+  }
+
+  export type NoticiaAuditWhereInput = {
+    AND?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    OR?: NoticiaAuditWhereInput[]
+    NOT?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    id?: IntFilter<"NoticiaAudit"> | number
+    noticiaId?: IntFilter<"NoticiaAudit"> | number
+    userId?: StringFilter<"NoticiaAudit"> | string
+    userNome?: StringFilter<"NoticiaAudit"> | string
+    acao?: StringFilter<"NoticiaAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"NoticiaAudit">
+    dadosNovos?: JsonNullableFilter<"NoticiaAudit">
+    createdAt?: DateTimeFilter<"NoticiaAudit"> | Date | string
+  }
+
+  export type NoticiaAuditOrderByWithRelationInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    OR?: NoticiaAuditWhereInput[]
+    NOT?: NoticiaAuditWhereInput | NoticiaAuditWhereInput[]
+    noticiaId?: IntFilter<"NoticiaAudit"> | number
+    userId?: StringFilter<"NoticiaAudit"> | string
+    userNome?: StringFilter<"NoticiaAudit"> | string
+    acao?: StringFilter<"NoticiaAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"NoticiaAudit">
+    dadosNovos?: JsonNullableFilter<"NoticiaAudit">
+    createdAt?: DateTimeFilter<"NoticiaAudit"> | Date | string
+  }, "id">
+
+  export type NoticiaAuditOrderByWithAggregationInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: NoticiaAuditCountOrderByAggregateInput
+    _avg?: NoticiaAuditAvgOrderByAggregateInput
+    _max?: NoticiaAuditMaxOrderByAggregateInput
+    _min?: NoticiaAuditMinOrderByAggregateInput
+    _sum?: NoticiaAuditSumOrderByAggregateInput
+  }
+
+  export type NoticiaAuditScalarWhereWithAggregatesInput = {
+    AND?: NoticiaAuditScalarWhereWithAggregatesInput | NoticiaAuditScalarWhereWithAggregatesInput[]
+    OR?: NoticiaAuditScalarWhereWithAggregatesInput[]
+    NOT?: NoticiaAuditScalarWhereWithAggregatesInput | NoticiaAuditScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"NoticiaAudit"> | number
+    noticiaId?: IntWithAggregatesFilter<"NoticiaAudit"> | number
+    userId?: StringWithAggregatesFilter<"NoticiaAudit"> | string
+    userNome?: StringWithAggregatesFilter<"NoticiaAudit"> | string
+    acao?: StringWithAggregatesFilter<"NoticiaAudit"> | string
+    dadosAntigos?: JsonNullableWithAggregatesFilter<"NoticiaAudit">
+    dadosNovos?: JsonNullableWithAggregatesFilter<"NoticiaAudit">
+    createdAt?: DateTimeWithAggregatesFilter<"NoticiaAudit"> | Date | string
+  }
+
+  export type RecadoWhereInput = {
+    AND?: RecadoWhereInput | RecadoWhereInput[]
+    OR?: RecadoWhereInput[]
+    NOT?: RecadoWhereInput | RecadoWhereInput[]
+    id?: IntFilter<"Recado"> | number
+    titulo?: StringFilter<"Recado"> | string
+    conteudo?: StringFilter<"Recado"> | string
+    imagem?: StringNullableFilter<"Recado"> | string | null
+    unidadeId?: IntFilter<"Recado"> | number
+    createdAt?: DateTimeFilter<"Recado"> | Date | string
+    updatedAt?: DateTimeFilter<"Recado"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+    unidades?: RecadoUnidadeListRelationFilter
+  }
+
+  export type RecadoOrderByWithRelationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrderInput | SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    unidade?: UnidadeOrderByWithRelationInput
+    unidades?: RecadoUnidadeOrderByRelationAggregateInput
+  }
+
+  export type RecadoWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: RecadoWhereInput | RecadoWhereInput[]
+    OR?: RecadoWhereInput[]
+    NOT?: RecadoWhereInput | RecadoWhereInput[]
+    titulo?: StringFilter<"Recado"> | string
+    conteudo?: StringFilter<"Recado"> | string
+    imagem?: StringNullableFilter<"Recado"> | string | null
+    unidadeId?: IntFilter<"Recado"> | number
+    createdAt?: DateTimeFilter<"Recado"> | Date | string
+    updatedAt?: DateTimeFilter<"Recado"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+    unidades?: RecadoUnidadeListRelationFilter
+  }, "id">
+
+  export type RecadoOrderByWithAggregationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrderInput | SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RecadoCountOrderByAggregateInput
+    _avg?: RecadoAvgOrderByAggregateInput
+    _max?: RecadoMaxOrderByAggregateInput
+    _min?: RecadoMinOrderByAggregateInput
+    _sum?: RecadoSumOrderByAggregateInput
+  }
+
+  export type RecadoScalarWhereWithAggregatesInput = {
+    AND?: RecadoScalarWhereWithAggregatesInput | RecadoScalarWhereWithAggregatesInput[]
+    OR?: RecadoScalarWhereWithAggregatesInput[]
+    NOT?: RecadoScalarWhereWithAggregatesInput | RecadoScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Recado"> | number
+    titulo?: StringWithAggregatesFilter<"Recado"> | string
+    conteudo?: StringWithAggregatesFilter<"Recado"> | string
+    imagem?: StringNullableWithAggregatesFilter<"Recado"> | string | null
+    unidadeId?: IntWithAggregatesFilter<"Recado"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Recado"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Recado"> | Date | string
+  }
+
+  export type RecadoUnidadeWhereInput = {
+    AND?: RecadoUnidadeWhereInput | RecadoUnidadeWhereInput[]
+    OR?: RecadoUnidadeWhereInput[]
+    NOT?: RecadoUnidadeWhereInput | RecadoUnidadeWhereInput[]
+    id?: IntFilter<"RecadoUnidade"> | number
+    recadoId?: IntFilter<"RecadoUnidade"> | number
+    unidadeId?: IntFilter<"RecadoUnidade"> | number
+    recado?: XOR<RecadoScalarRelationFilter, RecadoWhereInput>
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+  }
+
+  export type RecadoUnidadeOrderByWithRelationInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    unidadeId?: SortOrder
+    recado?: RecadoOrderByWithRelationInput
+    unidade?: UnidadeOrderByWithRelationInput
+  }
+
+  export type RecadoUnidadeWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    recadoId_unidadeId?: RecadoUnidadeRecadoIdUnidadeIdCompoundUniqueInput
+    AND?: RecadoUnidadeWhereInput | RecadoUnidadeWhereInput[]
+    OR?: RecadoUnidadeWhereInput[]
+    NOT?: RecadoUnidadeWhereInput | RecadoUnidadeWhereInput[]
+    recadoId?: IntFilter<"RecadoUnidade"> | number
+    unidadeId?: IntFilter<"RecadoUnidade"> | number
+    recado?: XOR<RecadoScalarRelationFilter, RecadoWhereInput>
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+  }, "id" | "recadoId_unidadeId">
+
+  export type RecadoUnidadeOrderByWithAggregationInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    unidadeId?: SortOrder
+    _count?: RecadoUnidadeCountOrderByAggregateInput
+    _avg?: RecadoUnidadeAvgOrderByAggregateInput
+    _max?: RecadoUnidadeMaxOrderByAggregateInput
+    _min?: RecadoUnidadeMinOrderByAggregateInput
+    _sum?: RecadoUnidadeSumOrderByAggregateInput
+  }
+
+  export type RecadoUnidadeScalarWhereWithAggregatesInput = {
+    AND?: RecadoUnidadeScalarWhereWithAggregatesInput | RecadoUnidadeScalarWhereWithAggregatesInput[]
+    OR?: RecadoUnidadeScalarWhereWithAggregatesInput[]
+    NOT?: RecadoUnidadeScalarWhereWithAggregatesInput | RecadoUnidadeScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"RecadoUnidade"> | number
+    recadoId?: IntWithAggregatesFilter<"RecadoUnidade"> | number
+    unidadeId?: IntWithAggregatesFilter<"RecadoUnidade"> | number
+  }
+
+  export type RecadoAuditWhereInput = {
+    AND?: RecadoAuditWhereInput | RecadoAuditWhereInput[]
+    OR?: RecadoAuditWhereInput[]
+    NOT?: RecadoAuditWhereInput | RecadoAuditWhereInput[]
+    id?: IntFilter<"RecadoAudit"> | number
+    recadoId?: IntFilter<"RecadoAudit"> | number
+    userId?: StringFilter<"RecadoAudit"> | string
+    userNome?: StringFilter<"RecadoAudit"> | string
+    acao?: StringFilter<"RecadoAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"RecadoAudit">
+    dadosNovos?: JsonNullableFilter<"RecadoAudit">
+    createdAt?: DateTimeFilter<"RecadoAudit"> | Date | string
+  }
+
+  export type RecadoAuditOrderByWithRelationInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RecadoAuditWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: RecadoAuditWhereInput | RecadoAuditWhereInput[]
+    OR?: RecadoAuditWhereInput[]
+    NOT?: RecadoAuditWhereInput | RecadoAuditWhereInput[]
+    recadoId?: IntFilter<"RecadoAudit"> | number
+    userId?: StringFilter<"RecadoAudit"> | string
+    userNome?: StringFilter<"RecadoAudit"> | string
+    acao?: StringFilter<"RecadoAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"RecadoAudit">
+    dadosNovos?: JsonNullableFilter<"RecadoAudit">
+    createdAt?: DateTimeFilter<"RecadoAudit"> | Date | string
+  }, "id">
+
+  export type RecadoAuditOrderByWithAggregationInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: RecadoAuditCountOrderByAggregateInput
+    _avg?: RecadoAuditAvgOrderByAggregateInput
+    _max?: RecadoAuditMaxOrderByAggregateInput
+    _min?: RecadoAuditMinOrderByAggregateInput
+    _sum?: RecadoAuditSumOrderByAggregateInput
+  }
+
+  export type RecadoAuditScalarWhereWithAggregatesInput = {
+    AND?: RecadoAuditScalarWhereWithAggregatesInput | RecadoAuditScalarWhereWithAggregatesInput[]
+    OR?: RecadoAuditScalarWhereWithAggregatesInput[]
+    NOT?: RecadoAuditScalarWhereWithAggregatesInput | RecadoAuditScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"RecadoAudit"> | number
+    recadoId?: IntWithAggregatesFilter<"RecadoAudit"> | number
+    userId?: StringWithAggregatesFilter<"RecadoAudit"> | string
+    userNome?: StringWithAggregatesFilter<"RecadoAudit"> | string
+    acao?: StringWithAggregatesFilter<"RecadoAudit"> | string
+    dadosAntigos?: JsonNullableWithAggregatesFilter<"RecadoAudit">
+    dadosNovos?: JsonNullableWithAggregatesFilter<"RecadoAudit">
+    createdAt?: DateTimeWithAggregatesFilter<"RecadoAudit"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -11659,6 +18043,8 @@ export namespace Prisma {
     ramais?: RamalCreateNestedManyWithoutUnidadeInput
     emails?: EmailCreateNestedManyWithoutUnidadeInput
     users?: UserCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateInput = {
@@ -11667,6 +18053,8 @@ export namespace Prisma {
     ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
     emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUpdateInput = {
@@ -11674,6 +18062,8 @@ export namespace Prisma {
     ramais?: RamalUpdateManyWithoutUnidadeNestedInput
     emails?: EmailUpdateManyWithoutUnidadeNestedInput
     users?: UserUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateInput = {
@@ -11682,6 +18072,8 @@ export namespace Prisma {
     ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
     emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeCreateManyInput = {
@@ -11902,6 +18294,322 @@ export namespace Prisma {
     dataLancamento?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaCreateInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoticiaUncheckedCreateInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoticiaUpdateInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaCreateManyInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoticiaUpdateManyMutationInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaAuditCreateInput = {
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NoticiaAuditUncheckedCreateInput = {
+    id?: number
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NoticiaAuditUpdateInput = {
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaAuditUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaAuditCreateManyInput = {
+    id?: number
+    noticiaId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NoticiaAuditUpdateManyMutationInput = {
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaAuditUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    noticiaId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoCreateInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutRecadosInput
+    unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoUncheckedCreateInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoUpdateInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+    unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type RecadoUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type RecadoCreateManyInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecadoUpdateManyMutationInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoUnidadeCreateInput = {
+    recado: RecadoCreateNestedOneWithoutUnidadesInput
+    unidade: UnidadeCreateNestedOneWithoutRecadosMultiInput
+  }
+
+  export type RecadoUnidadeUncheckedCreateInput = {
+    id?: number
+    recadoId: number
+    unidadeId: number
+  }
+
+  export type RecadoUnidadeUpdateInput = {
+    recado?: RecadoUpdateOneRequiredWithoutUnidadesNestedInput
+    unidade?: UnidadeUpdateOneRequiredWithoutRecadosMultiNestedInput
+  }
+
+  export type RecadoUnidadeUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recadoId?: IntFieldUpdateOperationsInput | number
+    unidadeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type RecadoUnidadeCreateManyInput = {
+    id?: number
+    recadoId: number
+    unidadeId: number
+  }
+
+  export type RecadoUnidadeUpdateManyMutationInput = {
+
+  }
+
+  export type RecadoUnidadeUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recadoId?: IntFieldUpdateOperationsInput | number
+    unidadeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type RecadoAuditCreateInput = {
+    recadoId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type RecadoAuditUncheckedCreateInput = {
+    id?: number
+    recadoId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type RecadoAuditUpdateInput = {
+    recadoId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoAuditUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recadoId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoAuditCreateManyInput = {
+    id?: number
+    recadoId: number
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type RecadoAuditUpdateManyMutationInput = {
+    recadoId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoAuditUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recadoId?: IntFieldUpdateOperationsInput | number
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -12293,6 +19001,18 @@ export namespace Prisma {
     none?: UserWhereInput
   }
 
+  export type RecadoListRelationFilter = {
+    every?: RecadoWhereInput
+    some?: RecadoWhereInput
+    none?: RecadoWhereInput
+  }
+
+  export type RecadoUnidadeListRelationFilter = {
+    every?: RecadoUnidadeWhereInput
+    some?: RecadoUnidadeWhereInput
+    none?: RecadoUnidadeWhereInput
+  }
+
   export type RamalOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -12302,6 +19022,14 @@ export namespace Prisma {
   }
 
   export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RecadoOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RecadoUnidadeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -12478,6 +19206,248 @@ export namespace Prisma {
 
   export type JornalSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type NoticiaCountOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoticiaAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type NoticiaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoticiaMinOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NoticiaSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NoticiaAuditCountOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrder
+    dadosNovos?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditAvgOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+  }
+
+  export type NoticiaAuditMaxOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditMinOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NoticiaAuditSumOrderByAggregateInput = {
+    id?: SortOrder
+    noticiaId?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type RecadoCountOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RecadoAvgOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RecadoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RecadoMinOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    unidadeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RecadoSumOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RecadoScalarRelationFilter = {
+    is?: RecadoWhereInput
+    isNot?: RecadoWhereInput
+  }
+
+  export type RecadoUnidadeRecadoIdUnidadeIdCompoundUniqueInput = {
+    recadoId: number
+    unidadeId: number
+  }
+
+  export type RecadoUnidadeCountOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RecadoUnidadeAvgOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RecadoUnidadeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RecadoUnidadeMinOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RecadoUnidadeSumOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type RecadoAuditCountOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrder
+    dadosNovos?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RecadoAuditAvgOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+  }
+
+  export type RecadoAuditMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RecadoAuditMinOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type RecadoAuditSumOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
   }
 
   export type UnidadeCreateNestedOneWithoutUsersInput = {
@@ -12661,6 +19631,20 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
+  export type RecadoCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<RecadoCreateWithoutUnidadeInput, RecadoUncheckedCreateWithoutUnidadeInput> | RecadoCreateWithoutUnidadeInput[] | RecadoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutUnidadeInput | RecadoCreateOrConnectWithoutUnidadeInput[]
+    createMany?: RecadoCreateManyUnidadeInputEnvelope
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+  }
+
+  export type RecadoUnidadeCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutUnidadeInput, RecadoUnidadeUncheckedCreateWithoutUnidadeInput> | RecadoUnidadeCreateWithoutUnidadeInput[] | RecadoUnidadeUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutUnidadeInput | RecadoUnidadeCreateOrConnectWithoutUnidadeInput[]
+    createMany?: RecadoUnidadeCreateManyUnidadeInputEnvelope
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+  }
+
   export type RamalUncheckedCreateNestedManyWithoutUnidadeInput = {
     create?: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput> | RamalCreateWithoutUnidadeInput[] | RamalUncheckedCreateWithoutUnidadeInput[]
     connectOrCreate?: RamalCreateOrConnectWithoutUnidadeInput | RamalCreateOrConnectWithoutUnidadeInput[]
@@ -12680,6 +19664,20 @@ export namespace Prisma {
     connectOrCreate?: UserCreateOrConnectWithoutUnidadeInput | UserCreateOrConnectWithoutUnidadeInput[]
     createMany?: UserCreateManyUnidadeInputEnvelope
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type RecadoUncheckedCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<RecadoCreateWithoutUnidadeInput, RecadoUncheckedCreateWithoutUnidadeInput> | RecadoCreateWithoutUnidadeInput[] | RecadoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutUnidadeInput | RecadoCreateOrConnectWithoutUnidadeInput[]
+    createMany?: RecadoCreateManyUnidadeInputEnvelope
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+  }
+
+  export type RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutUnidadeInput, RecadoUnidadeUncheckedCreateWithoutUnidadeInput> | RecadoUnidadeCreateWithoutUnidadeInput[] | RecadoUnidadeUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutUnidadeInput | RecadoUnidadeCreateOrConnectWithoutUnidadeInput[]
+    createMany?: RecadoUnidadeCreateManyUnidadeInputEnvelope
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
   }
 
   export type RamalUpdateManyWithoutUnidadeNestedInput = {
@@ -12722,6 +19720,34 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutUnidadeInput | UserUpdateWithWhereUniqueWithoutUnidadeInput[]
     updateMany?: UserUpdateManyWithWhereWithoutUnidadeInput | UserUpdateManyWithWhereWithoutUnidadeInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type RecadoUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<RecadoCreateWithoutUnidadeInput, RecadoUncheckedCreateWithoutUnidadeInput> | RecadoCreateWithoutUnidadeInput[] | RecadoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutUnidadeInput | RecadoCreateOrConnectWithoutUnidadeInput[]
+    upsert?: RecadoUpsertWithWhereUniqueWithoutUnidadeInput | RecadoUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: RecadoCreateManyUnidadeInputEnvelope
+    set?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    disconnect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    delete?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    update?: RecadoUpdateWithWhereUniqueWithoutUnidadeInput | RecadoUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: RecadoUpdateManyWithWhereWithoutUnidadeInput | RecadoUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: RecadoScalarWhereInput | RecadoScalarWhereInput[]
+  }
+
+  export type RecadoUnidadeUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutUnidadeInput, RecadoUnidadeUncheckedCreateWithoutUnidadeInput> | RecadoUnidadeCreateWithoutUnidadeInput[] | RecadoUnidadeUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutUnidadeInput | RecadoUnidadeCreateOrConnectWithoutUnidadeInput[]
+    upsert?: RecadoUnidadeUpsertWithWhereUniqueWithoutUnidadeInput | RecadoUnidadeUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: RecadoUnidadeCreateManyUnidadeInputEnvelope
+    set?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    disconnect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    delete?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    update?: RecadoUnidadeUpdateWithWhereUniqueWithoutUnidadeInput | RecadoUnidadeUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: RecadoUnidadeUpdateManyWithWhereWithoutUnidadeInput | RecadoUnidadeUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -12774,6 +19800,34 @@ export namespace Prisma {
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
+  export type RecadoUncheckedUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<RecadoCreateWithoutUnidadeInput, RecadoUncheckedCreateWithoutUnidadeInput> | RecadoCreateWithoutUnidadeInput[] | RecadoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutUnidadeInput | RecadoCreateOrConnectWithoutUnidadeInput[]
+    upsert?: RecadoUpsertWithWhereUniqueWithoutUnidadeInput | RecadoUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: RecadoCreateManyUnidadeInputEnvelope
+    set?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    disconnect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    delete?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    update?: RecadoUpdateWithWhereUniqueWithoutUnidadeInput | RecadoUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: RecadoUpdateManyWithWhereWithoutUnidadeInput | RecadoUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: RecadoScalarWhereInput | RecadoScalarWhereInput[]
+  }
+
+  export type RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutUnidadeInput, RecadoUnidadeUncheckedCreateWithoutUnidadeInput> | RecadoUnidadeCreateWithoutUnidadeInput[] | RecadoUnidadeUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutUnidadeInput | RecadoUnidadeCreateOrConnectWithoutUnidadeInput[]
+    upsert?: RecadoUnidadeUpsertWithWhereUniqueWithoutUnidadeInput | RecadoUnidadeUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: RecadoUnidadeCreateManyUnidadeInputEnvelope
+    set?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    disconnect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    delete?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    update?: RecadoUnidadeUpdateWithWhereUniqueWithoutUnidadeInput | RecadoUnidadeUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: RecadoUnidadeUpdateManyWithWhereWithoutUnidadeInput | RecadoUnidadeUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
+  }
+
   export type UnidadeCreateNestedOneWithoutRamaisInput = {
     create?: XOR<UnidadeCreateWithoutRamaisInput, UnidadeUncheckedCreateWithoutRamaisInput>
     connectOrCreate?: UnidadeCreateOrConnectWithoutRamaisInput
@@ -12800,6 +19854,90 @@ export namespace Prisma {
     upsert?: UnidadeUpsertWithoutEmailsInput
     connect?: UnidadeWhereUniqueInput
     update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutEmailsInput, UnidadeUpdateWithoutEmailsInput>, UnidadeUncheckedUpdateWithoutEmailsInput>
+  }
+
+  export type UnidadeCreateNestedOneWithoutRecadosInput = {
+    create?: XOR<UnidadeCreateWithoutRecadosInput, UnidadeUncheckedCreateWithoutRecadosInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutRecadosInput
+    connect?: UnidadeWhereUniqueInput
+  }
+
+  export type RecadoUnidadeCreateNestedManyWithoutRecadoInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput> | RecadoUnidadeCreateWithoutRecadoInput[] | RecadoUnidadeUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutRecadoInput | RecadoUnidadeCreateOrConnectWithoutRecadoInput[]
+    createMany?: RecadoUnidadeCreateManyRecadoInputEnvelope
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+  }
+
+  export type RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput> | RecadoUnidadeCreateWithoutRecadoInput[] | RecadoUnidadeUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutRecadoInput | RecadoUnidadeCreateOrConnectWithoutRecadoInput[]
+    createMany?: RecadoUnidadeCreateManyRecadoInputEnvelope
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+  }
+
+  export type UnidadeUpdateOneRequiredWithoutRecadosNestedInput = {
+    create?: XOR<UnidadeCreateWithoutRecadosInput, UnidadeUncheckedCreateWithoutRecadosInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutRecadosInput
+    upsert?: UnidadeUpsertWithoutRecadosInput
+    connect?: UnidadeWhereUniqueInput
+    update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutRecadosInput, UnidadeUpdateWithoutRecadosInput>, UnidadeUncheckedUpdateWithoutRecadosInput>
+  }
+
+  export type RecadoUnidadeUpdateManyWithoutRecadoNestedInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput> | RecadoUnidadeCreateWithoutRecadoInput[] | RecadoUnidadeUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutRecadoInput | RecadoUnidadeCreateOrConnectWithoutRecadoInput[]
+    upsert?: RecadoUnidadeUpsertWithWhereUniqueWithoutRecadoInput | RecadoUnidadeUpsertWithWhereUniqueWithoutRecadoInput[]
+    createMany?: RecadoUnidadeCreateManyRecadoInputEnvelope
+    set?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    disconnect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    delete?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    update?: RecadoUnidadeUpdateWithWhereUniqueWithoutRecadoInput | RecadoUnidadeUpdateWithWhereUniqueWithoutRecadoInput[]
+    updateMany?: RecadoUnidadeUpdateManyWithWhereWithoutRecadoInput | RecadoUnidadeUpdateManyWithWhereWithoutRecadoInput[]
+    deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
+  }
+
+  export type RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput = {
+    create?: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput> | RecadoUnidadeCreateWithoutRecadoInput[] | RecadoUnidadeUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutRecadoInput | RecadoUnidadeCreateOrConnectWithoutRecadoInput[]
+    upsert?: RecadoUnidadeUpsertWithWhereUniqueWithoutRecadoInput | RecadoUnidadeUpsertWithWhereUniqueWithoutRecadoInput[]
+    createMany?: RecadoUnidadeCreateManyRecadoInputEnvelope
+    set?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    disconnect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    delete?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+    update?: RecadoUnidadeUpdateWithWhereUniqueWithoutRecadoInput | RecadoUnidadeUpdateWithWhereUniqueWithoutRecadoInput[]
+    updateMany?: RecadoUnidadeUpdateManyWithWhereWithoutRecadoInput | RecadoUnidadeUpdateManyWithWhereWithoutRecadoInput[]
+    deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
+  }
+
+  export type RecadoCreateNestedOneWithoutUnidadesInput = {
+    create?: XOR<RecadoCreateWithoutUnidadesInput, RecadoUncheckedCreateWithoutUnidadesInput>
+    connectOrCreate?: RecadoCreateOrConnectWithoutUnidadesInput
+    connect?: RecadoWhereUniqueInput
+  }
+
+  export type UnidadeCreateNestedOneWithoutRecadosMultiInput = {
+    create?: XOR<UnidadeCreateWithoutRecadosMultiInput, UnidadeUncheckedCreateWithoutRecadosMultiInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutRecadosMultiInput
+    connect?: UnidadeWhereUniqueInput
+  }
+
+  export type RecadoUpdateOneRequiredWithoutUnidadesNestedInput = {
+    create?: XOR<RecadoCreateWithoutUnidadesInput, RecadoUncheckedCreateWithoutUnidadesInput>
+    connectOrCreate?: RecadoCreateOrConnectWithoutUnidadesInput
+    upsert?: RecadoUpsertWithoutUnidadesInput
+    connect?: RecadoWhereUniqueInput
+    update?: XOR<XOR<RecadoUpdateToOneWithWhereWithoutUnidadesInput, RecadoUpdateWithoutUnidadesInput>, RecadoUncheckedUpdateWithoutUnidadesInput>
+  }
+
+  export type UnidadeUpdateOneRequiredWithoutRecadosMultiNestedInput = {
+    create?: XOR<UnidadeCreateWithoutRecadosMultiInput, UnidadeUncheckedCreateWithoutRecadosMultiInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutRecadosMultiInput
+    upsert?: UnidadeUpsertWithoutRecadosMultiInput
+    connect?: UnidadeWhereUniqueInput
+    update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutRecadosMultiInput, UnidadeUpdateWithoutRecadosMultiInput>, UnidadeUncheckedUpdateWithoutRecadosMultiInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -13019,11 +20157,36 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type UnidadeCreateWithoutUsersInput = {
     nome: string
     ramais?: RamalCreateNestedManyWithoutUnidadeInput
     emails?: EmailCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutUsersInput = {
@@ -13031,6 +20194,8 @@ export namespace Prisma {
     nome: string
     ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
     emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutUsersInput = {
@@ -13123,6 +20288,8 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     ramais?: RamalUpdateManyWithoutUnidadeNestedInput
     emails?: EmailUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutUsersInput = {
@@ -13130,6 +20297,8 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
     emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -13423,6 +20592,54 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RecadoCreateWithoutUnidadeInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoUncheckedCreateWithoutUnidadeInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoCreateOrConnectWithoutUnidadeInput = {
+    where: RecadoWhereUniqueInput
+    create: XOR<RecadoCreateWithoutUnidadeInput, RecadoUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type RecadoCreateManyUnidadeInputEnvelope = {
+    data: RecadoCreateManyUnidadeInput | RecadoCreateManyUnidadeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RecadoUnidadeCreateWithoutUnidadeInput = {
+    recado: RecadoCreateNestedOneWithoutUnidadesInput
+  }
+
+  export type RecadoUnidadeUncheckedCreateWithoutUnidadeInput = {
+    id?: number
+    recadoId: number
+  }
+
+  export type RecadoUnidadeCreateOrConnectWithoutUnidadeInput = {
+    where: RecadoUnidadeWhereUniqueInput
+    create: XOR<RecadoUnidadeCreateWithoutUnidadeInput, RecadoUnidadeUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type RecadoUnidadeCreateManyUnidadeInputEnvelope = {
+    data: RecadoUnidadeCreateManyUnidadeInput | RecadoUnidadeCreateManyUnidadeInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RamalUpsertWithWhereUniqueWithoutUnidadeInput = {
     where: RamalWhereUniqueInput
     update: XOR<RamalUpdateWithoutUnidadeInput, RamalUncheckedUpdateWithoutUnidadeInput>
@@ -13512,10 +20729,66 @@ export namespace Prisma {
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
   }
 
+  export type RecadoUpsertWithWhereUniqueWithoutUnidadeInput = {
+    where: RecadoWhereUniqueInput
+    update: XOR<RecadoUpdateWithoutUnidadeInput, RecadoUncheckedUpdateWithoutUnidadeInput>
+    create: XOR<RecadoCreateWithoutUnidadeInput, RecadoUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type RecadoUpdateWithWhereUniqueWithoutUnidadeInput = {
+    where: RecadoWhereUniqueInput
+    data: XOR<RecadoUpdateWithoutUnidadeInput, RecadoUncheckedUpdateWithoutUnidadeInput>
+  }
+
+  export type RecadoUpdateManyWithWhereWithoutUnidadeInput = {
+    where: RecadoScalarWhereInput
+    data: XOR<RecadoUpdateManyMutationInput, RecadoUncheckedUpdateManyWithoutUnidadeInput>
+  }
+
+  export type RecadoScalarWhereInput = {
+    AND?: RecadoScalarWhereInput | RecadoScalarWhereInput[]
+    OR?: RecadoScalarWhereInput[]
+    NOT?: RecadoScalarWhereInput | RecadoScalarWhereInput[]
+    id?: IntFilter<"Recado"> | number
+    titulo?: StringFilter<"Recado"> | string
+    conteudo?: StringFilter<"Recado"> | string
+    imagem?: StringNullableFilter<"Recado"> | string | null
+    unidadeId?: IntFilter<"Recado"> | number
+    createdAt?: DateTimeFilter<"Recado"> | Date | string
+    updatedAt?: DateTimeFilter<"Recado"> | Date | string
+  }
+
+  export type RecadoUnidadeUpsertWithWhereUniqueWithoutUnidadeInput = {
+    where: RecadoUnidadeWhereUniqueInput
+    update: XOR<RecadoUnidadeUpdateWithoutUnidadeInput, RecadoUnidadeUncheckedUpdateWithoutUnidadeInput>
+    create: XOR<RecadoUnidadeCreateWithoutUnidadeInput, RecadoUnidadeUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type RecadoUnidadeUpdateWithWhereUniqueWithoutUnidadeInput = {
+    where: RecadoUnidadeWhereUniqueInput
+    data: XOR<RecadoUnidadeUpdateWithoutUnidadeInput, RecadoUnidadeUncheckedUpdateWithoutUnidadeInput>
+  }
+
+  export type RecadoUnidadeUpdateManyWithWhereWithoutUnidadeInput = {
+    where: RecadoUnidadeScalarWhereInput
+    data: XOR<RecadoUnidadeUpdateManyMutationInput, RecadoUnidadeUncheckedUpdateManyWithoutUnidadeInput>
+  }
+
+  export type RecadoUnidadeScalarWhereInput = {
+    AND?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
+    OR?: RecadoUnidadeScalarWhereInput[]
+    NOT?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
+    id?: IntFilter<"RecadoUnidade"> | number
+    recadoId?: IntFilter<"RecadoUnidade"> | number
+    unidadeId?: IntFilter<"RecadoUnidade"> | number
+  }
+
   export type UnidadeCreateWithoutRamaisInput = {
     nome: string
     emails?: EmailCreateNestedManyWithoutUnidadeInput
     users?: UserCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutRamaisInput = {
@@ -13523,6 +20796,8 @@ export namespace Prisma {
     nome: string
     emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutRamaisInput = {
@@ -13545,6 +20820,8 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     emails?: EmailUpdateManyWithoutUnidadeNestedInput
     users?: UserUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutRamaisInput = {
@@ -13552,12 +20829,16 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeCreateWithoutEmailsInput = {
     nome: string
     ramais?: RamalCreateNestedManyWithoutUnidadeInput
     users?: UserCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutEmailsInput = {
@@ -13565,6 +20846,8 @@ export namespace Prisma {
     nome: string
     ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutEmailsInput = {
@@ -13587,6 +20870,8 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     ramais?: RamalUpdateManyWithoutUnidadeNestedInput
     users?: UserUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutEmailsInput = {
@@ -13594,6 +20879,197 @@ export namespace Prisma {
     nome?: StringFieldUpdateOperationsInput | string
     ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeCreateWithoutRecadosInput = {
+    nome: string
+    ramais?: RamalCreateNestedManyWithoutUnidadeInput
+    emails?: EmailCreateNestedManyWithoutUnidadeInput
+    users?: UserCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateWithoutRecadosInput = {
+    id?: number
+    nome: string
+    ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
+    emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+    users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeCreateOrConnectWithoutRecadosInput = {
+    where: UnidadeWhereUniqueInput
+    create: XOR<UnidadeCreateWithoutRecadosInput, UnidadeUncheckedCreateWithoutRecadosInput>
+  }
+
+  export type RecadoUnidadeCreateWithoutRecadoInput = {
+    unidade: UnidadeCreateNestedOneWithoutRecadosMultiInput
+  }
+
+  export type RecadoUnidadeUncheckedCreateWithoutRecadoInput = {
+    id?: number
+    unidadeId: number
+  }
+
+  export type RecadoUnidadeCreateOrConnectWithoutRecadoInput = {
+    where: RecadoUnidadeWhereUniqueInput
+    create: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput>
+  }
+
+  export type RecadoUnidadeCreateManyRecadoInputEnvelope = {
+    data: RecadoUnidadeCreateManyRecadoInput | RecadoUnidadeCreateManyRecadoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UnidadeUpsertWithoutRecadosInput = {
+    update: XOR<UnidadeUpdateWithoutRecadosInput, UnidadeUncheckedUpdateWithoutRecadosInput>
+    create: XOR<UnidadeCreateWithoutRecadosInput, UnidadeUncheckedCreateWithoutRecadosInput>
+    where?: UnidadeWhereInput
+  }
+
+  export type UnidadeUpdateToOneWithWhereWithoutRecadosInput = {
+    where?: UnidadeWhereInput
+    data: XOR<UnidadeUpdateWithoutRecadosInput, UnidadeUncheckedUpdateWithoutRecadosInput>
+  }
+
+  export type UnidadeUpdateWithoutRecadosInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUpdateManyWithoutUnidadeNestedInput
+    users?: UserUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateWithoutRecadosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
+    users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type RecadoUnidadeUpsertWithWhereUniqueWithoutRecadoInput = {
+    where: RecadoUnidadeWhereUniqueInput
+    update: XOR<RecadoUnidadeUpdateWithoutRecadoInput, RecadoUnidadeUncheckedUpdateWithoutRecadoInput>
+    create: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput>
+  }
+
+  export type RecadoUnidadeUpdateWithWhereUniqueWithoutRecadoInput = {
+    where: RecadoUnidadeWhereUniqueInput
+    data: XOR<RecadoUnidadeUpdateWithoutRecadoInput, RecadoUnidadeUncheckedUpdateWithoutRecadoInput>
+  }
+
+  export type RecadoUnidadeUpdateManyWithWhereWithoutRecadoInput = {
+    where: RecadoUnidadeScalarWhereInput
+    data: XOR<RecadoUnidadeUpdateManyMutationInput, RecadoUnidadeUncheckedUpdateManyWithoutRecadoInput>
+  }
+
+  export type RecadoCreateWithoutUnidadesInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutRecadosInput
+  }
+
+  export type RecadoUncheckedCreateWithoutUnidadesInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecadoCreateOrConnectWithoutUnidadesInput = {
+    where: RecadoWhereUniqueInput
+    create: XOR<RecadoCreateWithoutUnidadesInput, RecadoUncheckedCreateWithoutUnidadesInput>
+  }
+
+  export type UnidadeCreateWithoutRecadosMultiInput = {
+    nome: string
+    ramais?: RamalCreateNestedManyWithoutUnidadeInput
+    emails?: EmailCreateNestedManyWithoutUnidadeInput
+    users?: UserCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateWithoutRecadosMultiInput = {
+    id?: number
+    nome: string
+    ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
+    emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+    users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeCreateOrConnectWithoutRecadosMultiInput = {
+    where: UnidadeWhereUniqueInput
+    create: XOR<UnidadeCreateWithoutRecadosMultiInput, UnidadeUncheckedCreateWithoutRecadosMultiInput>
+  }
+
+  export type RecadoUpsertWithoutUnidadesInput = {
+    update: XOR<RecadoUpdateWithoutUnidadesInput, RecadoUncheckedUpdateWithoutUnidadesInput>
+    create: XOR<RecadoCreateWithoutUnidadesInput, RecadoUncheckedCreateWithoutUnidadesInput>
+    where?: RecadoWhereInput
+  }
+
+  export type RecadoUpdateToOneWithWhereWithoutUnidadesInput = {
+    where?: RecadoWhereInput
+    data: XOR<RecadoUpdateWithoutUnidadesInput, RecadoUncheckedUpdateWithoutUnidadesInput>
+  }
+
+  export type RecadoUpdateWithoutUnidadesInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+  }
+
+  export type RecadoUncheckedUpdateWithoutUnidadesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UnidadeUpsertWithoutRecadosMultiInput = {
+    update: XOR<UnidadeUpdateWithoutRecadosMultiInput, UnidadeUncheckedUpdateWithoutRecadosMultiInput>
+    create: XOR<UnidadeCreateWithoutRecadosMultiInput, UnidadeUncheckedCreateWithoutRecadosMultiInput>
+    where?: UnidadeWhereInput
+  }
+
+  export type UnidadeUpdateToOneWithWhereWithoutRecadosMultiInput = {
+    where?: UnidadeWhereInput
+    data: XOR<UnidadeUpdateWithoutRecadosMultiInput, UnidadeUncheckedUpdateWithoutRecadosMultiInput>
+  }
+
+  export type UnidadeUpdateWithoutRecadosMultiInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUpdateManyWithoutUnidadeNestedInput
+    users?: UserUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateWithoutRecadosMultiInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
+    users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -13725,6 +21201,20 @@ export namespace Prisma {
     role?: $Enums.UserRole
   }
 
+  export type RecadoCreateManyUnidadeInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RecadoUnidadeCreateManyUnidadeInput = {
+    id?: number
+    recadoId: number
+  }
+
   export type RamalUpdateWithoutUnidadeInput = {
     numero?: StringFieldUpdateOperationsInput | string
     nome?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13812,6 +21302,67 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  }
+
+  export type RecadoUpdateWithoutUnidadeInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type RecadoUncheckedUpdateWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type RecadoUncheckedUpdateManyWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoUnidadeUpdateWithoutUnidadeInput = {
+    recado?: RecadoUpdateOneRequiredWithoutUnidadesNestedInput
+  }
+
+  export type RecadoUnidadeUncheckedUpdateWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recadoId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type RecadoUnidadeUncheckedUpdateManyWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recadoId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type RecadoUnidadeCreateManyRecadoInput = {
+    id?: number
+    unidadeId: number
+  }
+
+  export type RecadoUnidadeUpdateWithoutRecadoInput = {
+    unidade?: UnidadeUpdateOneRequiredWithoutRecadosMultiNestedInput
+  }
+
+  export type RecadoUnidadeUncheckedUpdateWithoutRecadoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    unidadeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type RecadoUnidadeUncheckedUpdateManyWithoutRecadoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    unidadeId?: IntFieldUpdateOperationsInput | number
   }
 
 
