@@ -1,5 +1,6 @@
 // src/app/admin/authenticated/recados/page.tsx
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
+export const dynamicParams = true;
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "../../../../lib/auth";

@@ -1,5 +1,6 @@
 // src/app/recados/page.tsx
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
+export const dynamicParams = true;
 import Layout from "@/src/components/Layout";
 import Image from "next/image";
 import { prisma } from "@/src/lib/prisma";
