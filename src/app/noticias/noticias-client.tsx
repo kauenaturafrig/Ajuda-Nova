@@ -51,7 +51,7 @@ export default function NoticiasPublica({ initialNoticias }: { initialNoticias: 
 
     return (
         <Layout>
-            <div className="container mx-auto py-12 w-[90%]">
+            <div className="container mx-auto py-4 w-[90%]">
                 <div className="flex items-center mb-12">
                     <Image
                         src="/assets/images/icons/icons8-news-preto.png"
@@ -96,7 +96,6 @@ export default function NoticiasPublica({ initialNoticias }: { initialNoticias: 
 
                             <div className="flex items-center justify-between pt-4 border-t border-blue-200/50">
                                 <div className="text-sm text-gray-500 flex items-center gap-2">
-                                    📰 {new Date(noticia.createdAt).toLocaleDateString('pt-BR')}
                                     <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                         Notícia
                                     </span>

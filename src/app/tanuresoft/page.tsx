@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Tanuresoft() {
   return (
     <Layout>
-      <div className="max-w-[90%] mx-auto mt-9 pt-2">
+      <div className="max-w-[90%] mx-auto pt-2 p-1">
         <div className="flex items-center mt-3 mb-7">
           <h1 className="font-bold text-5xl dark:text-white pr-4">
             Tanuresoft

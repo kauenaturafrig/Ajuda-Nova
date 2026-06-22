@@ -25,7 +25,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="h-screen fixed top-0 left-0 w-64 bg-blue-900 text-white p-4 flex flex-col
+    <aside className="h-screen fixed top-0 left-0 w-full sm:w-24 md:w-48 lg:w-48 xl:w-56 bg-blue-900 text-white p-3 lg:p-2 flex flex-col
       min-h-screen
       bg-gradient-to-b
       from-blue-700
@@ -34,34 +34,34 @@ export default function Sidebar() {
       animate-gradient-pulse
     ">
       {/* Header */}
-      <div className="flex flex-col items-center mb-6 pt-4">
+      <div className="flex flex-col items-center mb-4 sm:mb-6 pt-3 sm:pt-4">
         <Image
           src={'/assets/images/logo-naturafrig.png'}
-          width={200}
-          height={200}
+          width={160}
+          height={160}
           alt="Naturafrig Logo"
-          className='mb-6 mx-auto'
+          className='mb-4 sm:mb-6 mx-auto'
         />
 
-        <p>INTRANET</p>
+        <p className="text-sm sm:text-base">INTRANET</p>
       </div>
 
       {/* Menu Principal + Submenu */}
-      <nav className="flex-1 space-y-2 mb-8 overflow-y-auto">
+      <nav className="flex-1 space-y-2 mb-6 sm:mb-8 overflow-y-auto">
         {menuItems.map((item) => (
           <Link
             key={item.path}
             href={item.path}
-            className="hover:bg-yellow-500 p-2 rounded flex items-center my-1 transition-all duration-200"
+            className="hover:bg-yellow-500 p-1 rounded flex items-center my-1 transition-all duration-200 "
           >
             <Image
               src={item.icon}
               alt={item.label}
-              width={24}
-              height={24}
-              className='mr-3'
+              width={20}
+              height={20}
+              className='mr-2 sm:mr-3'
             />
-            <span className="font-medium">{item.label}</span>
+            <span className="font-normal text-xs sm:text-sm">{item.label}</span>
           </Link>
         ))}
 
@@ -73,17 +73,16 @@ export default function Sidebar() {
           >
             <div className="flex items-center">
               <Image
-                src="/assets/images/icons/icons8-manual-branco.png" // ícone pai do submenu
+                src="/assets/images/icons/icons8-manual-branco.png"
                 alt="Configurações"
-                width={24}
-                height={24}
-                className='mr-3'
+                width={20}
+                height={20}
+                className='mr-2 sm:mr-3'
               />
-              <span className="font-medium">Manuais</span>
+              <span className="font-normal text-xs sm:text-sm">Manuais</span>
             </div>
-            {/* Seta rotacionável */}
             <svg
-              className={`w-5 h-5 transition-transform duration-300 ${openSubmenu ? 'rotate-180' : ''}`}
+              className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${openSubmenu ? 'rotate-180' : ''}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -92,19 +91,18 @@ export default function Sidebar() {
             </svg>
           </button>
 
-          {/* Itens do Submenu */}
           <div className={`overflow-hidden transition-all duration-300 ${openSubmenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
             {submenuItems.map((item) => (
               <Link
                 key={item.path}
                 href={item.path}
-                className="hover:bg-yellow-400 bg-opacity-20 p-2 pl-12 rounded flex items-center my-1 ml-2 text-sm transition-all duration-200"
+                className="hover:bg-yellow-400 bg-opacity-20 p-2 pl-8 lg:pl-12 rounded flex items-center my-1 ml-2 text-xs sm:text-sm transition-all duration-200"
               >
                 <Image
                   src={item.icon}
                   alt={item.label}
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                   className='mr-2 flex-shrink-0'
                 />
                 <span>{item.label}</span>
@@ -121,19 +119,19 @@ export default function Sidebar() {
           <Image
             src="/assets/images/icons/icons8-admin-branco.png"
             alt="Admin"
-            width={24}
-            height={24}
-            className='mr-3'
+            width={20}
+            height={20}
+            className='mr-2 sm:mr-3'
           />
-          <span className="font-medium">Admin</span>
+          <span className="font-normal text-xs sm:text-sm">Admin</span>
         </Link>
       </nav>
 
       {/* Footer FIXO no fundo da sidebar */}
-      <footer className="mt-auto pt-4 pb-4 border-t border-blue-500/30">
+      <footer className="mt-auto pt-3 sm:pt-4 pb-3 sm:pb-4 border-t border-blue-500/30">
         <div className="text-center space-y-1 text-xs font-light">
-          <p>TI - Naturafrig 2026</p>
-          <p>Feito por Kaue 💻</p>
+          <p className="text-[10px] sm:text-xs">TI - Naturafrig 2026</p>
+          <p className="text-[10px] sm:text-xs">Feito por Kaue 💻</p>
         </div>
       </footer>
     </aside>

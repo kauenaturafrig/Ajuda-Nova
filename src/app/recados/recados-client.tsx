@@ -76,7 +76,7 @@ export default function RecadosClient({ initialRecados, unidadeId }: Props) {
             {/* Layout wrapper para backdrop funcionar */}
             <div className="relative">
                 <Layout>
-                    <div className="container mx-auto py-12 w-[90%]">
+                    <div className="container mx-auto py-4 w-[90%]">
                         <div className="flex justify-between items-center mb-12">
                             <div className="flex">
                                 <Image

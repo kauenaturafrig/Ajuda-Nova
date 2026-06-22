@@ -50,7 +50,7 @@ export default function LinksUtil() {
 
   return (
     <Layout>
-      <div className="min-h-screen pt-9 p-6">
+      <div className="min-h-screen pt-2 p-1">
         {/* Header */}
         <div className="max-w-7xl mx-auto mb-16">
           <div className="flex items-center gap-4 mb-4">

@@ -86,13 +86,13 @@ export default function PrintHeadClean() {
             </div>
             <li>
               Umedeça o algodão com o álcool isopropílico e passe no local
-              indicado pela seta vermelha na imagem, faça isso por pelo menos
+              indicado pela imagem, faça isso por pelo menos
               três vezes,
             </li>
             <div className="flex justify-center">
               <Image
                 src={
-                  "/assets/images/impressoras-termicas/cabeca-impressao-4.png"
+                  "/assets/images/impressoras-termicas/limpeza-cabecote-rolete1.svg"
                 }
                 alt="Logo Alfa"
                 width={500}
@@ -100,7 +100,20 @@ export default function PrintHeadClean() {
               />
             </div>
             <li>
-              Quarto passo coloque novamente a fita de etiqueta e o ribbon (se
+              Também passe o algodão enquanto gira manualmente o rolo de impressão,
+            </li>
+            <div className="flex justify-center">
+              <Image
+                src={
+                  "/assets/images/impressoras-termicas/limpeza-cabecote-rolete2.svg"
+                }
+                alt="Logo Alfa"
+                width={500}
+                height={500}
+              />
+            </div>
+            <li>
+              Coloque novamente a fita de etiqueta e o ribbon (se
               usado) no rolete deixando uma ponta da etiqueta com uns 8 cm para
               fora conforme imagem abaixo:
             </li>

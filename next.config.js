@@ -23,6 +23,7 @@ const nextConfig = {
       },
     ],
   },
+  allowedDevOrigins: ['172.16.20.232', 'localhost:3000'],
   experimental: {
     serverComponentsExternalPackages: ['@prisma/client'],
   },

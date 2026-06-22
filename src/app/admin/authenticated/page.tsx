@@ -34,7 +34,7 @@ export default async function Authenticated() {
 
   return (
     <Layout>
-      <div className="container mx-auto min-h-screen flex flex-col gap-8 py-10 w-[90%]">
+      <div className="container mx-auto min-h-screen flex flex-col gap-8 py-4 w-[90%]">
         <div>
           <div className="flex justify-between mb-6">
             <h1 className="font-bold text-5xl dark:text-white pr-4 mb-2">Área administrativa</h1>

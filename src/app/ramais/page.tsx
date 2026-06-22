@@ -6,7 +6,7 @@ import MapaBrasil from "../../components/MapaBrasil";
 export default function Ramais() {
   return (
     <Layout>
-      <div className="max-w-[90%] mx-auto mt-9 pt-2">
+      <div className="max-w-[90%] mx-auto pt-2 p-1">
         <div className="flex items-center mt-3 mb-7">
           <h1 className="font-bold text-5xl dark:text-white pr-4">Ramais</h1>
           <Image

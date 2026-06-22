@@ -43,3 +43,6 @@ next-env.d.ts
 
 # personalizado
 src/generated/
+public/uploads/jornais
+public/uploads/noticias
+public/uploads/recados

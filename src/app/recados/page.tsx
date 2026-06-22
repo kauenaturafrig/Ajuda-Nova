@@ -32,7 +32,7 @@ export default async function RecadosPage() {
     if (!unidadeId) {
         return (
             <Layout>
-                <div className="container mx-auto py-20 text-center">
+                <div className="container mx-auto text-center">
                     <h1 className="text-4xl font-bold mb-4 dark:text-white">Recados</h1>
                     <div className="bg-red-100 dark:bg-red-900/50 p-6 rounded-xl mb-4">
                         <p className="font-mono text-sm">IP: <span className="font-bold">{ip || 'N/A'}</span></p>

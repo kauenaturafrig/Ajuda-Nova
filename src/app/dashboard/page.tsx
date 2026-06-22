@@ -77,7 +77,7 @@ export default async function Dashboard() {
 
   return (
     <Layout>
-      <div className="min-h-screen pt-9 p-6">
+      <div className="min-h-screen pt-2 p-1">
         {/* HEADER igual */}
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-0 pb-12">
@@ -96,109 +96,107 @@ export default async function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
             {/* 🔥 ÚLTIMA NOTÍCIA */}
-            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl p-10 hover:shadow-3xl transition-all duration-300 h-72">
-              <div className="flex items-center justify-between mb-8"> {/* ✅ mb-8 */}
-                <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-900 dark:text-white">
-                  {/* <Newspaper className="w-7 h-7 text-blue-600" /> */}
+            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl p-6 sm:p-10 hover:shadow-3xl transition-all duration-300 h-auto min-h-[280px] max-h-[320px]">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2 sm:gap-3 text-gray-900 dark:text-white">
                   <Image
                     src={"/assets/images/icons/icons8-news-preto.png"}
                     alt={"Noticias"}
-                    width={30}
-                    height={30}
-                    className="object-cover hover:scale-110 transition-transform duration-300"
+                    width={24}
+                    height={24}
+                    className="object-cover hover:scale-110 transition-transform duration-300 dark:invert"
                   />
                   Últimas Notícias
                 </h2>
-                <Link href="/noticias" className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                <Link href="/noticias" className="text-xs sm:text-sm font-medium text-white flex items-center gap-1 bg-blue-600 hover:bg-blue-700 p-1.5 sm:p-2 rounded">
                   Ver todas <span>→</span>
                 </Link>
               </div>
 
               {ultimaNoticia ? (
                 <Link href={`/noticias#${ultimaNoticia.id}`} className="block hover:scale-[1.02] transition-transform duration-200">
-                  <div className="flex gap-6"> {/* ✅ gap-6 */}
+                  <div className="flex gap-4 sm:gap-6">
                     {ultimaNoticia.imagem && (
-                      <div className="w-32 h-32 flex-shrink-0 rounded-3xl overflow-hidden bg-gray-200 shadow-lg"> {/* ✅ w-32 h-32 */}
+                      <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden bg-gray-200 shadow-lg">
                         <Image
                           src={`/uploads/noticias/${ultimaNoticia.imagem}`}
                           alt={ultimaNoticia.titulo}
                           width={128}
                           height={128}
-                          className="object-cover hover:scale-110 transition-transform duration-300"
+                          className="object-cover w-full h-full hover:scale-110 transition-transform duration-300"
                         />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-2xl text-gray-900 dark:text-white line-clamp-2 mb-4 leading-tight"> {/* ✅ text-2xl + mb-4 */}
+                      <h3 className="font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 dark:text-white mb-2 sm:mb-3 leading-tight">
                         {ultimaNoticia.titulo}
                       </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-300 line-clamp-4 leading-relaxed"> {/* ✅ text-lg + line-clamp-4 */}
+                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3 leading-relaxed">
                         {ultimaNoticia.conteudo}
                       </p>
-                      <p className="text-sm text-gray-500 mt-4 flex items-center gap-2"> {/* ✅ text-sm + mt-4 */}
+                      <p className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4 flex items-center gap-2">
                         📰 {new Date(ultimaNoticia.createdAt).toLocaleDateString('pt-BR')}
                       </p>
                     </div>
                   </div>
                 </Link>
               ) : (
-                <div className="flex flex-col items-center justify-center py-16 text-center h-full"> {/* ✅ py-16 */}
-                  <Newspaper className="w-16 h-16 text-gray-400 mb-4 opacity-40" />
-                  <p className="text-lg text-gray-500 dark:text-gray-400 font-medium">Nenhuma notícia publicada ainda.</p>
+                <div className="flex flex-col items-center justify-center py-8 sm:py-16 text-center h-full">
+                  <Newspaper className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-3 sm:mb-4 opacity-40" />
+                  <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 font-medium">Nenhuma notícia publicada ainda.</p>
                 </div>
               )}
             </div>
 
-            {/* 🔥 ÚLTIMO RECADO  */}
-            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl p-10 hover:shadow-3xl transition-all duration-300 h-72">
-              <div className="flex items-center justify-between mb-8"> {/* ✅ mb-8 */}
-                <h2 className="text-2xl font-bold flex items-center gap-3 text-gray-900 dark:text-white">
-                  {/* <Bell className="w-7 h-7 text-orange-600" /> */}
+            {/* 🔥 ÚLTIMO RECADO */}
+            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl p-6 sm:p-10 hover:shadow-3xl transition-all duration-300 h-auto min-h-[280px] max-h-[320px]">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2 sm:gap-3 text-gray-900 dark:text-white">
                   <Image
                     src={"/assets/images/icons/icons8-megaphone-preto.png"}
                     alt={"Recados"}
-                    width={30}
-                    height={30}
-                    className="object-cover hover:scale-110 transition-transform duration-300"
+                    width={24}
+                    height={24}
+                    className="object-cover hover:scale-110 transition-transform duration-300 dark:invert"
                   />
                   Recados
                 </h2>
-                <Link href="/recados" className="text-sm font-medium text-orange-600 hover:text-orange-700 flex items-center gap-1">
+                <Link href="/recados" className="text-xs sm:text-sm font-medium text-white flex items-center gap-1 bg-orange-600 hover:bg-orange-700 p-1.5 sm:p-2 rounded">
                   Ver todos <span>→</span>
                 </Link>
               </div>
 
               {ultimoRecado ? (
                 <Link href={`/recados#${ultimoRecado.id}`} className="block hover:scale-[1.02] transition-transform duration-200">
-                  <div className="flex gap-6"> {/* ✅ gap-6 */}
+                  <div className="flex gap-4 sm:gap-6">
                     {ultimoRecado.imagem && (
-                      <div className="w-32 h-32 flex-shrink-0 rounded-3xl overflow-hidden bg-gray-200 shadow-lg"> {/* ✅ w-32 h-32 */}
+                      <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden bg-gray-200 shadow-lg">
                         <Image
                           src={`/uploads/recados/${ultimoRecado.imagem}`}
-                          alt={ultimoRecado.titulo}
+                          alt={ultimoRecado.unidade.nome}
                           width={128}
                           height={128}
-                          className="object-cover hover:scale-110 transition-transform duration-300"
+                          className="object-cover w-full h-full hover:scale-110 transition-transform duration-300"
                         />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-2xl text-gray-900 dark:text-white line-clamp-2 mb-4 leading-tight"> {/* ✅ text-2xl + mb-4 */}
+                      <h3 className="font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 dark:text-white mb-2 sm:mb-3 leading-tight">
                         {ultimoRecado.titulo}
                       </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-300 line-clamp-4 leading-relaxed"> {/* ✅ text-lg + line-clamp-4 */}
+                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3 leading-relaxed">
                         {ultimoRecado.conteudo}
                       </p>
-                      <p className="text-sm text-gray-500 mt-4 flex items-center gap-2"> {/* ✅ text-sm + mt-4 */}
+                      <p className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4 flex items-center gap-2">
                         📍 {ultimoRecado.unidade.nome} • {new Date(ultimoRecado.createdAt).toLocaleDateString('pt-BR')}
                       </p>
                     </div>
                   </div>
                 </Link>
               ) : (
-                <div className="flex flex-col items-center justify-center py-16 text-center h-full"> {/* ✅ py-16 */}
-                  <Bell className="w-16 h-16 text-gray-400 mb-4 opacity-40" />
-                  <p className="text-lg text-gray-500 dark:text-gray-400 font-medium">Nenhum recado publicado ainda.</p>
+                <div className="flex flex-col items-center justify-center py-8 sm:py-16 text-center h-full">
+                  <Bell className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-3 sm:mb-4 opacity-40" />
+                  <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 font-medium">Nenhum recado publicado ainda.</p>
                 </div>
               )}
             </div>
