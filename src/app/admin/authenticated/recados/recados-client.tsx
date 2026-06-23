@@ -271,7 +271,7 @@ export default function RecadosClient({
     if (loading) return <LoadingOverlay show={true} />;
 
     return (
-        <Layout>
+        <>
             <div className="container mx-auto py-12 w-[90%]">
                 <div className="flex justify-between items-center mb-12">
                     <Button onClick={() => router.back()} className="bg-gray-600 hover:bg-gray-700 text-white">
@@ -525,6 +525,6 @@ export default function RecadosClient({
                     )}
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

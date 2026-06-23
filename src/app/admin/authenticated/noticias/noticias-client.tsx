@@ -187,7 +187,7 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
       {loading && <LoadingOverlay show={true} />}
       {saving && <LoadingOverlay show={true} />}
 
-      <Layout>
+      <>
         <div className="container mx-auto py-12 w-[90%]">
           {/* Header */}
           <div className="flex justify-between items-center mb-12">
@@ -370,7 +370,7 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
             )}
           </div>
         </div>
-      </Layout>
+      </>
     </>
   );
 }
