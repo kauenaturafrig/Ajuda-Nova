@@ -54,7 +54,6 @@ export default function RamaisClientPage() {
     unidadeId: "" as string | number,
   });
 
-  // Função para recarregar ramais
   const refreshRamais = useCallback(async () => {
     const res = await fetch("/admin/api/ramais");
     const data = await res.json();
@@ -70,12 +69,10 @@ export default function RamaisClientPage() {
     }
 
     (async () => {
-      // pega ramais
       const res = await fetch("/admin/api/ramais");
       const data = await res.json();
       setRamais(data);
 
-      // pega usuário + unidades (pode ser uma rota /admin/api/me, aqui simplificado)
       const meRes = await fetch("/admin/api/usuarios/me");
       const me = await meRes.json();
       setCurrentUser(me);
@@ -91,9 +88,7 @@ export default function RamaisClientPage() {
   }, [isPending, session]);
 
   const handleChange = (id: number, field: keyof Ramal, value: string) => {
-    setRamais((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, [field]: value } : r))
-    );
+    setRamais((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
   };
 
   const handleSave = async (ramal: Ramal) => {
@@ -104,9 +99,7 @@ export default function RamaisClientPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(ramal),
       });
-      if (!res.ok) {
-        console.error("Erro ao salvar ramal");
-      }
+      if (!res.ok) console.error("Erro ao salvar ramal");
     } finally {
       setSavingId(null);
     }
@@ -120,40 +113,28 @@ export default function RamaisClientPage() {
       unidadeId: "",
     };
 
-    // valida número
     if (!formRamal.numero.trim()) {
       errors.numero = "Informe o número do ramal.";
     }
 
-    // valida nome (e se vier vazio, coloca 'Geral')
     if (!formRamal.nome.trim()) {
-      // define 'Geral' como default
       setFormRamal((prev) => ({ ...prev, nome: "Geral" }));
       errors.nome = "Nome estava vazio, será usado 'Geral'.";
     }
 
-    // valida setor
     if (!formRamal.setor.trim()) {
       errors.setor = "Informe o setor.";
     }
 
-    // valida unidade quando for OWNER
     if (currentUser?.role === "OWNER" && !formRamal.unidadeId) {
       errors.unidadeId = "Selecione a unidade.";
     }
 
-    // se tiver qualquer erro, não envia
-    if (
-      errors.numero ||
-      errors.nome ||
-      errors.setor ||
-      errors.unidadeId
-    ) {
+    if (errors.numero || errors.nome || errors.setor || errors.unidadeId) {
       setFormErrors(errors);
       return;
     }
 
-    // se passou, limpa erros
     setFormErrors({
       numero: "",
       nome: "",
@@ -167,14 +148,11 @@ export default function RamaisClientPage() {
       setor: formRamal.setor,
     };
 
-    if (!formRamal.numero || !formRamal.setor) return;
-
     if (currentUser?.role === "OWNER") {
       payload.unidadeId = formRamal.unidadeId;
     }
 
     if (editingId) {
-      // EDITAR
       payload.id = editingId;
       setSavingId(editingId);
       try {
@@ -188,9 +166,7 @@ export default function RamaisClientPage() {
           return;
         }
         const updated: Ramal = await res.json();
-        setRamais((prev) =>
-          prev.map((r) => (r.id === updated.id ? updated : r)),
-        );
+        setRamais((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
         cancelEdit();
 
         showToast({
@@ -198,13 +174,11 @@ export default function RamaisClientPage() {
           message: `Ramal ${updated.numero} salvo com sucesso.`,
         });
 
-        // força a rota atual a buscar dados de novo no servidor
         router.refresh();
       } finally {
         setSavingId(null);
       }
     } else {
-      // CRIAR
       setCreating(true);
       try {
         const res = await fetch("/admin/api/ramais", {
@@ -225,7 +199,6 @@ export default function RamaisClientPage() {
           message: `Ramal ${created.numero} criado com sucesso.`,
         });
 
-        // recarrega a rota e força nova busca de dados
         router.refresh();
       } finally {
         setCreating(false);
@@ -248,7 +221,6 @@ export default function RamaisClientPage() {
 
     if (!res.ok) {
       console.error("Erro ao excluir ramal");
-      // rollback em caso de erro
       setRamais(prev);
     }
   };
@@ -263,8 +235,6 @@ export default function RamaisClientPage() {
       unidadeId: ramal.unidadeId,
     });
 
-    // depois de setar o estado, rola até o formulário
-    // pequeno timeout garante que o React aplique o novo título "Editar email"
     setTimeout(() => {
       formRef.current?.scrollIntoView({
         behavior: "smooth",
@@ -286,23 +256,19 @@ export default function RamaisClientPage() {
 
   function normalize(str: string) {
     return str
-      .normalize("NFD") // separa acentos
-      .replace(/[\u0300-\u036f]/g, "") // remove marcas de acento
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase();
   }
 
-  const filteredRamais = useMemo(
-    () => {
-      const term = normalize(search);
+  const filteredRamais = useMemo(() => {
+    const term = normalize(search);
 
-      return ramais.filter((r) => {
-        const texto = `${r.numero} ${r.nome ?? ""} ${r.setor} ${r.unidade?.nome ?? ""
-          }`;
-        return normalize(texto).includes(term);
-      });
-    },
-    [ramais, search]
-  );
+    return ramais.filter((r) => {
+      const texto = `${r.numero} ${r.nome ?? ""} ${r.setor} ${r.unidade?.nome ?? ""}`;
+      return normalize(texto).includes(term);
+    });
+  }, [ramais, search]);
 
   if (isPending || loading || !currentUser) {
     return (
@@ -321,178 +287,216 @@ export default function RamaisClientPage() {
   }
 
   return (
-    <Layout>
+    <>
       <LoadingOverlay show={loading} />
-      {/* Botão Voltar */}
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => router.back()}
-        className="bg-gray-500 text-white mb-5 ml-14"
-      >
-        ← Voltar
-      </Button>
-      <div className="w-[90%] mx-auto">
-        {/*  className="space-y-4" */}
-        <div className="flex justify-between">
-          <h1 className="text-4xl font-semibold dark:text-white mt-2">Edição de Ramais</h1>
-          <div>
-            <h3 className="font-bold dark:text-white">Usuário logado: {session?.user.name}</h3>
-            <h4 className="dark:text-white">Perfil: {currentUser?.role === "OWNER" ? "Owner" : "Admin"}</h4>
-          </div>
-        </div>
 
-        {/* Barra de busca */}
-        <div className="flex gap-2 items-center my-10">
-          <Input
-            placeholder="Buscar por número, nome, setor ou unidade..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border-[3px] rounded border-blue-500 dark:text-white"
-          />
-        </div>
-
-        {/* Formulário de novo ramal */}
-        <h2 className="font-medium text-lg mt-4 mb-2 dark:text-white">
-          {editingId ? "Editar ramal" : "Criar novo ramal"}
-        </h2>
-        <div
-          className="grid grid-cols-5 gap-2 items-center"
-          ref={formRef}>
-          {/* Número */}
-          <div>
-            <Input
-              placeholder="Número"
-              value={formRamal.numero}
-              onChange={(e) => {
-                const onlyDigits = e.target.value.replace(/\D/g, "");
-                setFormRamal((prev) => ({ ...prev, numero: onlyDigits }));
-              }}
-              className="border-[3px] rounded border-blue-500 dark:text-white"
-            />
-            {formErrors.numero && (
-              <p className="text-red-500 text-sm mt-1">{formErrors.numero}</p>
-            )}
-          </div>
-
-          {/* Nome */}
-          <div>
-            <Input
-              placeholder="Nome"
-              value={formRamal.nome}
-              onChange={(e) =>
-                setFormRamal((prev) => ({ ...prev, nome: e.target.value }))
-              }
-              className="border-[3px] rounded border-blue-500 dark:text-white"
-            />
-            {formErrors.nome && (
-              <p className="text-red-500 text-sm mt-1">{formErrors.nome}</p>
-            )}
-          </div>
-
-          {/* Setor */}
-          <div>
-            <Input
-              placeholder="Setor"
-              value={formRamal.setor}
-              onChange={(e) =>
-                setFormRamal((prev) => ({ ...prev, setor: e.target.value }))
-              }
-              className="border-[3px] rounded border-blue-500 dark:text-white"
-            />
-            {formErrors.setor && (
-              <p className="text-red-500 text-sm mt-1">{formErrors.setor}</p>
-            )}
-          </div>
-
-          {/* Unidade (OWNER) */}
-          {currentUser?.role === "OWNER" ? (
-            <div>
-              <select
-                className="border rounded px-2 py-1 text-sm"
-                value={formRamal.unidadeId}
-                onChange={(e) =>
-                  setFormRamal((prev) => ({
-                    ...prev,
-                    unidadeId: Number(e.target.value),
-                  }))
-                }
-              >
-                <option value="">Selecione a unidade</option>
-                {unidades.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.nome}
-                  </option>
-                ))}
-              </select>
-              {formErrors.unidadeId && (
-                <p className="text-red-500 text-sm mt-1">{formErrors.unidadeId}</p>
-              )}
-            </div>
-          ) : (
-            <Input
-              disabled
-              value={
-                currentUser?.unidadeNome ?? `Unidade #${currentUser?.unidadeId}`
-              }
-              className="dark:text-white"
-            />
-          )}
-
-          <div className="flex gap-2">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <div className="space-y-4">
+          <div className="flex justify-start">
             <Button
-              onClick={handleSubmitForm}
-              disabled={creating || !!savingId}
-              className="bg-green-500"
+              type="button"
+              variant="outline"
+              onClick={() => router.back()}
+              className="bg-gray-500 text-white"
             >
-              {editingId
-                ? savingId === editingId
-                  ? "Salvando..."
-                  : "Salvar"
-                : creating
-                  ? "Criando..."
-                  : "Criar ramal"}
+              ← Voltar
             </Button>
-            {editingId && (
+          </div>
+
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-semibold dark:text-white">
+                Edição de Ramais
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
+                Pesquise, crie ou edite ramais com mais organização.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
               <Button
-                type="button"
                 variant="outline"
-                onClick={cancelEdit}
-                disabled={!!savingId}
-                className="bg-red-500 text-white"
+                onClick={async () => {
+                  const res = await fetch("/admin/api/ramais/export");
+                  const csv = await res.text();
+                  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+                  const link = document.createElement("a");
+                  link.href = URL.createObjectURL(blob);
+                  link.setAttribute("download", "ramais.csv");
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="bg-blue-500 border-none text-white"
               >
-                Cancelar
+                Exportar CSV
               </Button>
 
-            )}
+              <UploadRamaisImport onImportSuccess={refreshRamais} />
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 mt-4 mb-10 w-[100%] justify-end">
-          {/* Exportar */}
-          <Button
-            variant="outline"
-            onClick={async () => {
-              const res = await fetch("/admin/api/ramais/export");
-              const csv = await res.text();
-              const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-              const link = document.createElement("a");
-              link.href = URL.createObjectURL(blob);
-              link.setAttribute("download", "ramais.csv");
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }}
-            className="bg-blue-500 border-none text-white"
-          >
-            Exportar CSV
-          </Button>
-          {/* Importar */}
-          <UploadRamaisImport onImportSuccess={refreshRamais} />
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          <section className="xl:col-span-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-lg font-semibold dark:text-white">Buscar ramais</h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Filtre por qualquer campo.</p>
+              </div>
+              <span className="text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-200">
+                {filteredRamais.length} itens
+              </span>
+            </div>
+
+            <Input
+              placeholder="Buscar por número, nome, setor ou unidade..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border-[3px] rounded border-blue-500 dark:text-white"
+            />
+
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="mt-3 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+              >
+                Limpar busca
+              </button>
+            )}
+          </section>
+
+          <section className="xl:col-span-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-5">
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-lg font-semibold dark:text-white">
+                  {editingId ? "Editar ramal" : "Criar novo ramal"}
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Preencha os campos para salvar um novo registro.
+                </p>
+              </div>
+
+              {editingId && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={cancelEdit}
+                  disabled={!!savingId}
+                  className="bg-red-500 text-white"
+                >
+                  Cancelar edição
+                </Button>
+              )}
+            </div>
+
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3"
+              ref={formRef}
+            >
+              <div>
+                <Input
+                  placeholder="Número"
+                  value={formRamal.numero}
+                  onChange={(e) => {
+                    const onlyDigits = e.target.value.replace(/\D/g, "");
+                    setFormRamal((prev) => ({ ...prev, numero: onlyDigits }));
+                  }}
+                  className="border-[3px] rounded border-blue-500 dark:text-white"
+                />
+                {formErrors.numero && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.numero}</p>
+                )}
+              </div>
+
+              <div>
+                <Input
+                  placeholder="Nome"
+                  value={formRamal.nome}
+                  onChange={(e) =>
+                    setFormRamal((prev) => ({ ...prev, nome: e.target.value }))
+                  }
+                  className="border-[3px] rounded border-blue-500 dark:text-white"
+                />
+                {formErrors.nome && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.nome}</p>
+                )}
+              </div>
+
+              <div>
+                <Input
+                  placeholder="Setor"
+                  value={formRamal.setor}
+                  onChange={(e) =>
+                    setFormRamal((prev) => ({ ...prev, setor: e.target.value }))
+                  }
+                  className="border-[3px] rounded border-blue-500 dark:text-white"
+                />
+                {formErrors.setor && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.setor}</p>
+                )}
+              </div>
+
+              {currentUser?.role === "OWNER" ? (
+                <div>
+                  <select
+                    className="w-full border rounded px-3 py-2 text-sm dark:bg-gray-900 dark:text-white"
+                    value={formRamal.unidadeId}
+                    onChange={(e) =>
+                      setFormRamal((prev) => ({
+                        ...prev,
+                        unidadeId: Number(e.target.value),
+                      }))
+                    }
+                  >
+                    <option value="">Selecione a unidade</option>
+                    {unidades.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.nome}
+                      </option>
+                    ))}
+                  </select>
+                  {formErrors.unidadeId && (
+                    <p className="text-red-500 text-sm mt-1">{formErrors.unidadeId}</p>
+                  )}
+                </div>
+              ) : (
+                <Input
+                  disabled
+                  value={
+                    currentUser?.unidadeNome ?? `Unidade #${currentUser?.unidadeId}`
+                  }
+                  className="dark:text-white"
+                />
+              )}
+
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  onClick={handleSubmitForm}
+                  disabled={creating || !!savingId}
+                  className="bg-green-500"
+                >
+                  {editingId
+                    ? savingId === editingId
+                      ? "Salvando..."
+                      : "Salvar"
+                    : creating
+                      ? "Criando..."
+                      : "Criar ramal"}
+                </Button>
+              </div>
+            </div>
+          </section>
         </div>
 
-        {/* Lista de ramais (somente leitura) */}
-        <div className="space-y-1 p-2">
+        <div className="flex items-center justify-end gap-2">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            Dica: use a busca para encontrar ramais rapidamente.
+          </span>
+        </div>
+
+        <div className="space-y-2">
           {filteredRamais.length === 0 ? (
             <p className="text-sm text-muted-foreground dark:text-white">
               Nenhum ramal encontrado para “{search}”.
@@ -501,14 +505,9 @@ export default function RamaisClientPage() {
             filteredRamais.map((ramal) => (
               <div
                 key={ramal.id}
-                className="
-                  grid gap-3 border p-3 rounded
-                  grid-cols-1
-                  md:grid-cols-[1fr_2fr_2fr_1fr_auto]
-                  border-black align-middle items-center dark:text-white dark:border-white              
-                "
+                className="grid gap-3 border p-3 rounded-xl bg-white/70 dark:bg-gray-900/70 border-black dark:border-white align-middle items-center dark:text-white md:grid-cols-[1fr_2fr_2fr_1fr_auto]"
               >
-                <span className="break-all"><strong>{ramal.numero}</strong></span>
+                <span className="break-all font-semibold">{ramal.numero}</span>
                 <span className="break-words">{ramal.nome ?? "-"}</span>
                 <span className="break-words">{ramal.setor}</span>
                 <span className="text-sm text-muted-foreground break-words">
@@ -537,6 +536,6 @@ export default function RamaisClientPage() {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
