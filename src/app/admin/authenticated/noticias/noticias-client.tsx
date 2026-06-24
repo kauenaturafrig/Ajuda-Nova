@@ -1,10 +1,10 @@
-// src/app/admin/authenticated/noticias/noticias-client.tsx
 "use client";
+
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
-import { X, Maximize2 } from "lucide-react";
+import { X } from "lucide-react";
 import { LoadingOverlay } from "@/src/components/ui/loading-overlay";
 import Layout from "@/src/components/Layout";
 
@@ -14,9 +14,9 @@ interface Noticia {
   id: number;
   titulo: string;
   conteudo: string;
-  imagem: string | null | undefined; // ✅ Aceita null do Prisma
+  imagem: string | null | undefined;
   createdAt: Date;
-  updatedAt?: Date; // ✅ Opcional
+  updatedAt?: Date;
 }
 
 interface Props {
@@ -25,7 +25,11 @@ interface Props {
   userUnidadeId: number | null;
 }
 
-export default function NoticiasClient({ initialNoticias, userRole, userUnidadeId }: Props) {
+export default function NoticiasClient({
+  initialNoticias,
+  userRole,
+  userUnidadeId,
+}: Props) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -33,21 +37,28 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
   const [dragActive, setDragActive] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     titulo: "",
     conteudo: "",
     imagem: null as File | null,
     imagemPreview: "",
-    imagemAntiga: ""
+    imagemAntiga: "",
   });
 
   const [imagemNoticia, setImagemNoticia] = useState<File | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  const refreshNoticias = useCallback(async () => {
+    const res = await fetch("/admin/api/noticias", { cache: "no-store" });
+    const data = await res.json();
+    setNoticias(Array.isArray(data) ? data : []);
+    router.refresh();
+  }, [router]);
 
   const handleEdit = (noticia: Noticia) => {
     setEditingId(noticia.id);
@@ -56,18 +67,23 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
       conteudo: noticia.conteudo,
       imagem: null,
       imagemPreview: noticia.imagem ? `/uploads/noticias/${noticia.imagem}` : "",
-      imagemAntiga: noticia.imagem || ""
+      imagemAntiga: noticia.imagem || "",
     });
   };
 
-  // ✅ DELETE com loading
   const handleDelete = async (id: number) => {
     if (!confirm("Confirmar exclusão?")) return;
+
     setDeletingId(id);
     try {
-      await fetch(`/admin/api/noticias/${id}`, { method: "DELETE" });
-      setNoticias(prev => prev.filter(n => n.id !== id));
-    } catch (error) {
+      const res = await fetch(`/admin/api/noticias/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        alert("Erro ao excluir");
+        return;
+      }
+      setNoticias((prev) => prev.filter((n) => n.id !== id));
+      router.refresh();
+    } catch {
       alert("Erro ao excluir");
     } finally {
       setDeletingId(null);
@@ -108,23 +124,19 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
         conteudo: "",
         imagem: null,
         imagemPreview: "",
-        imagemAntiga: ""
+        imagemAntiga: "",
       });
       setEditingId(null);
       setImagemNoticia(null);
 
-      const refreshed = await fetch("/admin/api/noticias").then(r => r.json());
-      setNoticias(Array.isArray(refreshed) ? refreshed : []);
-
-      setTimeout(() => window.location.reload(), 500);
-    } catch (error) {
+      await refreshNoticias();
+    } catch {
       alert("Erro de conexão");
     } finally {
       setSaving(false);
     }
   };
 
-  // Drag & Drop handlers (igual recados - igual ao seu código)
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -144,41 +156,47 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
 
   const handleImageUpload = useCallback((file: File) => {
     const preview = URL.createObjectURL(file);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       imagem: file,
       imagemPreview: preview,
-      imagemAntiga: ""
+      imagemAntiga: "",
     }));
     setImagemNoticia(file);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      if (file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
-        handleImageUpload(file);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+      if (e.dataTransfer.files[0]) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
+          handleImageUpload(file);
+        }
       }
-    }
-  }, [handleImageUpload]);
+    },
+    [handleImageUpload]
+  );
 
-  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
-      handleImageUpload(file);
-      e.target.value = "";
-    }
-  }, [handleImageUpload]);
+  const handleImageChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file && file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
+        handleImageUpload(file);
+        e.target.value = "";
+      }
+    },
+    [handleImageUpload]
+  );
 
   const removeImage = useCallback(() => {
     setImagemNoticia(null);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       imagem: null,
-      imagemPreview: editingId ? prev.imagemAntiga : ""
+      imagemPreview: editingId ? prev.imagemAntiga : "",
     }));
   }, [editingId]);
 
@@ -189,42 +207,54 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
 
       <>
         <div className="container mx-auto py-12 w-[90%]">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-12">
-            <Button onClick={() => router.back()} className="bg-gray-600 hover:bg-gray-700 text-white">
+          <div className="flex justify-start mb-12">
+            <Button
+              onClick={() => router.back()}
+              className="bg-gray-600 hover:bg-gray-700 text-white"
+            >
               ← Voltar
             </Button>
-            <h1 className="text-5xl font-bold dark:text-white">Gerenciar Notícias</h1>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
+            <h1 className="text-5xl font-bold dark:text-white">
+              Gerenciar Notícias
+            </h1>
+
             <Image
               src="/assets/images/icons/icons8-news-preto.png"
               alt="Icon news"
               width={50}
               height={50}
-              className="mr-5 dark:invert"
+              className="dark:invert"
             />
           </div>
 
-          {/* Formulário */}
-          <form onSubmit={handleSubmit} className="bg-white/60 dark:bg-gray-500 backdrop-blur p-8 rounded-2xl mb-12">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white/60 dark:bg-gray-500 backdrop-blur p-8 rounded-2xl mb-12"
+          >
             <div className="grid md:grid-cols-2 gap-6">
               <input
                 value={formData.titulo}
-                onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, titulo: e.target.value })
+                }
                 placeholder="Título da notícia"
                 className="w-full p-4 border rounded-xl text-lg"
                 required
               />
 
-              {/* Upload Drag & Drop */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Nova Imagem (opcional)
                 </label>
                 <div
-                  className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 w-full ${dragActive
-                    ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
-                    : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                    }`}
+                  className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 w-full ${
+                    dragActive
+                      ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                      : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  }`}
                   onDragEnter={handleDragIn}
                   onDragLeave={handleDragOut}
                   onDragOver={handleDrag}
@@ -239,8 +269,18 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
                   />
 
                   <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center h-full">
-                    <svg className="w-10 h-10 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <svg
+                      className="w-10 h-10 mb-2 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
                     </svg>
                     <p className="text-sm font-medium text-gray-700 mb-1">
                       {dragActive ? "✅ Solte aqui!" : "Clique ou arraste nova imagem"}
@@ -277,7 +317,9 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
 
             <textarea
               value={formData.conteudo}
-              onChange={(e) => setFormData({ ...formData, conteudo: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, conteudo: e.target.value })
+              }
               placeholder="Conteúdo da notícia"
               rows={6}
               className="w-full p-4 border rounded-xl mt-6 text-lg"
@@ -286,46 +328,75 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
 
             {formData.imagemPreview && (
               <div className="mt-4 p-4 bg-gray-100 rounded-xl">
-                <img src={formData.imagemPreview} alt="Preview" className="w-32 h-32 object-cover rounded-lg" />
+                <img
+                  src={formData.imagemPreview}
+                  alt="Preview"
+                  className="w-32 h-32 object-cover rounded-lg"
+                />
               </div>
             )}
 
-            <Button type="submit" disabled={saving} className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50">
-              {saving ? "Salvando..." : (editingId ? "Atualizar" : "Criar")} Notícia
+            <Button
+              type="submit"
+              disabled={saving}
+              className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+            >
+              {saving ? "Salvando..." : editingId ? "Atualizar" : "Criar"} Notícia
             </Button>
           </form>
 
-          {/* Lista */}
           <div className="space-y-4">
             {noticias.length === 0 ? (
               <div className="text-center py-20">
-                <h3 className="text-3xl font-bold mb-4 dark:text-white">Nenhuma notícia</h3>
+                <h3 className="text-3xl font-bold mb-4 dark:text-white">
+                  Nenhuma notícia
+                </h3>
                 <p>Crie a primeira notícia acima!</p>
               </div>
             ) : (
               noticias.map((noticia) => {
                 const isDeleting = deletingId === noticia.id;
+                const imagemUrl = noticia.imagem
+                  ? `/uploads/noticias/${noticia.imagem}?v=${noticia.updatedAt ? new Date(noticia.updatedAt).getTime() : new Date(noticia.createdAt).getTime()}`
+                  : "";
+
                 return (
-                  <div key={noticia.id} className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 rounded-2xl border relative group">
+                  <div
+                    key={noticia.id}
+                    className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 rounded-2xl border relative group"
+                  >
                     {isDeleting && (
                       <div className="absolute inset-0 bg-white/95 dark:bg-black/80 backdrop-blur-md flex items-center justify-center rounded-2xl z-20 border-2 border-blue-400 animate-pulse">
                         <div className="flex items-center gap-3 bg-white/95 dark:bg-gray-900/95 p-6 rounded-2xl shadow-2xl border">
-                          <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
+                          <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent" />
                           <div>
-                            <p className="font-bold text-lg text-gray-800 dark:text-gray-100">Excluindo...</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Aguarde</p>
+                            <p className="font-bold text-lg text-gray-800 dark:text-gray-100">
+                              Excluindo...
+                            </p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              Aguarde
+                            </p>
                           </div>
                         </div>
                       </div>
                     )}
 
-                    <div className={`transition-all ${isDeleting ? 'opacity-50 blur-sm pointer-events-none' : ''}`}>
+                    <div
+                      className={`transition-all ${
+                        isDeleting ? "opacity-50 blur-sm pointer-events-none" : ""
+                      }`}
+                    >
                       <div className="flex justify-between items-start mb-4">
                         <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
-                          📰 {new Date(noticia.createdAt).toLocaleDateString('pt-BR')}
+                          📰 {new Date(noticia.createdAt).toLocaleDateString("pt-BR")}
                         </div>
                         <div className="flex gap-2">
-                          <Button onClick={() => handleEdit(noticia)} size="sm" className="bg-green-600 text-white" disabled={isDeleting}>
+                          <Button
+                            onClick={() => handleEdit(noticia)}
+                            size="sm"
+                            className="bg-green-600 text-white"
+                            disabled={isDeleting}
+                          >
                             Editar
                           </Button>
                           <Button
@@ -337,7 +408,7 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
                           >
                             {isDeleting ? (
                               <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
                                 Excluindo...
                               </>
                             ) : (
@@ -349,20 +420,26 @@ export default function NoticiasClient({ initialNoticias, userRole, userUnidadeI
                           </Button>
                         </div>
                       </div>
+
                       {noticia.imagem && (
                         <img
-                          src={`/uploads/noticias/${noticia.imagem}`}
+                          src={imagemUrl}
                           alt={noticia.titulo}
                           loading="lazy"
                           onError={(e) => {
-                            console.log('❌ NOTÍCIA IMAGEM FALHOU:', noticia.imagem);  // ✅ DEBUG
-                            (e.target as HTMLImageElement).src = '/placeholder.png';
+                            console.log("❌ NOTÍCIA IMAGEM FALHOU:", noticia.imagem);
+                            (e.target as HTMLImageElement).src = "/placeholder.png";
                           }}
                           className="w-28 h-28 object-cover rounded-xl mb-4 shadow-md hover:shadow-xl transition-all cursor-pointer group-hover:scale-105"
                         />
                       )}
-                      <h3 className="text-xl font-bold mb-2 dark:text-white">{noticia.titulo}</h3>
-                      <p className="text-gray-700 dark:text-gray-300">{noticia.conteudo.slice(0, 200)}...</p>
+
+                      <h3 className="text-xl font-bold mb-2 dark:text-white">
+                        {noticia.titulo}
+                      </h3>
+                      <p className="text-gray-700 dark:text-gray-300">
+                        {noticia.conteudo.slice(0, 200)}...
+                      </p>
                     </div>
                   </div>
                 );

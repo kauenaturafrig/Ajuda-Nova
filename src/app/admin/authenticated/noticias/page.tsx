@@ -1,6 +1,6 @@
-// src/app/admin/authenticated/noticias/page.tsx
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "../../../../lib/auth";
@@ -18,22 +18,21 @@ export default async function GerenciarNoticiasPage() {
     select: { role: true, unidadeId: true },
   });
 
-  // ✅ Permite OWNER, ADMIN, NEWSONLY, MESSAGENEWS
   const allowedRoles: AppUserRole[] = ["OWNER", "NEWSONLY", "MESSAGENEWS"];
   if (!dbUser || !allowedRoles.includes(dbUser.role)) {
     redirect("/admin/authenticated");
   }
 
   const noticias = await prisma.noticia.findMany({
-    orderBy: { createdAt: "desc" }
+    orderBy: { createdAt: "desc" },
   });
 
   return (
     <Layout>
       <NoticiasClient
-        initialNoticias={noticias as any[]} // ✅ Fix temporário
-        userRole={dbUser!.role as "OWNER" | "NEWSONLY" | "MESSAGENEWS"} // ✅ Tipos exatos
-        userUnidadeId={dbUser!.unidadeId || null}
+        initialNoticias={noticias as any[]}
+        userRole={dbUser.role as "OWNER" | "NEWSONLY" | "MESSAGENEWS"}
+        userUnidadeId={dbUser.unidadeId || null}
       />
     </Layout>
   );
