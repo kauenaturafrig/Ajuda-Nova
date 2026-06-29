@@ -19,6 +19,7 @@ interface Recado {
     unidadeIds: number[];
     unidade: { id: number; nome: string };
     createdAt: Date;
+    updatedAt?: Date;
 }
 
 interface Unidade {
@@ -31,6 +32,14 @@ interface Props {
     initialUnidades: Unidade[];
     userRole: UserRole;
     userUnidadeId: number | null;
+}
+
+function getImagemUrl(recado: Recado) {
+    if (!recado.imagem) return "";
+    const version = recado.updatedAt
+        ? new Date(recado.updatedAt).getTime()
+        : new Date(recado.createdAt).getTime();
+    return `/admin/api/uploads/recados/${recado.imagem}?v=${version}`;
 }
 
 export default function RecadosClient({
@@ -115,7 +124,7 @@ export default function RecadosClient({
             conteudo: recado.conteudo,
             unidadeIds: ids,
             imagem: null,
-            imagemPreview: recado.imagem ? `/uploads/recados/${recado.imagem}` : "",
+            imagemPreview: recado.imagem ? getImagemUrl(recado) : "",
             imagemAntiga: recado.imagem || ""
         });
 
@@ -428,6 +437,7 @@ export default function RecadosClient({
                             // ✅ ESTADO LOCAL: está deletando este recado?
                             const isDeleting = deletingId === recado.id;
                             const podeGerenciar = canManageRecado(recado);
+                            const imagemUrl = getImagemUrl(recado);
                             const unidadesExibicao = unidades.filter(u =>
                                 recado.unidadeIds.length > 0
                                     ? recado.unidadeIds.includes(u.id)
@@ -504,7 +514,7 @@ export default function RecadosClient({
 
                                         {recado.imagem && (
                                             <img
-                                                src={`/uploads/recados/${recado.imagem}`}
+                                                src={imagemUrl}
                                                 alt={recado.titulo}
                                                 loading="lazy"
                                                 onError={(e) => {

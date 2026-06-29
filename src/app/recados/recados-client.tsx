@@ -18,11 +18,20 @@ interface Recado {
         unidade: { id: number; nome: string };
     }>;
     createdAt: Date;
+    updatedAt?: Date;
 }
 
 interface Props {
     initialRecados: Recado[];
     unidadeId: number;
+}
+
+function getImagemUrl(recado: Recado) {
+    if (!recado.imagem) return "";
+    const version = recado.updatedAt
+        ? new Date(recado.updatedAt).getTime()
+        : new Date(recado.createdAt).getTime();
+    return `/admin/api/uploads/recados/${recado.imagem}?v=${version}`;
 }
 
 export default function RecadosClient({ initialRecados, unidadeId }: Props) {
@@ -97,6 +106,7 @@ export default function RecadosClient({ initialRecados, unidadeId }: Props) {
                             {initialRecados.map((recado) => {
                                 const recadoUnidadeIds = recado.unidades.map(u => u.unidadeId);
                                 const classificacao = getClassificacaoUnidade(recadoUnidadeIds.length);
+                                const imagemUrl = getImagemUrl(recado);
                                 const textoUnidade = recadoUnidadeIds.length === 1
                                     ? recado.unidade.nome || `Unidade ${recado.unidadeId}`
                                     : `${recadoUnidadeIds.length} unidade(s)`;
@@ -109,10 +119,10 @@ export default function RecadosClient({ initialRecados, unidadeId }: Props) {
                                         {recado.imagem && (
                                             <div
                                                 className="w-full h-64 md:h-80 rounded-2xl overflow-hidden mb-6 bg-gray-200 dark:bg-gray-800 cursor-zoom-in group-hover:scale-[1.02] transition-all duration-300 relative"
-                                                onClick={() => abrirImagem(`/uploads/recados/${recado.imagem}`)}
+                                                onClick={() => abrirImagem(imagemUrl)}
                                             >
                                                 <Image
-                                                    src={`/uploads/recados/${recado.imagem}`}
+                                                    src={imagemUrl}
                                                     alt={recado.titulo}
                                                     fill
                                                     className="object-cover hover:brightness-110 transition-all duration-300"

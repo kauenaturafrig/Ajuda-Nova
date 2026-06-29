@@ -25,6 +25,14 @@ interface Props {
   userUnidadeId: number | null;
 }
 
+function getImagemUrl(noticia: Noticia) {
+  if (!noticia.imagem) return "";
+  const version = noticia.updatedAt
+    ? new Date(noticia.updatedAt).getTime()
+    : new Date(noticia.createdAt).getTime();
+  return `/admin/api/uploads/noticias/${noticia.imagem}?v=${version}`;
+}
+
 export default function NoticiasClient({
   initialNoticias,
   userRole,
@@ -66,7 +74,7 @@ export default function NoticiasClient({
       titulo: noticia.titulo,
       conteudo: noticia.conteudo,
       imagem: null,
-      imagemPreview: noticia.imagem ? `/uploads/noticias/${noticia.imagem}` : "",
+      imagemPreview: getImagemUrl(noticia),
       imagemAntiga: noticia.imagem || "",
     });
   };
@@ -356,9 +364,7 @@ export default function NoticiasClient({
             ) : (
               noticias.map((noticia) => {
                 const isDeleting = deletingId === noticia.id;
-                const imagemUrl = noticia.imagem
-                  ? `/uploads/noticias/${noticia.imagem}?v=${noticia.updatedAt ? new Date(noticia.updatedAt).getTime() : new Date(noticia.createdAt).getTime()}`
-                  : "";
+                const imagemUrl = getImagemUrl(noticia);
 
                 return (
                   <div

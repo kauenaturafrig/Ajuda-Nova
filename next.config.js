@@ -1,4 +1,3 @@
-// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
@@ -6,36 +5,66 @@ const nextConfig = {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
+        protocol: "http",
+        hostname: "localhost",
+        port: "5050",
+        pathname: "/api/uploads/noticias/**",
       },
       {
-        protocol: 'http', 
-        hostname: '127.0.0.1',
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "5050",
+        pathname: "/api/uploads/noticias/**",
       },
       {
-        protocol: 'http',
-        hostname: '172.16.8.5',
+        protocol: "http",
+        hostname: "172.16.20.232",
+        port: "5050",
+        pathname: "/api/uploads/noticias/**",
       },
       {
-        protocol: 'http',
-        hostname: 'intranet.naturafrig.com.br',
+        protocol: "http",
+        hostname: "172.16.8.5",
+        port: "5050",
+        pathname: "/api/uploads/noticias/**",
+      },
+      {
+        protocol: "https",
+        hostname: "intranet.naturafrig.com.br",
+        pathname: "/api/uploads/noticias/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5050",
+        pathname: "/api/uploads/recados/**",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "5050",
+        pathname: "/api/uploads/recados/**",
+      },
+      {
+        protocol: "http",
+        hostname: "172.16.20.232",
+        port: "5050",
+        pathname: "/api/uploads/recados/**",
+      },
+      {
+        protocol: "http",
+        hostname: "172.16.8.5",
+        port: "5050",
+        pathname: "/api/uploads/recados/**",
+      },
+      {
+        protocol: "https",
+        hostname: "intranet.naturafrig.com.br",
+        pathname: "/api/uploads/recados/**",
       },
     ],
   },
-  allowedDevOrigins: ['172.16.20.232', 'localhost:3000'],
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client'],
-  },
-  // ✅ IMPORTANTE: Servir uploads estáticos
-  async rewrites() {
-    return [
-      {
-        source: '/uploads/:path*',
-        destination: '/public/uploads/:path*',
-      },
-    ];
-  },
+  allowedDevOrigins: ["172.16.20.232", "localhost:3000"],
 };
 
 module.exports = nextConfig;
