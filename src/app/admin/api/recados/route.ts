@@ -7,6 +7,7 @@ import path from "path";
 import { writeFile, rm, mkdir } from "fs/promises";
 import fs from "fs/promises";
 import crypto from "crypto";
+import { getUnidadeByIp } from "@/src/lib/getUnidadeByIp";
 
 export const dynamic = "force-dynamic";
 
@@ -50,14 +51,27 @@ async function logAudit(
 export async function GET(req: NextRequest) {
   try {
     const user = await requireAuth(req);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
 
-    const recadosWhere =
-      user.role === "OWNER" || user.role === "MESSAGENEWS"
-        ? {}
-        : { unidadeId: user.unidadeId! };
+    let recadosWhere: any;
+
+    if (user) {
+      // ✅ Usuário logado: filtra pela regra de permissão (role)
+      recadosWhere =
+        user.role === "OWNER" || user.role === "MESSAGENEWS"
+          ? {}
+          : { unidadeId: user.unidadeId! };
+    } else {
+      // ✅ Acesso público (sem login): filtra pela unidade detectada via IP
+      const ip = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip");
+      const unidadeId = getUnidadeByIp(ip);
+
+      if (!unidadeId) {
+        // IP não mapeado para nenhuma unidade: não expõe nenhum recado
+        return NextResponse.json([], { headers: noCacheHeaders });
+      }
+
+      recadosWhere = { unidadeId };
+    }
 
     const recados = await prisma.recado.findMany({
       where: recadosWhere,

@@ -8,25 +8,10 @@ import fs from "fs/promises";
 
 export const dynamic = "force-dynamic";
 
-async function requireAuth(req: NextRequest) {
-  const session = await auth.api.getSession({ headers: req.headers });
-  if (!session?.user?.id) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
-  });
-
-  return user;
-}
-
 export async function GET(req: NextRequest) {
   try {
-    const user = await requireAuth(req);
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
+    // ✅ Leitura pública: não exige mais sessão de login.
+    // (Criação/edição continuam restritas a usuários autenticados via POST/PUT.)
     const noticias = await prisma.noticia.findMany({
       orderBy: { createdAt: "desc" },
     });

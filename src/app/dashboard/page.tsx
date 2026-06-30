@@ -3,9 +3,7 @@ import Layout from "../../components/Layout";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedDarkModeToggle from "../../components/AnimatedDarkModeToggle";
-import { prisma } from "@/src/lib/prisma";
 import { headers } from "next/headers";
-import { getUnidadeByIp } from "../../lib/getUnidadeByIp";
 import { Newspaper, Bell } from "lucide-react";
 
 type DashboardItem = {
@@ -48,32 +46,71 @@ const dashboardItems: DashboardItem[] = [
   },
 ];
 
-async function getDashboardData() {
-  const h = await headers();
-  const ip = h.get('x-forwarded-for') ?? h.get('x-real-ip');
-  const unidadeId = getUnidadeByIp(ip);
+type Noticia = {
+  id: number;
+  titulo: string;
+  conteudo: string;
+  imagem: string | null;
+  createdAt: string;
+};
 
-  const [totalNoticias, totalRecados, ultimaNoticia, ultimoRecado] = await Promise.all([
-    prisma.noticia.count(),
-    unidadeId ? prisma.recado.count({ where: { unidadeId } }) : 0,
-    // ✅ ÚLTIMA NOTÍCIA (com imagem)
-    prisma.noticia.findFirst({
-      orderBy: { createdAt: 'desc' },
-      select: { id: true, titulo: true, conteudo: true, imagem: true, createdAt: true }
+type Recado = {
+  id: number;
+  titulo: string;
+  conteudo: string;
+  imagem: string | null;
+  createdAt: string;
+  unidade: { id: number; nome: string };
+};
+
+async function getBaseUrl() {
+  // Em Server Components, fetch para rota relativa exige host absoluto.
+  // Não assumimos https em produção: usamos o protocolo real repassado
+  // pelo proxy (x-forwarded-proto) ou, na ausência dele, http — que é
+  // o que `next start` fala nativamente sem um proxy/TLS na frente.
+  const h = await headers();
+  const host = h.get("host");
+  const forwardedProto = h.get("x-forwarded-proto");
+  const protocol = forwardedProto ?? "http";
+  return `${protocol}://${host}`;
+}
+
+async function getDashboardData() {
+  const baseUrl = await getBaseUrl();
+  const h = await headers();
+
+  // ✅ Repassa os headers de IP do visitante para a API,
+  // que usa getUnidadeByIp internamente quando não há sessão.
+  const forwardHeaders: HeadersInit = {
+    "x-forwarded-for": h.get("x-forwarded-for") ?? "",
+    "x-real-ip": h.get("x-real-ip") ?? "",
+    cookie: h.get("cookie") ?? "",
+  };
+
+  const [noticiasRes, recadosRes] = await Promise.all([
+    fetch(`${baseUrl}/admin/api/noticias`, {
+      headers: forwardHeaders,
+      cache: "no-store",
     }),
-    // ✅ ÚLTIMO RECADO (unidade atual)
-    unidadeId ? prisma.recado.findFirst({
-      where: { unidadeId },
-      orderBy: { createdAt: 'desc' },
-      include: { unidade: { select: { nome: true } } }
-    }) : null
+    fetch(`${baseUrl}/admin/api/recados`, {
+      headers: forwardHeaders,
+      cache: "no-store",
+    }),
   ]);
 
-  return { totalNoticias, totalRecados, unidadeId, ultimaNoticia, ultimoRecado };
+  const noticias: Noticia[] = noticiasRes.ok ? await noticiasRes.json() : [];
+  const recados: Recado[] = recadosRes.ok ? await recadosRes.json() : [];
+
+  const totalNoticias = noticias.length;
+  const totalRecados = recados.length;
+  const ultimaNoticia = noticias[0] ?? null;
+  const ultimoRecado = recados[0] ?? null;
+
+  return { totalNoticias, totalRecados, ultimaNoticia, ultimoRecado };
 }
 
 export default async function Dashboard() {
-  const { totalNoticias, totalRecados, unidadeId, ultimaNoticia, ultimoRecado } = await getDashboardData();
+  const { ultimaNoticia, ultimoRecado } = await getDashboardData();
 
   return (
     <Layout>
@@ -91,7 +128,7 @@ export default async function Dashboard() {
           </div>
         </div>
 
-        {/* ✅ NOVO: SEÇÃO ÚLTIMAS NOTÍCIAS + RECADOS */}
+        {/* SEÇÃO ÚLTIMAS NOTÍCIAS + RECADOS */}
         <div className="max-w-7xl mx-auto px-6 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
@@ -119,7 +156,7 @@ export default async function Dashboard() {
                     {ultimaNoticia.imagem && (
                       <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden bg-gray-200 shadow-lg">
                         <Image
-                          src={`/uploads/noticias/${ultimaNoticia.imagem}`}
+                          src={`/admin/api/uploads/noticias/${ultimaNoticia.imagem}?v=${new Date(ultimaNoticia.createdAt).getTime()}`}
                           alt={ultimaNoticia.titulo}
                           width={128}
                           height={128}
@@ -172,7 +209,7 @@ export default async function Dashboard() {
                     {ultimoRecado.imagem && (
                       <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden bg-gray-200 shadow-lg">
                         <Image
-                          src={`/uploads/recados/${ultimoRecado.imagem}`}
+                          src={`/admin/api/uploads/recados/${ultimoRecado.imagem}?v=${new Date(ultimoRecado.createdAt).getTime()}`}
                           alt={ultimoRecado.unidade.nome}
                           width={128}
                           height={128}
@@ -203,24 +240,17 @@ export default async function Dashboard() {
           </div>
         </div>
 
-        {/* ✅ 5 BOTÕES (igual antes) */}
+        {/* 5 BOTÕES (igual antes) */}
         <div className="max-w-7xl mx-auto px-6">
           <div className="
             grid gap-8 lg:gap-10
             grid-cols-1 sm:grid-cols-2 
             lg:grid-cols-3 xl:grid-cols-5
           ">
-            {dashboardItems.map((item, index) => {
-              let countBadge = null;
-              // if (item.title.includes('Notícias')) countBadge = totalNoticias;
-              // if (item.title.includes('Recados')) countBadge = totalRecados;
-
+            {dashboardItems.map((item) => {
               return (
                 <Link key={item.href} href={item.href} className="group relative w-full h-[220px] lg:h-[260px] flex flex-col items-center justify-center rounded-3xl p-8 text-center shadow-xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:-translate-y-2 overflow-hidden focus:outline-none">
-                  {/* ✅ SÓ GRADIENTE - SEM VIDRO */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-95 group-hover:opacity-100 transition-all duration-500`} />
-
-                  {/* ✅ REMOVIDO: backdrop-blur, overlays, bordas brancas */}
 
                   {item.icon && (
                     <div className="relative w-20 h-20 lg:w-28 lg:h-28 mb-6 z-10 transform group-hover:scale-110 transition-transform duration-300">
@@ -230,12 +260,6 @@ export default async function Dashboard() {
                   <span className="relative z-10 text-xl lg:text-2xl font-bold leading-tight tracking-tight break-words px-4 bg-gradient-to-r from-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-lg">
                     {item.title.split('\\n')[0]}
                   </span>
-                  {/* {countBadge !== null && (
-                    <div className="absolute -top-3 -right-3 bg-white/95 dark:bg-black/95 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-20 border">
-                      {countBadge}
-                    </div>
-                  )} */}
-                  {/* ✅ EFEITOS DECORATIVOS mantidos */}
                   <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/30 rounded-2xl blur-xl group-hover:scale-150 transition-all duration-700 opacity-0 group-hover:opacity-100" />
                   <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-32 h-32 bg-white/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
                 </Link>
