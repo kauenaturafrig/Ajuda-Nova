@@ -1,3 +1,4 @@
+// src/app/admin/authenticated/noticias/noticias-client.tsx
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -392,8 +393,13 @@ export default function NoticiasClient({
                         isDeleting ? "opacity-50 blur-sm pointer-events-none" : ""
                       }`}
                     >
+                      {/* ✅ TÍTULO no topo do card */}
+                      <h3 className="text-xl font-bold mb-3 dark:text-white">
+                        {noticia.titulo}
+                      </h3>
+
                       <div className="flex justify-between items-start mb-4">
-                        <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
+                        <div className="text-sm text-gray-500 flex items-center gap-2 dark:text-gray-400">
                           📰 {new Date(noticia.createdAt).toLocaleDateString("pt-BR")}
                         </div>
                         <div className="flex gap-2">
@@ -440,9 +446,6 @@ export default function NoticiasClient({
                         />
                       )}
 
-                      <h3 className="text-xl font-bold mb-2 dark:text-white">
-                        {noticia.titulo}
-                      </h3>
                       <p className="text-gray-700 dark:text-gray-300">
                         {noticia.conteudo.slice(0, 200)}...
                       </p>

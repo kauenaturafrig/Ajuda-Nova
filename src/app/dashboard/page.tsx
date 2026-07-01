@@ -1,9 +1,12 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
+
 import Layout from "../../components/Layout";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedDarkModeToggle from "../../components/AnimatedDarkModeToggle";
+import { prisma } from "@/src/lib/prisma";
 import { headers } from "next/headers";
+import { getUnidadeByIp } from "../../lib/getUnidadeByIp";
 import { Newspaper, Bell } from "lucide-react";
 
 type DashboardItem = {
@@ -76,37 +79,50 @@ async function getBaseUrl() {
 }
 
 async function getDashboardData() {
-  const baseUrl = await getBaseUrl();
   const h = await headers();
+  const ip = h.get("x-forwarded-for") ?? h.get("x-real-ip");
+  const unidadeId = getUnidadeByIp(ip);
 
-  // ✅ Repassa os headers de IP do visitante para a API,
-  // que usa getUnidadeByIp internamente quando não há sessão.
-  const forwardHeaders: HeadersInit = {
-    "x-forwarded-for": h.get("x-forwarded-for") ?? "",
-    "x-real-ip": h.get("x-real-ip") ?? "",
-    cookie: h.get("cookie") ?? "",
-  };
-
-  const [noticiasRes, recadosRes] = await Promise.all([
-    fetch(`${baseUrl}/admin/api/noticias`, {
-      headers: forwardHeaders,
-      cache: "no-store",
+  const [ultimaNoticia, ultimoRecado] = await Promise.all([
+    prisma.noticia.findFirst({
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        titulo: true,
+        conteudo: true,
+        imagem: true,
+        createdAt: true,
+      },
     }),
-    fetch(`${baseUrl}/admin/api/recados`, {
-      headers: forwardHeaders,
-      cache: "no-store",
-    }),
+    unidadeId
+      ? prisma.recado.findFirst({
+          where: {
+            unidades: {
+              some: {
+                unidadeId,
+              },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+          include: {
+            unidade: { select: { id: true, nome: true } },
+          },
+        })
+      : null,
   ]);
 
-  const noticias: Noticia[] = noticiasRes.ok ? await noticiasRes.json() : [];
-  const recados: Recado[] = recadosRes.ok ? await recadosRes.json() : [];
+  const totalNoticias = await prisma.noticia.count();
+  const totalRecados = unidadeId
+    ? await prisma.recado.count({
+        where: {
+          unidades: {
+            some: { unidadeId },
+          },
+        },
+      })
+    : 0;
 
-  const totalNoticias = noticias.length;
-  const totalRecados = recados.length;
-  const ultimaNoticia = noticias[0] ?? null;
-  const ultimoRecado = recados[0] ?? null;
-
-  return { totalNoticias, totalRecados, ultimaNoticia, ultimoRecado };
+  return { totalNoticias, totalRecados, unidadeId, ultimaNoticia, ultimoRecado };
 }
 
 export default async function Dashboard() {
@@ -118,11 +134,25 @@ export default async function Dashboard() {
         {/* HEADER igual */}
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-0 pb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent leading-tight">
+            <h1
+              className="font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent leading-tight"
+              style={{ fontSize: "clamp(1.75rem, 1.1rem + 3vw, 3.75rem)" }}
+            >
               Bem vindo!
             </h1>
-            <div className="flex items-center gap-3 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/30 shadow-lg">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tema</span>
+            <div
+              className="flex items-center bg-white/60 dark:bg-gray-900/60 backdrop-blur-md rounded-2xl border border-white/30 shadow-lg"
+              style={{
+                gap: "clamp(0.5rem, 0.3rem + 0.8vw, 0.75rem)",
+                padding: "clamp(0.4rem, 0.2rem + 0.6vw, 0.5rem) clamp(0.75rem, 0.5rem + 1vw, 1rem)",
+              }}
+            >
+              <span
+                className="font-medium text-gray-700 dark:text-gray-300"
+                style={{ fontSize: "clamp(0.75rem, 0.6rem + 0.5vw, 0.875rem)" }}
+              >
+                Tema
+              </span>
               <AnimatedDarkModeToggle />
             </div>
           </div>

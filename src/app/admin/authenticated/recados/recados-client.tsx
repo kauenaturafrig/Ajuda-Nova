@@ -49,8 +49,8 @@ export default function RecadosClient({
     userUnidadeId
 }: Props) {
     const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false); // ✅ CREATE/UPDATE
-    const [deletingId, setDeletingId] = useState<number | null>(null); // ✅ DELETE específico
+    const [saving, setSaving] = useState(false);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
     const [recados, setRecados] = useState<Recado[]>(initialRecados);
     const [unidades, setUnidades] = useState<Unidade[]>(initialUnidades);
     const [dragActive, setDragActive] = useState(false);
@@ -77,7 +77,6 @@ export default function RecadosClient({
         setLoading(false);
     }, []);
 
-    // ✅ FIX: handleCheckboxChange corrigido
     const handleCheckboxChange = (unidadeId: number) => {
         setSelectedUnidades(prev => {
             const newState = { ...prev };
@@ -85,7 +84,6 @@ export default function RecadosClient({
             return newState;
         });
 
-        // ✅ Corrige formData com estado atualizado
         setFormData(prev => ({
             ...prev,
             unidadeIds: Object.keys(selectedUnidades)
@@ -94,31 +92,20 @@ export default function RecadosClient({
         }));
     };
 
-    // ✅ ADD: Função para verificar se pode editar/excluir
     const canManageRecado = useCallback((recado: Recado) => {
-        // OWNER e MESSAGENEWS podem tudo
-        if (userRole === "OWNER" || userRole === "MESSAGENEWS") {
-            return true;
-        }
-
-        // ADMIN e MESSAGEONLY só podem gerenciar recados da SUA unidade
-        // (que têm apenas 1 unidade e é igual a sua)
+        if (userRole === "OWNER" || userRole === "MESSAGENEWS") return true;
         const ehMultiUnidade = recado.unidadeIds.length > 1;
         const ehSuaUnidade = recado.unidadeId === userUnidadeId;
-
         return !ehMultiUnidade && ehSuaUnidade;
     }, [userRole, userUnidadeId]);
 
-    // ✅ ADD: handleEdit
     const handleEdit = (recado: Recado) => {
         if (!canManageRecado(recado)) {
             alert("⛔ Você só pode editar recados da sua própria unidade!");
             return;
         }
-
         setEditingId(recado.id);
         const ids = recado.unidadeIds.length > 0 ? recado.unidadeIds : [recado.unidadeId];
-
         setFormData({
             titulo: recado.titulo,
             conteudo: recado.conteudo,
@@ -127,30 +114,26 @@ export default function RecadosClient({
             imagemPreview: recado.imagem ? getImagemUrl(recado) : "",
             imagemAntiga: recado.imagem || ""
         });
-
         const selected: Record<number, boolean> = {};
         ids.forEach(id => { selected[id] = true; });
         setSelectedUnidades(selected);
-    }
+    };
 
-    // ✅ ADD: handleDelete
     const handleDelete = async (id: number) => {
         const recado = recados.find(r => r.id === id);
         if (recado && !canManageRecado(recado)) {
             alert("⛔ Você só pode excluir recados da sua própria unidade!");
             return;
         }
-
         if (!confirm("Confirmar exclusão?")) return;
-
-        setDeletingId(id); // ✅ ATIVA LOADING ESPECÍFICO
+        setDeletingId(id);
         try {
             await fetch(`/admin/api/recados/${id}`, { method: "DELETE" });
             setRecados(prev => prev.filter(r => r.id !== id));
-        } catch (error) {
+        } catch {
             alert("Erro ao excluir");
         } finally {
-            setDeletingId(null); // ✅ DESATIVA LOADING
+            setDeletingId(null);
         }
     };
 
@@ -188,20 +171,11 @@ export default function RecadosClient({
                 return;
             }
 
-            // Reset form
-            setFormData({
-                titulo: "",
-                conteudo: "",
-                unidadeIds: [],
-                imagem: null,
-                imagemPreview: "",
-                imagemAntiga: "",
-            });
+            setFormData({ titulo: "", conteudo: "", unidadeIds: [], imagem: null, imagemPreview: "", imagemAntiga: "" });
             setEditingId(null);
             setSelectedUnidades({});
-            setImagemRecado(null)
+            setImagemRecado(null);
 
-            // Refresh lista
             const refreshed = await fetch("/admin/api/recados").then(r => r.json());
             setRecados(Array.isArray(refreshed) ? refreshed.map((r: any) => ({
                 ...r,
@@ -211,51 +185,28 @@ export default function RecadosClient({
             })) : []);
 
             setTimeout(() => window.location.reload(), 500);
-        } catch (error) {
+        } catch {
             alert("Erro de conexão");
         } finally {
             setSaving(false);
         }
     };
 
-    // Drag & Drop handlers (abreviados por brevidade)
-    const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-    }, []);
-
-    const handleDragIn = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(true);
-    }, []);
-
-    const handleDragOut = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(false);
-    }, []);
+    const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => { e.preventDefault(); e.stopPropagation(); }, []);
+    const handleDragIn = useCallback((e: React.DragEvent<HTMLDivElement>) => { e.preventDefault(); e.stopPropagation(); setDragActive(true); }, []);
+    const handleDragOut = useCallback((e: React.DragEvent<HTMLDivElement>) => { e.preventDefault(); e.stopPropagation(); setDragActive(false); }, []);
 
     const handleImageUpload = useCallback((file: File) => {
         const preview = URL.createObjectURL(file);
-        setFormData(prev => ({
-            ...prev,
-            imagem: file,
-            imagemPreview: preview,
-            imagemAntiga: ""
-        }));
+        setFormData(prev => ({ ...prev, imagem: file, imagemPreview: preview, imagemAntiga: "" }));
         setImagemRecado(file);
     }, []);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(false);
+        e.preventDefault(); e.stopPropagation(); setDragActive(false);
         if (e.dataTransfer.files[0]) {
             const file = e.dataTransfer.files[0];
-            if (file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
-                handleImageUpload(file);
-            }
+            if (file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) handleImageUpload(file);
         }
     }, [handleImageUpload]);
 
@@ -269,13 +220,8 @@ export default function RecadosClient({
 
     const removeImage = useCallback(() => {
         setImagemRecado(null);
-        setFormData(prev => ({
-            ...prev,
-            imagem: null,
-            imagemPreview: editingId ? prev.imagemAntiga : ""
-        }));
+        setFormData(prev => ({ ...prev, imagem: null, imagemPreview: editingId ? prev.imagemAntiga : "" }));
     }, [editingId]);
-
 
     if (loading) return <LoadingOverlay show={true} />;
 
@@ -296,7 +242,6 @@ export default function RecadosClient({
                     />
                 </div>
 
-                {/* Form */}
                 <form onSubmit={handleSubmit} className="bg-white/60 dark:bg-gray-500 backdrop-blur p-8 rounded-2xl mb-12">
                     <div className="grid md:grid-cols-1 gap-6">
                         <input
@@ -307,7 +252,6 @@ export default function RecadosClient({
                             required
                         />
 
-                        {/* Checkboxes de unidades */}
                         {(userRole === "MESSAGEONLY" || userRole === "ADMIN") ? (
                             <div className="p-6 border-2 border-green-200 bg-green-50 rounded-2xl text-center">
                                 <Check className="w-12 h-12 text-green-600 mx-auto mb-4" />
@@ -347,16 +291,12 @@ export default function RecadosClient({
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6 mt-6">
-                        {/* ✅ UPLOAD Drag & Drop */}
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Nova Imagem (opcional)
                             </label>
                             <div
-                                className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 w-full ${dragActive
-                                    ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
-                                    : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                                    }`}
+                                className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 w-full ${dragActive ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30" : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"}`}
                                 onDragEnter={handleDragIn}
                                 onDragLeave={handleDragOut}
                                 onDragOver={handleDrag}
@@ -369,7 +309,6 @@ export default function RecadosClient({
                                     onChange={handleImageChange}
                                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 pointer-events-auto"
                                 />
-
                                 <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center h-full">
                                     <svg className="w-10 h-10 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -379,26 +318,14 @@ export default function RecadosClient({
                                     </p>
                                     <p className="text-xs text-gray-500">PNG, JPG (máx. 5MB)</p>
                                 </div>
-
-                                {/* ✅ PREVIEW DA IMAGEM ARRASTADA */}
                                 {imagemRecado && (
                                     <div className="absolute inset-0 bg-white/95 dark:bg-black/95 flex flex-col items-center justify-center z-30 rounded-xl">
                                         <div className="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/50 p-4 rounded-lg border border-blue-200 dark:border-blue-800 w-full max-w-md">
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-blue-800 dark:text-blue-200 truncate">
-                                                    {imagemRecado.name}
-                                                </p>
-                                                <p className="text-xs text-blue-700 dark:text-blue-300">
-                                                    {Math.round(imagemRecado.size / 1024)} KB
-                                                </p>
+                                                <p className="text-sm font-medium text-blue-800 dark:text-blue-200 truncate">{imagemRecado.name}</p>
+                                                <p className="text-xs text-blue-700 dark:text-blue-300">{Math.round(imagemRecado.size / 1024)} KB</p>
                                             </div>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={removeImage}
-                                                className="h-9 w-9 p-0 hover:bg-red-500 hover:text-white"
-                                            >
+                                            <Button type="button" variant="ghost" size="sm" onClick={removeImage} className="h-9 w-9 p-0 hover:bg-red-500 hover:text-white">
                                                 <X className="h-4 w-4" />
                                             </Button>
                                         </div>
@@ -415,11 +342,13 @@ export default function RecadosClient({
                             required
                         />
                     </div>
+
                     {formData.imagemPreview && (
                         <div className="mt-4 p-4 bg-gray-100 rounded-xl">
                             <img src={formData.imagemPreview} alt="Preview" className="w-32 h-32 object-cover rounded-lg" />
                         </div>
                     )}
+
                     <Button type="submit" disabled={saving} className="mt-6 w-full bg-orange-600 hover:bg-orange-700 text-white disabled:opacity-50">
                         {saving ? "Salvando..." : (editingId ? "Atualizar" : "Criar")} Recado
                     </Button>
@@ -434,7 +363,6 @@ export default function RecadosClient({
                         </div>
                     ) : (
                         recados.map((recado) => {
-                            // ✅ ESTADO LOCAL: está deletando este recado?
                             const isDeleting = deletingId === recado.id;
                             const podeGerenciar = canManageRecado(recado);
                             const imagemUrl = getImagemUrl(recado);
@@ -449,7 +377,6 @@ export default function RecadosClient({
                                     key={recado.id}
                                     className="p-6 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/50 rounded-2xl border relative group"
                                 >
-                                    {/* ✅ OVERLAY LOADING LOCAL (só neste recado) */}
                                     {isDeleting && (
                                         <div className="absolute inset-0 bg-white/90 dark:bg-black/80 backdrop-blur-md flex items-center justify-center rounded-2xl z-20 border-2 border-orange-400 animate-pulse">
                                             <div className="flex items-center gap-3 bg-white/95 dark:bg-gray-900/95 p-6 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
@@ -462,11 +389,15 @@ export default function RecadosClient({
                                         </div>
                                     )}
 
-                                    {/* ✅ CONTEÚDO (opaco durante delete) */}
-                                    <div className={`transition-all duration-200 ${isDeleting ? 'opacity-50 blur-sm pointer-events-none' : ''}`}>
+                                    <div className={`transition-all duration-200 ${isDeleting ? "opacity-50 blur-sm pointer-events-none" : ""}`}>
+                                        {/* ✅ TÍTULO no topo do card */}
+                                        <h3 className="text-xl font-bold mb-3 dark:text-white">
+                                            {recado.titulo}
+                                        </h3>
+
                                         <div className="flex justify-between items-start mb-4">
-                                            <div className="text-sm text-gray-500 flex items-center gap-2 mt-1 dark:text-gray-400">
-                                                📍 {unidadesExibicao.map(u => u.nome).join(", ")} - {new Date(recado.createdAt).toLocaleDateString('pt-BR')}
+                                            <div className="text-sm text-gray-500 flex items-center gap-2 dark:text-gray-400">
+                                                📍 {unidadesExibicao.map(u => u.nome).join(", ")} — {new Date(recado.createdAt).toLocaleDateString("pt-BR")}
                                                 {!podeGerenciar && (
                                                     <span className="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-full">
                                                         🔒 Global
@@ -476,31 +407,14 @@ export default function RecadosClient({
                                             <div className="flex gap-2">
                                                 {podeGerenciar ? (
                                                     <>
-                                                        <Button
-                                                            onClick={() => handleEdit(recado)}
-                                                            size="sm"
-                                                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 transition-all"
-                                                            disabled={isDeleting}
-                                                        >
+                                                        <Button onClick={() => handleEdit(recado)} size="sm" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 transition-all" disabled={isDeleting}>
                                                             Editar
                                                         </Button>
-                                                        <Button
-                                                            onClick={() => handleDelete(recado.id)}
-                                                            size="sm"
-                                                            variant="destructive"
-                                                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 transition-all flex items-center gap-2"
-                                                            disabled={isDeleting}
-                                                        >
+                                                        <Button onClick={() => handleDelete(recado.id)} size="sm" variant="destructive" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 transition-all flex items-center gap-2" disabled={isDeleting}>
                                                             {isDeleting ? (
-                                                                <>
-                                                                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                                                                    Excluindo...
-                                                                </>
+                                                                <><div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div> Excluindo...</>
                                                             ) : (
-                                                                <>
-                                                                    <X className="w-4 h-4" />
-                                                                    Excluir
-                                                                </>
+                                                                <><X className="w-4 h-4" /> Excluir</>
                                                             )}
                                                         </Button>
                                                     </>
@@ -518,14 +432,14 @@ export default function RecadosClient({
                                                 alt={recado.titulo}
                                                 loading="lazy"
                                                 onError={(e) => {
-                                                    console.log('❌ IMAGEM FALHOU:', recado.imagem);  // ✅ DEBUG
-                                                    (e.target as HTMLImageElement).src = '/placeholder.png';
+                                                    console.log("❌ IMAGEM FALHOU:", recado.imagem);
+                                                    (e.target as HTMLImageElement).src = "/placeholder.png";
                                                 }}
                                                 className="w-28 h-28 object-cover rounded-xl mb-4 shadow-md hover:shadow-xl transition-all cursor-pointer group-hover:scale-105"
                                             />
                                         )}
 
-                                        <p className="text-gray-700 dark:text-gray-300 mb-2 leading-relaxed">
+                                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                                             {recado.conteudo.slice(0, 200)}{recado.conteudo.length > 200 ? "..." : ""}
                                         </p>
                                     </div>
