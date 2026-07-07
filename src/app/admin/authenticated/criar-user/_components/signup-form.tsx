@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, ArrowLeft, ArrowRight } from "lucide-react";
 
 import { Button } from "../../../../../components/ui/button";
 import { Input } from "../../../../../components/ui/input";
@@ -27,7 +27,7 @@ const signupSchema = z
     password: z.string().min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
     confirmPassword: z
       .string()
-      .min(8, { message: "A confirmação de senha deve ter pelo menos 8 caracteres" }),
+      .min(8, { message: "A confirmação deve ter pelo menos 8 caracteres" }),
     role: z.enum(["OWNER", "ADMIN", "NEWSONLY", "MESSAGEONLY", "MESSAGENEWS"], { message: "Selecione um perfil" }),
     unidadeId: z.string().min(1, { message: "Selecione uma unidade" }),
   })
@@ -37,12 +37,8 @@ const signupSchema = z
   });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
-
 type Unidade = { id: number; nome: string };
-
-type Props = {
-  unidades: Unidade[];
-};
+type Props = { unidades: Unidade[] };
 
 export function SignupForm({ unidades }: Props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -65,13 +61,11 @@ export function SignupForm({ unidades }: Props) {
   async function onSubmit(values: SignupFormValues) {
     setIsLoading(true);
 
-    // 1) cria o usuário no Better Auth
     const { error } = await authClient.signUp.email(
       {
         name: values.name,
         email: values.email,
         password: values.password,
-        // sem callbackURL
       },
       {
         onRequest: () => setIsLoading(true),
@@ -85,10 +79,6 @@ export function SignupForm({ unidades }: Props) {
       return;
     }
 
-    // 2) NÃO desloga aqui — você ainda é o OWNER
-    // await authClient.signOut();  // <- remove isso
-
-    // 3) seta role/unidade no User recém-criado
     const res = await fetch("/admin/api/usuarios/set-role-unidade", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -113,185 +103,204 @@ export function SignupForm({ unidades }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        
+        {/* Campo Nome */}
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="dark:text-white">Nome</FormLabel>
+            <FormItem className="space-y-1.5">
+              <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Nome Completo</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Seu nome completo"
+                  placeholder="Ex: João Silva"
                   {...field}
                   disabled={isLoading}
-                  className="border-2 rounded border-blue-500 dark:text-white"
+                  className="rounded-xl h-10 border-gray-200 dark:border-neutral-800 text-xs bg-white dark:bg-neutral-900 focus-visible:ring-green-500/50"
                 />
               </FormControl>
-              <FormMessage className="!text-red-500" />
+              <FormMessage className="text-[11px] font-medium text-red-500" />
             </FormItem>
           )}
         />
 
+        {/* Campo Email */}
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel className="dark:text-white">Email</FormLabel>
+            <FormItem className="space-y-1.5">
+              <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Endereço de Email</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="seu@email.com"
+                  placeholder="nome@empresa.com"
                   type="email"
                   {...field}
                   disabled={isLoading}
-                  className="border-2 rounded border-blue-500 dark:text-white"
+                  className="rounded-xl h-10 border-gray-200 dark:border-neutral-800 text-xs bg-white dark:bg-neutral-900 focus-visible:ring-green-500/50"
                 />
               </FormControl>
-              <FormMessage className="!text-red-500" />
+              <FormMessage className="text-[11px] font-medium text-red-500" />
             </FormItem>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="dark:text-white">Senha</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="••••••••"
-                    type={showPassword ? "text" : "password"}
+        {/* Grid de Senha / Confirmação */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Senha */}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Senha Provisória</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="••••••••"
+                      type={showPassword ? "text" : "password"}
+                      {...field}
+                      disabled={isLoading}
+                      className="rounded-xl h-10 border-gray-200 dark:border-neutral-800 text-xs bg-white dark:bg-neutral-900 pr-10 focus-visible:ring-green-500/50"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:bg-transparent hover:text-gray-600 dark:hover:text-white"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage className="text-[11px] font-medium text-red-500" />
+              </FormItem>
+            )}
+          />
+
+          {/* Confirmar Senha */}
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Confirmar Senha</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="••••••••"
+                      type={showConfirmPassword ? "text" : "password"}
+                      {...field}
+                      disabled={isLoading}
+                      className="rounded-xl h-10 border-gray-200 dark:border-neutral-800 text-xs bg-white dark:bg-neutral-900 pr-10 focus-visible:ring-green-500/50"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:bg-transparent hover:text-gray-600 dark:hover:text-white"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      disabled={isLoading}
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage className="text-[11px] font-medium text-red-500" />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Perfil e Unidade */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Role */}
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Perfil de Nível</FormLabel>
+                <FormControl>
+                  <select
                     {...field}
                     disabled={isLoading}
-                    className="border-2 rounded border-blue-500 dark:text-white"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent dark:text-white"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
+                    className="flex h-10 w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500/50"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground dark:text-white" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground dark:text-white" />
-                    )}
-                    <span className="sr-only">
-                      {showPassword ? "Esconder senha" : "Mostrar senha"}
-                    </span>
-                  </Button>
-                </div>
-              </FormControl>
-              <FormMessage className="!text-red-500" />
-            </FormItem>
-          )}
-        />
+                    <option value="ADMIN">Admin</option>
+                    <option value="OWNER">Owner (Acesso Total)</option>
+                    <option value="NEWSONLY">Apenas Notícias</option>
+                    <option value="MESSAGEONLY">Recados Unidade</option>
+                    <option value="MESSAGENEWS">Notícias + Recados Multi</option>
+                  </select>
+                </FormControl>
+                <FormMessage className="text-[11px] font-medium text-red-500" />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="dark:text-white">Confirmar Senha</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="••••••••"
-                    type={showConfirmPassword ? "text" : "password"}
+          {/* Unidade */}
+          <FormField
+            control={form.control}
+            name="unidadeId"
+            render={({ field }) => (
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Unidade Operacional</FormLabel>
+                <FormControl>
+                  <select
                     {...field}
                     disabled={isLoading}
-                    className="border-2 rounded border-blue-500 dark:text-white"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent dark:text-white"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    disabled={isLoading}
+                    className="flex h-10 w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500/50"
                   >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground dark:text-white" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground dark:text-white" />
-                    )}
-                    <span className="sr-only">
-                      {showConfirmPassword ? "Esconder senha" : "Mostrar senha"}
-                    </span>
-                  </Button>
-                </div>
-              </FormControl>
-              <FormMessage className="!text-red-500" />
-            </FormItem>
-          )}
-        />
+                    <option value="">Selecione uma unidade...</option>
+                    {unidades.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.nome}
+                      </option>
+                    ))}
+                  </select>
+                </FormControl>
+                <FormMessage className="text-[11px] font-medium text-red-500" />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        {/* Role */}
-        <FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="dark:text-white">Perfil</FormLabel>
-              <FormControl>
-                <select
-                  {...field}
-                  className="border rounded px-2 py-2 w-full"
-                  disabled={isLoading}
-                >
-                  <option value="ADMIN">Admin</option>
-                  <option value="OWNER">Owner</option>
-                  <option value="NEWSONLY">Newsonly</option>
-                  <option value="MESSAGEONLY">Messageonly</option>
-                  <option value="MESSAGENEWS">Messagenews</option>
-                </select>
-              </FormControl>
-              <FormMessage className="!text-red-500" />
-            </FormItem>
-          )}
-        />
+        {/* Ações operacionais do Formulário */}
+        <div className="flex flex-col sm:flex-row items-center gap-2 border-t border-gray-100 dark:border-neutral-800/50 pt-4 mt-2">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => router.back()}
+            disabled={isLoading}
+            className="w-full sm:w-auto h-10 order-2 sm:order-1 gap-2 rounded-xl text-xs font-semibold text-gray-500 hover:bg-gray-50 dark:hover:bg-neutral-900"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Cancelar e Voltar
+          </Button>
 
-        {/* Unidade */}
-        <FormField
-          control={form.control}
-          name="unidadeId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="dark:text-white">Unidade</FormLabel>
-              <FormControl>
-                <select
-                  {...field}
-                  className="border rounded px-2 py-2 w-full"
-                  disabled={isLoading}
-                >
-                  <option value="">Selecione...</option>
-                  {unidades.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {u.nome}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
-              <FormMessage className="!text-red-500" />
-            </FormItem>
-          )}
-        />
+          <Button 
+            type="submit" 
+            disabled={isLoading}
+            className="w-full sm:ml-auto sm:w-auto h-10 order-1 sm:order-2 gap-2 rounded-xl text-xs font-semibold bg-gray-900 dark:bg-neutral-800 hover:bg-gray-800 text-white px-6 transition-all"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Criando Usuário...
+              </>
+            ) : (
+              <>
+                Efetivar Cadastro
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </Button>
+        </div>
 
-        <Button type="submit" className="w-full rounded bg-blue-600 text-white hover:scale-105" disabled={isLoading}>
-          {form.formState.isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Cadastrando...
-            </>
-          ) : (
-            "Cadastrar"
-          )}
-        </Button>
       </form>
     </Form>
   );

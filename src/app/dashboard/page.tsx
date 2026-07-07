@@ -1,301 +1,231 @@
-export const dynamic = "force-dynamic";
+"use client";
 
 import Layout from "../../components/Layout";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedDarkModeToggle from "../../components/AnimatedDarkModeToggle";
-import { prisma } from "@/src/lib/prisma";
-import { headers } from "next/headers";
-import { getUnidadeByIp } from "../../lib/getUnidadeByIp";
-import { Newspaper, Bell } from "lucide-react";
+import {
+  Link2,
+  ArrowRight,
+  Phone,
+  Mail,
+  Newspaper,
+  Megaphone,
+} from "lucide-react";
 
-type DashboardItem = {
-  title: string;
-  href: string;
-  color: string;
-  icon?: string;
+type Sistema = {
+  url: string;
+  name: string;
+  description: string;
+  badge?: string;
+  icon: string;
+  hoverBorder: string;
+  badgeStyle?: string;
 };
 
-const dashboardItems: DashboardItem[] = [
+const sistemas: Sistema[] = [
   {
-    title: "Sistemas\nNaturafrig",
-    href: "/links-uteis",
-    color: "bg-gradient-to-br from-slate-600 to-slate-800",
-    icon: "/assets/images/icons/icons8-link-branco.png",
+    url: "https://helpdesk.naturafrig.com.br/",
+    name: "Chamados TI",
+    description: "Abra e acompanhe seus chamados de TI",
+    badge: "Novo",
+    icon: "/assets/images/logos/logo-help-ok - Copia.png",
+    hoverBorder: "hover:border-orange-500/50 hover:shadow-orange-500/10",
+    badgeStyle: "bg-orange-100 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400",
   },
   {
-    title: "Ramais",
-    href: "/ramais",
-    color: "bg-gradient-to-br from-amber-500 to-amber-700",
-    icon: "/assets/images/icons/icons8-phone-branco.png",
+    url: "http://172.16.10.4:8220/webapp/",
+    name: "PROTHEUS",
+    description: "Acesse o sistema TOTVS Protheus",
+    icon: "/assets/images/logos/protheus.png",
+    hoverBorder: "hover:border-blue-600/50 hover:shadow-blue-600/10",
   },
   {
-    title: "Emails",
-    href: "/emails",
-    color: "bg-gradient-to-br from-sky-500 to-sky-700",
-    icon: "/assets/images/icons/icons8-mail-branco.png",
+    url: "http://172.16.10.4:7017/login",
+    name: "Smartview",
+    description: "Painéis e indicadores em tempo real",
+    icon: "/assets/images/logos/smartview.png",
+    hoverBorder: "hover:border-purple-500/50 hover:shadow-purple-500/10",
   },
   {
-    title: "Notícias",
-    href: "/noticias",
-    color: "bg-gradient-to-br from-blue-500 to-indigo-600",
-    icon: "/assets/images/icons/icons8-news-branco.png",
+    url: "http://172.16.8.5:6969/",
+    name: "Busca PROTHEUS",
+    description: "Pesquise por informações no Protheus",
+    icon: "/assets/images/icons/icons8-magnifying-glass-96.png",
+    hoverBorder: "hover:border-sky-500/50 hover:shadow-sky-500/10",
   },
   {
-    title: "Recados",
-    href: "/recados",
-    color: "bg-gradient-to-br from-orange-500 to-red-600",
-    icon: "/assets/images/icons/icons8-megaphone-branco.png",
+    url: "https://platform.senior.com.br/",
+    name: "SeniorX",
+    description: "Sistema de gestão Senior",
+    icon: "/assets/images/logos/logo-senior.png",
+    hoverBorder: "hover:border-emerald-500/50 hover:shadow-emerald-500/10",
+  },
+  {
+    url: "https://webmail.naturafrig.com.br/",
+    name: "Webmail",
+    description: "Acesse seu e-mail corporativo",
+    icon: "/assets/images/logos/webmail-logo.svg",
+    hoverBorder: "hover:border-neutral-400/50 hover:shadow-neutral-400/10",
   },
 ];
 
-type Noticia = {
-  id: number;
-  titulo: string;
-  conteudo: string;
-  imagem: string | null;
-  createdAt: string;
+const userName = "Seja bem vindo(a)"; // Substitua pelo nome do usuário, se disponível
+
+type QuickLink = {
+  href: string;
+  name: string;
+  icon: React.ReactNode;
+  iconBg: string;
 };
 
-type Recado = {
-  id: number;
-  titulo: string;
-  conteudo: string;
-  imagem: string | null;
-  createdAt: string;
-  unidade: { id: number; nome: string };
-};
+const quickLinks: QuickLink[] = [
+  {
+    href: "/ramais",
+    name: "Ramais",
+    icon: <Phone size={18} />,
+    iconBg: "bg-gradient-to-br from-amber-500 to-amber-700",
+  },
+  {
+    href: "/emails",
+    name: "Emails",
+    icon: <Mail size={18} />,
+    iconBg: "bg-gradient-to-br from-sky-500 to-sky-700",
+  },
+  {
+    href: "/noticias",
+    name: "Notícias",
+    icon: <Newspaper size={18} />,
+    iconBg: "bg-gradient-to-br from-blue-500 to-indigo-600",
+  },
+  {
+    href: "/recados",
+    name: "Recados",
+    icon: <Megaphone size={18} />,
+    iconBg: "bg-gradient-to-br from-orange-500 to-red-600",
+  },
+];
 
-async function getBaseUrl() {
-  // Em Server Components, fetch para rota relativa exige host absoluto.
-  // Não assumimos https em produção: usamos o protocolo real repassado
-  // pelo proxy (x-forwarded-proto) ou, na ausência dele, http — que é
-  // o que `next start` fala nativamente sem um proxy/TLS na frente.
-  const h = await headers();
-  const host = h.get("host");
-  const forwardedProto = h.get("x-forwarded-proto");
-  const protocol = forwardedProto ?? "http";
-  return `${protocol}://${host}`;
-}
-
-async function getDashboardData() {
-  const h = await headers();
-  const ip = h.get("x-forwarded-for") ?? h.get("x-real-ip");
-  const unidadeId = getUnidadeByIp(ip);
-
-  const [ultimaNoticia, ultimoRecado] = await Promise.all([
-    prisma.noticia.findFirst({
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        titulo: true,
-        conteudo: true,
-        imagem: true,
-        createdAt: true,
-      },
-    }),
-    unidadeId
-      ? prisma.recado.findFirst({
-          where: {
-            unidades: {
-              some: {
-                unidadeId,
-              },
-            },
-          },
-          orderBy: { createdAt: "desc" },
-          include: {
-            unidade: { select: { id: true, nome: true } },
-          },
-        })
-      : null,
-  ]);
-
-  const totalNoticias = await prisma.noticia.count();
-  const totalRecados = unidadeId
-    ? await prisma.recado.count({
-        where: {
-          unidades: {
-            some: { unidadeId },
-          },
-        },
-      })
-    : 0;
-
-  return { totalNoticias, totalRecados, unidadeId, ultimaNoticia, ultimoRecado };
-}
-
-export default async function Dashboard() {
-  const { ultimaNoticia, ultimoRecado } = await getDashboardData();
+export default function DashboardPage() {
+  const openInNewTab = (url: string) => {
+    const newTab = window.open(url, "_blank", "noopener,noreferrer");
+    newTab?.focus();
+  };
 
   return (
     <Layout>
-      <div className="min-h-screen pt-2 p-1">
-        {/* HEADER igual */}
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-0 pb-12">
-            <h1
-              className="font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent leading-tight"
-              style={{ fontSize: "clamp(1.75rem, 1.1rem + 3vw, 3.75rem)" }}
-            >
-              Bem vindo!
-            </h1>
-            <div
-              className="flex items-center bg-white/60 dark:bg-gray-900/60 backdrop-blur-md rounded-2xl border border-white/30 shadow-lg"
-              style={{
-                gap: "clamp(0.5rem, 0.3rem + 0.8vw, 0.75rem)",
-                padding: "clamp(0.4rem, 0.2rem + 0.6vw, 0.5rem) clamp(0.75rem, 0.5rem + 1vw, 1rem)",
-              }}
-            >
-              <span
-                className="font-medium text-gray-700 dark:text-gray-300"
-                style={{ fontSize: "clamp(0.75rem, 0.6rem + 0.5vw, 0.875rem)" }}
-              >
+      <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          
+          {/* Header Superior */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-gray-100 dark:border-neutral-800/60">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                Olá, {userName}! 
+                {/* <span className="animate-pulse"> */}
+                <span className="">
+                  👋
+                </span>
+              </h1>
+              <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base mt-1">
+                Acesse rapidamente todos os sistemas essenciais da empresa
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 bg-zinc-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-2xl px-4 py-2 shadow-sm">
+              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 Tema
               </span>
               <AnimatedDarkModeToggle />
             </div>
           </div>
-        </div>
 
-        {/* SEÇÃO ÚLTIMAS NOTÍCIAS + RECADOS */}
-        <div className="max-w-7xl mx-auto px-6 mb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-            {/* 🔥 ÚLTIMA NOTÍCIA */}
-            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl p-6 sm:p-10 hover:shadow-3xl transition-all duration-300 h-auto min-h-[280px] max-h-[320px]">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2 sm:gap-3 text-gray-900 dark:text-white">
-                  <Image
-                    src={"/assets/images/icons/icons8-news-preto.png"}
-                    alt={"Noticias"}
-                    width={24}
-                    height={24}
-                    className="object-cover hover:scale-110 transition-transform duration-300 dark:invert"
-                  />
-                  Últimas Notícias
-                </h2>
-                <Link href="/noticias" className="text-xs sm:text-sm font-medium text-white flex items-center gap-1 bg-blue-600 hover:bg-blue-700 p-1.5 sm:p-2 rounded">
-                  Ver todas <span>→</span>
-                </Link>
-              </div>
-
-              {ultimaNoticia ? (
-                <Link href={`/noticias#${ultimaNoticia.id}`} className="block hover:scale-[1.02] transition-transform duration-200">
-                  <div className="flex gap-4 sm:gap-6">
-                    {ultimaNoticia.imagem && (
-                      <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden bg-gray-200 shadow-lg">
-                        <Image
-                          src={`/admin/api/uploads/noticias/${ultimaNoticia.imagem}?v=${new Date(ultimaNoticia.createdAt).getTime()}`}
-                          alt={ultimaNoticia.titulo}
-                          width={128}
-                          height={128}
-                          className="object-cover w-full h-full hover:scale-110 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 dark:text-white mb-2 sm:mb-3 leading-tight">
-                        {ultimaNoticia.titulo}
-                      </h3>
-                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3 leading-relaxed">
-                        {ultimaNoticia.conteudo}
-                      </p>
-                      <p className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4 flex items-center gap-2">
-                        📰 {new Date(ultimaNoticia.createdAt).toLocaleDateString('pt-BR')}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-8 sm:py-16 text-center h-full">
-                  <Newspaper className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-3 sm:mb-4 opacity-40" />
-                  <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 font-medium">Nenhuma notícia publicada ainda.</p>
-                </div>
-              )}
-            </div>
-
-            {/* 🔥 ÚLTIMO RECADO */}
-            <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-3xl border border-white/50 shadow-2xl p-6 sm:p-10 hover:shadow-3xl transition-all duration-300 h-auto min-h-[280px] max-h-[320px]">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2 sm:gap-3 text-gray-900 dark:text-white">
-                  <Image
-                    src={"/assets/images/icons/icons8-megaphone-preto.png"}
-                    alt={"Recados"}
-                    width={24}
-                    height={24}
-                    className="object-cover hover:scale-110 transition-transform duration-300 dark:invert"
-                  />
-                  Recados
-                </h2>
-                <Link href="/recados" className="text-xs sm:text-sm font-medium text-white flex items-center gap-1 bg-orange-600 hover:bg-orange-700 p-1.5 sm:p-2 rounded">
-                  Ver todos <span>→</span>
-                </Link>
-              </div>
-
-              {ultimoRecado ? (
-                <Link href={`/recados#${ultimoRecado.id}`} className="block hover:scale-[1.02] transition-transform duration-200">
-                  <div className="flex gap-4 sm:gap-6">
-                    {ultimoRecado.imagem && (
-                      <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl sm:rounded-3xl overflow-hidden bg-gray-200 shadow-lg">
-                        <Image
-                          src={`/admin/api/uploads/recados/${ultimoRecado.imagem}?v=${new Date(ultimoRecado.createdAt).getTime()}`}
-                          alt={ultimoRecado.unidade.nome}
-                          width={128}
-                          height={128}
-                          className="object-cover w-full h-full hover:scale-110 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 dark:text-white mb-2 sm:mb-3 leading-tight">
-                        {ultimoRecado.titulo}
-                      </h3>
-                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3 leading-relaxed">
-                        {ultimoRecado.conteudo}
-                      </p>
-                      <p className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4 flex items-center gap-2">
-                        📍 {ultimoRecado.unidade.nome} • {new Date(ultimoRecado.createdAt).toLocaleDateString('pt-BR')}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-8 sm:py-16 text-center h-full">
-                  <Bell className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-3 sm:mb-4 opacity-40" />
-                  <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 font-medium">Nenhum recado publicado ainda.</p>
-                </div>
-              )}
+          {/* Título da seção de Sistemas */}
+          <div className="flex items-center gap-3 mb-6">
+            <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
+              <Link2 size={16} />
+            </span>
+            <div>
+              <h2 className="font-bold text-lg text-gray-900 dark:text-white">
+                Sistemas Corporativos
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                Tudo que você precisa em um só lugar
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* 5 BOTÕES (igual antes) */}
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="
-            grid gap-8 lg:gap-10
-            grid-cols-1 sm:grid-cols-2 
-            lg:grid-cols-3 xl:grid-cols-5
-          ">
-            {dashboardItems.map((item) => {
-              return (
-                <Link key={item.href} href={item.href} className="group relative w-full h-[220px] lg:h-[260px] flex flex-col items-center justify-center rounded-3xl p-8 text-center shadow-xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:-translate-y-2 overflow-hidden focus:outline-none">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-95 group-hover:opacity-100 transition-all duration-500`} />
+          {/* Grid de Sistemas Futurista */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {sistemas.map((sistema) => (
+              <div
+                key={sistema.url}
+                onClick={() => openInNewTab(sistema.url)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") openInNewTab(sistema.url);
+                }}
+                className={`group relative flex items-center gap-4 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-4 cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg ${sistema.hoverBorder}`}
+              >
+                {/* Container do Logo - Aumentado e com fundo de alto contraste */}
+                <div className="relative w-20 h-20 shrink-0 bg-zinc-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-2xl p-2.5 flex items-center justify-center overflow-hidden transition-all duration-300 shadow-inner group-hover:bg-white dark:group-hover:bg-neutral-750">
+                  <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-300">
+                    <Image
+                      src={sistema.icon}
+                      alt={sistema.name}
+                      fill
+                      className="object-contain filter dark:brightness-110"
+                    />
+                  </div>
+                </div>
 
-                  {item.icon && (
-                    <div className="relative w-20 h-20 lg:w-28 lg:h-28 mb-6 z-10 transform group-hover:scale-110 transition-transform duration-300">
-                      <Image src={item.icon} alt={item.title} fill className="object-contain drop-shadow-lg" />
-                    </div>
-                  )}
-                  <span className="relative z-10 text-xl lg:text-2xl font-bold leading-tight tracking-tight break-words px-4 bg-gradient-to-r from-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-lg">
-                    {item.title.split('\\n')[0]}
-                  </span>
-                  <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/30 rounded-2xl blur-xl group-hover:scale-150 transition-all duration-700 opacity-0 group-hover:opacity-100" />
-                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-32 h-32 bg-white/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
-                </Link>
-              );
-            })}
+                {/* Textos */}
+                <div className="flex-1 min-w-0 pr-6">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white text-base truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {sistema.name}
+                    </h3>
+                    {sistema.badge && (
+                      <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${sistema.badgeStyle}`}>
+                        {sistema.badge}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-400 dark:text-gray-500 text-xs mt-0.5 line-clamp-2 leading-relaxed">
+                    {sistema.description}
+                  </p>
+                </div>
+
+                {/* Mini botão de link */}
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-50 dark:bg-neutral-950 border border-gray-100 dark:border-neutral-800 text-gray-400 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 group-hover:bg-blue-500 group-hover:text-white group-hover:border-blue-500">
+                  <ArrowRight size={12} />
+                </span>
+              </div>
+            ))}
           </div>
+
+          {/* Divider */}
+          <div className="h-px bg-gray-100 dark:bg-neutral-800/60 my-8" />
+
+          {/* Grid de Acesso Rápido com gradientes */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {quickLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group flex items-center gap-3.5 bg-white dark:bg-neutral-900 rounded-2xl border border-gray-100 dark:border-neutral-800 shadow-sm p-3.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+              >
+                <span className={`flex items-center justify-center w-9 h-9 shrink-0 rounded-xl text-white shadow-md ${item.iconBg}`}>
+                  {item.icon}
+                </span>
+                <span className="font-semibold text-gray-800 dark:text-neutral-200 text-sm group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                  {item.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+
         </div>
       </div>
     </Layout>

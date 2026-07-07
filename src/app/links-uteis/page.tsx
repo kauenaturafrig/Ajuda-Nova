@@ -2,43 +2,50 @@
 
 import Layout from "../../components/Layout";
 import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 
 const sistemas = [
   {
     url: "https://helpdesk.naturafrig.com.br/",
     name: "Chamados TI",
     icon: "/assets/images/logos/logo-help-ok - Copia.png",
-    color: "bg-gradient-to-br from-orange-500 to-orange-700",
+    color: "border-orange-500/20 hover:border-orange-500 group-hover:text-orange-500 hover:shadow-orange-500/10",
+    badge: "bg-orange-500/10 text-orange-600 dark:text-orange-400"
   },
   {
     url: "http://172.16.10.4:8220/webapp/",
     name: "PROTHEUS",
     icon: "/assets/images/logos/protheus.png",
-    color: "bg-gradient-to-br from-slate-600 to-slate-800",
+    color: "border-slate-500/20 hover:border-slate-400 group-hover:text-slate-400 hover:shadow-slate-500/10",
+    badge: "bg-slate-500/10 text-slate-600 dark:text-slate-300"
   },
   {
     url: "http://172.16.10.4:7017/login",
     name: "Smartview",
     icon: "/assets/images/logos/smartview.png",
-    color: "bg-gradient-to-br from-blue-600 to-blue-800",
+    color: "border-blue-500/20 hover:border-blue-500 group-hover:text-blue-500 hover:shadow-blue-500/10",
+    badge: "bg-blue-500/10 text-blue-600 dark:text-blue-400"
   },
   {
     url: "http://172.16.8.5:6969/",
     name: "Busca PROTHEUS",
     icon: "/assets/images/icons/icons8-magnifying-glass-96.png",
-    color: "bg-gradient-to-br from-sky-500 to-sky-700",
+    color: "border-sky-500/20 hover:border-sky-500 group-hover:text-sky-500 hover:shadow-sky-500/10",
+    badge: "bg-sky-500/10 text-sky-600 dark:text-sky-400"
   },
   {
     url: "https://platform.senior.com.br/",
     name: "SeniorX",
     icon: "/assets/images/logos/logo-senior.png",
-    color: "bg-gradient-to-br from-emerald-500 to-emerald-700",
+    color: "border-emerald-500/20 hover:border-emerald-500 group-hover:text-emerald-500 hover:shadow-emerald-500/10",
+    badge: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
   },
   {
     url: "https://webmail.naturafrig.com.br/",
     name: "Webmail",
     icon: "/assets/images/logos/webmail-logo.svg",
-    color: "bg-gradient-to-br from-black to-black",
+    color: "border-neutral-500/20 hover:border-neutral-400 group-hover:text-neutral-400 hover:shadow-neutral-500/5",
+    badge: "bg-neutral-500/10 text-neutral-600 dark:text-neutral-300"
   },
 ];
 
@@ -50,83 +57,74 @@ export default function LinksUtil() {
 
   return (
     <Layout>
-      <div className="min-h-screen pt-2 p-1">
-        {/* Header */}
-        <div className="max-w-7xl mx-auto mb-16">
-          <div className="flex items-center gap-4 mb-4">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-              Sistemas Naturafrig
-            </h1>
-            <Image
-              src="/assets/images/icons/icons8-link-preto.png"
-              alt="Logo Link"
-              width={50}
-              height={50}
-              className="dark:invert"
-            />
+      <div className="max-w-6xl mx-auto py-8 px-4">
+        {/* Header no mesmo alinhamento fino dos painéis anteriores */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-gray-100 dark:border-neutral-800">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+                Sistemas Naturafrig
+              </h1>
+              <Image
+                src="/assets/images/icons/icons8-link-preto.png"
+                alt="Logo Link"
+                width={28}
+                height={28}
+                className="dark:invert opacity-80"
+              />
+            </div>
+            <p className="text-base text-gray-500 dark:text-gray-400">
+              Acesso corporativo unificado aos sistemas essenciais da empresa.
+            </p>
           </div>
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl">
-            Acesse rapidamente todos os sistemas essenciais da empresa
-          </p>
         </div>
 
-        {/* Dashboard Grid */}
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sistemas.map(({ url, name, icon, color }) => (
-              <div
-                key={url}
-                className="
-      group relative w-full h-[200px] lg:h-[220px] xl:h-[240px]
-      rounded-3xl p-8 text-center shadow-xl cursor-pointer
-      transition-all duration-500 hover:scale-[1.05] hover:shadow-2xl hover:-translate-y-3
-      overflow-hidden focus:outline-none
-    "
-                onClick={() => openInNewTab(url)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    openInNewTab(url);
-                  }
-                }}
-              >
-                {/* ✅ GRADIENTE PURO */}
-                <div className={`
-      absolute inset-0 ${color}
-      opacity-95 group-hover:opacity-100 group-hover:brightness-105
-      transition-all duration-500
-    `} />
-
-                {/* ✅ REMOVIDO: Glass overlay */}
-                {/* <div className="absolute inset-0 bg-white/15 dark:bg-black/25 backdrop-blur-sm border border-white/30" /> */}
-
-                {/* Logo */}
-                <div className="relative w-20 h-20 lg:w-24 lg:h-24 xl:w-44 xl:h-28 mx-auto mb-6 z-10 transform group-hover:scale-110 transition-all duration-300">
-                  <Image
-                    src={icon}
-                    alt={name}
-                    fill
-                    className="object-contain drop-shadow-2xl"
-                  />
-                </div>
-
-                {/* Nome - TEXTO MAIS SÓLIDO */}
-                <h3 className="relative z-10 text-xl lg:text-2xl xl:text-3xl font-bold leading-tight tracking-tight bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent drop-shadow-2xl">
-                  {name}
-                </h3>
-
-                {/* Indicador Nova Aba - SIMPLIFICADO */}
-                <div className="absolute bottom-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md">
-                  ↗️ Nova aba
-                </div>
-
-                {/* ✨ EFEITOS DECORATIVOS mantidos */}
-                <div className="absolute -top-4 -right-4 w-20 h-20 lg:w-24 lg:h-24 bg-white/40 rounded-full blur-xl group-hover:scale-150 opacity-0 group-hover:opacity-100 transition-all duration-700" />
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-32 bg-white/30 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+        {/* Dashboard Grid Futurista e Clean */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sistemas.map(({ url, name, icon, color, badge }) => (
+            <div
+              key={url}
+              onClick={() => openInNewTab(url)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  openInNewTab(url);
+                }
+              }}
+              className={`
+                group relative flex flex-col items-center justify-center h-48
+                bg-white dark:bg-neutral-900 
+                border rounded-3xl p-6 shadow-sm cursor-pointer
+                transition-all duration-300 ease-out
+                hover:-translate-y-1.5 hover:shadow-xl
+                ${color}
+              `}
+            >
+              {/* Badge indicadora discreta no topo superior direito */}
+              <div className={`absolute top-4 right-4 flex items-center justify-center p-1.5 rounded-xl opacity-40 group-hover:opacity-100 transition-opacity duration-300 ${badge}`}>
+                <ArrowUpRight size={14} />
               </div>
-            ))}
-          </div>
+
+              {/* Logo Centralizado com efeito de flutuação */}
+              <div className="relative w-36 h-16 mb-4 transform group-hover:scale-105 transition-transform duration-300">
+                <Image
+                  src={icon}
+                  alt={name}
+                  fill
+                  className="object-contain filter dark:brightness-110 drop-shadow-sm"
+                />
+              </div>
+
+              {/* Nome do Sistema em Texto Sólido e Clean */}
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
+                {name}
+              </h3>
+
+              {/* Linha de brilho sutil no fundo interno do card */}
+              <div className="absolute inset-x-12 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+            </div>
+          ))}
         </div>
       </div>
     </Layout>

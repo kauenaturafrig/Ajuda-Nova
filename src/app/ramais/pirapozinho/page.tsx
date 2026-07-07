@@ -4,38 +4,42 @@ import Layout from "../../../components/Layout";
 import { RamaisList } from "../_components/ramais-list";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
-// desabilita cache e SSG
 export const dynamic = "force-dynamic";
-// ou, alternativamente:
-// export const revalidate = 0;
 
 export default async function RamaisPirapozinhoPage() {
-  // pega a unidade pelo nome (ou id fixo, como preferir)
   const unidade = await prisma.unidade.findFirst({
     where: { nome: "Pirapozinho-SP" },
     include: { ramais: { orderBy: { setor: "asc" } } },
   });
 
-  // se não achar unidade, mostra mensagem simples
   const ramais = unidade?.ramais ?? [];
 
   return (
     <Layout>
-      <Link href="/ramais" prefetch={false}>
-        <Button variant="outline" className="mb-4 bg-gray-500 text-white">
-          ← Voltar
-        </Button>
-      </Link>
-      <RamaisList
-        titulo="Pirapozinho - SP"
-        imagem="/assets/images/unidades/PIRAPOZINHO2023.jpg"
-        ramais={ramais.map((r) => ({
-          nome: r.nome,
-          setor: r.setor,
-          ramal: r.numero,
-        }))}
-      />
+      <div className="max-w-6xl mx-auto py-4">
+        {/* Botão Voltar Alinhado com a Identidade */}
+        <Link href="/ramais" prefetch={false} passHref>
+          <Button
+            variant="outline"
+            className="mb-6 gap-2 text-gray-600 dark:text-gray-300 transition-all duration-300"
+          >
+            <ArrowLeft size={16} />
+            Voltar para o Mapa
+          </Button>
+        </Link>
+
+        <RamaisList
+          titulo="Pirapozinho - SP"
+          imagem="/assets/images/unidades/PIRAPOZINHO2023.jpg"
+          ramais={ramais.map((r) => ({
+            nome: r.nome,
+            setor: r.setor,
+            ramal: r.numero,
+          }))}
+        />
+      </div>
     </Layout>
   );
 }

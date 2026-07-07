@@ -5,9 +5,18 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
-import { X } from "lucide-react";
+import { Input } from "../../../../components/ui/input";
 import { LoadingOverlay } from "@/src/components/ui/loading-overlay";
-import Layout from "@/src/components/Layout";
+import { 
+  ArrowLeft, 
+  Newspaper, 
+  UploadCloud, 
+  FileText, 
+  Calendar, 
+  Edit3, 
+  Trash2, 
+  X 
+} from "lucide-react";
 
 export type UserRole = "OWNER" | "ADMIN" | "NEWSONLY" | "MESSAGENEWS";
 
@@ -78,6 +87,7 @@ export default function NoticiasClient({
       imagemPreview: getImagemUrl(noticia),
       imagemAntiga: noticia.imagem || "",
     });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id: number) => {
@@ -214,55 +224,115 @@ export default function NoticiasClient({
       {loading && <LoadingOverlay show={true} />}
       {saving && <LoadingOverlay show={true} />}
 
-      <>
-        <div className="container mx-auto py-12 w-[90%]">
-          <div className="flex justify-start mb-12">
-            <Button
-              onClick={() => router.back()}
-              className="bg-gray-600 hover:bg-gray-700 text-white"
-            >
-              ← Voltar
-            </Button>
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+        
+        {/* Topbar / Header Administrativo */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-6">
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => router.back()}
+                className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+              <div className="flex items-center gap-2">
+                <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
+                  <Newspaper size={18} />
+                </span>
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  Gerenciar Notícias
+                </h1>
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 pl-12">
+              Publique informativos, avisos gerais e comunicados internos na plataforma.
+            </p>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
-            <h1 className="text-5xl font-bold dark:text-white">
-              Gerenciar Notícias
-            </h1>
-
+          <div className="hidden sm:block pl-12 md:pl-0 shrink-0 opacity-80 dark:opacity-40">
             <Image
               src="/assets/images/icons/icons8-news-preto.png"
               alt="Icon news"
-              width={50}
-              height={50}
+              width={42}
+              height={42}
               className="dark:invert"
             />
           </div>
+        </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white/60 dark:bg-gray-500 backdrop-blur p-8 rounded-2xl mb-12"
-          >
-            <div className="grid md:grid-cols-2 gap-6">
-              <input
-                value={formData.titulo}
-                onChange={(e) =>
-                  setFormData({ ...formData, titulo: e.target.value })
-                }
-                placeholder="Título da notícia"
-                className="w-full p-4 border rounded-xl text-lg"
-                required
-              />
-
+        {/* Formulário de Criação/Edição */}
+        <section className="bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 p-6 shadow-sm">
+          <div className="flex items-center justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-4 mb-6">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Nova Imagem (opcional)
-                </label>
+                <h2 className="text-base font-bold text-gray-900 dark:text-white">
+                  {editingId ? "Editar Conteúdo Publicado" : "Compor Nova Publicação"}
+                </h2>
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  Insira o título, texto principal e vincule uma imagem de destaque se desejar.
+                </p>
+              </div>
+            </div>
+
+            {editingId && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setEditingId(null);
+                  setFormData({ titulo: "", conteudo: "", imagem: null, imagemPreview: "", imagemAntiga: "" });
+                  setImagemNoticia(null);
+                }}
+                className="rounded-xl text-xs font-semibold hover:bg-gray-150 dark:hover:bg-neutral-800 text-gray-500"
+              >
+                Cancelar Edição
+              </Button>
+            )}
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              
+              {/* Inputs de Texto */}
+              <div className="lg:col-span-2 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Título da Notícia</label>
+                  <Input
+                    value={formData.titulo}
+                    onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
+                    placeholder="Escreva um título chamativo e direto..."
+                    className="rounded-xl h-11 border-gray-200 dark:border-neutral-800 text-xs"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Corpo da Publicação</label>
+                  <textarea
+                    value={formData.conteudo}
+                    onChange={(e) => setFormData({ ...formData, conteudo: e.target.value })}
+                    placeholder="Digite o conteúdo detalhado da notícia aqui..."
+                    rows={5}
+                    className="flex w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Upload de Imagem Drag & Drop */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Imagem de Destaque</label>
                 <div
-                  className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 w-full ${
+                  className={`relative border-2 border-dashed rounded-xl p-5 text-center transition-all duration-200 h-[198px] flex flex-col justify-center items-center ${
                     dragActive
-                      ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
-                      : "border-gray-300 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      ? "border-blue-400 bg-blue-50/20 dark:bg-blue-950/10"
+                      : "border-gray-200 dark:border-neutral-800 hover:border-blue-400/60 hover:bg-gray-50/50 dark:hover:bg-neutral-800/40"
                   }`}
                   onDragEnter={handleDragIn}
                   onDragLeave={handleDragOut}
@@ -274,189 +344,176 @@ export default function NoticiasClient({
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 pointer-events-auto"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                   />
 
-                  <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center h-full">
-                    <svg
-                      className="w-10 h-10 mb-2 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
-                    <p className="text-sm font-medium text-gray-700 mb-1">
-                      {dragActive ? "✅ Solte aqui!" : "Clique ou arraste nova imagem"}
+                  <div className="relative z-10 pointer-events-none flex flex-col items-center justify-center">
+                    <UploadCloud className="w-8 h-8 mb-2 text-gray-400" />
+                    <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-0.5">
+                      {dragActive ? "Solte a imagem aqui" : "Arraste ou clique para upload"}
                     </p>
-                    <p className="text-xs text-gray-500">PNG, JPG (máx. 5MB)</p>
+                    <p className="text-[10px] text-gray-400">Suporta PNG, JPG (máx. 5MB)</p>
                   </div>
 
-                  {imagemNoticia && (
-                    <div className="absolute inset-0 bg-white/95 dark:bg-black/95 flex flex-col items-center justify-center z-30 rounded-xl">
-                      <div className="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/50 p-4 rounded-lg border border-blue-200 dark:border-blue-800 w-full max-w-md">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-blue-800 dark:text-blue-200 truncate">
-                            {imagemNoticia.name}
-                          </p>
-                          <p className="text-xs text-blue-700 dark:text-blue-300">
-                            {Math.round(imagemNoticia.size / 1024)} KB
-                          </p>
+                  {(imagemNoticia || formData.imagemPreview) && (
+                    <div className="absolute inset-1.5 bg-white dark:bg-neutral-900 flex flex-col items-center justify-center z-30 rounded-lg p-2 border border-gray-100 dark:border-neutral-800">
+                      {formData.imagemPreview ? (
+                        <div className="relative w-full h-full flex items-center justify-center bg-gray-50 dark:bg-neutral-950 rounded-md overflow-hidden">
+                          <img
+                            src={formData.imagemPreview}
+                            alt="Preview"
+                            className="max-w-full max-h-full object-contain rounded"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            onClick={removeImage}
+                            className="absolute top-1.5 right-1.5 h-6 w-6 rounded-lg opacity-90 hover:opacity-100"
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
                         </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={removeImage}
-                          className="h-9 w-9 p-0 hover:bg-red-500 hover:text-white"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
+                      ) : (
+                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-neutral-950 p-2 rounded-lg border border-gray-200 dark:border-neutral-800 w-full">
+                          <FileText className="w-4 h-4 text-blue-500 shrink-0" />
+                          <div className="flex-1 min-w-0 text-left">
+                            <p className="text-[11px] font-bold text-gray-800 dark:text-gray-200 truncate">
+                              {imagemNoticia?.name}
+                            </p>
+                            <p className="text-[10px] text-gray-400">
+                              {imagemNoticia ? Math.round(imagemNoticia.size / 1024) : 0} KB
+                            </p>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={removeImage}
+                            className="h-7 w-7 p-0 rounded-lg text-gray-400 hover:text-red-500"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
               </div>
             </div>
 
-            <textarea
-              value={formData.conteudo}
-              onChange={(e) =>
-                setFormData({ ...formData, conteudo: e.target.value })
-              }
-              placeholder="Conteúdo da notícia"
-              rows={6}
-              className="w-full p-4 border rounded-xl mt-6 text-lg"
-              required
-            />
-
-            {formData.imagemPreview && (
-              <div className="mt-4 p-4 bg-gray-100 rounded-xl">
-                <img
-                  src={formData.imagemPreview}
-                  alt="Preview"
-                  className="w-32 h-32 object-cover rounded-lg"
-                />
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              disabled={saving}
-              className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-            >
-              {saving ? "Salvando..." : editingId ? "Atualizar" : "Criar"} Notícia
-            </Button>
+            <div className="flex justify-end border-t border-gray-100 dark:border-neutral-800/60 pt-4">
+              <Button
+                type="submit"
+                disabled={saving}
+                className="w-full sm:w-48 h-10 gap-2 rounded-xl text-xs font-semibold bg-blue-500 hover:bg-blue-600 text-white shadow-md shadow-blue-500/10"
+              >
+                {saving ? "Salvando..." : editingId ? "Atualizar Notícia" : "Publicar Notícia"}
+              </Button>
+            </div>
           </form>
+        </section>
 
-          <div className="space-y-4">
-            {noticias.length === 0 ? (
-              <div className="text-center py-20">
-                <h3 className="text-3xl font-bold mb-4 dark:text-white">
-                  Nenhuma notícia
-                </h3>
-                <p>Crie a primeira notícia acima!</p>
-              </div>
-            ) : (
-              noticias.map((noticia) => {
+        {/* Feed Vertical de Notícias Recentes */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 px-1">
+            <span className="w-1.5 h-3 rounded-full bg-blue-500" />
+            <h3 className="text-base font-bold text-gray-900 dark:text-white">Feed de Publicações Ativas</h3>
+          </div>
+
+          {noticias.length === 0 ? (
+            <div className="text-center py-16 bg-white dark:bg-neutral-900/20 rounded-2xl border border-gray-100 dark:border-neutral-800/80">
+              <Newspaper className="w-8 h-8 text-gray-300 dark:text-neutral-700 mx-auto mb-2" />
+              <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200">Nenhuma notícia registrada</h4>
+              <p className="text-xs text-gray-400 dark:text-gray-500 max-w-xs mx-auto mt-0.5">
+                Compunha a sua primeira publicação utilizando o formulário administrativo acima.
+              </p>
+            </div>
+          ) : (
+            /* Lista mudada para flex-col (vertical direta de largura total) */
+            <div className="flex flex-col gap-4">
+              {noticias.map((noticia) => {
                 const isDeleting = deletingId === noticia.id;
                 const imagemUrl = getImagemUrl(noticia);
 
                 return (
                   <div
                     key={noticia.id}
-                    className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 rounded-2xl border relative group"
+                    className="p-5 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 relative flex flex-col justify-between transition-all hover:shadow-sm hover:border-gray-200/60 dark:hover:border-neutral-800 group"
                   >
                     {isDeleting && (
-                      <div className="absolute inset-0 bg-white/95 dark:bg-black/80 backdrop-blur-md flex items-center justify-center rounded-2xl z-20 border-2 border-blue-400 animate-pulse">
-                        <div className="flex items-center gap-3 bg-white/95 dark:bg-gray-900/95 p-6 rounded-2xl shadow-2xl border">
-                          <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent" />
-                          <div>
-                            <p className="font-bold text-lg text-gray-800 dark:text-gray-100">
-                              Excluindo...
-                            </p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Aguarde
-                            </p>
-                          </div>
+                      <div className="absolute inset-0 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm flex items-center justify-center rounded-2xl z-20 border border-red-500/20">
+                        <div className="flex items-center gap-2.5 bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-md border border-gray-100 dark:border-neutral-800">
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-500 border-t-transparent" />
+                          <p className="font-bold text-xs text-gray-800 dark:text-gray-100">Removendo registro...</p>
                         </div>
                       </div>
                     )}
 
-                    <div
-                      className={`transition-all ${
-                        isDeleting ? "opacity-50 blur-sm pointer-events-none" : ""
-                      }`}
-                    >
-                      {/* ✅ TÍTULO no topo do card */}
-                      <h3 className="text-xl font-bold mb-3 dark:text-white">
-                        {noticia.titulo}
-                      </h3>
-
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="text-sm text-gray-500 flex items-center gap-2 dark:text-gray-400">
-                          📰 {new Date(noticia.createdAt).toLocaleDateString("pt-BR")}
+                    <div className={isDeleting ? "opacity-40 blur-xs pointer-events-none" : ""}>
+                      {/* Meta info & Botões de Ação */}
+                      <div className="flex items-center justify-between gap-4 mb-3">
+                        <div className="flex items-center gap-1.5 text-[11px] font-medium text-gray-400 dark:text-gray-500">
+                          <Calendar className="w-3.5 h-3.5 text-blue-500/70" />
+                          {new Date(noticia.createdAt).toLocaleDateString("pt-BR")}
                         </div>
-                        <div className="flex gap-2">
+                        
+                        <div className="flex items-center gap-1 shadow-sm rounded-lg border border-gray-100 dark:border-neutral-800/60 bg-gray-50/50 dark:bg-neutral-900/60 p-0.5">
                           <Button
                             onClick={() => handleEdit(noticia)}
-                            size="sm"
-                            className="bg-green-600 text-white"
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7 rounded-md text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-neutral-800"
                             disabled={isDeleting}
                           >
-                            Editar
+                            <Edit3 className="w-3.5 h-3.5" />
                           </Button>
                           <Button
                             onClick={() => handleDelete(noticia.id)}
-                            size="sm"
-                            variant="destructive"
-                            className="bg-red-600 text-white flex items-center gap-2"
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7 rounded-md text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-white dark:hover:bg-neutral-800"
                             disabled={isDeleting}
                           >
-                            {isDeleting ? (
-                              <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                                Excluindo...
-                              </>
-                            ) : (
-                              <>
-                                <X className="w-4 h-4" />
-                                Excluir
-                              </>
-                            )}
+                            <Trash2 className="w-3.5 h-3.5" />
                           </Button>
                         </div>
                       </div>
 
-                      {noticia.imagem && (
-                        <img
-                          src={imagemUrl}
-                          alt={noticia.titulo}
-                          loading="lazy"
-                          onError={(e) => {
-                            console.log("❌ NOTÍCIA IMAGEM FALHOU:", noticia.imagem);
-                            (e.target as HTMLImageElement).src = "/placeholder.png";
-                          }}
-                          className="w-28 h-28 object-cover rounded-xl mb-4 shadow-md hover:shadow-xl transition-all cursor-pointer group-hover:scale-105"
-                        />
-                      )}
-
-                      <p className="text-gray-700 dark:text-gray-300">
-                        {noticia.conteudo.slice(0, 200)}...
-                      </p>
+                      {/* Corpo do card expandido na horizontal para o feed vertical */}
+                      <div className="flex flex-col sm:flex-row gap-4 items-start">
+                        {noticia.imagem && (
+                          <div className="relative w-full sm:w-28 h-40 sm:h-28 rounded-xl bg-gray-50 dark:bg-neutral-950 border border-gray-150 dark:border-neutral-800 shrink-0 overflow-hidden shadow-inner">
+                            <img
+                              src={imagemUrl}
+                              alt={noticia.titulo}
+                              loading="lazy"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "/placeholder.png";
+                              }}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
+                            />
+                          </div>
+                        )}
+                        
+                        <div className="space-y-1.5 min-w-0 flex-1">
+                          <h4 className="text-sm font-bold text-gray-900 dark:text-white leading-snug break-words group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                            {noticia.titulo}
+                          </h4>
+                          {/* Removido o line-clamp severo para que textos fiquem mais legíveis verticalmente */}
+                          <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed break-words whitespace-pre-wrap">
+                            {noticia.conteudo}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );
-              })
-            )}
-          </div>
+              })}
+            </div>
+          )}
         </div>
-      </>
+      </div>
     </>
   );
 }
