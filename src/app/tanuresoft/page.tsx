@@ -1,5 +1,6 @@
 import Layout from "../../components/Layout";
 import Link from "next/link";
+import { type ReactNode } from "react";
 import {
   Terminal,
   Scissors,
@@ -171,7 +172,14 @@ export default function Tanuresoft() {
   );
 }
 
-function CmdCard({ href, icon, title, description }) {
+interface CmdCardProps {
+  href: string;
+  icon: ReactNode;
+  title: string;
+  description: string;
+}
+
+function CmdCard({ href, icon, title, description }: CmdCardProps) {
   return (
     <Link
       href={href}
