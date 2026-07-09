@@ -53,16 +53,16 @@ export function getUnidadeByIp(ip: string | null): number | null {
     '172.16.38': 1,   // Rochedo
     '172.16.39': 1,   // Rochedo
 
-    '172.16.40': 3,   // Barra dos Bugres
-    '172.16.41': 3,  // Barra dos Bugres
-    '172.16.42': 3,  // Barra dos Bugres
-    '172.16.43': 3,  // Barra dos Bugres
-    '172.16.44': 3,  // Barra dos Bugres
-    '172.16.45': 3,  // Barra dos Bugres
-    '172.16.46': 3,  // Barra dos Bugres
-    '172.16.47': 3,  // Barra dos Bugres
-    '172.16.48': 3,  // Barra dos Bugres
-    '172.16.49': 3,  // Barra dos Bugres
+    '172.16.40': 3,   // Barra do Bugres
+    '172.16.41': 3,  // Barra do Bugres
+    '172.16.42': 3,  // Barra do Bugres
+    '172.16.43': 3,  // Barra do Bugres
+    '172.16.44': 3,  // Barra do Bugres
+    '172.16.45': 3,  // Barra do Bugres
+    '172.16.46': 3,  // Barra do Bugres
+    '172.16.47': 3,  // Barra do Bugres
+    '172.16.48': 3,  // Barra do Bugres
+    '172.16.49': 3,  // Barra do Bugres
 
     '127.0.0': 2,    // LOCALHOST
   };

@@ -44,8 +44,8 @@ export default function RamaisMapaSVG({ basePath }: MapaBrasilProps) {
         lon: -55.29,
       },
       {
-        name: "Barra dos Bugres - MT",
-        slug: "barra-dos-bugres",
+        name: "Barra do Bugres - MT",
+        slug: "barra-do-bugres",
         lat: -14.57,
         lon: -58.18,
       },

@@ -25,87 +25,90 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="h-screen fixed top-0 left-0 w-full sm:w-24 md:w-48 lg:w-48 xl:w-56 bg-blue-900 text-white p-3 lg:p-2 flex flex-col
-      min-h-screen
-      bg-gradient-to-b
-      from-blue-700
-      to-green-700
-      bg-[length:400%_400%]
-      animate-gradient-pulse
-    ">
+    <aside
+      className={`h-screen fixed top-0 left-0 z-50 bg-gradient-to-b from-blue-700 to-green-700 bg-[length:400%_400%] animate-gradient-pulse text-white flex flex-col transition-all duration-300
+        w-20 hover:w-64 group px-2 hover:px-4 overflow-x-hidden overflow-y-auto
+      `}
+      onMouseEnter={() => setOpenSubmenu(openSubmenu)}
+      onMouseLeave={() => setOpenSubmenu(false)}
+    >
       {/* Header */}
-      <div className="flex flex-col items-center mb-4 sm:mb-6 pt-3 sm:pt-4">
+      <div className="flex flex-col items-center mb-4 pt-3">
         <Image
-          src={'/assets/images/logo-naturafrig.png'}
-          width={160}
-          height={160}
+          src='/assets/images/logo-naturafrig.png'
+          width={60}
+          height={60}
           alt="Naturafrig Logo"
-          className='mb-4 sm:mb-6 mx-auto'
+          className='mb-2 mx-auto group-hover:w-40 group-hover:h-auto group-hover:mx-0 transition-all duration-300'
         />
-
-        <p className="text-sm sm:text-base">INTRANET</p>
       </div>
 
       {/* Menu Principal + Submenu */}
-      <nav className="flex-1 space-y-2 mb-6 sm:mb-8 overflow-y-auto">
+      <nav className="flex-1 space-y-3 mb-6 overflow-y-auto overflow-x-hidden">
         {menuItems.map((item) => (
           <Link
             key={item.path}
             href={item.path}
-            className="hover:bg-yellow-500 p-1 rounded flex items-center my-1 transition-all duration-200 "
+            className="hover:bg-yellow-500 rounded flex items-center my-1 transition-all duration-200 mx-2.5"
           >
-            <Image
-              src={item.icon}
-              alt={item.label}
-              width={20}
-              height={20}
-              className='mr-2 sm:mr-3'
-            />
-            <span className="font-normal text-xs sm:text-sm">{item.label}</span>
+            {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
+            <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
+              <Image
+                src={item.icon}
+                alt={item.label}
+                width={20}
+                height={20}
+              />
+            </div>
+
+            {/* Legenda só aparece quando expandido */}
+            <span className="font-normal text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+              {item.label}
+            </span>
           </Link>
         ))}
 
-        {/* Submenu com seta */}
+        {/* Submenu */}
         <div className="relative">
           <button
             onClick={() => setOpenSubmenu(!openSubmenu)}
-            className="w-full hover:bg-yellow-500 p-2 rounded flex items-center my-1 justify-between transition-all duration-200 group"
+            className="w-full hover:bg-yellow-500 rounded flex items-center my-1 transition-all duration-200 mx-2.5"
           >
-            <div className="flex items-center">
+            {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
+            <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
               <Image
                 src="/assets/images/icons/icons8-manual-branco.png"
                 alt="Configurações"
                 width={20}
                 height={20}
-                className='mr-2 sm:mr-3'
               />
-              <span className="font-normal text-xs sm:text-sm">Manuais</span>
             </div>
-            <svg
-              className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${openSubmenu ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+
+            <span className="font-normal text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+              Manuais
+            </span>
           </button>
 
-          <div className={`overflow-hidden transition-all duration-300 ${openSubmenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className={`overflow-hidden transition-all duration-300 ${openSubmenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} mx-3`}>
             {submenuItems.map((item) => (
               <Link
                 key={item.path}
                 href={item.path}
-                className="hover:bg-yellow-400 bg-opacity-20 p-2 pl-8 lg:pl-12 rounded flex items-center my-1 ml-2 text-xs sm:text-sm transition-all duration-200"
+                className="hover:bg-yellow-400 bg-opacity-20 rounded flex items-center my-1 ml-2 text-xs sm:text-sm transition-all duration-200"
               >
-                <Image
-                  src={item.icon}
-                  alt={item.label}
-                  width={18}
-                  height={18}
-                  className='mr-2 flex-shrink-0'
-                />
-                <span>{item.label}</span>
+                {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
+                <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
+                  <Image
+                    src={item.icon}
+                    alt={item.label}
+                    width={18}
+                    height={18}
+                  />
+                </div>
+
+                <span className="whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                  {item.label}
+                </span>
               </Link>
             ))}
           </div>
@@ -114,21 +117,26 @@ export default function Sidebar() {
         <Link
           key={"/admin"}
           href={"/admin"}
-          className="hover:bg-yellow-500 p-2 rounded flex items-center my-1 transition-all duration-200"
+          className="hover:bg-yellow-500 rounded flex items-center my-1 transition-all duration-200 mx-2.5"
         >
-          <Image
-            src="/assets/images/icons/icons8-admin-branco.png"
-            alt="Admin"
-            width={20}
-            height={20}
-            className='mr-2 sm:mr-3'
-          />
-          <span className="font-normal text-xs sm:text-sm">Admin</span>
+          {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
+          <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
+            <Image
+              src="/assets/images/icons/icons8-admin-branco.png"
+              alt="Admin"
+              width={20}
+              height={20}
+            />
+          </div>
+
+          <span className="font-normal text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+            Admin
+          </span>
         </Link>
       </nav>
 
-      {/* Footer FIXO no fundo da sidebar */}
-      <footer className="mt-auto pt-3 sm:pt-4 pb-3 sm:pb-4 border-t border-blue-500/30">
+      {/* Footer visível só quando expandido */}
+      <footer className="mt-auto pt-3 pb-3 border-t border-blue-500/30 hidden group-hover:block">
         <div className="text-center space-y-1 text-xs font-light">
           <p className="text-[10px] sm:text-xs">TI - Naturafrig 2026</p>
           <p className="text-[10px] sm:text-xs">Feito por Kaue 💻</p>
