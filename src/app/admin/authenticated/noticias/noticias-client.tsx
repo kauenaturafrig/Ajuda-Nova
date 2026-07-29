@@ -7,31 +7,36 @@ import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { LoadingOverlay } from "@/src/components/ui/loading-overlay";
-import { 
-  ArrowLeft, 
-  Newspaper, 
-  UploadCloud, 
-  FileText, 
-  Calendar, 
-  Edit3, 
-  Trash2, 
-  X 
+import {
+  ArrowLeft,
+  Newspaper,
+  UploadCloud,
+  FileText,
+  Calendar,
+  Edit3,
+  Trash2,
+  X,
+  Check,
+  MapPin,
+  Lock,
+  ClipboardCheck,
+  Info,
 } from "lucide-react";
-
-export type UserRole = "OWNER" | "ADMIN" | "NEWSONLY" | "MESSAGENEWS";
+import type { AppUserRole } from "@/src/types/user";
 
 interface Noticia {
   id: number;
   titulo: string;
   conteudo: string;
   imagem: string | null | undefined;
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: string | Date;
+  updatedAt?: string | Date;
+  unidadeId?: number | null;
 }
 
 interface Props {
   initialNoticias: Noticia[];
-  userRole: UserRole;
+  userRole: AppUserRole;
   userUnidadeId: number | null;
 }
 
@@ -54,8 +59,13 @@ export default function NoticiasClient({
   const [noticias, setNoticias] = useState<Noticia[]>(initialNoticias);
   const [dragActive, setDragActive] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [pendentesCount, setPendentesCount] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const isSolicitante = userRole === "NEWSONLY";
+  const podeRevisarSolicitacoes =
+    userRole === "OWNER" || userRole === "ADMIN" || userRole === "MESSAGENEWS";
 
   const [formData, setFormData] = useState({
     titulo: "",
@@ -71,6 +81,13 @@ export default function NoticiasClient({
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    fetch("/admin/api/noticias/solicitacoes?status=PENDENTE")
+      .then((r) => r.json())
+      .then((data) => setPendentesCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => {});
+  }, []);
+
   const refreshNoticias = useCallback(async () => {
     const res = await fetch("/admin/api/noticias", { cache: "no-store" });
     const data = await res.json();
@@ -84,20 +101,50 @@ export default function NoticiasClient({
       titulo: noticia.titulo,
       conteudo: noticia.conteudo,
       imagem: null,
-      imagemPreview: getImagemUrl(noticia),
+      imagemPreview: noticia.imagem ? getImagemUrl(noticia) : "",
       imagemAntiga: noticia.imagem || "",
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id: number) => {
+    if (isSolicitante) {
+      if (!confirm("Isso enviará uma solicitação de exclusão para aprovação. Deseja continuar?")) return;
+
+      setDeletingId(id);
+      try {
+        const fd = new FormData();
+        fd.append("tipo", "DELETE");
+        fd.append("noticiaId", id.toString());
+
+        const res = await fetch("/admin/api/noticias/solicitacoes", {
+          method: "POST",
+          body: fd,
+        });
+
+        if (!res.ok) {
+          const error = await res.json();
+          alert(`Erro: ${error.error || "Falha ao solicitar exclusão"}`);
+          return;
+        }
+
+        alert("✅ Solicitação de exclusão enviada! Aguarde a aprovação de um administrador.");
+      } catch {
+        alert("Erro de conexão");
+      } finally {
+        setDeletingId(null);
+      }
+      return;
+    }
+
     if (!confirm("Confirmar exclusão?")) return;
 
     setDeletingId(id);
     try {
       const res = await fetch(`/admin/api/noticias/${id}`, { method: "DELETE" });
       if (!res.ok) {
-        alert("Erro ao excluir");
+        const error = await res.json();
+        alert(`Erro: ${error.error || "Falha ao excluir"}`);
         return;
       }
       setNoticias((prev) => prev.filter((n) => n.id !== id));
@@ -124,13 +171,24 @@ export default function NoticiasClient({
       fd.append("titulo", formData.titulo);
       fd.append("conteudo", formData.conteudo);
       if (formData.imagem) fd.append("imagem", formData.imagem);
-      if (editingId) {
+
+      let url = "/admin/api/noticias";
+      let method = editingId ? "PUT" : "POST";
+
+      if (isSolicitante) {
+        url = "/admin/api/noticias/solicitacoes";
+        method = "POST";
+        fd.append("tipo", editingId ? "UPDATE" : "CREATE");
+        if (editingId) {
+          fd.append("noticiaId", editingId.toString());
+          fd.append("imagemAntiga", formData.imagemAntiga);
+        }
+      } else if (editingId) {
         fd.append("id", editingId.toString());
         fd.append("imagemAntiga", formData.imagemAntiga);
       }
 
-      const method = editingId ? "PUT" : "POST";
-      const res = await fetch("/admin/api/noticias", { method, body: fd });
+      const res = await fetch(url, { method, body: fd });
 
       if (!res.ok) {
         const error = await res.json();
@@ -147,6 +205,11 @@ export default function NoticiasClient({
       });
       setEditingId(null);
       setImagemNoticia(null);
+
+      if (isSolicitante) {
+        alert("✅ Solicitação enviada! Aguarde a aprovação de um administrador.");
+        return;
+      }
 
       await refreshNoticias();
     } catch {
@@ -225,8 +288,6 @@ export default function NoticiasClient({
       {saving && <LoadingOverlay show={true} />}
 
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-        
-        {/* Topbar / Header Administrativo */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-6">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
@@ -249,32 +310,58 @@ export default function NoticiasClient({
               </div>
             </div>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 pl-12">
-              Publique informativos, avisos gerais e comunicados internos na plataforma.
+              {isSolicitante
+                ? "Envie solicitações de notícias para aprovação."
+                : "Publique informativos, avisos gerais e comunicados internos na plataforma."}
             </p>
           </div>
 
-          <div className="hidden sm:block pl-12 md:pl-0 shrink-0 opacity-80 dark:opacity-40">
-            <Image
-              src="/assets/images/icons/icons8-news-preto.png"
-              alt="Icon news"
-              width={42}
-              height={42}
-              className="dark:invert"
-            />
+          <div className="flex items-center gap-2 shrink-0">
+            {(podeRevisarSolicitacoes || isSolicitante) && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => router.push("/admin/authenticated/noticias/solicitacoes")}
+                className="relative rounded-xl text-xs font-semibold gap-1.5 border-gray-200 dark:border-neutral-800 h-9"
+              >
+                <ClipboardCheck className="w-3.5 h-3.5" />
+                {isSolicitante ? "Minhas Solicitações" : "Solicitações"}
+                {pendentesCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-[9px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                    {pendentesCount}
+                  </span>
+                )}
+              </Button>
+            )}
+            <div className="hidden sm:block opacity-80 dark:opacity-40">
+              <Image
+                src="/assets/images/icons/icons8-news-preto.png"
+                alt="Icon news"
+                width={42}
+                height={42}
+                className="dark:invert"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Formulário de Criação/Edição */}
         <section className="bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 p-6 shadow-sm">
           <div className="flex items-center justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-4 mb-6">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
               <div>
                 <h2 className="text-base font-bold text-gray-900 dark:text-white">
-                  {editingId ? "Editar Conteúdo Publicado" : "Compor Nova Publicação"}
+                  {editingId
+                    ? isSolicitante
+                      ? "Solicitar Edição de Notícia"
+                      : "Editar Notícia Selecionada"
+                    : isSolicitante
+                    ? "Solicitar Nova Notícia"
+                    : "Escrever Nova Notícia"}
                 </h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500">
-                  Insira o título, texto principal e vincule uma imagem de destaque se desejar.
+                  Defina o título, conteúdo e adicione uma imagem de destaque opcional.
                 </p>
               </div>
             </div>
@@ -286,7 +373,13 @@ export default function NoticiasClient({
                 size="sm"
                 onClick={() => {
                   setEditingId(null);
-                  setFormData({ titulo: "", conteudo: "", imagem: null, imagemPreview: "", imagemAntiga: "" });
+                  setFormData({
+                    titulo: "",
+                    conteudo: "",
+                    imagem: null,
+                    imagemPreview: "",
+                    imagemAntiga: "",
+                  });
                   setImagemNoticia(null);
                 }}
                 className="rounded-xl text-xs font-semibold hover:bg-gray-150 dark:hover:bg-neutral-800 text-gray-500"
@@ -296,10 +389,15 @@ export default function NoticiasClient({
             )}
           </div>
 
+          {isSolicitante && (
+            <div className="flex items-start gap-2 p-3 mb-5 rounded-xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 text-[11px] text-blue-700 dark:text-blue-400">
+              <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+              Suas alterações são enviadas como solicitação e só aparecem após aprovação.
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-              
-              {/* Inputs de Texto */}
               <div className="lg:col-span-2 space-y-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Título da Notícia</label>
@@ -319,13 +417,12 @@ export default function NoticiasClient({
                     onChange={(e) => setFormData({ ...formData, conteudo: e.target.value })}
                     placeholder="Digite o conteúdo detalhado da notícia aqui..."
                     rows={5}
-                    className="flex w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
+                    className="flex w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 resize-y"
                     required
                   />
                 </div>
               </div>
 
-              {/* Upload de Imagem Drag & Drop */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Imagem de Destaque</label>
                 <div
@@ -375,7 +472,7 @@ export default function NoticiasClient({
                           </Button>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-neutral-950 p-2 rounded-lg border border-gray-200 dark:border-neutral-800 w-full">
+                                                <div className="flex items-center gap-2 bg-gray-50 dark:bg-neutral-950 p-2 rounded-lg border border-gray-200 dark:border-neutral-800 w-full">
                           <FileText className="w-4 h-4 text-blue-500 shrink-0" />
                           <div className="flex-1 min-w-0 text-left">
                             <p className="text-[11px] font-bold text-gray-800 dark:text-gray-200 truncate">
@@ -414,7 +511,6 @@ export default function NoticiasClient({
           </form>
         </section>
 
-        {/* Feed Vertical de Notícias Recentes */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 px-1">
             <span className="w-1.5 h-3 rounded-full bg-blue-500" />
@@ -426,11 +522,10 @@ export default function NoticiasClient({
               <Newspaper className="w-8 h-8 text-gray-300 dark:text-neutral-700 mx-auto mb-2" />
               <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200">Nenhuma notícia registrada</h4>
               <p className="text-xs text-gray-400 dark:text-gray-500 max-w-xs mx-auto mt-0.5">
-                Compunha a sua primeira publicação utilizando o formulário administrativo acima.
+                Crie sua primeira publicação utilizando o formulário acima.
               </p>
             </div>
           ) : (
-            /* Lista mudada para flex-col (vertical direta de largura total) */
             <div className="flex flex-col gap-4">
               {noticias.map((noticia) => {
                 const isDeleting = deletingId === noticia.id;
@@ -442,22 +537,21 @@ export default function NoticiasClient({
                     className="p-5 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 relative flex flex-col justify-between transition-all hover:shadow-sm hover:border-gray-200/60 dark:hover:border-neutral-800 group"
                   >
                     {isDeleting && (
-                      <div className="absolute inset-0 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm flex items-center justify-center rounded-2xl z-20 border border-red-500/20">
+                      <div className="absolute inset-0 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm flex items-center justify-center rounded-2xl z-20 border border-blue-500/20">
                         <div className="flex items-center gap-2.5 bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-md border border-gray-100 dark:border-neutral-800">
-                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-red-500 border-t-transparent" />
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-500 border-t-transparent" />
                           <p className="font-bold text-xs text-gray-800 dark:text-gray-100">Removendo registro...</p>
                         </div>
                       </div>
                     )}
 
                     <div className={isDeleting ? "opacity-40 blur-xs pointer-events-none" : ""}>
-                      {/* Meta info & Botões de Ação */}
                       <div className="flex items-center justify-between gap-4 mb-3">
                         <div className="flex items-center gap-1.5 text-[11px] font-medium text-gray-400 dark:text-gray-500">
                           <Calendar className="w-3.5 h-3.5 text-blue-500/70" />
                           {new Date(noticia.createdAt).toLocaleDateString("pt-BR")}
                         </div>
-                        
+
                         <div className="flex items-center gap-1 shadow-sm rounded-lg border border-gray-100 dark:border-neutral-800/60 bg-gray-50/50 dark:bg-neutral-900/60 p-0.5">
                           <Button
                             onClick={() => handleEdit(noticia)}
@@ -480,7 +574,6 @@ export default function NoticiasClient({
                         </div>
                       </div>
 
-                      {/* Corpo do card expandido na horizontal para o feed vertical */}
                       <div className="flex flex-col sm:flex-row gap-4 items-start">
                         {noticia.imagem && (
                           <div className="relative w-full sm:w-28 h-40 sm:h-28 rounded-xl bg-gray-50 dark:bg-neutral-950 border border-gray-150 dark:border-neutral-800 shrink-0 overflow-hidden shadow-inner">
@@ -495,12 +588,11 @@ export default function NoticiasClient({
                             />
                           </div>
                         )}
-                        
+
                         <div className="space-y-1.5 min-w-0 flex-1">
                           <h4 className="text-sm font-bold text-gray-900 dark:text-white leading-snug break-words group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
                             {noticia.titulo}
                           </h4>
-                          {/* Removido o line-clamp severo para que textos fiquem mais legíveis verticalmente */}
                           <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed break-words whitespace-pre-wrap">
                             {noticia.conteudo}
                           </p>

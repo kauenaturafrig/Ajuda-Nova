@@ -34,12 +34,13 @@ export default async function Authenticated() {
   const isNewsOnly = dbUser.role === "NEWSONLY";
   const isMessageOnly = dbUser.role === "MESSAGEONLY";
   const isMessageNews = dbUser.role === "MESSAGENEWS";
+  const isEvents = dbUser.role === "EVENTS";
 
   return (
     <Layout>
       <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          
+
           {/* Header Superior Administrativo */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-12 pb-6 border-b border-gray-100 dark:border-neutral-800/60">
             <div>
@@ -80,7 +81,7 @@ export default async function Authenticated() {
 
           {/* Grid de Ferramentas Administrativas */}
           <nav className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            
+
             {/* RAMAIS */}
             {(isOwner || isAdmin) && (
               <Link
@@ -177,6 +178,52 @@ export default async function Authenticated() {
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">Log de Recados</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Auditoria e histórico de recados.</p>
+              </Link>
+            )}
+
+            {/* Agenda */}
+            {(isOwner || isEvents) && (
+              <Link
+                href="/admin/authenticated/agenda"
+                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/5"
+              >
+                <div className="relative w-20 h-20 bg-emerald-500 border border-emerald-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-emerald-600">
+                  <Image
+                    src="/assets/images/icons/icons8-tear-off-calendar-branco.png"
+                    alt="Agenda"
+                    fill
+                    className="object-contain p-3 dark:invert"
+                  />
+                </div>
+                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  Agenda
+                </h2>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">
+                  Gerenciamento de eventos e atividades.
+                </p>
+              </Link>
+            )}
+
+            {/* LOG DA AGENDA (AUDITORIA) */}
+            {isOwner && (
+              <Link
+                href="/admin/authenticated/agenda/logs"
+                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-violet-500/50 hover:shadow-violet-500/5"
+              >
+                <div className="relative w-20 h-20 bg-violet-500 border border-violet-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-violet-600">
+                  <Image
+                    src="/assets/images/icons/icons8-tear-off-calendar-branco.png"
+                    alt="Log da Agenda"
+                    fill
+                    className="object-contain p-3 dark:invert"
+                  />
+                </div>
+                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                  Log da Agenda
+                </h2>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">
+                  Auditoria de eventos e atividades.
+                </p>
               </Link>
             )}
 

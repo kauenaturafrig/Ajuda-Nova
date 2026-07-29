@@ -1,3 +1,4 @@
+//src/app/admin/api/noticias/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 import { auth } from "../../../../../lib/auth";
@@ -5,25 +6,54 @@ import { rm } from "fs/promises";
 import path from "path";
 import fs from "fs/promises";
 
+export const dynamic = "force-dynamic";
+
+const noCacheHeaders = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
+async function requireAuth(req: NextRequest) {
+  const session = await auth.api.getSession({ headers: req.headers });
+  if (!session?.user?.id) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { id: true, role: true, unidadeId: true, name: true },
+  });
+  return user;
+}
+
+async function apagarArquivo(nome?: string | null) {
+  if (!nome) return;
+  const p = path.join(process.cwd(), "storage", "uploads", "noticias", nome);
+  try {
+    await fs.access(p);
+    await rm(p);
+  } catch {}
+}
+
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers });
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const user = await requireAuth(req);
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!["OWNER", "MESSAGENEWS"].includes(user.role)) {
+      return NextResponse.json(
+        { error: "⛔ Apenas OWNER ou MESSAGENEWS podem excluir notícias diretamente." },
+        { status: 403 }
+      );
     }
 
     const { id } = await params;
+    const noticiaId = Number(id);
 
     const noticia = await prisma.noticia.findUnique({
-      where: { id: Number(id) },
+      where: { id: noticiaId },
     });
 
     if (!noticia) {
@@ -32,12 +62,11 @@ export async function DELETE(
 
     await prisma.noticiaAudit.create({
       data: {
-        noticiaId: noticia.id,
-        userId: session.user.id,
+        noticiaId,
+        userId: user.id,
         userNome: user.name || "Usuário",
         acao: "DELETE",
         dadosAntigos: {
-          id: noticia.id,
           titulo: noticia.titulo,
           conteudo: noticia.conteudo,
           imagem: noticia.imagem,
@@ -45,33 +74,14 @@ export async function DELETE(
       },
     });
 
-    if (noticia.imagem) {
-      const caminho = path.join(
-        process.cwd(),
-        "storage",
-        "uploads",
-        "noticias",
-        noticia.imagem
-      );
-      try {
-        await fs.access(caminho);
-        await rm(caminho);
-      } catch {}
-    }
-
+    await apagarArquivo(noticia.imagem);
     await prisma.noticia.delete({
-      where: { id: Number(id) },
+      where: { id: noticiaId },
     });
 
     return NextResponse.json(
       { success: true },
-      {
-        headers: {
-          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      }
+      { headers: noCacheHeaders }
     );
   } catch (e: any) {
     console.error("DELETE Error:", e.message);

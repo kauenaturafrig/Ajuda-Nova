@@ -1,28 +1,58 @@
+//src/app/admin/api/noticias/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/src/lib/prisma";
 import { auth } from "../../../../lib/auth";
 import path from "path";
-import { writeFile, mkdir } from "fs/promises";
-import crypto from "crypto";
+import { writeFile, rm, mkdir } from "fs/promises";
 import fs from "fs/promises";
+import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
+const noCacheHeaders = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
+async function requireAuth(req: NextRequest) {
+  const session = await auth.api.getSession({ headers: req.headers });
+  if (!session?.user?.id) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { id: true, role: true, unidadeId: true, name: true },
+  });
+  return user;
+}
+
+async function logAudit(
+  noticiaId: number,
+  userId: string,
+  userNome: string,
+  acao: string,
+  dadosAntigos: any = null,
+  dadosNovos: any = null
+) {
+  await prisma.noticiaAudit.create({
+    data: {
+      noticiaId,
+      userId,
+      userNome,
+      acao,
+      dadosAntigos: dadosAntigos ? JSON.parse(JSON.stringify(dadosAntigos)) : null,
+      dadosNovos: dadosNovos ? JSON.parse(JSON.stringify(dadosNovos)) : null,
+    },
+  });
+}
+
 export async function GET(req: NextRequest) {
   try {
-    // ✅ Leitura pública: não exige mais sessão de login.
-    // (Criação/edição continuam restritas a usuários autenticados via POST/PUT.)
     const noticias = await prisma.noticia.findMany({
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(noticias, {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
-      },
-    });
+    return NextResponse.json(noticias, { headers: noCacheHeaders });
   } catch (e: any) {
     console.error("GET Error:", e.message);
     return NextResponse.json([], { status: 200 });
@@ -31,14 +61,14 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers });
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const user = await requireAuth(req);
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!["OWNER", "MESSAGENEWS"].includes(user.role)) {
+      return NextResponse.json(
+        { error: "⛔ Apenas OWNER ou MESSAGENEWS podem criar notícias diretamente." },
+        { status: 403 }
+      );
     }
 
     const formData = await req.formData();
@@ -46,8 +76,11 @@ export async function POST(req: NextRequest) {
     const conteudo = formData.get("conteudo") as string;
     const imagemFile = formData.get("imagem") as File | null;
 
-    let filename: string | null = null;
+    if (!titulo || !conteudo) {
+      return NextResponse.json({ error: "Dados obrigatórios" }, { status: 400 });
+    }
 
+    let filename: string | null = null;
     if (imagemFile && imagemFile.size > 0) {
       const uploadDir = path.join(process.cwd(), "storage", "uploads", "noticias");
       await mkdir(uploadDir, { recursive: true });
@@ -63,28 +96,14 @@ export async function POST(req: NextRequest) {
       data: { titulo, conteudo, imagem: filename },
     });
 
-    await prisma.noticiaAudit.create({
-      data: {
-        noticiaId: noticia.id,
-        userId: session.user.id,
-        userNome: user.name || "Usuário",
-        acao: "CREATE",
-        dadosNovos: {
-          id: noticia.id,
-          titulo: noticia.titulo,
-          conteudo: noticia.conteudo,
-          imagem: noticia.imagem,
-        },
-      },
+    await logAudit(noticia.id, user.id, user.name || "Usuário", "CREATE", null, {
+      id: noticia.id,
+      titulo: noticia.titulo,
+      conteudo: noticia.conteudo,
+      imagem: noticia.imagem,
     });
 
-    return NextResponse.json(noticia, {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
-      },
-    });
+    return NextResponse.json(noticia, { headers: noCacheHeaders });
   } catch (e: any) {
     console.error("POST Error:", e.message);
     return NextResponse.json({ error: e.message }, { status: 500 });
@@ -93,14 +112,14 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers });
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const user = await requireAuth(req);
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!["OWNER", "MESSAGENEWS"].includes(user.role)) {
+      return NextResponse.json(
+        { error: "⛔ Apenas OWNER ou MESSAGENEWS podem editar notícias diretamente." },
+        { status: 403 }
+      );
     }
 
     const formData = await req.formData();
@@ -108,7 +127,11 @@ export async function PUT(req: NextRequest) {
     const titulo = formData.get("titulo") as string;
     const conteudo = formData.get("conteudo") as string;
     const file = formData.get("imagem") as File | null;
-    const imagemAntiga = formData.get("imagemAntiga") as string;
+    const imagemAntiga = (formData.get("imagemAntiga") as string) || null;
+
+    if (!id || !titulo || !conteudo) {
+      return NextResponse.json({ error: "Dados obrigatórios" }, { status: 400 });
+    }
 
     const noticiaAntes = await prisma.noticia.findUnique({ where: { id } });
     if (!noticiaAntes) {
@@ -121,7 +144,8 @@ export async function PUT(req: NextRequest) {
       if (imagemAntiga) {
         const oldPath = path.join(process.cwd(), "storage", "uploads", "noticias", imagemAntiga);
         try {
-          await fs.unlink(oldPath);
+          await fs.access(oldPath);
+          await rm(oldPath);
         } catch {}
       }
 
@@ -139,32 +163,24 @@ export async function PUT(req: NextRequest) {
       data: { titulo, conteudo, imagem: imagem || null },
     });
 
-    await prisma.noticiaAudit.create({
-      data: {
-        noticiaId: id,
-        userId: session.user.id,
-        userNome: user.name || "Usuário",
-        acao: "UPDATE",
-        dadosAntigos: {
-          titulo: noticiaAntes.titulo,
-          conteudo: noticiaAntes.conteudo,
-          imagem: noticiaAntes.imagem,
-        },
-        dadosNovos: {
-          titulo: noticiaDepois.titulo,
-          conteudo: noticiaDepois.conteudo,
-          imagem: noticiaDepois.imagem,
-        },
+    await logAudit(
+      noticiaDepois.id,
+      user.id,
+      user.name || "Usuário",
+      "UPDATE",
+      {
+        titulo: noticiaAntes.titulo,
+        conteudo: noticiaAntes.conteudo,
+        imagem: noticiaAntes.imagem,
       },
-    });
+      {
+        titulo: noticiaDepois.titulo,
+        conteudo: noticiaDepois.conteudo,
+        imagem: noticiaDepois.imagem,
+      }
+    );
 
-    return NextResponse.json(noticiaDepois, {
-      headers: {
-        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
-      },
-    });
+    return NextResponse.json(noticiaDepois, { headers: noCacheHeaders });
   } catch (e: any) {
     console.error("PUT Error:", e.message);
     return NextResponse.json({ error: e.message }, { status: 500 });

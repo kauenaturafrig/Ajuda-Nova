@@ -11,15 +11,19 @@ import type { AppUserRole } from "@/src/types/user";
 
 export default async function GerenciarNoticiasPage() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) redirect("/admin");
+  if (!session?.user?.id) redirect("/admin");
 
   const dbUser = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: { role: true, unidadeId: true },
   });
 
+  if (!dbUser) {
+    redirect("/admin/authenticated");
+  }
+
   const allowedRoles: AppUserRole[] = ["OWNER", "NEWSONLY", "MESSAGENEWS"];
-  if (!dbUser || !allowedRoles.includes(dbUser.role)) {
+  if (!allowedRoles.includes(dbUser.role as AppUserRole)) {
     redirect("/admin/authenticated");
   }
 

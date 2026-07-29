@@ -7,21 +7,23 @@ import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { LoadingOverlay } from "@/src/components/ui/loading-overlay";
-import { 
-  ArrowLeft, 
-  Megaphone, 
-  UploadCloud, 
-  FileText, 
-  Calendar, 
-  Edit3, 
-  Trash2, 
-  X, 
+import {
+  ArrowLeft,
+  Megaphone,
+  UploadCloud,
+  FileText,
+  Calendar,
+  Edit3,
+  Trash2,
+  X,
   Check,
   MapPin,
-  Lock
+  Lock,
+  ClipboardCheck,
+  Info,
 } from "lucide-react";
 
-export type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS";
+export type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS" | "EVENTS";
 
 interface Recado {
   id: number;
@@ -31,8 +33,8 @@ interface Recado {
   unidadeId: number;
   unidadeIds: number[];
   unidade: { id: number; nome: string };
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: string | Date;
+  updatedAt?: string | Date;
 }
 
 interface Unidade {
@@ -68,13 +70,21 @@ export default function RecadosClient({
   const [unidades] = useState<Unidade[]>(initialUnidades);
   const [dragActive, setDragActive] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [pendentesCount, setPendentesCount] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const isSolicitante = userRole === "MESSAGEONLY";
+  const podeRevisarSolicitacoes =
+    userRole === "OWNER" || userRole === "ADMIN" || userRole === "MESSAGENEWS";
 
   const [formData, setFormData] = useState({
     titulo: "",
     conteudo: "",
-    unidadeIds: (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId ? [userUnidadeId] : [] as number[],
+    unidadeIds:
+      (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId
+        ? [userUnidadeId]
+        : ([] as number[]),
     imagem: null as File | null,
     imagemPreview: "",
     imagemAntiga: "",
@@ -82,17 +92,26 @@ export default function RecadosClient({
 
   const [imagemRecado, setImagemRecado] = useState<File | null>(null);
   const [selectedUnidades, setSelectedUnidades] = useState<Record<number, boolean>>(
-    (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId ? { [userUnidadeId]: true } : {}
+    (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId
+      ? { [userUnidadeId]: true }
+      : {}
   );
 
   useEffect(() => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    fetch("/admin/api/recados/solicitacoes?status=PENDENTE")
+      .then((r) => r.json())
+      .then((data) => setPendentesCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => { });
+  }, []);
+
   const handleCheckboxChange = (unidadeId: number) => {
     setSelectedUnidades((prev) => {
       const newState = { ...prev, [unidadeId]: !prev[unidadeId] };
-      
+
       setFormData((prevForm) => ({
         ...prevForm,
         unidadeIds: Object.keys(newState)
@@ -104,19 +123,42 @@ export default function RecadosClient({
     });
   };
 
-  const canManageRecado = useCallback((recado: Recado) => {
-    if (userRole === "OWNER" || userRole === "MESSAGENEWS") return true;
-    const ehMultiUnidade = recado.unidadeIds.length > 1;
-    const ehSuaUnidade = recado.unidadeId === userUnidadeId;
-    return !ehMultiUnidade && ehSuaUnidade;
-  }, [userRole, userUnidadeId]);
+  const canManageRecado = useCallback(
+    (recado: Recado) => {
+      if (userRole === "OWNER" || userRole === "MESSAGENEWS") return true;
+      const ehMultiUnidade = recado.unidadeIds.length > 1;
+      const ehSuaUnidade = recado.unidadeId === userUnidadeId;
+      return !ehMultiUnidade && ehSuaUnidade;
+    },
+    [userRole, userUnidadeId]
+  );
+
+  const resetForm = () => {
+    setFormData({
+      titulo: "",
+      conteudo: "",
+      unidadeIds: [],
+      imagem: null,
+      imagemPreview: "",
+      imagemAntiga: "",
+    });
+    setEditingId(null);
+    setSelectedUnidades(
+      (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId
+        ? { [userUnidadeId]: true }
+        : {}
+    );
+    setImagemRecado(null);
+  };
 
   const handleEdit = (recado: Recado) => {
     if (!canManageRecado(recado)) {
       alert("⛔ Você só pode editar recados da sua própria unidade!");
       return;
     }
+
     setEditingId(recado.id);
+
     const ids = recado.unidadeIds.length > 0 ? recado.unidadeIds : [recado.unidadeId];
     setFormData({
       titulo: recado.titulo,
@@ -126,24 +168,62 @@ export default function RecadosClient({
       imagemPreview: recado.imagem ? getImagemUrl(recado) : "",
       imagemAntiga: recado.imagem || "",
     });
-    
+
     const selected: Record<number, boolean> = {};
-    ids.forEach((id) => { selected[id] = true; });
+    ids.forEach((id) => {
+      selected[id] = true;
+    });
     setSelectedUnidades(selected);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id: number) => {
     const recado = recados.find((r) => r.id === id);
+
     if (recado && !canManageRecado(recado)) {
       alert("⛔ Você só pode excluir recados da sua própria unidade!");
       return;
     }
+
+    if (isSolicitante) {
+      if (!confirm("Isso enviará uma solicitação de exclusão para aprovação. Deseja continuar?")) return;
+
+      setDeletingId(id);
+      try {
+        const fd = new FormData();
+        fd.append("tipo", "DELETE");
+        fd.append("recadoId", id.toString());
+
+        const res = await fetch("/admin/api/recados/solicitacoes", {
+          method: "POST",
+          body: fd,
+        });
+
+        if (!res.ok) {
+          const error = await res.json();
+          alert(`Erro: ${error.error || "Falha ao solicitar exclusão"}`);
+          return;
+        }
+
+        alert("✅ Solicitação de exclusão enviada! Aguarde a aprovação de um administrador.");
+      } catch {
+        alert("Erro de conexão");
+      } finally {
+        setDeletingId(null);
+      }
+      return;
+    }
+
     if (!confirm("Confirmar exclusão?")) return;
 
     setDeletingId(id);
     try {
-      await fetch(`/admin/api/recados/${id}`, { method: "DELETE" });
+      const res = await fetch(`/admin/api/recados/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const error = await res.json();
+        alert(`Erro: ${error.error || "Falha ao excluir"}`);
+        return;
+      }
       setRecados((prev) => prev.filter((r) => r.id !== id));
       router.refresh();
     } catch {
@@ -173,13 +253,24 @@ export default function RecadosClient({
       fd.append("conteudo", formData.conteudo);
       currentUnidadeIds.forEach((id) => fd.append("unidadeIds[]", id.toString()));
       if (formData.imagem) fd.append("imagem", formData.imagem);
-      if (editingId) {
+
+      let url = "/admin/api/recados";
+      let method = editingId ? "PUT" : "POST";
+
+      if (isSolicitante) {
+        url = "/admin/api/recados/solicitacoes";
+        method = "POST";
+        fd.append("tipo", editingId ? "UPDATE" : "CREATE");
+        if (editingId) {
+          fd.append("recadoId", editingId.toString());
+          fd.append("imagemAntiga", formData.imagemAntiga);
+        }
+      } else if (editingId) {
         fd.append("id", editingId.toString());
         fd.append("imagemAntiga", formData.imagemAntiga);
       }
 
-      const method = editingId ? "PUT" : "POST";
-      const res = await fetch("/admin/api/recados", { method, body: fd });
+      const res = await fetch(url, { method, body: fd });
 
       if (!res.ok) {
         const error = await res.json();
@@ -187,20 +278,26 @@ export default function RecadosClient({
         return;
       }
 
-      setFormData({ titulo: "", conteudo: "", unidadeIds: [], imagem: null, imagemPreview: "", imagemAntiga: "" });
-      setEditingId(null);
-      setSelectedUnidades({});
-      setImagemRecado(null);
+      resetForm();
+
+      if (isSolicitante) {
+        alert("✅ Solicitação enviada! Aguarde a aprovação de um administrador para que ela apareça no mural.");
+        return;
+      }
 
       const refreshed = await fetch("/admin/api/recados").then((r) => r.json());
-      setRecados(Array.isArray(refreshed) ? refreshed.map((r: any) => ({
-        ...r,
-        imagem: r.imagem || undefined,
-        unidade: r.unidade,
-        unidadeIds: r.unidadeIds || []
-      })) : []);
+      setRecados(
+        Array.isArray(refreshed)
+          ? refreshed.map((r: any) => ({
+            ...r,
+            imagem: r.imagem || undefined,
+            unidade: r.unidade,
+            unidadeIds: r.unidadeIds || [],
+          }))
+          : []
+      );
 
-      setTimeout(() => window.location.reload(), 500);
+      router.refresh();
     } catch {
       alert("Erro de conexão");
     } finally {
@@ -208,9 +305,22 @@ export default function RecadosClient({
     }
   };
 
-  const handleDrag = useCallback((e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); }, []);
-  const handleDragIn = useCallback((e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); setDragActive(true); }, []);
-  const handleDragOut = useCallback((e: React.DragEvent) => { e.preventDefault(); e.stopPropagation(); setDragActive(false); }, []);
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDragIn = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }, []);
+
+  const handleDragOut = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  }, []);
 
   const handleImageUpload = useCallback((file: File) => {
     const preview = URL.createObjectURL(file);
@@ -218,21 +328,30 @@ export default function RecadosClient({
     setImagemRecado(file);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); e.stopPropagation(); setDragActive(false);
-    if (e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      if (file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) handleImageUpload(file);
-    }
-  }, [handleImageUpload]);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
 
-  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
-      handleImageUpload(file);
-      e.target.value = "";
-    }
-  }, [handleImageUpload]);
+      if (e.dataTransfer.files[0]) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) handleImageUpload(file);
+      }
+    },
+    [handleImageUpload]
+  );
+
+  const handleImageChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file && file.type.startsWith("image/") && file.size < 5 * 1024 * 1024) {
+        handleImageUpload(file);
+        e.target.value = "";
+      }
+    },
+    [handleImageUpload]
+  );
 
   const removeImage = useCallback(() => {
     setImagemRecado(null);
@@ -245,7 +364,7 @@ export default function RecadosClient({
       {saving && <LoadingOverlay show={true} />}
 
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-        
+
         {/* Topbar / Header Administrativo */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-6">
           <div className="space-y-1">
@@ -269,18 +388,39 @@ export default function RecadosClient({
               </div>
             </div>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 pl-12">
-              Envie comunicados instantâneos direcionados a uma ou múltiplas unidades.
+              {isSolicitante
+                ? "Envie solicitações de comunicados para aprovação da sua unidade."
+                : "Envie comunicados instantâneos direcionados a uma ou múltiplas unidades."}
             </p>
           </div>
 
-          <div className="hidden sm:block pl-12 md:pl-0 shrink-0 opacity-80 dark:opacity-40">
-            <Image
-              src="/assets/images/icons/icons8-megaphone-preto.png"
-              alt="Icon megaphone"
-              width={42}
-              height={42}
-              className="dark:invert"
-            />
+          <div className="flex items-center gap-2 shrink-0">
+            {(podeRevisarSolicitacoes || isSolicitante) && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => router.push("/admin/authenticated/recados/solicitacoes")}
+                className="relative rounded-xl text-xs font-semibold gap-1.5 border-gray-200 dark:border-neutral-800 h-9"
+              >
+                <ClipboardCheck className="w-3.5 h-3.5" />
+                {isSolicitante ? "Minhas Solicitações" : "Solicitações"}
+                {pendentesCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-orange-600 text-white text-[9px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                    {pendentesCount}
+                  </span>
+                )}
+              </Button>
+            )}
+            <div className="hidden sm:block opacity-80 dark:opacity-40">
+              <Image
+                src="/assets/images/icons/icons8-megaphone-preto.png"
+                alt="Icon megaphone"
+                width={42}
+                height={42}
+                className="dark:invert"
+              />
+            </div>
           </div>
         </div>
 
@@ -291,7 +431,9 @@ export default function RecadosClient({
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
               <div>
                 <h2 className="text-base font-bold text-gray-900 dark:text-white">
-                  {editingId ? "Editar Recado Selecionado" : "Escrever Novo Comunicado"}
+                  {editingId
+                    ? isSolicitante ? "Solicitar Edição de Recado" : "Editar Recado Selecionado"
+                    : isSolicitante ? "Solicitar Novo Comunicado" : "Escrever Novo Comunicado"}
                 </h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500">
                   Defina o escopo, corpo da mensagem e configure os destinatários de destino.
@@ -304,12 +446,7 @@ export default function RecadosClient({
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => {
-                  setEditingId(null);
-                  setFormData({ titulo: "", conteudo: "", unidadeIds: [], imagem: null, imagemPreview: "", imagemAntiga: "" });
-                  setSelectedUnidades({});
-                  setImagemRecado(null);
-                }}
+                onClick={resetForm}
                 className="rounded-xl text-xs font-semibold hover:bg-gray-150 dark:hover:bg-neutral-800 text-gray-500"
               >
                 Cancelar Edição
@@ -317,9 +454,16 @@ export default function RecadosClient({
             )}
           </div>
 
+          {isSolicitante && (
+            <div className="flex items-start gap-2 p-3 mb-5 rounded-xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 text-[11px] text-blue-700 dark:text-blue-400">
+              <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+              Suas alterações são enviadas como solicitação e só aparecem no mural após aprovação de um administrador.
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-              
+
               {/* Inputs de Conteúdo */}
               <div className="lg:col-span-2 space-y-4">
                 <div className="space-y-1.5">
@@ -348,11 +492,11 @@ export default function RecadosClient({
 
               {/* Seletor de Unidades & Upload Dinâmico */}
               <div className="space-y-4">
-                
+
                 {/* Distribuição por Unidade */}
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Destinatários autorizados</label>
-                  
+
                   {userRole === "MESSAGEONLY" || userRole === "ADMIN" ? (
                     <div className="p-3.5 border border-emerald-100 dark:border-emerald-900/40 bg-emerald-50/30 dark:bg-emerald-950/10 rounded-xl flex items-center gap-2.5">
                       <Check className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -385,11 +529,10 @@ export default function RecadosClient({
                 {/* Upload de Imagem Compacto */}
                 <div className="space-y-1.5">
                   <div
-                    className={`relative border-2 border-dashed rounded-xl p-4 text-center transition-all duration-200 h-[106px] flex flex-col justify-center items-center ${
-                      dragActive
+                    className={`relative border-2 border-dashed rounded-xl p-4 text-center transition-all duration-200 h-[106px] flex flex-col justify-center items-center ${dragActive
                         ? "border-orange-400 bg-orange-50/20"
                         : "border-gray-200 dark:border-neutral-800 hover:border-orange-400/60 hover:bg-gray-50/50 dark:hover:bg-neutral-800/40"
-                    }`}
+                      }`}
                     onDragEnter={handleDragIn}
                     onDragLeave={handleDragOut}
                     onDragOver={handleDrag}
@@ -449,7 +592,11 @@ export default function RecadosClient({
                 disabled={saving}
                 className="w-full sm:w-48 h-10 gap-2 rounded-xl text-xs font-semibold bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/10"
               >
-                {saving ? "Salvando..." : editingId ? "Atualizar Recado" : "Disparar Recado"}
+                {saving
+                  ? "Salvando..."
+                  : isSolicitante
+                    ? editingId ? "Solicitar Atualização" : "Solicitar Publicação"
+                    : editingId ? "Atualizar Recado" : "Disparar Recado"}
               </Button>
             </div>
           </form>
@@ -490,13 +637,15 @@ export default function RecadosClient({
                       <div className="absolute inset-0 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm flex items-center justify-center rounded-2xl z-20 border border-orange-500/20">
                         <div className="flex items-center gap-2.5 bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-md border border-gray-100 dark:border-neutral-800">
                           <div className="animate-spin rounded-full h-4 w-4 border-2 border-orange-500 border-t-transparent" />
-                          <p className="font-bold text-xs text-gray-800 dark:text-gray-100">Removendo registro...</p>
+                          <p className="font-bold text-xs text-gray-800 dark:text-gray-100">
+                            {isSolicitante ? "Enviando solicitação..." : "Removendo registro..."}
+                          </p>
                         </div>
                       </div>
                     )}
 
                     <div className={isDeleting ? "opacity-40 blur-xs pointer-events-none" : ""}>
-                      
+
                       {/* Meta info & Botões de Ação */}
                       <div className="flex items-center justify-between gap-4 mb-3">
                         <div className="flex flex-wrap items-center gap-y-1 gap-x-2.5 text-[11px] font-medium text-gray-400 dark:text-gray-500">
@@ -514,7 +663,7 @@ export default function RecadosClient({
                             </span>
                           )}
                         </div>
-                        
+
                         <div className="flex items-center gap-1 shadow-sm rounded-lg border border-gray-100 dark:border-neutral-800/60 bg-gray-50/50 dark:bg-neutral-900/60 p-0.5 shrink-0">
                           {podeGerenciar ? (
                             <>
@@ -522,6 +671,7 @@ export default function RecadosClient({
                                 onClick={() => handleEdit(recado)}
                                 size="icon"
                                 variant="ghost"
+                                title={isSolicitante ? "Solicitar edição" : "Editar"}
                                 className="h-7 w-7 rounded-md text-gray-500 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-white dark:hover:bg-neutral-800"
                                 disabled={isDeleting}
                               >
@@ -531,6 +681,7 @@ export default function RecadosClient({
                                 onClick={() => handleDelete(recado.id)}
                                 size="icon"
                                 variant="ghost"
+                                title={isSolicitante ? "Solicitar exclusão" : "Excluir"}
                                 className="h-7 w-7 rounded-md text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-white dark:hover:bg-neutral-800"
                                 disabled={isDeleting}
                               >
@@ -560,7 +711,7 @@ export default function RecadosClient({
                             />
                           </div>
                         )}
-                        
+
                         <div className="space-y-1.5 min-w-0 flex-1">
                           <h4 className="text-sm font-bold text-gray-900 dark:text-white leading-snug break-words group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">
                             {recado.titulo}

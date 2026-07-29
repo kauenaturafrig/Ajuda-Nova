@@ -78,6 +78,21 @@ export type RecadoUnidade = $Result.DefaultSelection<Prisma.$RecadoUnidadePayloa
  * 
  */
 export type RecadoAudit = $Result.DefaultSelection<Prisma.$RecadoAuditPayload>
+/**
+ * Model AgendaEvento
+ * 
+ */
+export type AgendaEvento = $Result.DefaultSelection<Prisma.$AgendaEventoPayload>
+/**
+ * Model AgendaEventoAudit
+ * 
+ */
+export type AgendaEventoAudit = $Result.DefaultSelection<Prisma.$AgendaEventoAuditPayload>
+/**
+ * Model SolicitacaoGerenciamento
+ * 
+ */
+export type SolicitacaoGerenciamento = $Result.DefaultSelection<Prisma.$SolicitacaoGerenciamentoPayload>
 
 /**
  * Enums
@@ -88,16 +103,56 @@ export namespace $Enums {
   ADMIN: 'ADMIN',
   MESSAGEONLY: 'MESSAGEONLY',
   NEWSONLY: 'NEWSONLY',
-  MESSAGENEWS: 'MESSAGENEWS'
+  MESSAGENEWS: 'MESSAGENEWS',
+  EVENTS: 'EVENTS'
 };
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const SolicitacaoTipo: {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE'
+};
+
+export type SolicitacaoTipo = (typeof SolicitacaoTipo)[keyof typeof SolicitacaoTipo]
+
+
+export const SolicitacaoStatus: {
+  PENDENTE: 'PENDENTE',
+  APROVADO: 'APROVADO',
+  RECUSADO: 'RECUSADO',
+  CANCELADO: 'CANCELADO'
+};
+
+export type SolicitacaoStatus = (typeof SolicitacaoStatus)[keyof typeof SolicitacaoStatus]
+
+
+export const SolicitacaoRecurso: {
+  RECADO: 'RECADO',
+  NOTICIA: 'NOTICIA'
+};
+
+export type SolicitacaoRecurso = (typeof SolicitacaoRecurso)[keyof typeof SolicitacaoRecurso]
 
 }
 
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
+
+export type SolicitacaoTipo = $Enums.SolicitacaoTipo
+
+export const SolicitacaoTipo: typeof $Enums.SolicitacaoTipo
+
+export type SolicitacaoStatus = $Enums.SolicitacaoStatus
+
+export const SolicitacaoStatus: typeof $Enums.SolicitacaoStatus
+
+export type SolicitacaoRecurso = $Enums.SolicitacaoRecurso
+
+export const SolicitacaoRecurso: typeof $Enums.SolicitacaoRecurso
 
 /**
  * ##  Prisma Client ʲˢ
@@ -346,6 +401,36 @@ export class PrismaClient<
     * ```
     */
   get recadoAudit(): Prisma.RecadoAuditDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.agendaEvento`: Exposes CRUD operations for the **AgendaEvento** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AgendaEventos
+    * const agendaEventos = await prisma.agendaEvento.findMany()
+    * ```
+    */
+  get agendaEvento(): Prisma.AgendaEventoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.agendaEventoAudit`: Exposes CRUD operations for the **AgendaEventoAudit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AgendaEventoAudits
+    * const agendaEventoAudits = await prisma.agendaEventoAudit.findMany()
+    * ```
+    */
+  get agendaEventoAudit(): Prisma.AgendaEventoAuditDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.solicitacaoGerenciamento`: Exposes CRUD operations for the **SolicitacaoGerenciamento** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SolicitacaoGerenciamentos
+    * const solicitacaoGerenciamentos = await prisma.solicitacaoGerenciamento.findMany()
+    * ```
+    */
+  get solicitacaoGerenciamento(): Prisma.SolicitacaoGerenciamentoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -404,7 +489,7 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.19.1
+   * Prisma Client JS version: 6.19.3
    * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
@@ -799,7 +884,10 @@ export namespace Prisma {
     NoticiaAudit: 'NoticiaAudit',
     Recado: 'Recado',
     RecadoUnidade: 'RecadoUnidade',
-    RecadoAudit: 'RecadoAudit'
+    RecadoAudit: 'RecadoAudit',
+    AgendaEvento: 'AgendaEvento',
+    AgendaEventoAudit: 'AgendaEventoAudit',
+    SolicitacaoGerenciamento: 'SolicitacaoGerenciamento'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -818,7 +906,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal" | "noticia" | "noticiaAudit" | "recado" | "recadoUnidade" | "recadoAudit"
+      modelProps: "user" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal" | "noticia" | "noticiaAudit" | "recado" | "recadoUnidade" | "recadoAudit" | "agendaEvento" | "agendaEventoAudit" | "solicitacaoGerenciamento"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1784,6 +1872,228 @@ export namespace Prisma {
           }
         }
       }
+      AgendaEvento: {
+        payload: Prisma.$AgendaEventoPayload<ExtArgs>
+        fields: Prisma.AgendaEventoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AgendaEventoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AgendaEventoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>
+          }
+          findFirst: {
+            args: Prisma.AgendaEventoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AgendaEventoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>
+          }
+          findMany: {
+            args: Prisma.AgendaEventoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>[]
+          }
+          create: {
+            args: Prisma.AgendaEventoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>
+          }
+          createMany: {
+            args: Prisma.AgendaEventoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AgendaEventoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>[]
+          }
+          delete: {
+            args: Prisma.AgendaEventoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>
+          }
+          update: {
+            args: Prisma.AgendaEventoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>
+          }
+          deleteMany: {
+            args: Prisma.AgendaEventoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AgendaEventoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AgendaEventoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>[]
+          }
+          upsert: {
+            args: Prisma.AgendaEventoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoPayload>
+          }
+          aggregate: {
+            args: Prisma.AgendaEventoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAgendaEvento>
+          }
+          groupBy: {
+            args: Prisma.AgendaEventoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AgendaEventoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AgendaEventoCountArgs<ExtArgs>
+            result: $Utils.Optional<AgendaEventoCountAggregateOutputType> | number
+          }
+        }
+      }
+      AgendaEventoAudit: {
+        payload: Prisma.$AgendaEventoAuditPayload<ExtArgs>
+        fields: Prisma.AgendaEventoAuditFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AgendaEventoAuditFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AgendaEventoAuditFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>
+          }
+          findFirst: {
+            args: Prisma.AgendaEventoAuditFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AgendaEventoAuditFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>
+          }
+          findMany: {
+            args: Prisma.AgendaEventoAuditFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>[]
+          }
+          create: {
+            args: Prisma.AgendaEventoAuditCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>
+          }
+          createMany: {
+            args: Prisma.AgendaEventoAuditCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AgendaEventoAuditCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>[]
+          }
+          delete: {
+            args: Prisma.AgendaEventoAuditDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>
+          }
+          update: {
+            args: Prisma.AgendaEventoAuditUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>
+          }
+          deleteMany: {
+            args: Prisma.AgendaEventoAuditDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AgendaEventoAuditUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AgendaEventoAuditUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>[]
+          }
+          upsert: {
+            args: Prisma.AgendaEventoAuditUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AgendaEventoAuditPayload>
+          }
+          aggregate: {
+            args: Prisma.AgendaEventoAuditAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAgendaEventoAudit>
+          }
+          groupBy: {
+            args: Prisma.AgendaEventoAuditGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AgendaEventoAuditGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AgendaEventoAuditCountArgs<ExtArgs>
+            result: $Utils.Optional<AgendaEventoAuditCountAggregateOutputType> | number
+          }
+        }
+      }
+      SolicitacaoGerenciamento: {
+        payload: Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>
+        fields: Prisma.SolicitacaoGerenciamentoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SolicitacaoGerenciamentoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SolicitacaoGerenciamentoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>
+          }
+          findFirst: {
+            args: Prisma.SolicitacaoGerenciamentoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SolicitacaoGerenciamentoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>
+          }
+          findMany: {
+            args: Prisma.SolicitacaoGerenciamentoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>[]
+          }
+          create: {
+            args: Prisma.SolicitacaoGerenciamentoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>
+          }
+          createMany: {
+            args: Prisma.SolicitacaoGerenciamentoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SolicitacaoGerenciamentoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>[]
+          }
+          delete: {
+            args: Prisma.SolicitacaoGerenciamentoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>
+          }
+          update: {
+            args: Prisma.SolicitacaoGerenciamentoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>
+          }
+          deleteMany: {
+            args: Prisma.SolicitacaoGerenciamentoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SolicitacaoGerenciamentoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SolicitacaoGerenciamentoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>[]
+          }
+          upsert: {
+            args: Prisma.SolicitacaoGerenciamentoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SolicitacaoGerenciamentoPayload>
+          }
+          aggregate: {
+            args: Prisma.SolicitacaoGerenciamentoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSolicitacaoGerenciamento>
+          }
+          groupBy: {
+            args: Prisma.SolicitacaoGerenciamentoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SolicitacaoGerenciamentoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SolicitacaoGerenciamentoCountArgs<ExtArgs>
+            result: $Utils.Optional<SolicitacaoGerenciamentoCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1893,6 +2203,9 @@ export namespace Prisma {
     recado?: RecadoOmit
     recadoUnidade?: RecadoUnidadeOmit
     recadoAudit?: RecadoAuditOmit
+    agendaEvento?: AgendaEventoOmit
+    agendaEventoAudit?: AgendaEventoAuditOmit
+    solicitacaoGerenciamento?: SolicitacaoGerenciamentoOmit
   }
 
   /* Types for Logging */
@@ -1975,11 +2288,15 @@ export namespace Prisma {
   export type UserCountOutputType = {
     sessions: number
     accounts: number
+    eventosCriados: number
+    eventosAtualizados: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
+    eventosCriados?: boolean | UserCountOutputTypeCountEventosCriadosArgs
+    eventosAtualizados?: boolean | UserCountOutputTypeCountEventosAtualizadosArgs
   }
 
   // Custom InputTypes
@@ -2007,6 +2324,20 @@ export namespace Prisma {
     where?: AccountWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventosCriadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgendaEventoWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventosAtualizadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgendaEventoWhereInput
+  }
+
 
   /**
    * Count Type UnidadeCountOutputType
@@ -2018,6 +2349,8 @@ export namespace Prisma {
     users: number
     recados: number
     recadosMulti: number
+    agendaEventos: number
+    solicitacoes: number
   }
 
   export type UnidadeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2026,6 +2359,8 @@ export namespace Prisma {
     users?: boolean | UnidadeCountOutputTypeCountUsersArgs
     recados?: boolean | UnidadeCountOutputTypeCountRecadosArgs
     recadosMulti?: boolean | UnidadeCountOutputTypeCountRecadosMultiArgs
+    agendaEventos?: boolean | UnidadeCountOutputTypeCountAgendaEventosArgs
+    solicitacoes?: boolean | UnidadeCountOutputTypeCountSolicitacoesArgs
   }
 
   // Custom InputTypes
@@ -2074,6 +2409,51 @@ export namespace Prisma {
     where?: RecadoUnidadeWhereInput
   }
 
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeCountAgendaEventosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgendaEventoWhereInput
+  }
+
+  /**
+   * UnidadeCountOutputType without action
+   */
+  export type UnidadeCountOutputTypeCountSolicitacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SolicitacaoGerenciamentoWhereInput
+  }
+
+
+  /**
+   * Count Type NoticiaCountOutputType
+   */
+
+  export type NoticiaCountOutputType = {
+    solicitacoes: number
+  }
+
+  export type NoticiaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    solicitacoes?: boolean | NoticiaCountOutputTypeCountSolicitacoesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * NoticiaCountOutputType without action
+   */
+  export type NoticiaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NoticiaCountOutputType
+     */
+    select?: NoticiaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * NoticiaCountOutputType without action
+   */
+  export type NoticiaCountOutputTypeCountSolicitacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SolicitacaoGerenciamentoWhereInput
+  }
+
 
   /**
    * Count Type RecadoCountOutputType
@@ -2081,10 +2461,12 @@ export namespace Prisma {
 
   export type RecadoCountOutputType = {
     unidades: number
+    solicitacoes: number
   }
 
   export type RecadoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     unidades?: boolean | RecadoCountOutputTypeCountUnidadesArgs
+    solicitacoes?: boolean | RecadoCountOutputTypeCountSolicitacoesArgs
   }
 
   // Custom InputTypes
@@ -2103,6 +2485,13 @@ export namespace Prisma {
    */
   export type RecadoCountOutputTypeCountUnidadesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RecadoUnidadeWhereInput
+  }
+
+  /**
+   * RecadoCountOutputType without action
+   */
+  export type RecadoCountOutputTypeCountSolicitacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SolicitacaoGerenciamentoWhereInput
   }
 
 
@@ -2343,6 +2732,8 @@ export namespace Prisma {
     unidade?: boolean | User$unidadeArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
+    eventosCriados?: boolean | User$eventosCriadosArgs<ExtArgs>
+    eventosAtualizados?: boolean | User$eventosAtualizadosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2389,6 +2780,8 @@ export namespace Prisma {
     unidade?: boolean | User$unidadeArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
+    eventosCriados?: boolean | User$eventosCriadosArgs<ExtArgs>
+    eventosAtualizados?: boolean | User$eventosAtualizadosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2404,6 +2797,8 @@ export namespace Prisma {
       unidade: Prisma.$UnidadePayload<ExtArgs> | null
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
+      eventosCriados: Prisma.$AgendaEventoPayload<ExtArgs>[]
+      eventosAtualizados: Prisma.$AgendaEventoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2812,6 +3207,8 @@ export namespace Prisma {
     unidade<T extends User$unidadeArgs<ExtArgs> = {}>(args?: Subset<T, User$unidadeArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eventosCriados<T extends User$eventosCriadosArgs<ExtArgs> = {}>(args?: Subset<T, User$eventosCriadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eventosAtualizados<T extends User$eventosAtualizadosArgs<ExtArgs> = {}>(args?: Subset<T, User$eventosAtualizadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3310,6 +3707,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+  }
+
+  /**
+   * User.eventosCriados
+   */
+  export type User$eventosCriadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    where?: AgendaEventoWhereInput
+    orderBy?: AgendaEventoOrderByWithRelationInput | AgendaEventoOrderByWithRelationInput[]
+    cursor?: AgendaEventoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgendaEventoScalarFieldEnum | AgendaEventoScalarFieldEnum[]
+  }
+
+  /**
+   * User.eventosAtualizados
+   */
+  export type User$eventosAtualizadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    where?: AgendaEventoWhereInput
+    orderBy?: AgendaEventoOrderByWithRelationInput | AgendaEventoOrderByWithRelationInput[]
+    cursor?: AgendaEventoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgendaEventoScalarFieldEnum | AgendaEventoScalarFieldEnum[]
   }
 
   /**
@@ -6777,6 +7222,8 @@ export namespace Prisma {
     users?: boolean | Unidade$usersArgs<ExtArgs>
     recados?: boolean | Unidade$recadosArgs<ExtArgs>
     recadosMulti?: boolean | Unidade$recadosMultiArgs<ExtArgs>
+    agendaEventos?: boolean | Unidade$agendaEventosArgs<ExtArgs>
+    solicitacoes?: boolean | Unidade$solicitacoesArgs<ExtArgs>
     _count?: boolean | UnidadeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["unidade"]>
 
@@ -6802,6 +7249,8 @@ export namespace Prisma {
     users?: boolean | Unidade$usersArgs<ExtArgs>
     recados?: boolean | Unidade$recadosArgs<ExtArgs>
     recadosMulti?: boolean | Unidade$recadosMultiArgs<ExtArgs>
+    agendaEventos?: boolean | Unidade$agendaEventosArgs<ExtArgs>
+    solicitacoes?: boolean | Unidade$solicitacoesArgs<ExtArgs>
     _count?: boolean | UnidadeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UnidadeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6815,6 +7264,8 @@ export namespace Prisma {
       users: Prisma.$UserPayload<ExtArgs>[]
       recados: Prisma.$RecadoPayload<ExtArgs>[]
       recadosMulti: Prisma.$RecadoUnidadePayload<ExtArgs>[]
+      agendaEventos: Prisma.$AgendaEventoPayload<ExtArgs>[]
+      solicitacoes: Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7218,6 +7669,8 @@ export namespace Prisma {
     users<T extends Unidade$usersArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     recados<T extends Unidade$recadosArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$recadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     recadosMulti<T extends Unidade$recadosMultiArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$recadosMultiArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    agendaEventos<T extends Unidade$agendaEventosArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$agendaEventosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    solicitacoes<T extends Unidade$solicitacoesArgs<ExtArgs> = {}>(args?: Subset<T, Unidade$solicitacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7754,6 +8207,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RecadoUnidadeScalarFieldEnum | RecadoUnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade.agendaEventos
+   */
+  export type Unidade$agendaEventosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    where?: AgendaEventoWhereInput
+    orderBy?: AgendaEventoOrderByWithRelationInput | AgendaEventoOrderByWithRelationInput[]
+    cursor?: AgendaEventoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AgendaEventoScalarFieldEnum | AgendaEventoScalarFieldEnum[]
+  }
+
+  /**
+   * Unidade.solicitacoes
+   */
+  export type Unidade$solicitacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    where?: SolicitacaoGerenciamentoWhereInput
+    orderBy?: SolicitacaoGerenciamentoOrderByWithRelationInput | SolicitacaoGerenciamentoOrderByWithRelationInput[]
+    cursor?: SolicitacaoGerenciamentoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SolicitacaoGerenciamentoScalarFieldEnum | SolicitacaoGerenciamentoScalarFieldEnum[]
   }
 
   /**
@@ -11293,6 +11794,8 @@ export namespace Prisma {
     imagem?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    solicitacoes?: boolean | Noticia$solicitacoesArgs<ExtArgs>
+    _count?: boolean | NoticiaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["noticia"]>
 
   export type NoticiaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11323,10 +11826,18 @@ export namespace Prisma {
   }
 
   export type NoticiaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "conteudo" | "imagem" | "createdAt" | "updatedAt", ExtArgs["result"]["noticia"]>
+  export type NoticiaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    solicitacoes?: boolean | Noticia$solicitacoesArgs<ExtArgs>
+    _count?: boolean | NoticiaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type NoticiaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type NoticiaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $NoticiaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Noticia"
-    objects: {}
+    objects: {
+      solicitacoes: Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       titulo: string
@@ -11728,6 +12239,7 @@ export namespace Prisma {
    */
   export interface Prisma__NoticiaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    solicitacoes<T extends Noticia$solicitacoesArgs<ExtArgs> = {}>(args?: Subset<T, Noticia$solicitacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11780,6 +12292,10 @@ export namespace Prisma {
      */
     omit?: NoticiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    /**
      * Filter, which Noticia to fetch.
      */
     where: NoticiaWhereUniqueInput
@@ -11798,6 +12314,10 @@ export namespace Prisma {
      */
     omit?: NoticiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    /**
      * Filter, which Noticia to fetch.
      */
     where: NoticiaWhereUniqueInput
@@ -11815,6 +12335,10 @@ export namespace Prisma {
      * Omit specific fields from the Noticia
      */
     omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
     /**
      * Filter, which Noticia to fetch.
      */
@@ -11864,6 +12388,10 @@ export namespace Prisma {
      */
     omit?: NoticiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    /**
      * Filter, which Noticia to fetch.
      */
     where?: NoticiaWhereInput
@@ -11912,6 +12440,10 @@ export namespace Prisma {
      */
     omit?: NoticiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    /**
      * Filter, which Noticias to fetch.
      */
     where?: NoticiaWhereInput
@@ -11954,6 +12486,10 @@ export namespace Prisma {
      * Omit specific fields from the Noticia
      */
     omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
     /**
      * The data needed to create a Noticia.
      */
@@ -12002,6 +12538,10 @@ export namespace Prisma {
      * Omit specific fields from the Noticia
      */
     omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
     /**
      * The data needed to update a Noticia.
      */
@@ -12069,6 +12609,10 @@ export namespace Prisma {
      */
     omit?: NoticiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    /**
      * The filter to search for the Noticia to update in case it exists.
      */
     where: NoticiaWhereUniqueInput
@@ -12095,6 +12639,10 @@ export namespace Prisma {
      */
     omit?: NoticiaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    /**
      * Filter which Noticia to delete.
      */
     where: NoticiaWhereUniqueInput
@@ -12115,6 +12663,30 @@ export namespace Prisma {
   }
 
   /**
+   * Noticia.solicitacoes
+   */
+  export type Noticia$solicitacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    where?: SolicitacaoGerenciamentoWhereInput
+    orderBy?: SolicitacaoGerenciamentoOrderByWithRelationInput | SolicitacaoGerenciamentoOrderByWithRelationInput[]
+    cursor?: SolicitacaoGerenciamentoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SolicitacaoGerenciamentoScalarFieldEnum | SolicitacaoGerenciamentoScalarFieldEnum[]
+  }
+
+  /**
    * Noticia without action
    */
   export type NoticiaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12126,6 +12698,10 @@ export namespace Prisma {
      * Omit specific fields from the Noticia
      */
     omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
   }
 
 
@@ -13413,6 +13989,7 @@ export namespace Prisma {
     updatedAt?: boolean
     unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
     unidades?: boolean | Recado$unidadesArgs<ExtArgs>
+    solicitacoes?: boolean | Recado$solicitacoesArgs<ExtArgs>
     _count?: boolean | RecadoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["recado"]>
 
@@ -13452,6 +14029,7 @@ export namespace Prisma {
   export type RecadoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
     unidades?: boolean | Recado$unidadesArgs<ExtArgs>
+    solicitacoes?: boolean | Recado$solicitacoesArgs<ExtArgs>
     _count?: boolean | RecadoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RecadoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13466,6 +14044,7 @@ export namespace Prisma {
     objects: {
       unidade: Prisma.$UnidadePayload<ExtArgs>
       unidades: Prisma.$RecadoUnidadePayload<ExtArgs>[]
+      solicitacoes: Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -13871,6 +14450,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     unidade<T extends UnidadeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnidadeDefaultArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     unidades<T extends Recado$unidadesArgs<ExtArgs> = {}>(args?: Subset<T, Recado$unidadesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    solicitacoes<T extends Recado$solicitacoesArgs<ExtArgs> = {}>(args?: Subset<T, Recado$solicitacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14324,6 +14904,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RecadoUnidadeScalarFieldEnum | RecadoUnidadeScalarFieldEnum[]
+  }
+
+  /**
+   * Recado.solicitacoes
+   */
+  export type Recado$solicitacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    where?: SolicitacaoGerenciamentoWhereInput
+    orderBy?: SolicitacaoGerenciamentoOrderByWithRelationInput | SolicitacaoGerenciamentoOrderByWithRelationInput[]
+    cursor?: SolicitacaoGerenciamentoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SolicitacaoGerenciamentoScalarFieldEnum | SolicitacaoGerenciamentoScalarFieldEnum[]
   }
 
   /**
@@ -16492,6 +17096,3655 @@ export namespace Prisma {
 
 
   /**
+   * Model AgendaEvento
+   */
+
+  export type AggregateAgendaEvento = {
+    _count: AgendaEventoCountAggregateOutputType | null
+    _avg: AgendaEventoAvgAggregateOutputType | null
+    _sum: AgendaEventoSumAggregateOutputType | null
+    _min: AgendaEventoMinAggregateOutputType | null
+    _max: AgendaEventoMaxAggregateOutputType | null
+  }
+
+  export type AgendaEventoAvgAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type AgendaEventoSumAggregateOutputType = {
+    id: number | null
+    unidadeId: number | null
+  }
+
+  export type AgendaEventoMinAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    descricao: string | null
+    data: Date | null
+    unidadeId: number | null
+    criadoPorId: string | null
+    atualizadoPorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgendaEventoMaxAggregateOutputType = {
+    id: number | null
+    titulo: string | null
+    descricao: string | null
+    data: Date | null
+    unidadeId: number | null
+    criadoPorId: string | null
+    atualizadoPorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AgendaEventoCountAggregateOutputType = {
+    id: number
+    titulo: number
+    descricao: number
+    data: number
+    unidadeId: number
+    criadoPorId: number
+    atualizadoPorId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AgendaEventoAvgAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type AgendaEventoSumAggregateInputType = {
+    id?: true
+    unidadeId?: true
+  }
+
+  export type AgendaEventoMinAggregateInputType = {
+    id?: true
+    titulo?: true
+    descricao?: true
+    data?: true
+    unidadeId?: true
+    criadoPorId?: true
+    atualizadoPorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgendaEventoMaxAggregateInputType = {
+    id?: true
+    titulo?: true
+    descricao?: true
+    data?: true
+    unidadeId?: true
+    criadoPorId?: true
+    atualizadoPorId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AgendaEventoCountAggregateInputType = {
+    id?: true
+    titulo?: true
+    descricao?: true
+    data?: true
+    unidadeId?: true
+    criadoPorId?: true
+    atualizadoPorId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AgendaEventoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgendaEvento to aggregate.
+     */
+    where?: AgendaEventoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventos to fetch.
+     */
+    orderBy?: AgendaEventoOrderByWithRelationInput | AgendaEventoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AgendaEventoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AgendaEventos
+    **/
+    _count?: true | AgendaEventoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AgendaEventoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AgendaEventoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AgendaEventoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AgendaEventoMaxAggregateInputType
+  }
+
+  export type GetAgendaEventoAggregateType<T extends AgendaEventoAggregateArgs> = {
+        [P in keyof T & keyof AggregateAgendaEvento]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAgendaEvento[P]>
+      : GetScalarType<T[P], AggregateAgendaEvento[P]>
+  }
+
+
+
+
+  export type AgendaEventoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgendaEventoWhereInput
+    orderBy?: AgendaEventoOrderByWithAggregationInput | AgendaEventoOrderByWithAggregationInput[]
+    by: AgendaEventoScalarFieldEnum[] | AgendaEventoScalarFieldEnum
+    having?: AgendaEventoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AgendaEventoCountAggregateInputType | true
+    _avg?: AgendaEventoAvgAggregateInputType
+    _sum?: AgendaEventoSumAggregateInputType
+    _min?: AgendaEventoMinAggregateInputType
+    _max?: AgendaEventoMaxAggregateInputType
+  }
+
+  export type AgendaEventoGroupByOutputType = {
+    id: number
+    titulo: string
+    descricao: string | null
+    data: Date
+    unidadeId: number
+    criadoPorId: string
+    atualizadoPorId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AgendaEventoCountAggregateOutputType | null
+    _avg: AgendaEventoAvgAggregateOutputType | null
+    _sum: AgendaEventoSumAggregateOutputType | null
+    _min: AgendaEventoMinAggregateOutputType | null
+    _max: AgendaEventoMaxAggregateOutputType | null
+  }
+
+  type GetAgendaEventoGroupByPayload<T extends AgendaEventoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AgendaEventoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AgendaEventoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AgendaEventoGroupByOutputType[P]>
+            : GetScalarType<T[P], AgendaEventoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AgendaEventoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    data?: boolean
+    unidadeId?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | AgendaEvento$atualizadoPorArgs<ExtArgs>
+  }, ExtArgs["result"]["agendaEvento"]>
+
+  export type AgendaEventoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    data?: boolean
+    unidadeId?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | AgendaEvento$atualizadoPorArgs<ExtArgs>
+  }, ExtArgs["result"]["agendaEvento"]>
+
+  export type AgendaEventoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    data?: boolean
+    unidadeId?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | AgendaEvento$atualizadoPorArgs<ExtArgs>
+  }, ExtArgs["result"]["agendaEvento"]>
+
+  export type AgendaEventoSelectScalar = {
+    id?: boolean
+    titulo?: boolean
+    descricao?: boolean
+    data?: boolean
+    unidadeId?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AgendaEventoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "descricao" | "data" | "unidadeId" | "criadoPorId" | "atualizadoPorId" | "createdAt" | "updatedAt", ExtArgs["result"]["agendaEvento"]>
+  export type AgendaEventoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | AgendaEvento$atualizadoPorArgs<ExtArgs>
+  }
+  export type AgendaEventoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | AgendaEvento$atualizadoPorArgs<ExtArgs>
+  }
+  export type AgendaEventoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | AgendaEvento$atualizadoPorArgs<ExtArgs>
+  }
+
+  export type $AgendaEventoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AgendaEvento"
+    objects: {
+      unidade: Prisma.$UnidadePayload<ExtArgs>
+      criadoPor: Prisma.$UserPayload<ExtArgs>
+      atualizadoPor: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      titulo: string
+      descricao: string | null
+      data: Date
+      unidadeId: number
+      criadoPorId: string
+      atualizadoPorId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["agendaEvento"]>
+    composites: {}
+  }
+
+  type AgendaEventoGetPayload<S extends boolean | null | undefined | AgendaEventoDefaultArgs> = $Result.GetResult<Prisma.$AgendaEventoPayload, S>
+
+  type AgendaEventoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AgendaEventoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AgendaEventoCountAggregateInputType | true
+    }
+
+  export interface AgendaEventoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AgendaEvento'], meta: { name: 'AgendaEvento' } }
+    /**
+     * Find zero or one AgendaEvento that matches the filter.
+     * @param {AgendaEventoFindUniqueArgs} args - Arguments to find a AgendaEvento
+     * @example
+     * // Get one AgendaEvento
+     * const agendaEvento = await prisma.agendaEvento.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AgendaEventoFindUniqueArgs>(args: SelectSubset<T, AgendaEventoFindUniqueArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AgendaEvento that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AgendaEventoFindUniqueOrThrowArgs} args - Arguments to find a AgendaEvento
+     * @example
+     * // Get one AgendaEvento
+     * const agendaEvento = await prisma.agendaEvento.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AgendaEventoFindUniqueOrThrowArgs>(args: SelectSubset<T, AgendaEventoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgendaEvento that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoFindFirstArgs} args - Arguments to find a AgendaEvento
+     * @example
+     * // Get one AgendaEvento
+     * const agendaEvento = await prisma.agendaEvento.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AgendaEventoFindFirstArgs>(args?: SelectSubset<T, AgendaEventoFindFirstArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgendaEvento that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoFindFirstOrThrowArgs} args - Arguments to find a AgendaEvento
+     * @example
+     * // Get one AgendaEvento
+     * const agendaEvento = await prisma.agendaEvento.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AgendaEventoFindFirstOrThrowArgs>(args?: SelectSubset<T, AgendaEventoFindFirstOrThrowArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AgendaEventos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AgendaEventos
+     * const agendaEventos = await prisma.agendaEvento.findMany()
+     * 
+     * // Get first 10 AgendaEventos
+     * const agendaEventos = await prisma.agendaEvento.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const agendaEventoWithIdOnly = await prisma.agendaEvento.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AgendaEventoFindManyArgs>(args?: SelectSubset<T, AgendaEventoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AgendaEvento.
+     * @param {AgendaEventoCreateArgs} args - Arguments to create a AgendaEvento.
+     * @example
+     * // Create one AgendaEvento
+     * const AgendaEvento = await prisma.agendaEvento.create({
+     *   data: {
+     *     // ... data to create a AgendaEvento
+     *   }
+     * })
+     * 
+     */
+    create<T extends AgendaEventoCreateArgs>(args: SelectSubset<T, AgendaEventoCreateArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AgendaEventos.
+     * @param {AgendaEventoCreateManyArgs} args - Arguments to create many AgendaEventos.
+     * @example
+     * // Create many AgendaEventos
+     * const agendaEvento = await prisma.agendaEvento.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AgendaEventoCreateManyArgs>(args?: SelectSubset<T, AgendaEventoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AgendaEventos and returns the data saved in the database.
+     * @param {AgendaEventoCreateManyAndReturnArgs} args - Arguments to create many AgendaEventos.
+     * @example
+     * // Create many AgendaEventos
+     * const agendaEvento = await prisma.agendaEvento.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AgendaEventos and only return the `id`
+     * const agendaEventoWithIdOnly = await prisma.agendaEvento.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AgendaEventoCreateManyAndReturnArgs>(args?: SelectSubset<T, AgendaEventoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AgendaEvento.
+     * @param {AgendaEventoDeleteArgs} args - Arguments to delete one AgendaEvento.
+     * @example
+     * // Delete one AgendaEvento
+     * const AgendaEvento = await prisma.agendaEvento.delete({
+     *   where: {
+     *     // ... filter to delete one AgendaEvento
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AgendaEventoDeleteArgs>(args: SelectSubset<T, AgendaEventoDeleteArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AgendaEvento.
+     * @param {AgendaEventoUpdateArgs} args - Arguments to update one AgendaEvento.
+     * @example
+     * // Update one AgendaEvento
+     * const agendaEvento = await prisma.agendaEvento.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AgendaEventoUpdateArgs>(args: SelectSubset<T, AgendaEventoUpdateArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AgendaEventos.
+     * @param {AgendaEventoDeleteManyArgs} args - Arguments to filter AgendaEventos to delete.
+     * @example
+     * // Delete a few AgendaEventos
+     * const { count } = await prisma.agendaEvento.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AgendaEventoDeleteManyArgs>(args?: SelectSubset<T, AgendaEventoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgendaEventos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AgendaEventos
+     * const agendaEvento = await prisma.agendaEvento.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AgendaEventoUpdateManyArgs>(args: SelectSubset<T, AgendaEventoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgendaEventos and returns the data updated in the database.
+     * @param {AgendaEventoUpdateManyAndReturnArgs} args - Arguments to update many AgendaEventos.
+     * @example
+     * // Update many AgendaEventos
+     * const agendaEvento = await prisma.agendaEvento.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AgendaEventos and only return the `id`
+     * const agendaEventoWithIdOnly = await prisma.agendaEvento.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AgendaEventoUpdateManyAndReturnArgs>(args: SelectSubset<T, AgendaEventoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AgendaEvento.
+     * @param {AgendaEventoUpsertArgs} args - Arguments to update or create a AgendaEvento.
+     * @example
+     * // Update or create a AgendaEvento
+     * const agendaEvento = await prisma.agendaEvento.upsert({
+     *   create: {
+     *     // ... data to create a AgendaEvento
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AgendaEvento we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AgendaEventoUpsertArgs>(args: SelectSubset<T, AgendaEventoUpsertArgs<ExtArgs>>): Prisma__AgendaEventoClient<$Result.GetResult<Prisma.$AgendaEventoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AgendaEventos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoCountArgs} args - Arguments to filter AgendaEventos to count.
+     * @example
+     * // Count the number of AgendaEventos
+     * const count = await prisma.agendaEvento.count({
+     *   where: {
+     *     // ... the filter for the AgendaEventos we want to count
+     *   }
+     * })
+    **/
+    count<T extends AgendaEventoCountArgs>(
+      args?: Subset<T, AgendaEventoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AgendaEventoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AgendaEvento.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AgendaEventoAggregateArgs>(args: Subset<T, AgendaEventoAggregateArgs>): Prisma.PrismaPromise<GetAgendaEventoAggregateType<T>>
+
+    /**
+     * Group by AgendaEvento.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AgendaEventoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AgendaEventoGroupByArgs['orderBy'] }
+        : { orderBy?: AgendaEventoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AgendaEventoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAgendaEventoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AgendaEvento model
+   */
+  readonly fields: AgendaEventoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AgendaEvento.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AgendaEventoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    unidade<T extends UnidadeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnidadeDefaultArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    criadoPor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    atualizadoPor<T extends AgendaEvento$atualizadoPorArgs<ExtArgs> = {}>(args?: Subset<T, AgendaEvento$atualizadoPorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AgendaEvento model
+   */
+  interface AgendaEventoFieldRefs {
+    readonly id: FieldRef<"AgendaEvento", 'Int'>
+    readonly titulo: FieldRef<"AgendaEvento", 'String'>
+    readonly descricao: FieldRef<"AgendaEvento", 'String'>
+    readonly data: FieldRef<"AgendaEvento", 'DateTime'>
+    readonly unidadeId: FieldRef<"AgendaEvento", 'Int'>
+    readonly criadoPorId: FieldRef<"AgendaEvento", 'String'>
+    readonly atualizadoPorId: FieldRef<"AgendaEvento", 'String'>
+    readonly createdAt: FieldRef<"AgendaEvento", 'DateTime'>
+    readonly updatedAt: FieldRef<"AgendaEvento", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AgendaEvento findUnique
+   */
+  export type AgendaEventoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * Filter, which AgendaEvento to fetch.
+     */
+    where: AgendaEventoWhereUniqueInput
+  }
+
+  /**
+   * AgendaEvento findUniqueOrThrow
+   */
+  export type AgendaEventoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * Filter, which AgendaEvento to fetch.
+     */
+    where: AgendaEventoWhereUniqueInput
+  }
+
+  /**
+   * AgendaEvento findFirst
+   */
+  export type AgendaEventoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * Filter, which AgendaEvento to fetch.
+     */
+    where?: AgendaEventoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventos to fetch.
+     */
+    orderBy?: AgendaEventoOrderByWithRelationInput | AgendaEventoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgendaEventos.
+     */
+    cursor?: AgendaEventoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgendaEventos.
+     */
+    distinct?: AgendaEventoScalarFieldEnum | AgendaEventoScalarFieldEnum[]
+  }
+
+  /**
+   * AgendaEvento findFirstOrThrow
+   */
+  export type AgendaEventoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * Filter, which AgendaEvento to fetch.
+     */
+    where?: AgendaEventoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventos to fetch.
+     */
+    orderBy?: AgendaEventoOrderByWithRelationInput | AgendaEventoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgendaEventos.
+     */
+    cursor?: AgendaEventoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgendaEventos.
+     */
+    distinct?: AgendaEventoScalarFieldEnum | AgendaEventoScalarFieldEnum[]
+  }
+
+  /**
+   * AgendaEvento findMany
+   */
+  export type AgendaEventoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * Filter, which AgendaEventos to fetch.
+     */
+    where?: AgendaEventoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventos to fetch.
+     */
+    orderBy?: AgendaEventoOrderByWithRelationInput | AgendaEventoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AgendaEventos.
+     */
+    cursor?: AgendaEventoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventos.
+     */
+    skip?: number
+    distinct?: AgendaEventoScalarFieldEnum | AgendaEventoScalarFieldEnum[]
+  }
+
+  /**
+   * AgendaEvento create
+   */
+  export type AgendaEventoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AgendaEvento.
+     */
+    data: XOR<AgendaEventoCreateInput, AgendaEventoUncheckedCreateInput>
+  }
+
+  /**
+   * AgendaEvento createMany
+   */
+  export type AgendaEventoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AgendaEventos.
+     */
+    data: AgendaEventoCreateManyInput | AgendaEventoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AgendaEvento createManyAndReturn
+   */
+  export type AgendaEventoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * The data used to create many AgendaEventos.
+     */
+    data: AgendaEventoCreateManyInput | AgendaEventoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgendaEvento update
+   */
+  export type AgendaEventoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AgendaEvento.
+     */
+    data: XOR<AgendaEventoUpdateInput, AgendaEventoUncheckedUpdateInput>
+    /**
+     * Choose, which AgendaEvento to update.
+     */
+    where: AgendaEventoWhereUniqueInput
+  }
+
+  /**
+   * AgendaEvento updateMany
+   */
+  export type AgendaEventoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AgendaEventos.
+     */
+    data: XOR<AgendaEventoUpdateManyMutationInput, AgendaEventoUncheckedUpdateManyInput>
+    /**
+     * Filter which AgendaEventos to update
+     */
+    where?: AgendaEventoWhereInput
+    /**
+     * Limit how many AgendaEventos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgendaEvento updateManyAndReturn
+   */
+  export type AgendaEventoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * The data used to update AgendaEventos.
+     */
+    data: XOR<AgendaEventoUpdateManyMutationInput, AgendaEventoUncheckedUpdateManyInput>
+    /**
+     * Filter which AgendaEventos to update
+     */
+    where?: AgendaEventoWhereInput
+    /**
+     * Limit how many AgendaEventos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AgendaEvento upsert
+   */
+  export type AgendaEventoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AgendaEvento to update in case it exists.
+     */
+    where: AgendaEventoWhereUniqueInput
+    /**
+     * In case the AgendaEvento found by the `where` argument doesn't exist, create a new AgendaEvento with this data.
+     */
+    create: XOR<AgendaEventoCreateInput, AgendaEventoUncheckedCreateInput>
+    /**
+     * In case the AgendaEvento was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AgendaEventoUpdateInput, AgendaEventoUncheckedUpdateInput>
+  }
+
+  /**
+   * AgendaEvento delete
+   */
+  export type AgendaEventoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+    /**
+     * Filter which AgendaEvento to delete.
+     */
+    where: AgendaEventoWhereUniqueInput
+  }
+
+  /**
+   * AgendaEvento deleteMany
+   */
+  export type AgendaEventoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgendaEventos to delete
+     */
+    where?: AgendaEventoWhereInput
+    /**
+     * Limit how many AgendaEventos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgendaEvento.atualizadoPor
+   */
+  export type AgendaEvento$atualizadoPorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * AgendaEvento without action
+   */
+  export type AgendaEventoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEvento
+     */
+    select?: AgendaEventoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEvento
+     */
+    omit?: AgendaEventoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AgendaEventoInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AgendaEventoAudit
+   */
+
+  export type AggregateAgendaEventoAudit = {
+    _count: AgendaEventoAuditCountAggregateOutputType | null
+    _avg: AgendaEventoAuditAvgAggregateOutputType | null
+    _sum: AgendaEventoAuditSumAggregateOutputType | null
+    _min: AgendaEventoAuditMinAggregateOutputType | null
+    _max: AgendaEventoAuditMaxAggregateOutputType | null
+  }
+
+  export type AgendaEventoAuditAvgAggregateOutputType = {
+    id: number | null
+    eventoId: number | null
+    unidadeId: number | null
+  }
+
+  export type AgendaEventoAuditSumAggregateOutputType = {
+    id: number | null
+    eventoId: number | null
+    unidadeId: number | null
+  }
+
+  export type AgendaEventoAuditMinAggregateOutputType = {
+    id: number | null
+    eventoId: number | null
+    eventoTitulo: string | null
+    unidadeId: number | null
+    unidadeNome: string | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type AgendaEventoAuditMaxAggregateOutputType = {
+    id: number | null
+    eventoId: number | null
+    eventoTitulo: string | null
+    unidadeId: number | null
+    unidadeNome: string | null
+    userId: string | null
+    userNome: string | null
+    acao: string | null
+    createdAt: Date | null
+  }
+
+  export type AgendaEventoAuditCountAggregateOutputType = {
+    id: number
+    eventoId: number
+    eventoTitulo: number
+    unidadeId: number
+    unidadeNome: number
+    userId: number
+    userNome: number
+    acao: number
+    dadosAntigos: number
+    dadosNovos: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AgendaEventoAuditAvgAggregateInputType = {
+    id?: true
+    eventoId?: true
+    unidadeId?: true
+  }
+
+  export type AgendaEventoAuditSumAggregateInputType = {
+    id?: true
+    eventoId?: true
+    unidadeId?: true
+  }
+
+  export type AgendaEventoAuditMinAggregateInputType = {
+    id?: true
+    eventoId?: true
+    eventoTitulo?: true
+    unidadeId?: true
+    unidadeNome?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type AgendaEventoAuditMaxAggregateInputType = {
+    id?: true
+    eventoId?: true
+    eventoTitulo?: true
+    unidadeId?: true
+    unidadeNome?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    createdAt?: true
+  }
+
+  export type AgendaEventoAuditCountAggregateInputType = {
+    id?: true
+    eventoId?: true
+    eventoTitulo?: true
+    unidadeId?: true
+    unidadeNome?: true
+    userId?: true
+    userNome?: true
+    acao?: true
+    dadosAntigos?: true
+    dadosNovos?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AgendaEventoAuditAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgendaEventoAudit to aggregate.
+     */
+    where?: AgendaEventoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventoAudits to fetch.
+     */
+    orderBy?: AgendaEventoAuditOrderByWithRelationInput | AgendaEventoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AgendaEventoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventoAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AgendaEventoAudits
+    **/
+    _count?: true | AgendaEventoAuditCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AgendaEventoAuditAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AgendaEventoAuditSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AgendaEventoAuditMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AgendaEventoAuditMaxAggregateInputType
+  }
+
+  export type GetAgendaEventoAuditAggregateType<T extends AgendaEventoAuditAggregateArgs> = {
+        [P in keyof T & keyof AggregateAgendaEventoAudit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAgendaEventoAudit[P]>
+      : GetScalarType<T[P], AggregateAgendaEventoAudit[P]>
+  }
+
+
+
+
+  export type AgendaEventoAuditGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AgendaEventoAuditWhereInput
+    orderBy?: AgendaEventoAuditOrderByWithAggregationInput | AgendaEventoAuditOrderByWithAggregationInput[]
+    by: AgendaEventoAuditScalarFieldEnum[] | AgendaEventoAuditScalarFieldEnum
+    having?: AgendaEventoAuditScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AgendaEventoAuditCountAggregateInputType | true
+    _avg?: AgendaEventoAuditAvgAggregateInputType
+    _sum?: AgendaEventoAuditSumAggregateInputType
+    _min?: AgendaEventoAuditMinAggregateInputType
+    _max?: AgendaEventoAuditMaxAggregateInputType
+  }
+
+  export type AgendaEventoAuditGroupByOutputType = {
+    id: number
+    eventoId: number
+    eventoTitulo: string
+    unidadeId: number
+    unidadeNome: string | null
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos: JsonValue | null
+    dadosNovos: JsonValue | null
+    createdAt: Date
+    _count: AgendaEventoAuditCountAggregateOutputType | null
+    _avg: AgendaEventoAuditAvgAggregateOutputType | null
+    _sum: AgendaEventoAuditSumAggregateOutputType | null
+    _min: AgendaEventoAuditMinAggregateOutputType | null
+    _max: AgendaEventoAuditMaxAggregateOutputType | null
+  }
+
+  type GetAgendaEventoAuditGroupByPayload<T extends AgendaEventoAuditGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AgendaEventoAuditGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AgendaEventoAuditGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AgendaEventoAuditGroupByOutputType[P]>
+            : GetScalarType<T[P], AgendaEventoAuditGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AgendaEventoAuditSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventoId?: boolean
+    eventoTitulo?: boolean
+    unidadeId?: boolean
+    unidadeNome?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["agendaEventoAudit"]>
+
+  export type AgendaEventoAuditSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventoId?: boolean
+    eventoTitulo?: boolean
+    unidadeId?: boolean
+    unidadeNome?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["agendaEventoAudit"]>
+
+  export type AgendaEventoAuditSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventoId?: boolean
+    eventoTitulo?: boolean
+    unidadeId?: boolean
+    unidadeNome?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["agendaEventoAudit"]>
+
+  export type AgendaEventoAuditSelectScalar = {
+    id?: boolean
+    eventoId?: boolean
+    eventoTitulo?: boolean
+    unidadeId?: boolean
+    unidadeNome?: boolean
+    userId?: boolean
+    userNome?: boolean
+    acao?: boolean
+    dadosAntigos?: boolean
+    dadosNovos?: boolean
+    createdAt?: boolean
+  }
+
+  export type AgendaEventoAuditOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventoId" | "eventoTitulo" | "unidadeId" | "unidadeNome" | "userId" | "userNome" | "acao" | "dadosAntigos" | "dadosNovos" | "createdAt", ExtArgs["result"]["agendaEventoAudit"]>
+
+  export type $AgendaEventoAuditPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AgendaEventoAudit"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      eventoId: number
+      eventoTitulo: string
+      unidadeId: number
+      unidadeNome: string | null
+      userId: string
+      userNome: string
+      acao: string
+      dadosAntigos: Prisma.JsonValue | null
+      dadosNovos: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["agendaEventoAudit"]>
+    composites: {}
+  }
+
+  type AgendaEventoAuditGetPayload<S extends boolean | null | undefined | AgendaEventoAuditDefaultArgs> = $Result.GetResult<Prisma.$AgendaEventoAuditPayload, S>
+
+  type AgendaEventoAuditCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AgendaEventoAuditFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AgendaEventoAuditCountAggregateInputType | true
+    }
+
+  export interface AgendaEventoAuditDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AgendaEventoAudit'], meta: { name: 'AgendaEventoAudit' } }
+    /**
+     * Find zero or one AgendaEventoAudit that matches the filter.
+     * @param {AgendaEventoAuditFindUniqueArgs} args - Arguments to find a AgendaEventoAudit
+     * @example
+     * // Get one AgendaEventoAudit
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AgendaEventoAuditFindUniqueArgs>(args: SelectSubset<T, AgendaEventoAuditFindUniqueArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AgendaEventoAudit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AgendaEventoAuditFindUniqueOrThrowArgs} args - Arguments to find a AgendaEventoAudit
+     * @example
+     * // Get one AgendaEventoAudit
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AgendaEventoAuditFindUniqueOrThrowArgs>(args: SelectSubset<T, AgendaEventoAuditFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgendaEventoAudit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAuditFindFirstArgs} args - Arguments to find a AgendaEventoAudit
+     * @example
+     * // Get one AgendaEventoAudit
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AgendaEventoAuditFindFirstArgs>(args?: SelectSubset<T, AgendaEventoAuditFindFirstArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AgendaEventoAudit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAuditFindFirstOrThrowArgs} args - Arguments to find a AgendaEventoAudit
+     * @example
+     * // Get one AgendaEventoAudit
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AgendaEventoAuditFindFirstOrThrowArgs>(args?: SelectSubset<T, AgendaEventoAuditFindFirstOrThrowArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AgendaEventoAudits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAuditFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AgendaEventoAudits
+     * const agendaEventoAudits = await prisma.agendaEventoAudit.findMany()
+     * 
+     * // Get first 10 AgendaEventoAudits
+     * const agendaEventoAudits = await prisma.agendaEventoAudit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const agendaEventoAuditWithIdOnly = await prisma.agendaEventoAudit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AgendaEventoAuditFindManyArgs>(args?: SelectSubset<T, AgendaEventoAuditFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AgendaEventoAudit.
+     * @param {AgendaEventoAuditCreateArgs} args - Arguments to create a AgendaEventoAudit.
+     * @example
+     * // Create one AgendaEventoAudit
+     * const AgendaEventoAudit = await prisma.agendaEventoAudit.create({
+     *   data: {
+     *     // ... data to create a AgendaEventoAudit
+     *   }
+     * })
+     * 
+     */
+    create<T extends AgendaEventoAuditCreateArgs>(args: SelectSubset<T, AgendaEventoAuditCreateArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AgendaEventoAudits.
+     * @param {AgendaEventoAuditCreateManyArgs} args - Arguments to create many AgendaEventoAudits.
+     * @example
+     * // Create many AgendaEventoAudits
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AgendaEventoAuditCreateManyArgs>(args?: SelectSubset<T, AgendaEventoAuditCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AgendaEventoAudits and returns the data saved in the database.
+     * @param {AgendaEventoAuditCreateManyAndReturnArgs} args - Arguments to create many AgendaEventoAudits.
+     * @example
+     * // Create many AgendaEventoAudits
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AgendaEventoAudits and only return the `id`
+     * const agendaEventoAuditWithIdOnly = await prisma.agendaEventoAudit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AgendaEventoAuditCreateManyAndReturnArgs>(args?: SelectSubset<T, AgendaEventoAuditCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AgendaEventoAudit.
+     * @param {AgendaEventoAuditDeleteArgs} args - Arguments to delete one AgendaEventoAudit.
+     * @example
+     * // Delete one AgendaEventoAudit
+     * const AgendaEventoAudit = await prisma.agendaEventoAudit.delete({
+     *   where: {
+     *     // ... filter to delete one AgendaEventoAudit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AgendaEventoAuditDeleteArgs>(args: SelectSubset<T, AgendaEventoAuditDeleteArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AgendaEventoAudit.
+     * @param {AgendaEventoAuditUpdateArgs} args - Arguments to update one AgendaEventoAudit.
+     * @example
+     * // Update one AgendaEventoAudit
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AgendaEventoAuditUpdateArgs>(args: SelectSubset<T, AgendaEventoAuditUpdateArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AgendaEventoAudits.
+     * @param {AgendaEventoAuditDeleteManyArgs} args - Arguments to filter AgendaEventoAudits to delete.
+     * @example
+     * // Delete a few AgendaEventoAudits
+     * const { count } = await prisma.agendaEventoAudit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AgendaEventoAuditDeleteManyArgs>(args?: SelectSubset<T, AgendaEventoAuditDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgendaEventoAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAuditUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AgendaEventoAudits
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AgendaEventoAuditUpdateManyArgs>(args: SelectSubset<T, AgendaEventoAuditUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AgendaEventoAudits and returns the data updated in the database.
+     * @param {AgendaEventoAuditUpdateManyAndReturnArgs} args - Arguments to update many AgendaEventoAudits.
+     * @example
+     * // Update many AgendaEventoAudits
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AgendaEventoAudits and only return the `id`
+     * const agendaEventoAuditWithIdOnly = await prisma.agendaEventoAudit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AgendaEventoAuditUpdateManyAndReturnArgs>(args: SelectSubset<T, AgendaEventoAuditUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AgendaEventoAudit.
+     * @param {AgendaEventoAuditUpsertArgs} args - Arguments to update or create a AgendaEventoAudit.
+     * @example
+     * // Update or create a AgendaEventoAudit
+     * const agendaEventoAudit = await prisma.agendaEventoAudit.upsert({
+     *   create: {
+     *     // ... data to create a AgendaEventoAudit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AgendaEventoAudit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AgendaEventoAuditUpsertArgs>(args: SelectSubset<T, AgendaEventoAuditUpsertArgs<ExtArgs>>): Prisma__AgendaEventoAuditClient<$Result.GetResult<Prisma.$AgendaEventoAuditPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AgendaEventoAudits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAuditCountArgs} args - Arguments to filter AgendaEventoAudits to count.
+     * @example
+     * // Count the number of AgendaEventoAudits
+     * const count = await prisma.agendaEventoAudit.count({
+     *   where: {
+     *     // ... the filter for the AgendaEventoAudits we want to count
+     *   }
+     * })
+    **/
+    count<T extends AgendaEventoAuditCountArgs>(
+      args?: Subset<T, AgendaEventoAuditCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AgendaEventoAuditCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AgendaEventoAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAuditAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AgendaEventoAuditAggregateArgs>(args: Subset<T, AgendaEventoAuditAggregateArgs>): Prisma.PrismaPromise<GetAgendaEventoAuditAggregateType<T>>
+
+    /**
+     * Group by AgendaEventoAudit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AgendaEventoAuditGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AgendaEventoAuditGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AgendaEventoAuditGroupByArgs['orderBy'] }
+        : { orderBy?: AgendaEventoAuditGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AgendaEventoAuditGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAgendaEventoAuditGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AgendaEventoAudit model
+   */
+  readonly fields: AgendaEventoAuditFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AgendaEventoAudit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AgendaEventoAuditClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AgendaEventoAudit model
+   */
+  interface AgendaEventoAuditFieldRefs {
+    readonly id: FieldRef<"AgendaEventoAudit", 'Int'>
+    readonly eventoId: FieldRef<"AgendaEventoAudit", 'Int'>
+    readonly eventoTitulo: FieldRef<"AgendaEventoAudit", 'String'>
+    readonly unidadeId: FieldRef<"AgendaEventoAudit", 'Int'>
+    readonly unidadeNome: FieldRef<"AgendaEventoAudit", 'String'>
+    readonly userId: FieldRef<"AgendaEventoAudit", 'String'>
+    readonly userNome: FieldRef<"AgendaEventoAudit", 'String'>
+    readonly acao: FieldRef<"AgendaEventoAudit", 'String'>
+    readonly dadosAntigos: FieldRef<"AgendaEventoAudit", 'Json'>
+    readonly dadosNovos: FieldRef<"AgendaEventoAudit", 'Json'>
+    readonly createdAt: FieldRef<"AgendaEventoAudit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AgendaEventoAudit findUnique
+   */
+  export type AgendaEventoAuditFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AgendaEventoAudit to fetch.
+     */
+    where: AgendaEventoAuditWhereUniqueInput
+  }
+
+  /**
+   * AgendaEventoAudit findUniqueOrThrow
+   */
+  export type AgendaEventoAuditFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AgendaEventoAudit to fetch.
+     */
+    where: AgendaEventoAuditWhereUniqueInput
+  }
+
+  /**
+   * AgendaEventoAudit findFirst
+   */
+  export type AgendaEventoAuditFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AgendaEventoAudit to fetch.
+     */
+    where?: AgendaEventoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventoAudits to fetch.
+     */
+    orderBy?: AgendaEventoAuditOrderByWithRelationInput | AgendaEventoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgendaEventoAudits.
+     */
+    cursor?: AgendaEventoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventoAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgendaEventoAudits.
+     */
+    distinct?: AgendaEventoAuditScalarFieldEnum | AgendaEventoAuditScalarFieldEnum[]
+  }
+
+  /**
+   * AgendaEventoAudit findFirstOrThrow
+   */
+  export type AgendaEventoAuditFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AgendaEventoAudit to fetch.
+     */
+    where?: AgendaEventoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventoAudits to fetch.
+     */
+    orderBy?: AgendaEventoAuditOrderByWithRelationInput | AgendaEventoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AgendaEventoAudits.
+     */
+    cursor?: AgendaEventoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventoAudits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AgendaEventoAudits.
+     */
+    distinct?: AgendaEventoAuditScalarFieldEnum | AgendaEventoAuditScalarFieldEnum[]
+  }
+
+  /**
+   * AgendaEventoAudit findMany
+   */
+  export type AgendaEventoAuditFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * Filter, which AgendaEventoAudits to fetch.
+     */
+    where?: AgendaEventoAuditWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AgendaEventoAudits to fetch.
+     */
+    orderBy?: AgendaEventoAuditOrderByWithRelationInput | AgendaEventoAuditOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AgendaEventoAudits.
+     */
+    cursor?: AgendaEventoAuditWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AgendaEventoAudits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AgendaEventoAudits.
+     */
+    skip?: number
+    distinct?: AgendaEventoAuditScalarFieldEnum | AgendaEventoAuditScalarFieldEnum[]
+  }
+
+  /**
+   * AgendaEventoAudit create
+   */
+  export type AgendaEventoAuditCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AgendaEventoAudit.
+     */
+    data: XOR<AgendaEventoAuditCreateInput, AgendaEventoAuditUncheckedCreateInput>
+  }
+
+  /**
+   * AgendaEventoAudit createMany
+   */
+  export type AgendaEventoAuditCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AgendaEventoAudits.
+     */
+    data: AgendaEventoAuditCreateManyInput | AgendaEventoAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AgendaEventoAudit createManyAndReturn
+   */
+  export type AgendaEventoAuditCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * The data used to create many AgendaEventoAudits.
+     */
+    data: AgendaEventoAuditCreateManyInput | AgendaEventoAuditCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AgendaEventoAudit update
+   */
+  export type AgendaEventoAuditUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AgendaEventoAudit.
+     */
+    data: XOR<AgendaEventoAuditUpdateInput, AgendaEventoAuditUncheckedUpdateInput>
+    /**
+     * Choose, which AgendaEventoAudit to update.
+     */
+    where: AgendaEventoAuditWhereUniqueInput
+  }
+
+  /**
+   * AgendaEventoAudit updateMany
+   */
+  export type AgendaEventoAuditUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AgendaEventoAudits.
+     */
+    data: XOR<AgendaEventoAuditUpdateManyMutationInput, AgendaEventoAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which AgendaEventoAudits to update
+     */
+    where?: AgendaEventoAuditWhereInput
+    /**
+     * Limit how many AgendaEventoAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgendaEventoAudit updateManyAndReturn
+   */
+  export type AgendaEventoAuditUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * The data used to update AgendaEventoAudits.
+     */
+    data: XOR<AgendaEventoAuditUpdateManyMutationInput, AgendaEventoAuditUncheckedUpdateManyInput>
+    /**
+     * Filter which AgendaEventoAudits to update
+     */
+    where?: AgendaEventoAuditWhereInput
+    /**
+     * Limit how many AgendaEventoAudits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgendaEventoAudit upsert
+   */
+  export type AgendaEventoAuditUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AgendaEventoAudit to update in case it exists.
+     */
+    where: AgendaEventoAuditWhereUniqueInput
+    /**
+     * In case the AgendaEventoAudit found by the `where` argument doesn't exist, create a new AgendaEventoAudit with this data.
+     */
+    create: XOR<AgendaEventoAuditCreateInput, AgendaEventoAuditUncheckedCreateInput>
+    /**
+     * In case the AgendaEventoAudit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AgendaEventoAuditUpdateInput, AgendaEventoAuditUncheckedUpdateInput>
+  }
+
+  /**
+   * AgendaEventoAudit delete
+   */
+  export type AgendaEventoAuditDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+    /**
+     * Filter which AgendaEventoAudit to delete.
+     */
+    where: AgendaEventoAuditWhereUniqueInput
+  }
+
+  /**
+   * AgendaEventoAudit deleteMany
+   */
+  export type AgendaEventoAuditDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AgendaEventoAudits to delete
+     */
+    where?: AgendaEventoAuditWhereInput
+    /**
+     * Limit how many AgendaEventoAudits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AgendaEventoAudit without action
+   */
+  export type AgendaEventoAuditDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AgendaEventoAudit
+     */
+    select?: AgendaEventoAuditSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AgendaEventoAudit
+     */
+    omit?: AgendaEventoAuditOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SolicitacaoGerenciamento
+   */
+
+  export type AggregateSolicitacaoGerenciamento = {
+    _count: SolicitacaoGerenciamentoCountAggregateOutputType | null
+    _avg: SolicitacaoGerenciamentoAvgAggregateOutputType | null
+    _sum: SolicitacaoGerenciamentoSumAggregateOutputType | null
+    _min: SolicitacaoGerenciamentoMinAggregateOutputType | null
+    _max: SolicitacaoGerenciamentoMaxAggregateOutputType | null
+  }
+
+  export type SolicitacaoGerenciamentoAvgAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    noticiaId: number | null
+    unidadeId: number | null
+  }
+
+  export type SolicitacaoGerenciamentoSumAggregateOutputType = {
+    id: number | null
+    recadoId: number | null
+    noticiaId: number | null
+    unidadeId: number | null
+  }
+
+  export type SolicitacaoGerenciamentoMinAggregateOutputType = {
+    id: number | null
+    recurso: $Enums.SolicitacaoRecurso | null
+    tipo: $Enums.SolicitacaoTipo | null
+    status: $Enums.SolicitacaoStatus | null
+    recadoId: number | null
+    noticiaId: number | null
+    unidadeId: number | null
+    unidadeIds: string | null
+    titulo: string | null
+    conteudo: string | null
+    imagem: string | null
+    imagemAntiga: string | null
+    motivoRecusa: string | null
+    solicitanteId: string | null
+    solicitanteNome: string | null
+    revisorId: string | null
+    revisorNome: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SolicitacaoGerenciamentoMaxAggregateOutputType = {
+    id: number | null
+    recurso: $Enums.SolicitacaoRecurso | null
+    tipo: $Enums.SolicitacaoTipo | null
+    status: $Enums.SolicitacaoStatus | null
+    recadoId: number | null
+    noticiaId: number | null
+    unidadeId: number | null
+    unidadeIds: string | null
+    titulo: string | null
+    conteudo: string | null
+    imagem: string | null
+    imagemAntiga: string | null
+    motivoRecusa: string | null
+    solicitanteId: string | null
+    solicitanteNome: string | null
+    revisorId: string | null
+    revisorNome: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SolicitacaoGerenciamentoCountAggregateOutputType = {
+    id: number
+    recurso: number
+    tipo: number
+    status: number
+    recadoId: number
+    noticiaId: number
+    unidadeId: number
+    unidadeIds: number
+    titulo: number
+    conteudo: number
+    imagem: number
+    imagemAntiga: number
+    motivoRecusa: number
+    solicitanteId: number
+    solicitanteNome: number
+    revisorId: number
+    revisorNome: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SolicitacaoGerenciamentoAvgAggregateInputType = {
+    id?: true
+    recadoId?: true
+    noticiaId?: true
+    unidadeId?: true
+  }
+
+  export type SolicitacaoGerenciamentoSumAggregateInputType = {
+    id?: true
+    recadoId?: true
+    noticiaId?: true
+    unidadeId?: true
+  }
+
+  export type SolicitacaoGerenciamentoMinAggregateInputType = {
+    id?: true
+    recurso?: true
+    tipo?: true
+    status?: true
+    recadoId?: true
+    noticiaId?: true
+    unidadeId?: true
+    unidadeIds?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    imagemAntiga?: true
+    motivoRecusa?: true
+    solicitanteId?: true
+    solicitanteNome?: true
+    revisorId?: true
+    revisorNome?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SolicitacaoGerenciamentoMaxAggregateInputType = {
+    id?: true
+    recurso?: true
+    tipo?: true
+    status?: true
+    recadoId?: true
+    noticiaId?: true
+    unidadeId?: true
+    unidadeIds?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    imagemAntiga?: true
+    motivoRecusa?: true
+    solicitanteId?: true
+    solicitanteNome?: true
+    revisorId?: true
+    revisorNome?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SolicitacaoGerenciamentoCountAggregateInputType = {
+    id?: true
+    recurso?: true
+    tipo?: true
+    status?: true
+    recadoId?: true
+    noticiaId?: true
+    unidadeId?: true
+    unidadeIds?: true
+    titulo?: true
+    conteudo?: true
+    imagem?: true
+    imagemAntiga?: true
+    motivoRecusa?: true
+    solicitanteId?: true
+    solicitanteNome?: true
+    revisorId?: true
+    revisorNome?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SolicitacaoGerenciamentoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SolicitacaoGerenciamento to aggregate.
+     */
+    where?: SolicitacaoGerenciamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolicitacaoGerenciamentos to fetch.
+     */
+    orderBy?: SolicitacaoGerenciamentoOrderByWithRelationInput | SolicitacaoGerenciamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SolicitacaoGerenciamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolicitacaoGerenciamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolicitacaoGerenciamentos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SolicitacaoGerenciamentos
+    **/
+    _count?: true | SolicitacaoGerenciamentoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SolicitacaoGerenciamentoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SolicitacaoGerenciamentoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SolicitacaoGerenciamentoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SolicitacaoGerenciamentoMaxAggregateInputType
+  }
+
+  export type GetSolicitacaoGerenciamentoAggregateType<T extends SolicitacaoGerenciamentoAggregateArgs> = {
+        [P in keyof T & keyof AggregateSolicitacaoGerenciamento]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSolicitacaoGerenciamento[P]>
+      : GetScalarType<T[P], AggregateSolicitacaoGerenciamento[P]>
+  }
+
+
+
+
+  export type SolicitacaoGerenciamentoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SolicitacaoGerenciamentoWhereInput
+    orderBy?: SolicitacaoGerenciamentoOrderByWithAggregationInput | SolicitacaoGerenciamentoOrderByWithAggregationInput[]
+    by: SolicitacaoGerenciamentoScalarFieldEnum[] | SolicitacaoGerenciamentoScalarFieldEnum
+    having?: SolicitacaoGerenciamentoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SolicitacaoGerenciamentoCountAggregateInputType | true
+    _avg?: SolicitacaoGerenciamentoAvgAggregateInputType
+    _sum?: SolicitacaoGerenciamentoSumAggregateInputType
+    _min?: SolicitacaoGerenciamentoMinAggregateInputType
+    _max?: SolicitacaoGerenciamentoMaxAggregateInputType
+  }
+
+  export type SolicitacaoGerenciamentoGroupByOutputType = {
+    id: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status: $Enums.SolicitacaoStatus
+    recadoId: number | null
+    noticiaId: number | null
+    unidadeId: number | null
+    unidadeIds: string | null
+    titulo: string | null
+    conteudo: string | null
+    imagem: string | null
+    imagemAntiga: string | null
+    motivoRecusa: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId: string | null
+    revisorNome: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SolicitacaoGerenciamentoCountAggregateOutputType | null
+    _avg: SolicitacaoGerenciamentoAvgAggregateOutputType | null
+    _sum: SolicitacaoGerenciamentoSumAggregateOutputType | null
+    _min: SolicitacaoGerenciamentoMinAggregateOutputType | null
+    _max: SolicitacaoGerenciamentoMaxAggregateOutputType | null
+  }
+
+  type GetSolicitacaoGerenciamentoGroupByPayload<T extends SolicitacaoGerenciamentoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SolicitacaoGerenciamentoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SolicitacaoGerenciamentoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SolicitacaoGerenciamentoGroupByOutputType[P]>
+            : GetScalarType<T[P], SolicitacaoGerenciamentoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SolicitacaoGerenciamentoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recurso?: boolean
+    tipo?: boolean
+    status?: boolean
+    recadoId?: boolean
+    noticiaId?: boolean
+    unidadeId?: boolean
+    unidadeIds?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    imagemAntiga?: boolean
+    motivoRecusa?: boolean
+    solicitanteId?: boolean
+    solicitanteNome?: boolean
+    revisorId?: boolean
+    revisorNome?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    recado?: boolean | SolicitacaoGerenciamento$recadoArgs<ExtArgs>
+    noticia?: boolean | SolicitacaoGerenciamento$noticiaArgs<ExtArgs>
+    unidade?: boolean | SolicitacaoGerenciamento$unidadeArgs<ExtArgs>
+  }, ExtArgs["result"]["solicitacaoGerenciamento"]>
+
+  export type SolicitacaoGerenciamentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recurso?: boolean
+    tipo?: boolean
+    status?: boolean
+    recadoId?: boolean
+    noticiaId?: boolean
+    unidadeId?: boolean
+    unidadeIds?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    imagemAntiga?: boolean
+    motivoRecusa?: boolean
+    solicitanteId?: boolean
+    solicitanteNome?: boolean
+    revisorId?: boolean
+    revisorNome?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    recado?: boolean | SolicitacaoGerenciamento$recadoArgs<ExtArgs>
+    noticia?: boolean | SolicitacaoGerenciamento$noticiaArgs<ExtArgs>
+    unidade?: boolean | SolicitacaoGerenciamento$unidadeArgs<ExtArgs>
+  }, ExtArgs["result"]["solicitacaoGerenciamento"]>
+
+  export type SolicitacaoGerenciamentoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    recurso?: boolean
+    tipo?: boolean
+    status?: boolean
+    recadoId?: boolean
+    noticiaId?: boolean
+    unidadeId?: boolean
+    unidadeIds?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    imagemAntiga?: boolean
+    motivoRecusa?: boolean
+    solicitanteId?: boolean
+    solicitanteNome?: boolean
+    revisorId?: boolean
+    revisorNome?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    recado?: boolean | SolicitacaoGerenciamento$recadoArgs<ExtArgs>
+    noticia?: boolean | SolicitacaoGerenciamento$noticiaArgs<ExtArgs>
+    unidade?: boolean | SolicitacaoGerenciamento$unidadeArgs<ExtArgs>
+  }, ExtArgs["result"]["solicitacaoGerenciamento"]>
+
+  export type SolicitacaoGerenciamentoSelectScalar = {
+    id?: boolean
+    recurso?: boolean
+    tipo?: boolean
+    status?: boolean
+    recadoId?: boolean
+    noticiaId?: boolean
+    unidadeId?: boolean
+    unidadeIds?: boolean
+    titulo?: boolean
+    conteudo?: boolean
+    imagem?: boolean
+    imagemAntiga?: boolean
+    motivoRecusa?: boolean
+    solicitanteId?: boolean
+    solicitanteNome?: boolean
+    revisorId?: boolean
+    revisorNome?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SolicitacaoGerenciamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recurso" | "tipo" | "status" | "recadoId" | "noticiaId" | "unidadeId" | "unidadeIds" | "titulo" | "conteudo" | "imagem" | "imagemAntiga" | "motivoRecusa" | "solicitanteId" | "solicitanteNome" | "revisorId" | "revisorNome" | "createdAt" | "updatedAt", ExtArgs["result"]["solicitacaoGerenciamento"]>
+  export type SolicitacaoGerenciamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recado?: boolean | SolicitacaoGerenciamento$recadoArgs<ExtArgs>
+    noticia?: boolean | SolicitacaoGerenciamento$noticiaArgs<ExtArgs>
+    unidade?: boolean | SolicitacaoGerenciamento$unidadeArgs<ExtArgs>
+  }
+  export type SolicitacaoGerenciamentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recado?: boolean | SolicitacaoGerenciamento$recadoArgs<ExtArgs>
+    noticia?: boolean | SolicitacaoGerenciamento$noticiaArgs<ExtArgs>
+    unidade?: boolean | SolicitacaoGerenciamento$unidadeArgs<ExtArgs>
+  }
+  export type SolicitacaoGerenciamentoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    recado?: boolean | SolicitacaoGerenciamento$recadoArgs<ExtArgs>
+    noticia?: boolean | SolicitacaoGerenciamento$noticiaArgs<ExtArgs>
+    unidade?: boolean | SolicitacaoGerenciamento$unidadeArgs<ExtArgs>
+  }
+
+  export type $SolicitacaoGerenciamentoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SolicitacaoGerenciamento"
+    objects: {
+      recado: Prisma.$RecadoPayload<ExtArgs> | null
+      noticia: Prisma.$NoticiaPayload<ExtArgs> | null
+      unidade: Prisma.$UnidadePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      recurso: $Enums.SolicitacaoRecurso
+      tipo: $Enums.SolicitacaoTipo
+      status: $Enums.SolicitacaoStatus
+      recadoId: number | null
+      noticiaId: number | null
+      unidadeId: number | null
+      unidadeIds: string | null
+      titulo: string | null
+      conteudo: string | null
+      imagem: string | null
+      imagemAntiga: string | null
+      motivoRecusa: string | null
+      solicitanteId: string
+      solicitanteNome: string
+      revisorId: string | null
+      revisorNome: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["solicitacaoGerenciamento"]>
+    composites: {}
+  }
+
+  type SolicitacaoGerenciamentoGetPayload<S extends boolean | null | undefined | SolicitacaoGerenciamentoDefaultArgs> = $Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload, S>
+
+  type SolicitacaoGerenciamentoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SolicitacaoGerenciamentoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SolicitacaoGerenciamentoCountAggregateInputType | true
+    }
+
+  export interface SolicitacaoGerenciamentoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SolicitacaoGerenciamento'], meta: { name: 'SolicitacaoGerenciamento' } }
+    /**
+     * Find zero or one SolicitacaoGerenciamento that matches the filter.
+     * @param {SolicitacaoGerenciamentoFindUniqueArgs} args - Arguments to find a SolicitacaoGerenciamento
+     * @example
+     * // Get one SolicitacaoGerenciamento
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SolicitacaoGerenciamentoFindUniqueArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoFindUniqueArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SolicitacaoGerenciamento that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SolicitacaoGerenciamentoFindUniqueOrThrowArgs} args - Arguments to find a SolicitacaoGerenciamento
+     * @example
+     * // Get one SolicitacaoGerenciamento
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SolicitacaoGerenciamentoFindUniqueOrThrowArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SolicitacaoGerenciamento that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolicitacaoGerenciamentoFindFirstArgs} args - Arguments to find a SolicitacaoGerenciamento
+     * @example
+     * // Get one SolicitacaoGerenciamento
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SolicitacaoGerenciamentoFindFirstArgs>(args?: SelectSubset<T, SolicitacaoGerenciamentoFindFirstArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SolicitacaoGerenciamento that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolicitacaoGerenciamentoFindFirstOrThrowArgs} args - Arguments to find a SolicitacaoGerenciamento
+     * @example
+     * // Get one SolicitacaoGerenciamento
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SolicitacaoGerenciamentoFindFirstOrThrowArgs>(args?: SelectSubset<T, SolicitacaoGerenciamentoFindFirstOrThrowArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SolicitacaoGerenciamentos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolicitacaoGerenciamentoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SolicitacaoGerenciamentos
+     * const solicitacaoGerenciamentos = await prisma.solicitacaoGerenciamento.findMany()
+     * 
+     * // Get first 10 SolicitacaoGerenciamentos
+     * const solicitacaoGerenciamentos = await prisma.solicitacaoGerenciamento.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const solicitacaoGerenciamentoWithIdOnly = await prisma.solicitacaoGerenciamento.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SolicitacaoGerenciamentoFindManyArgs>(args?: SelectSubset<T, SolicitacaoGerenciamentoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SolicitacaoGerenciamento.
+     * @param {SolicitacaoGerenciamentoCreateArgs} args - Arguments to create a SolicitacaoGerenciamento.
+     * @example
+     * // Create one SolicitacaoGerenciamento
+     * const SolicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.create({
+     *   data: {
+     *     // ... data to create a SolicitacaoGerenciamento
+     *   }
+     * })
+     * 
+     */
+    create<T extends SolicitacaoGerenciamentoCreateArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoCreateArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SolicitacaoGerenciamentos.
+     * @param {SolicitacaoGerenciamentoCreateManyArgs} args - Arguments to create many SolicitacaoGerenciamentos.
+     * @example
+     * // Create many SolicitacaoGerenciamentos
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SolicitacaoGerenciamentoCreateManyArgs>(args?: SelectSubset<T, SolicitacaoGerenciamentoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SolicitacaoGerenciamentos and returns the data saved in the database.
+     * @param {SolicitacaoGerenciamentoCreateManyAndReturnArgs} args - Arguments to create many SolicitacaoGerenciamentos.
+     * @example
+     * // Create many SolicitacaoGerenciamentos
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SolicitacaoGerenciamentos and only return the `id`
+     * const solicitacaoGerenciamentoWithIdOnly = await prisma.solicitacaoGerenciamento.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SolicitacaoGerenciamentoCreateManyAndReturnArgs>(args?: SelectSubset<T, SolicitacaoGerenciamentoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SolicitacaoGerenciamento.
+     * @param {SolicitacaoGerenciamentoDeleteArgs} args - Arguments to delete one SolicitacaoGerenciamento.
+     * @example
+     * // Delete one SolicitacaoGerenciamento
+     * const SolicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.delete({
+     *   where: {
+     *     // ... filter to delete one SolicitacaoGerenciamento
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SolicitacaoGerenciamentoDeleteArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoDeleteArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SolicitacaoGerenciamento.
+     * @param {SolicitacaoGerenciamentoUpdateArgs} args - Arguments to update one SolicitacaoGerenciamento.
+     * @example
+     * // Update one SolicitacaoGerenciamento
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SolicitacaoGerenciamentoUpdateArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoUpdateArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SolicitacaoGerenciamentos.
+     * @param {SolicitacaoGerenciamentoDeleteManyArgs} args - Arguments to filter SolicitacaoGerenciamentos to delete.
+     * @example
+     * // Delete a few SolicitacaoGerenciamentos
+     * const { count } = await prisma.solicitacaoGerenciamento.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SolicitacaoGerenciamentoDeleteManyArgs>(args?: SelectSubset<T, SolicitacaoGerenciamentoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SolicitacaoGerenciamentos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolicitacaoGerenciamentoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SolicitacaoGerenciamentos
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SolicitacaoGerenciamentoUpdateManyArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SolicitacaoGerenciamentos and returns the data updated in the database.
+     * @param {SolicitacaoGerenciamentoUpdateManyAndReturnArgs} args - Arguments to update many SolicitacaoGerenciamentos.
+     * @example
+     * // Update many SolicitacaoGerenciamentos
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SolicitacaoGerenciamentos and only return the `id`
+     * const solicitacaoGerenciamentoWithIdOnly = await prisma.solicitacaoGerenciamento.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SolicitacaoGerenciamentoUpdateManyAndReturnArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SolicitacaoGerenciamento.
+     * @param {SolicitacaoGerenciamentoUpsertArgs} args - Arguments to update or create a SolicitacaoGerenciamento.
+     * @example
+     * // Update or create a SolicitacaoGerenciamento
+     * const solicitacaoGerenciamento = await prisma.solicitacaoGerenciamento.upsert({
+     *   create: {
+     *     // ... data to create a SolicitacaoGerenciamento
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SolicitacaoGerenciamento we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SolicitacaoGerenciamentoUpsertArgs>(args: SelectSubset<T, SolicitacaoGerenciamentoUpsertArgs<ExtArgs>>): Prisma__SolicitacaoGerenciamentoClient<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SolicitacaoGerenciamentos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolicitacaoGerenciamentoCountArgs} args - Arguments to filter SolicitacaoGerenciamentos to count.
+     * @example
+     * // Count the number of SolicitacaoGerenciamentos
+     * const count = await prisma.solicitacaoGerenciamento.count({
+     *   where: {
+     *     // ... the filter for the SolicitacaoGerenciamentos we want to count
+     *   }
+     * })
+    **/
+    count<T extends SolicitacaoGerenciamentoCountArgs>(
+      args?: Subset<T, SolicitacaoGerenciamentoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SolicitacaoGerenciamentoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SolicitacaoGerenciamento.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolicitacaoGerenciamentoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SolicitacaoGerenciamentoAggregateArgs>(args: Subset<T, SolicitacaoGerenciamentoAggregateArgs>): Prisma.PrismaPromise<GetSolicitacaoGerenciamentoAggregateType<T>>
+
+    /**
+     * Group by SolicitacaoGerenciamento.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SolicitacaoGerenciamentoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SolicitacaoGerenciamentoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SolicitacaoGerenciamentoGroupByArgs['orderBy'] }
+        : { orderBy?: SolicitacaoGerenciamentoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SolicitacaoGerenciamentoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSolicitacaoGerenciamentoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SolicitacaoGerenciamento model
+   */
+  readonly fields: SolicitacaoGerenciamentoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SolicitacaoGerenciamento.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SolicitacaoGerenciamentoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    recado<T extends SolicitacaoGerenciamento$recadoArgs<ExtArgs> = {}>(args?: Subset<T, SolicitacaoGerenciamento$recadoArgs<ExtArgs>>): Prisma__RecadoClient<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    noticia<T extends SolicitacaoGerenciamento$noticiaArgs<ExtArgs> = {}>(args?: Subset<T, SolicitacaoGerenciamento$noticiaArgs<ExtArgs>>): Prisma__NoticiaClient<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    unidade<T extends SolicitacaoGerenciamento$unidadeArgs<ExtArgs> = {}>(args?: Subset<T, SolicitacaoGerenciamento$unidadeArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SolicitacaoGerenciamento model
+   */
+  interface SolicitacaoGerenciamentoFieldRefs {
+    readonly id: FieldRef<"SolicitacaoGerenciamento", 'Int'>
+    readonly recurso: FieldRef<"SolicitacaoGerenciamento", 'SolicitacaoRecurso'>
+    readonly tipo: FieldRef<"SolicitacaoGerenciamento", 'SolicitacaoTipo'>
+    readonly status: FieldRef<"SolicitacaoGerenciamento", 'SolicitacaoStatus'>
+    readonly recadoId: FieldRef<"SolicitacaoGerenciamento", 'Int'>
+    readonly noticiaId: FieldRef<"SolicitacaoGerenciamento", 'Int'>
+    readonly unidadeId: FieldRef<"SolicitacaoGerenciamento", 'Int'>
+    readonly unidadeIds: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly titulo: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly conteudo: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly imagem: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly imagemAntiga: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly motivoRecusa: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly solicitanteId: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly solicitanteNome: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly revisorId: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly revisorNome: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly createdAt: FieldRef<"SolicitacaoGerenciamento", 'DateTime'>
+    readonly updatedAt: FieldRef<"SolicitacaoGerenciamento", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SolicitacaoGerenciamento findUnique
+   */
+  export type SolicitacaoGerenciamentoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which SolicitacaoGerenciamento to fetch.
+     */
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+  }
+
+  /**
+   * SolicitacaoGerenciamento findUniqueOrThrow
+   */
+  export type SolicitacaoGerenciamentoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which SolicitacaoGerenciamento to fetch.
+     */
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+  }
+
+  /**
+   * SolicitacaoGerenciamento findFirst
+   */
+  export type SolicitacaoGerenciamentoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which SolicitacaoGerenciamento to fetch.
+     */
+    where?: SolicitacaoGerenciamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolicitacaoGerenciamentos to fetch.
+     */
+    orderBy?: SolicitacaoGerenciamentoOrderByWithRelationInput | SolicitacaoGerenciamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SolicitacaoGerenciamentos.
+     */
+    cursor?: SolicitacaoGerenciamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolicitacaoGerenciamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolicitacaoGerenciamentos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SolicitacaoGerenciamentos.
+     */
+    distinct?: SolicitacaoGerenciamentoScalarFieldEnum | SolicitacaoGerenciamentoScalarFieldEnum[]
+  }
+
+  /**
+   * SolicitacaoGerenciamento findFirstOrThrow
+   */
+  export type SolicitacaoGerenciamentoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which SolicitacaoGerenciamento to fetch.
+     */
+    where?: SolicitacaoGerenciamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolicitacaoGerenciamentos to fetch.
+     */
+    orderBy?: SolicitacaoGerenciamentoOrderByWithRelationInput | SolicitacaoGerenciamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SolicitacaoGerenciamentos.
+     */
+    cursor?: SolicitacaoGerenciamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolicitacaoGerenciamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolicitacaoGerenciamentos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SolicitacaoGerenciamentos.
+     */
+    distinct?: SolicitacaoGerenciamentoScalarFieldEnum | SolicitacaoGerenciamentoScalarFieldEnum[]
+  }
+
+  /**
+   * SolicitacaoGerenciamento findMany
+   */
+  export type SolicitacaoGerenciamentoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which SolicitacaoGerenciamentos to fetch.
+     */
+    where?: SolicitacaoGerenciamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SolicitacaoGerenciamentos to fetch.
+     */
+    orderBy?: SolicitacaoGerenciamentoOrderByWithRelationInput | SolicitacaoGerenciamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SolicitacaoGerenciamentos.
+     */
+    cursor?: SolicitacaoGerenciamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SolicitacaoGerenciamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SolicitacaoGerenciamentos.
+     */
+    skip?: number
+    distinct?: SolicitacaoGerenciamentoScalarFieldEnum | SolicitacaoGerenciamentoScalarFieldEnum[]
+  }
+
+  /**
+   * SolicitacaoGerenciamento create
+   */
+  export type SolicitacaoGerenciamentoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SolicitacaoGerenciamento.
+     */
+    data: XOR<SolicitacaoGerenciamentoCreateInput, SolicitacaoGerenciamentoUncheckedCreateInput>
+  }
+
+  /**
+   * SolicitacaoGerenciamento createMany
+   */
+  export type SolicitacaoGerenciamentoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SolicitacaoGerenciamentos.
+     */
+    data: SolicitacaoGerenciamentoCreateManyInput | SolicitacaoGerenciamentoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SolicitacaoGerenciamento createManyAndReturn
+   */
+  export type SolicitacaoGerenciamentoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * The data used to create many SolicitacaoGerenciamentos.
+     */
+    data: SolicitacaoGerenciamentoCreateManyInput | SolicitacaoGerenciamentoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SolicitacaoGerenciamento update
+   */
+  export type SolicitacaoGerenciamentoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SolicitacaoGerenciamento.
+     */
+    data: XOR<SolicitacaoGerenciamentoUpdateInput, SolicitacaoGerenciamentoUncheckedUpdateInput>
+    /**
+     * Choose, which SolicitacaoGerenciamento to update.
+     */
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+  }
+
+  /**
+   * SolicitacaoGerenciamento updateMany
+   */
+  export type SolicitacaoGerenciamentoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SolicitacaoGerenciamentos.
+     */
+    data: XOR<SolicitacaoGerenciamentoUpdateManyMutationInput, SolicitacaoGerenciamentoUncheckedUpdateManyInput>
+    /**
+     * Filter which SolicitacaoGerenciamentos to update
+     */
+    where?: SolicitacaoGerenciamentoWhereInput
+    /**
+     * Limit how many SolicitacaoGerenciamentos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SolicitacaoGerenciamento updateManyAndReturn
+   */
+  export type SolicitacaoGerenciamentoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * The data used to update SolicitacaoGerenciamentos.
+     */
+    data: XOR<SolicitacaoGerenciamentoUpdateManyMutationInput, SolicitacaoGerenciamentoUncheckedUpdateManyInput>
+    /**
+     * Filter which SolicitacaoGerenciamentos to update
+     */
+    where?: SolicitacaoGerenciamentoWhereInput
+    /**
+     * Limit how many SolicitacaoGerenciamentos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SolicitacaoGerenciamento upsert
+   */
+  export type SolicitacaoGerenciamentoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SolicitacaoGerenciamento to update in case it exists.
+     */
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    /**
+     * In case the SolicitacaoGerenciamento found by the `where` argument doesn't exist, create a new SolicitacaoGerenciamento with this data.
+     */
+    create: XOR<SolicitacaoGerenciamentoCreateInput, SolicitacaoGerenciamentoUncheckedCreateInput>
+    /**
+     * In case the SolicitacaoGerenciamento was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SolicitacaoGerenciamentoUpdateInput, SolicitacaoGerenciamentoUncheckedUpdateInput>
+  }
+
+  /**
+   * SolicitacaoGerenciamento delete
+   */
+  export type SolicitacaoGerenciamentoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+    /**
+     * Filter which SolicitacaoGerenciamento to delete.
+     */
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+  }
+
+  /**
+   * SolicitacaoGerenciamento deleteMany
+   */
+  export type SolicitacaoGerenciamentoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SolicitacaoGerenciamentos to delete
+     */
+    where?: SolicitacaoGerenciamentoWhereInput
+    /**
+     * Limit how many SolicitacaoGerenciamentos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SolicitacaoGerenciamento.recado
+   */
+  export type SolicitacaoGerenciamento$recadoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    where?: RecadoWhereInput
+  }
+
+  /**
+   * SolicitacaoGerenciamento.noticia
+   */
+  export type SolicitacaoGerenciamento$noticiaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    where?: NoticiaWhereInput
+  }
+
+  /**
+   * SolicitacaoGerenciamento.unidade
+   */
+  export type SolicitacaoGerenciamento$unidadeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Unidade
+     */
+    select?: UnidadeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Unidade
+     */
+    omit?: UnidadeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnidadeInclude<ExtArgs> | null
+    where?: UnidadeWhereInput
+  }
+
+  /**
+   * SolicitacaoGerenciamento without action
+   */
+  export type SolicitacaoGerenciamentoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SolicitacaoGerenciamento
+     */
+    select?: SolicitacaoGerenciamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SolicitacaoGerenciamento
+     */
+    omit?: SolicitacaoGerenciamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SolicitacaoGerenciamentoInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -16675,6 +20928,63 @@ export namespace Prisma {
   export type RecadoAuditScalarFieldEnum = (typeof RecadoAuditScalarFieldEnum)[keyof typeof RecadoAuditScalarFieldEnum]
 
 
+  export const AgendaEventoScalarFieldEnum: {
+    id: 'id',
+    titulo: 'titulo',
+    descricao: 'descricao',
+    data: 'data',
+    unidadeId: 'unidadeId',
+    criadoPorId: 'criadoPorId',
+    atualizadoPorId: 'atualizadoPorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AgendaEventoScalarFieldEnum = (typeof AgendaEventoScalarFieldEnum)[keyof typeof AgendaEventoScalarFieldEnum]
+
+
+  export const AgendaEventoAuditScalarFieldEnum: {
+    id: 'id',
+    eventoId: 'eventoId',
+    eventoTitulo: 'eventoTitulo',
+    unidadeId: 'unidadeId',
+    unidadeNome: 'unidadeNome',
+    userId: 'userId',
+    userNome: 'userNome',
+    acao: 'acao',
+    dadosAntigos: 'dadosAntigos',
+    dadosNovos: 'dadosNovos',
+    createdAt: 'createdAt'
+  };
+
+  export type AgendaEventoAuditScalarFieldEnum = (typeof AgendaEventoAuditScalarFieldEnum)[keyof typeof AgendaEventoAuditScalarFieldEnum]
+
+
+  export const SolicitacaoGerenciamentoScalarFieldEnum: {
+    id: 'id',
+    recurso: 'recurso',
+    tipo: 'tipo',
+    status: 'status',
+    recadoId: 'recadoId',
+    noticiaId: 'noticiaId',
+    unidadeId: 'unidadeId',
+    unidadeIds: 'unidadeIds',
+    titulo: 'titulo',
+    conteudo: 'conteudo',
+    imagem: 'imagem',
+    imagemAntiga: 'imagemAntiga',
+    motivoRecusa: 'motivoRecusa',
+    solicitanteId: 'solicitanteId',
+    solicitanteNome: 'solicitanteNome',
+    revisorId: 'revisorId',
+    revisorNome: 'revisorNome',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SolicitacaoGerenciamentoScalarFieldEnum = (typeof SolicitacaoGerenciamentoScalarFieldEnum)[keyof typeof SolicitacaoGerenciamentoScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -16799,6 +21109,48 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SolicitacaoRecurso'
+   */
+  export type EnumSolicitacaoRecursoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SolicitacaoRecurso'>
+    
+
+
+  /**
+   * Reference to a field of type 'SolicitacaoRecurso[]'
+   */
+  export type ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SolicitacaoRecurso[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SolicitacaoTipo'
+   */
+  export type EnumSolicitacaoTipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SolicitacaoTipo'>
+    
+
+
+  /**
+   * Reference to a field of type 'SolicitacaoTipo[]'
+   */
+  export type ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SolicitacaoTipo[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SolicitacaoStatus'
+   */
+  export type EnumSolicitacaoStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SolicitacaoStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SolicitacaoStatus[]'
+   */
+  export type ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SolicitacaoStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -16831,6 +21183,8 @@ export namespace Prisma {
     unidade?: XOR<UnidadeNullableScalarRelationFilter, UnidadeWhereInput> | null
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
+    eventosCriados?: AgendaEventoListRelationFilter
+    eventosAtualizados?: AgendaEventoListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -16846,6 +21200,8 @@ export namespace Prisma {
     unidade?: UnidadeOrderByWithRelationInput
     sessions?: SessionOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
+    eventosCriados?: AgendaEventoOrderByRelationAggregateInput
+    eventosAtualizados?: AgendaEventoOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16864,6 +21220,8 @@ export namespace Prisma {
     unidade?: XOR<UnidadeNullableScalarRelationFilter, UnidadeWhereInput> | null
     sessions?: SessionListRelationFilter
     accounts?: AccountListRelationFilter
+    eventosCriados?: AgendaEventoListRelationFilter
+    eventosAtualizados?: AgendaEventoListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -17131,6 +21489,8 @@ export namespace Prisma {
     users?: UserListRelationFilter
     recados?: RecadoListRelationFilter
     recadosMulti?: RecadoUnidadeListRelationFilter
+    agendaEventos?: AgendaEventoListRelationFilter
+    solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }
 
   export type UnidadeOrderByWithRelationInput = {
@@ -17141,6 +21501,8 @@ export namespace Prisma {
     users?: UserOrderByRelationAggregateInput
     recados?: RecadoOrderByRelationAggregateInput
     recadosMulti?: RecadoUnidadeOrderByRelationAggregateInput
+    agendaEventos?: AgendaEventoOrderByRelationAggregateInput
+    solicitacoes?: SolicitacaoGerenciamentoOrderByRelationAggregateInput
   }
 
   export type UnidadeWhereUniqueInput = Prisma.AtLeast<{
@@ -17154,6 +21516,8 @@ export namespace Prisma {
     users?: UserListRelationFilter
     recados?: RecadoListRelationFilter
     recadosMulti?: RecadoUnidadeListRelationFilter
+    agendaEventos?: AgendaEventoListRelationFilter
+    solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }, "id">
 
   export type UnidadeOrderByWithAggregationInput = {
@@ -17389,6 +21753,7 @@ export namespace Prisma {
     imagem?: StringNullableFilter<"Noticia"> | string | null
     createdAt?: DateTimeFilter<"Noticia"> | Date | string
     updatedAt?: DateTimeFilter<"Noticia"> | Date | string
+    solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }
 
   export type NoticiaOrderByWithRelationInput = {
@@ -17398,6 +21763,7 @@ export namespace Prisma {
     imagem?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    solicitacoes?: SolicitacaoGerenciamentoOrderByRelationAggregateInput
   }
 
   export type NoticiaWhereUniqueInput = Prisma.AtLeast<{
@@ -17410,6 +21776,7 @@ export namespace Prisma {
     imagem?: StringNullableFilter<"Noticia"> | string | null
     createdAt?: DateTimeFilter<"Noticia"> | Date | string
     updatedAt?: DateTimeFilter<"Noticia"> | Date | string
+    solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }, "id">
 
   export type NoticiaOrderByWithAggregationInput = {
@@ -17520,6 +21887,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Recado"> | Date | string
     unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
     unidades?: RecadoUnidadeListRelationFilter
+    solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }
 
   export type RecadoOrderByWithRelationInput = {
@@ -17532,6 +21900,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     unidade?: UnidadeOrderByWithRelationInput
     unidades?: RecadoUnidadeOrderByRelationAggregateInput
+    solicitacoes?: SolicitacaoGerenciamentoOrderByRelationAggregateInput
   }
 
   export type RecadoWhereUniqueInput = Prisma.AtLeast<{
@@ -17547,6 +21916,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Recado"> | Date | string
     unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
     unidades?: RecadoUnidadeListRelationFilter
+    solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }, "id">
 
   export type RecadoOrderByWithAggregationInput = {
@@ -17697,6 +22067,306 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"RecadoAudit"> | Date | string
   }
 
+  export type AgendaEventoWhereInput = {
+    AND?: AgendaEventoWhereInput | AgendaEventoWhereInput[]
+    OR?: AgendaEventoWhereInput[]
+    NOT?: AgendaEventoWhereInput | AgendaEventoWhereInput[]
+    id?: IntFilter<"AgendaEvento"> | number
+    titulo?: StringFilter<"AgendaEvento"> | string
+    descricao?: StringNullableFilter<"AgendaEvento"> | string | null
+    data?: DateTimeFilter<"AgendaEvento"> | Date | string
+    unidadeId?: IntFilter<"AgendaEvento"> | number
+    criadoPorId?: StringFilter<"AgendaEvento"> | string
+    atualizadoPorId?: StringNullableFilter<"AgendaEvento"> | string | null
+    createdAt?: DateTimeFilter<"AgendaEvento"> | Date | string
+    updatedAt?: DateTimeFilter<"AgendaEvento"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+    criadoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    atualizadoPor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type AgendaEventoOrderByWithRelationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    data?: SortOrder
+    unidadeId?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    unidade?: UnidadeOrderByWithRelationInput
+    criadoPor?: UserOrderByWithRelationInput
+    atualizadoPor?: UserOrderByWithRelationInput
+  }
+
+  export type AgendaEventoWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AgendaEventoWhereInput | AgendaEventoWhereInput[]
+    OR?: AgendaEventoWhereInput[]
+    NOT?: AgendaEventoWhereInput | AgendaEventoWhereInput[]
+    titulo?: StringFilter<"AgendaEvento"> | string
+    descricao?: StringNullableFilter<"AgendaEvento"> | string | null
+    data?: DateTimeFilter<"AgendaEvento"> | Date | string
+    unidadeId?: IntFilter<"AgendaEvento"> | number
+    criadoPorId?: StringFilter<"AgendaEvento"> | string
+    atualizadoPorId?: StringNullableFilter<"AgendaEvento"> | string | null
+    createdAt?: DateTimeFilter<"AgendaEvento"> | Date | string
+    updatedAt?: DateTimeFilter<"AgendaEvento"> | Date | string
+    unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+    criadoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    atualizadoPor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type AgendaEventoOrderByWithAggregationInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    data?: SortOrder
+    unidadeId?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AgendaEventoCountOrderByAggregateInput
+    _avg?: AgendaEventoAvgOrderByAggregateInput
+    _max?: AgendaEventoMaxOrderByAggregateInput
+    _min?: AgendaEventoMinOrderByAggregateInput
+    _sum?: AgendaEventoSumOrderByAggregateInput
+  }
+
+  export type AgendaEventoScalarWhereWithAggregatesInput = {
+    AND?: AgendaEventoScalarWhereWithAggregatesInput | AgendaEventoScalarWhereWithAggregatesInput[]
+    OR?: AgendaEventoScalarWhereWithAggregatesInput[]
+    NOT?: AgendaEventoScalarWhereWithAggregatesInput | AgendaEventoScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AgendaEvento"> | number
+    titulo?: StringWithAggregatesFilter<"AgendaEvento"> | string
+    descricao?: StringNullableWithAggregatesFilter<"AgendaEvento"> | string | null
+    data?: DateTimeWithAggregatesFilter<"AgendaEvento"> | Date | string
+    unidadeId?: IntWithAggregatesFilter<"AgendaEvento"> | number
+    criadoPorId?: StringWithAggregatesFilter<"AgendaEvento"> | string
+    atualizadoPorId?: StringNullableWithAggregatesFilter<"AgendaEvento"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AgendaEvento"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AgendaEvento"> | Date | string
+  }
+
+  export type AgendaEventoAuditWhereInput = {
+    AND?: AgendaEventoAuditWhereInput | AgendaEventoAuditWhereInput[]
+    OR?: AgendaEventoAuditWhereInput[]
+    NOT?: AgendaEventoAuditWhereInput | AgendaEventoAuditWhereInput[]
+    id?: IntFilter<"AgendaEventoAudit"> | number
+    eventoId?: IntFilter<"AgendaEventoAudit"> | number
+    eventoTitulo?: StringFilter<"AgendaEventoAudit"> | string
+    unidadeId?: IntFilter<"AgendaEventoAudit"> | number
+    unidadeNome?: StringNullableFilter<"AgendaEventoAudit"> | string | null
+    userId?: StringFilter<"AgendaEventoAudit"> | string
+    userNome?: StringFilter<"AgendaEventoAudit"> | string
+    acao?: StringFilter<"AgendaEventoAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"AgendaEventoAudit">
+    dadosNovos?: JsonNullableFilter<"AgendaEventoAudit">
+    createdAt?: DateTimeFilter<"AgendaEventoAudit"> | Date | string
+  }
+
+  export type AgendaEventoAuditOrderByWithRelationInput = {
+    id?: SortOrder
+    eventoId?: SortOrder
+    eventoTitulo?: SortOrder
+    unidadeId?: SortOrder
+    unidadeNome?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AgendaEventoAuditWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: AgendaEventoAuditWhereInput | AgendaEventoAuditWhereInput[]
+    OR?: AgendaEventoAuditWhereInput[]
+    NOT?: AgendaEventoAuditWhereInput | AgendaEventoAuditWhereInput[]
+    eventoId?: IntFilter<"AgendaEventoAudit"> | number
+    eventoTitulo?: StringFilter<"AgendaEventoAudit"> | string
+    unidadeId?: IntFilter<"AgendaEventoAudit"> | number
+    unidadeNome?: StringNullableFilter<"AgendaEventoAudit"> | string | null
+    userId?: StringFilter<"AgendaEventoAudit"> | string
+    userNome?: StringFilter<"AgendaEventoAudit"> | string
+    acao?: StringFilter<"AgendaEventoAudit"> | string
+    dadosAntigos?: JsonNullableFilter<"AgendaEventoAudit">
+    dadosNovos?: JsonNullableFilter<"AgendaEventoAudit">
+    createdAt?: DateTimeFilter<"AgendaEventoAudit"> | Date | string
+  }, "id">
+
+  export type AgendaEventoAuditOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventoId?: SortOrder
+    eventoTitulo?: SortOrder
+    unidadeId?: SortOrder
+    unidadeNome?: SortOrderInput | SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrderInput | SortOrder
+    dadosNovos?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AgendaEventoAuditCountOrderByAggregateInput
+    _avg?: AgendaEventoAuditAvgOrderByAggregateInput
+    _max?: AgendaEventoAuditMaxOrderByAggregateInput
+    _min?: AgendaEventoAuditMinOrderByAggregateInput
+    _sum?: AgendaEventoAuditSumOrderByAggregateInput
+  }
+
+  export type AgendaEventoAuditScalarWhereWithAggregatesInput = {
+    AND?: AgendaEventoAuditScalarWhereWithAggregatesInput | AgendaEventoAuditScalarWhereWithAggregatesInput[]
+    OR?: AgendaEventoAuditScalarWhereWithAggregatesInput[]
+    NOT?: AgendaEventoAuditScalarWhereWithAggregatesInput | AgendaEventoAuditScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"AgendaEventoAudit"> | number
+    eventoId?: IntWithAggregatesFilter<"AgendaEventoAudit"> | number
+    eventoTitulo?: StringWithAggregatesFilter<"AgendaEventoAudit"> | string
+    unidadeId?: IntWithAggregatesFilter<"AgendaEventoAudit"> | number
+    unidadeNome?: StringNullableWithAggregatesFilter<"AgendaEventoAudit"> | string | null
+    userId?: StringWithAggregatesFilter<"AgendaEventoAudit"> | string
+    userNome?: StringWithAggregatesFilter<"AgendaEventoAudit"> | string
+    acao?: StringWithAggregatesFilter<"AgendaEventoAudit"> | string
+    dadosAntigos?: JsonNullableWithAggregatesFilter<"AgendaEventoAudit">
+    dadosNovos?: JsonNullableWithAggregatesFilter<"AgendaEventoAudit">
+    createdAt?: DateTimeWithAggregatesFilter<"AgendaEventoAudit"> | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoWhereInput = {
+    AND?: SolicitacaoGerenciamentoWhereInput | SolicitacaoGerenciamentoWhereInput[]
+    OR?: SolicitacaoGerenciamentoWhereInput[]
+    NOT?: SolicitacaoGerenciamentoWhereInput | SolicitacaoGerenciamentoWhereInput[]
+    id?: IntFilter<"SolicitacaoGerenciamento"> | number
+    recurso?: EnumSolicitacaoRecursoFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoStatus
+    recadoId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    noticiaId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    titulo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    conteudo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    imagem?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    imagemAntiga?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    motivoRecusa?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    solicitanteId?: StringFilter<"SolicitacaoGerenciamento"> | string
+    solicitanteNome?: StringFilter<"SolicitacaoGerenciamento"> | string
+    revisorId?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    revisorNome?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    createdAt?: DateTimeFilter<"SolicitacaoGerenciamento"> | Date | string
+    updatedAt?: DateTimeFilter<"SolicitacaoGerenciamento"> | Date | string
+    recado?: XOR<RecadoNullableScalarRelationFilter, RecadoWhereInput> | null
+    noticia?: XOR<NoticiaNullableScalarRelationFilter, NoticiaWhereInput> | null
+    unidade?: XOR<UnidadeNullableScalarRelationFilter, UnidadeWhereInput> | null
+  }
+
+  export type SolicitacaoGerenciamentoOrderByWithRelationInput = {
+    id?: SortOrder
+    recurso?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    recadoId?: SortOrderInput | SortOrder
+    noticiaId?: SortOrderInput | SortOrder
+    unidadeId?: SortOrderInput | SortOrder
+    unidadeIds?: SortOrderInput | SortOrder
+    titulo?: SortOrderInput | SortOrder
+    conteudo?: SortOrderInput | SortOrder
+    imagem?: SortOrderInput | SortOrder
+    imagemAntiga?: SortOrderInput | SortOrder
+    motivoRecusa?: SortOrderInput | SortOrder
+    solicitanteId?: SortOrder
+    solicitanteNome?: SortOrder
+    revisorId?: SortOrderInput | SortOrder
+    revisorNome?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    recado?: RecadoOrderByWithRelationInput
+    noticia?: NoticiaOrderByWithRelationInput
+    unidade?: UnidadeOrderByWithRelationInput
+  }
+
+  export type SolicitacaoGerenciamentoWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: SolicitacaoGerenciamentoWhereInput | SolicitacaoGerenciamentoWhereInput[]
+    OR?: SolicitacaoGerenciamentoWhereInput[]
+    NOT?: SolicitacaoGerenciamentoWhereInput | SolicitacaoGerenciamentoWhereInput[]
+    recurso?: EnumSolicitacaoRecursoFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoStatus
+    recadoId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    noticiaId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    titulo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    conteudo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    imagem?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    imagemAntiga?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    motivoRecusa?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    solicitanteId?: StringFilter<"SolicitacaoGerenciamento"> | string
+    solicitanteNome?: StringFilter<"SolicitacaoGerenciamento"> | string
+    revisorId?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    revisorNome?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    createdAt?: DateTimeFilter<"SolicitacaoGerenciamento"> | Date | string
+    updatedAt?: DateTimeFilter<"SolicitacaoGerenciamento"> | Date | string
+    recado?: XOR<RecadoNullableScalarRelationFilter, RecadoWhereInput> | null
+    noticia?: XOR<NoticiaNullableScalarRelationFilter, NoticiaWhereInput> | null
+    unidade?: XOR<UnidadeNullableScalarRelationFilter, UnidadeWhereInput> | null
+  }, "id">
+
+  export type SolicitacaoGerenciamentoOrderByWithAggregationInput = {
+    id?: SortOrder
+    recurso?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    recadoId?: SortOrderInput | SortOrder
+    noticiaId?: SortOrderInput | SortOrder
+    unidadeId?: SortOrderInput | SortOrder
+    unidadeIds?: SortOrderInput | SortOrder
+    titulo?: SortOrderInput | SortOrder
+    conteudo?: SortOrderInput | SortOrder
+    imagem?: SortOrderInput | SortOrder
+    imagemAntiga?: SortOrderInput | SortOrder
+    motivoRecusa?: SortOrderInput | SortOrder
+    solicitanteId?: SortOrder
+    solicitanteNome?: SortOrder
+    revisorId?: SortOrderInput | SortOrder
+    revisorNome?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SolicitacaoGerenciamentoCountOrderByAggregateInput
+    _avg?: SolicitacaoGerenciamentoAvgOrderByAggregateInput
+    _max?: SolicitacaoGerenciamentoMaxOrderByAggregateInput
+    _min?: SolicitacaoGerenciamentoMinOrderByAggregateInput
+    _sum?: SolicitacaoGerenciamentoSumOrderByAggregateInput
+  }
+
+  export type SolicitacaoGerenciamentoScalarWhereWithAggregatesInput = {
+    AND?: SolicitacaoGerenciamentoScalarWhereWithAggregatesInput | SolicitacaoGerenciamentoScalarWhereWithAggregatesInput[]
+    OR?: SolicitacaoGerenciamentoScalarWhereWithAggregatesInput[]
+    NOT?: SolicitacaoGerenciamentoScalarWhereWithAggregatesInput | SolicitacaoGerenciamentoScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"SolicitacaoGerenciamento"> | number
+    recurso?: EnumSolicitacaoRecursoWithAggregatesFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoWithAggregatesFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusWithAggregatesFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoStatus
+    recadoId?: IntNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | number | null
+    noticiaId?: IntNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeId?: IntNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeIds?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    titulo?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    conteudo?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    imagem?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    imagemAntiga?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    motivoRecusa?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    solicitanteId?: StringWithAggregatesFilter<"SolicitacaoGerenciamento"> | string
+    solicitanteNome?: StringWithAggregatesFilter<"SolicitacaoGerenciamento"> | string
+    revisorId?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    revisorNome?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SolicitacaoGerenciamento"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SolicitacaoGerenciamento"> | Date | string
+  }
+
   export type UserCreateInput = {
     id: string
     name: string
@@ -17709,6 +22379,8 @@ export namespace Prisma {
     unidade?: UnidadeCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -17723,6 +22395,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoUncheckedCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoUncheckedCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserUpdateInput = {
@@ -17737,6 +22411,8 @@ export namespace Prisma {
     unidade?: UnidadeUpdateOneWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -17751,6 +22427,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUncheckedUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -18045,6 +22723,8 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutUnidadeInput
     recados?: RecadoCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateInput = {
@@ -18055,6 +22735,8 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
     recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUpdateInput = {
@@ -18064,6 +22746,8 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateInput = {
@@ -18074,6 +22758,8 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeCreateManyInput = {
@@ -18302,6 +22988,7 @@ export namespace Prisma {
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutNoticiaInput
   }
 
   export type NoticiaUncheckedCreateInput = {
@@ -18311,6 +22998,7 @@ export namespace Prisma {
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutNoticiaInput
   }
 
   export type NoticiaUpdateInput = {
@@ -18319,6 +23007,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutNoticiaNestedInput
   }
 
   export type NoticiaUncheckedUpdateInput = {
@@ -18328,6 +23017,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutNoticiaNestedInput
   }
 
   export type NoticiaCreateManyInput = {
@@ -18438,6 +23128,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     unidade: UnidadeCreateNestedOneWithoutRecadosInput
     unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput
   }
 
   export type RecadoUncheckedCreateInput = {
@@ -18449,6 +23140,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput
   }
 
   export type RecadoUpdateInput = {
@@ -18459,6 +23151,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
     unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput
   }
 
   export type RecadoUncheckedUpdateInput = {
@@ -18470,6 +23163,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput
   }
 
   export type RecadoCreateManyInput = {
@@ -18612,6 +23306,327 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AgendaEventoCreateInput = {
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutAgendaEventosInput
+    criadoPor: UserCreateNestedOneWithoutEventosCriadosInput
+    atualizadoPor?: UserCreateNestedOneWithoutEventosAtualizadosInput
+  }
+
+  export type AgendaEventoUncheckedCreateInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    unidadeId: number
+    criadoPorId: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendaEventoUpdateInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutAgendaEventosNestedInput
+    criadoPor?: UserUpdateOneRequiredWithoutEventosCriadosNestedInput
+    atualizadoPor?: UserUpdateOneWithoutEventosAtualizadosNestedInput
+  }
+
+  export type AgendaEventoUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoCreateManyInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    unidadeId: number
+    criadoPorId: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendaEventoUpdateManyMutationInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoAuditCreateInput = {
+    eventoId: number
+    eventoTitulo: string
+    unidadeId: number
+    unidadeNome?: string | null
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AgendaEventoAuditUncheckedCreateInput = {
+    id?: number
+    eventoId: number
+    eventoTitulo: string
+    unidadeId: number
+    unidadeNome?: string | null
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AgendaEventoAuditUpdateInput = {
+    eventoId?: IntFieldUpdateOperationsInput | number
+    eventoTitulo?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    unidadeNome?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoAuditUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eventoId?: IntFieldUpdateOperationsInput | number
+    eventoTitulo?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    unidadeNome?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoAuditCreateManyInput = {
+    id?: number
+    eventoId: number
+    eventoTitulo: string
+    unidadeId: number
+    unidadeNome?: string | null
+    userId: string
+    userNome: string
+    acao: string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type AgendaEventoAuditUpdateManyMutationInput = {
+    eventoId?: IntFieldUpdateOperationsInput | number
+    eventoTitulo?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    unidadeNome?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoAuditUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eventoId?: IntFieldUpdateOperationsInput | number
+    eventoTitulo?: StringFieldUpdateOperationsInput | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    unidadeNome?: NullableStringFieldUpdateOperationsInput | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    userNome?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    dadosAntigos?: NullableJsonNullValueInput | InputJsonValue
+    dadosNovos?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoCreateInput = {
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recado?: RecadoCreateNestedOneWithoutSolicitacoesInput
+    noticia?: NoticiaCreateNestedOneWithoutSolicitacoesInput
+    unidade?: UnidadeCreateNestedOneWithoutSolicitacoesInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedCreateInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    recadoId?: number | null
+    noticiaId?: number | null
+    unidadeId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUpdateInput = {
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recado?: RecadoUpdateOneWithoutSolicitacoesNestedInput
+    noticia?: NoticiaUpdateOneWithoutSolicitacoesNestedInput
+    unidade?: UnidadeUpdateOneWithoutSolicitacoesNestedInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    recadoId?: NullableIntFieldUpdateOperationsInput | number | null
+    noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoCreateManyInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    recadoId?: number | null
+    noticiaId?: number | null
+    unidadeId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUpdateManyMutationInput = {
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    recadoId?: NullableIntFieldUpdateOperationsInput | number | null
+    noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -18693,6 +23708,12 @@ export namespace Prisma {
     none?: AccountWhereInput
   }
 
+  export type AgendaEventoListRelationFilter = {
+    every?: AgendaEventoWhereInput
+    some?: AgendaEventoWhereInput
+    none?: AgendaEventoWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -18703,6 +23724,10 @@ export namespace Prisma {
   }
 
   export type AccountOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AgendaEventoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19013,6 +24038,12 @@ export namespace Prisma {
     none?: RecadoUnidadeWhereInput
   }
 
+  export type SolicitacaoGerenciamentoListRelationFilter = {
+    every?: SolicitacaoGerenciamentoWhereInput
+    some?: SolicitacaoGerenciamentoWhereInput
+    none?: SolicitacaoGerenciamentoWhereInput
+  }
+
   export type RamalOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -19030,6 +24061,10 @@ export namespace Prisma {
   }
 
   export type RecadoUnidadeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SolicitacaoGerenciamentoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19450,6 +24485,248 @@ export namespace Prisma {
     recadoId?: SortOrder
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type AgendaEventoCountOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    data?: SortOrder
+    unidadeId?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgendaEventoAvgOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type AgendaEventoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    data?: SortOrder
+    unidadeId?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgendaEventoMinOrderByAggregateInput = {
+    id?: SortOrder
+    titulo?: SortOrder
+    descricao?: SortOrder
+    data?: SortOrder
+    unidadeId?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AgendaEventoSumOrderByAggregateInput = {
+    id?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type AgendaEventoAuditCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventoId?: SortOrder
+    eventoTitulo?: SortOrder
+    unidadeId?: SortOrder
+    unidadeNome?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    dadosAntigos?: SortOrder
+    dadosNovos?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AgendaEventoAuditAvgOrderByAggregateInput = {
+    id?: SortOrder
+    eventoId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type AgendaEventoAuditMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventoId?: SortOrder
+    eventoTitulo?: SortOrder
+    unidadeId?: SortOrder
+    unidadeNome?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AgendaEventoAuditMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventoId?: SortOrder
+    eventoTitulo?: SortOrder
+    unidadeId?: SortOrder
+    unidadeNome?: SortOrder
+    userId?: SortOrder
+    userNome?: SortOrder
+    acao?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AgendaEventoAuditSumOrderByAggregateInput = {
+    id?: SortOrder
+    eventoId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type EnumSolicitacaoRecursoFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoRecurso | EnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoRecursoFilter<$PrismaModel> | $Enums.SolicitacaoRecurso
+  }
+
+  export type EnumSolicitacaoTipoFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoTipo | EnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoTipoFilter<$PrismaModel> | $Enums.SolicitacaoTipo
+  }
+
+  export type EnumSolicitacaoStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoStatus | EnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoStatusFilter<$PrismaModel> | $Enums.SolicitacaoStatus
+  }
+
+  export type RecadoNullableScalarRelationFilter = {
+    is?: RecadoWhereInput | null
+    isNot?: RecadoWhereInput | null
+  }
+
+  export type NoticiaNullableScalarRelationFilter = {
+    is?: NoticiaWhereInput | null
+    isNot?: NoticiaWhereInput | null
+  }
+
+  export type SolicitacaoGerenciamentoCountOrderByAggregateInput = {
+    id?: SortOrder
+    recurso?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    recadoId?: SortOrder
+    noticiaId?: SortOrder
+    unidadeId?: SortOrder
+    unidadeIds?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    imagemAntiga?: SortOrder
+    motivoRecusa?: SortOrder
+    solicitanteId?: SortOrder
+    solicitanteNome?: SortOrder
+    revisorId?: SortOrder
+    revisorNome?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SolicitacaoGerenciamentoAvgOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    noticiaId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type SolicitacaoGerenciamentoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    recurso?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    recadoId?: SortOrder
+    noticiaId?: SortOrder
+    unidadeId?: SortOrder
+    unidadeIds?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    imagemAntiga?: SortOrder
+    motivoRecusa?: SortOrder
+    solicitanteId?: SortOrder
+    solicitanteNome?: SortOrder
+    revisorId?: SortOrder
+    revisorNome?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SolicitacaoGerenciamentoMinOrderByAggregateInput = {
+    id?: SortOrder
+    recurso?: SortOrder
+    tipo?: SortOrder
+    status?: SortOrder
+    recadoId?: SortOrder
+    noticiaId?: SortOrder
+    unidadeId?: SortOrder
+    unidadeIds?: SortOrder
+    titulo?: SortOrder
+    conteudo?: SortOrder
+    imagem?: SortOrder
+    imagemAntiga?: SortOrder
+    motivoRecusa?: SortOrder
+    solicitanteId?: SortOrder
+    solicitanteNome?: SortOrder
+    revisorId?: SortOrder
+    revisorNome?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SolicitacaoGerenciamentoSumOrderByAggregateInput = {
+    id?: SortOrder
+    recadoId?: SortOrder
+    noticiaId?: SortOrder
+    unidadeId?: SortOrder
+  }
+
+  export type EnumSolicitacaoRecursoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoRecurso | EnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoRecursoWithAggregatesFilter<$PrismaModel> | $Enums.SolicitacaoRecurso
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSolicitacaoRecursoFilter<$PrismaModel>
+    _max?: NestedEnumSolicitacaoRecursoFilter<$PrismaModel>
+  }
+
+  export type EnumSolicitacaoTipoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoTipo | EnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoTipoWithAggregatesFilter<$PrismaModel> | $Enums.SolicitacaoTipo
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSolicitacaoTipoFilter<$PrismaModel>
+    _max?: NestedEnumSolicitacaoTipoFilter<$PrismaModel>
+  }
+
+  export type EnumSolicitacaoStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoStatus | EnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoStatusWithAggregatesFilter<$PrismaModel> | $Enums.SolicitacaoStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSolicitacaoStatusFilter<$PrismaModel>
+    _max?: NestedEnumSolicitacaoStatusFilter<$PrismaModel>
+  }
+
   export type UnidadeCreateNestedOneWithoutUsersInput = {
     create?: XOR<UnidadeCreateWithoutUsersInput, UnidadeUncheckedCreateWithoutUsersInput>
     connectOrCreate?: UnidadeCreateOrConnectWithoutUsersInput
@@ -19470,6 +24747,20 @@ export namespace Prisma {
     connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
+  export type AgendaEventoCreateNestedManyWithoutCriadoPorInput = {
+    create?: XOR<AgendaEventoCreateWithoutCriadoPorInput, AgendaEventoUncheckedCreateWithoutCriadoPorInput> | AgendaEventoCreateWithoutCriadoPorInput[] | AgendaEventoUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutCriadoPorInput | AgendaEventoCreateOrConnectWithoutCriadoPorInput[]
+    createMany?: AgendaEventoCreateManyCriadoPorInputEnvelope
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+  }
+
+  export type AgendaEventoCreateNestedManyWithoutAtualizadoPorInput = {
+    create?: XOR<AgendaEventoCreateWithoutAtualizadoPorInput, AgendaEventoUncheckedCreateWithoutAtualizadoPorInput> | AgendaEventoCreateWithoutAtualizadoPorInput[] | AgendaEventoUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutAtualizadoPorInput | AgendaEventoCreateOrConnectWithoutAtualizadoPorInput[]
+    createMany?: AgendaEventoCreateManyAtualizadoPorInputEnvelope
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -19482,6 +24773,20 @@ export namespace Prisma {
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
     createMany?: AccountCreateManyUserInputEnvelope
     connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+  }
+
+  export type AgendaEventoUncheckedCreateNestedManyWithoutCriadoPorInput = {
+    create?: XOR<AgendaEventoCreateWithoutCriadoPorInput, AgendaEventoUncheckedCreateWithoutCriadoPorInput> | AgendaEventoCreateWithoutCriadoPorInput[] | AgendaEventoUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutCriadoPorInput | AgendaEventoCreateOrConnectWithoutCriadoPorInput[]
+    createMany?: AgendaEventoCreateManyCriadoPorInputEnvelope
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+  }
+
+  export type AgendaEventoUncheckedCreateNestedManyWithoutAtualizadoPorInput = {
+    create?: XOR<AgendaEventoCreateWithoutAtualizadoPorInput, AgendaEventoUncheckedCreateWithoutAtualizadoPorInput> | AgendaEventoCreateWithoutAtualizadoPorInput[] | AgendaEventoUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutAtualizadoPorInput | AgendaEventoCreateOrConnectWithoutAtualizadoPorInput[]
+    createMany?: AgendaEventoCreateManyAtualizadoPorInputEnvelope
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -19542,6 +24847,34 @@ export namespace Prisma {
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
+  export type AgendaEventoUpdateManyWithoutCriadoPorNestedInput = {
+    create?: XOR<AgendaEventoCreateWithoutCriadoPorInput, AgendaEventoUncheckedCreateWithoutCriadoPorInput> | AgendaEventoCreateWithoutCriadoPorInput[] | AgendaEventoUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutCriadoPorInput | AgendaEventoCreateOrConnectWithoutCriadoPorInput[]
+    upsert?: AgendaEventoUpsertWithWhereUniqueWithoutCriadoPorInput | AgendaEventoUpsertWithWhereUniqueWithoutCriadoPorInput[]
+    createMany?: AgendaEventoCreateManyCriadoPorInputEnvelope
+    set?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    disconnect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    delete?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    update?: AgendaEventoUpdateWithWhereUniqueWithoutCriadoPorInput | AgendaEventoUpdateWithWhereUniqueWithoutCriadoPorInput[]
+    updateMany?: AgendaEventoUpdateManyWithWhereWithoutCriadoPorInput | AgendaEventoUpdateManyWithWhereWithoutCriadoPorInput[]
+    deleteMany?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
+  }
+
+  export type AgendaEventoUpdateManyWithoutAtualizadoPorNestedInput = {
+    create?: XOR<AgendaEventoCreateWithoutAtualizadoPorInput, AgendaEventoUncheckedCreateWithoutAtualizadoPorInput> | AgendaEventoCreateWithoutAtualizadoPorInput[] | AgendaEventoUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutAtualizadoPorInput | AgendaEventoCreateOrConnectWithoutAtualizadoPorInput[]
+    upsert?: AgendaEventoUpsertWithWhereUniqueWithoutAtualizadoPorInput | AgendaEventoUpsertWithWhereUniqueWithoutAtualizadoPorInput[]
+    createMany?: AgendaEventoCreateManyAtualizadoPorInputEnvelope
+    set?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    disconnect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    delete?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    update?: AgendaEventoUpdateWithWhereUniqueWithoutAtualizadoPorInput | AgendaEventoUpdateWithWhereUniqueWithoutAtualizadoPorInput[]
+    updateMany?: AgendaEventoUpdateManyWithWhereWithoutAtualizadoPorInput | AgendaEventoUpdateManyWithWhereWithoutAtualizadoPorInput[]
+    deleteMany?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -19576,6 +24909,34 @@ export namespace Prisma {
     update?: AccountUpdateWithWhereUniqueWithoutUserInput | AccountUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: AccountUpdateManyWithWhereWithoutUserInput | AccountUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
+  }
+
+  export type AgendaEventoUncheckedUpdateManyWithoutCriadoPorNestedInput = {
+    create?: XOR<AgendaEventoCreateWithoutCriadoPorInput, AgendaEventoUncheckedCreateWithoutCriadoPorInput> | AgendaEventoCreateWithoutCriadoPorInput[] | AgendaEventoUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutCriadoPorInput | AgendaEventoCreateOrConnectWithoutCriadoPorInput[]
+    upsert?: AgendaEventoUpsertWithWhereUniqueWithoutCriadoPorInput | AgendaEventoUpsertWithWhereUniqueWithoutCriadoPorInput[]
+    createMany?: AgendaEventoCreateManyCriadoPorInputEnvelope
+    set?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    disconnect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    delete?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    update?: AgendaEventoUpdateWithWhereUniqueWithoutCriadoPorInput | AgendaEventoUpdateWithWhereUniqueWithoutCriadoPorInput[]
+    updateMany?: AgendaEventoUpdateManyWithWhereWithoutCriadoPorInput | AgendaEventoUpdateManyWithWhereWithoutCriadoPorInput[]
+    deleteMany?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
+  }
+
+  export type AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorNestedInput = {
+    create?: XOR<AgendaEventoCreateWithoutAtualizadoPorInput, AgendaEventoUncheckedCreateWithoutAtualizadoPorInput> | AgendaEventoCreateWithoutAtualizadoPorInput[] | AgendaEventoUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutAtualizadoPorInput | AgendaEventoCreateOrConnectWithoutAtualizadoPorInput[]
+    upsert?: AgendaEventoUpsertWithWhereUniqueWithoutAtualizadoPorInput | AgendaEventoUpsertWithWhereUniqueWithoutAtualizadoPorInput[]
+    createMany?: AgendaEventoCreateManyAtualizadoPorInputEnvelope
+    set?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    disconnect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    delete?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    update?: AgendaEventoUpdateWithWhereUniqueWithoutAtualizadoPorInput | AgendaEventoUpdateWithWhereUniqueWithoutAtualizadoPorInput[]
+    updateMany?: AgendaEventoUpdateManyWithWhereWithoutAtualizadoPorInput | AgendaEventoUpdateManyWithWhereWithoutAtualizadoPorInput[]
+    deleteMany?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSessionsInput = {
@@ -19645,6 +25006,20 @@ export namespace Prisma {
     connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
   }
 
+  export type AgendaEventoCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<AgendaEventoCreateWithoutUnidadeInput, AgendaEventoUncheckedCreateWithoutUnidadeInput> | AgendaEventoCreateWithoutUnidadeInput[] | AgendaEventoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutUnidadeInput | AgendaEventoCreateOrConnectWithoutUnidadeInput[]
+    createMany?: AgendaEventoCreateManyUnidadeInputEnvelope
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+  }
+
+  export type SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput> | SolicitacaoGerenciamentoCreateWithoutUnidadeInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput | SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyUnidadeInputEnvelope
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+  }
+
   export type RamalUncheckedCreateNestedManyWithoutUnidadeInput = {
     create?: XOR<RamalCreateWithoutUnidadeInput, RamalUncheckedCreateWithoutUnidadeInput> | RamalCreateWithoutUnidadeInput[] | RamalUncheckedCreateWithoutUnidadeInput[]
     connectOrCreate?: RamalCreateOrConnectWithoutUnidadeInput | RamalCreateOrConnectWithoutUnidadeInput[]
@@ -19678,6 +25053,20 @@ export namespace Prisma {
     connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutUnidadeInput | RecadoUnidadeCreateOrConnectWithoutUnidadeInput[]
     createMany?: RecadoUnidadeCreateManyUnidadeInputEnvelope
     connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+  }
+
+  export type AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<AgendaEventoCreateWithoutUnidadeInput, AgendaEventoUncheckedCreateWithoutUnidadeInput> | AgendaEventoCreateWithoutUnidadeInput[] | AgendaEventoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutUnidadeInput | AgendaEventoCreateOrConnectWithoutUnidadeInput[]
+    createMany?: AgendaEventoCreateManyUnidadeInputEnvelope
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput> | SolicitacaoGerenciamentoCreateWithoutUnidadeInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput | SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyUnidadeInputEnvelope
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
   }
 
   export type RamalUpdateManyWithoutUnidadeNestedInput = {
@@ -19748,6 +25137,34 @@ export namespace Prisma {
     update?: RecadoUnidadeUpdateWithWhereUniqueWithoutUnidadeInput | RecadoUnidadeUpdateWithWhereUniqueWithoutUnidadeInput[]
     updateMany?: RecadoUnidadeUpdateManyWithWhereWithoutUnidadeInput | RecadoUnidadeUpdateManyWithWhereWithoutUnidadeInput[]
     deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
+  }
+
+  export type AgendaEventoUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<AgendaEventoCreateWithoutUnidadeInput, AgendaEventoUncheckedCreateWithoutUnidadeInput> | AgendaEventoCreateWithoutUnidadeInput[] | AgendaEventoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutUnidadeInput | AgendaEventoCreateOrConnectWithoutUnidadeInput[]
+    upsert?: AgendaEventoUpsertWithWhereUniqueWithoutUnidadeInput | AgendaEventoUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: AgendaEventoCreateManyUnidadeInputEnvelope
+    set?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    disconnect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    delete?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    update?: AgendaEventoUpdateWithWhereUniqueWithoutUnidadeInput | AgendaEventoUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: AgendaEventoUpdateManyWithWhereWithoutUnidadeInput | AgendaEventoUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput> | SolicitacaoGerenciamentoCreateWithoutUnidadeInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput | SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput[]
+    upsert?: SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutUnidadeInput | SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyUnidadeInputEnvelope
+    set?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    disconnect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    delete?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutUnidadeInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutUnidadeInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -19828,6 +25245,34 @@ export namespace Prisma {
     deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
   }
 
+  export type AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<AgendaEventoCreateWithoutUnidadeInput, AgendaEventoUncheckedCreateWithoutUnidadeInput> | AgendaEventoCreateWithoutUnidadeInput[] | AgendaEventoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: AgendaEventoCreateOrConnectWithoutUnidadeInput | AgendaEventoCreateOrConnectWithoutUnidadeInput[]
+    upsert?: AgendaEventoUpsertWithWhereUniqueWithoutUnidadeInput | AgendaEventoUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: AgendaEventoCreateManyUnidadeInputEnvelope
+    set?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    disconnect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    delete?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    connect?: AgendaEventoWhereUniqueInput | AgendaEventoWhereUniqueInput[]
+    update?: AgendaEventoUpdateWithWhereUniqueWithoutUnidadeInput | AgendaEventoUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: AgendaEventoUpdateManyWithWhereWithoutUnidadeInput | AgendaEventoUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput> | SolicitacaoGerenciamentoCreateWithoutUnidadeInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput | SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput[]
+    upsert?: SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutUnidadeInput | SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutUnidadeInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyUnidadeInputEnvelope
+    set?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    disconnect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    delete?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutUnidadeInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutUnidadeInput[]
+    updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutUnidadeInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutUnidadeInput[]
+    deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+  }
+
   export type UnidadeCreateNestedOneWithoutRamaisInput = {
     create?: XOR<UnidadeCreateWithoutRamaisInput, UnidadeUncheckedCreateWithoutRamaisInput>
     connectOrCreate?: UnidadeCreateOrConnectWithoutRamaisInput
@@ -19856,6 +25301,48 @@ export namespace Prisma {
     update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutEmailsInput, UnidadeUpdateWithoutEmailsInput>, UnidadeUncheckedUpdateWithoutEmailsInput>
   }
 
+  export type SolicitacaoGerenciamentoCreateNestedManyWithoutNoticiaInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput> | SolicitacaoGerenciamentoCreateWithoutNoticiaInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput | SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyNoticiaInputEnvelope
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutNoticiaInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput> | SolicitacaoGerenciamentoCreateWithoutNoticiaInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput | SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyNoticiaInputEnvelope
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUpdateManyWithoutNoticiaNestedInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput> | SolicitacaoGerenciamentoCreateWithoutNoticiaInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput | SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput[]
+    upsert?: SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutNoticiaInput | SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutNoticiaInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyNoticiaInputEnvelope
+    set?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    disconnect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    delete?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutNoticiaInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutNoticiaInput[]
+    updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutNoticiaInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutNoticiaInput[]
+    deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateManyWithoutNoticiaNestedInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput> | SolicitacaoGerenciamentoCreateWithoutNoticiaInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput | SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput[]
+    upsert?: SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutNoticiaInput | SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutNoticiaInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyNoticiaInputEnvelope
+    set?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    disconnect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    delete?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutNoticiaInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutNoticiaInput[]
+    updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutNoticiaInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutNoticiaInput[]
+    deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+  }
+
   export type UnidadeCreateNestedOneWithoutRecadosInput = {
     create?: XOR<UnidadeCreateWithoutRecadosInput, UnidadeUncheckedCreateWithoutRecadosInput>
     connectOrCreate?: UnidadeCreateOrConnectWithoutRecadosInput
@@ -19869,11 +25356,25 @@ export namespace Prisma {
     connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
   }
 
+  export type SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput> | SolicitacaoGerenciamentoCreateWithoutRecadoInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput | SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyRecadoInputEnvelope
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+  }
+
   export type RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput = {
     create?: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput> | RecadoUnidadeCreateWithoutRecadoInput[] | RecadoUnidadeUncheckedCreateWithoutRecadoInput[]
     connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutRecadoInput | RecadoUnidadeCreateOrConnectWithoutRecadoInput[]
     createMany?: RecadoUnidadeCreateManyRecadoInputEnvelope
     connect?: RecadoUnidadeWhereUniqueInput | RecadoUnidadeWhereUniqueInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput> | SolicitacaoGerenciamentoCreateWithoutRecadoInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput | SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyRecadoInputEnvelope
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
   }
 
   export type UnidadeUpdateOneRequiredWithoutRecadosNestedInput = {
@@ -19898,6 +25399,20 @@ export namespace Prisma {
     deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
   }
 
+  export type SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput> | SolicitacaoGerenciamentoCreateWithoutRecadoInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput | SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput[]
+    upsert?: SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutRecadoInput | SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutRecadoInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyRecadoInputEnvelope
+    set?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    disconnect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    delete?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutRecadoInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutRecadoInput[]
+    updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutRecadoInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutRecadoInput[]
+    deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+  }
+
   export type RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput = {
     create?: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput> | RecadoUnidadeCreateWithoutRecadoInput[] | RecadoUnidadeUncheckedCreateWithoutRecadoInput[]
     connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutRecadoInput | RecadoUnidadeCreateOrConnectWithoutRecadoInput[]
@@ -19910,6 +25425,20 @@ export namespace Prisma {
     update?: RecadoUnidadeUpdateWithWhereUniqueWithoutRecadoInput | RecadoUnidadeUpdateWithWhereUniqueWithoutRecadoInput[]
     updateMany?: RecadoUnidadeUpdateManyWithWhereWithoutRecadoInput | RecadoUnidadeUpdateManyWithWhereWithoutRecadoInput[]
     deleteMany?: RecadoUnidadeScalarWhereInput | RecadoUnidadeScalarWhereInput[]
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput = {
+    create?: XOR<SolicitacaoGerenciamentoCreateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput> | SolicitacaoGerenciamentoCreateWithoutRecadoInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput[]
+    connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput | SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput[]
+    upsert?: SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutRecadoInput | SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutRecadoInput[]
+    createMany?: SolicitacaoGerenciamentoCreateManyRecadoInputEnvelope
+    set?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    disconnect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    delete?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+    update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutRecadoInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutRecadoInput[]
+    updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutRecadoInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutRecadoInput[]
+    deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
   }
 
   export type RecadoCreateNestedOneWithoutUnidadesInput = {
@@ -19938,6 +25467,110 @@ export namespace Prisma {
     upsert?: UnidadeUpsertWithoutRecadosMultiInput
     connect?: UnidadeWhereUniqueInput
     update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutRecadosMultiInput, UnidadeUpdateWithoutRecadosMultiInput>, UnidadeUncheckedUpdateWithoutRecadosMultiInput>
+  }
+
+  export type UnidadeCreateNestedOneWithoutAgendaEventosInput = {
+    create?: XOR<UnidadeCreateWithoutAgendaEventosInput, UnidadeUncheckedCreateWithoutAgendaEventosInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutAgendaEventosInput
+    connect?: UnidadeWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutEventosCriadosInput = {
+    create?: XOR<UserCreateWithoutEventosCriadosInput, UserUncheckedCreateWithoutEventosCriadosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventosCriadosInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutEventosAtualizadosInput = {
+    create?: XOR<UserCreateWithoutEventosAtualizadosInput, UserUncheckedCreateWithoutEventosAtualizadosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventosAtualizadosInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UnidadeUpdateOneRequiredWithoutAgendaEventosNestedInput = {
+    create?: XOR<UnidadeCreateWithoutAgendaEventosInput, UnidadeUncheckedCreateWithoutAgendaEventosInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutAgendaEventosInput
+    upsert?: UnidadeUpsertWithoutAgendaEventosInput
+    connect?: UnidadeWhereUniqueInput
+    update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutAgendaEventosInput, UnidadeUpdateWithoutAgendaEventosInput>, UnidadeUncheckedUpdateWithoutAgendaEventosInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutEventosCriadosNestedInput = {
+    create?: XOR<UserCreateWithoutEventosCriadosInput, UserUncheckedCreateWithoutEventosCriadosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventosCriadosInput
+    upsert?: UserUpsertWithoutEventosCriadosInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventosCriadosInput, UserUpdateWithoutEventosCriadosInput>, UserUncheckedUpdateWithoutEventosCriadosInput>
+  }
+
+  export type UserUpdateOneWithoutEventosAtualizadosNestedInput = {
+    create?: XOR<UserCreateWithoutEventosAtualizadosInput, UserUncheckedCreateWithoutEventosAtualizadosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventosAtualizadosInput
+    upsert?: UserUpsertWithoutEventosAtualizadosInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventosAtualizadosInput, UserUpdateWithoutEventosAtualizadosInput>, UserUncheckedUpdateWithoutEventosAtualizadosInput>
+  }
+
+  export type RecadoCreateNestedOneWithoutSolicitacoesInput = {
+    create?: XOR<RecadoCreateWithoutSolicitacoesInput, RecadoUncheckedCreateWithoutSolicitacoesInput>
+    connectOrCreate?: RecadoCreateOrConnectWithoutSolicitacoesInput
+    connect?: RecadoWhereUniqueInput
+  }
+
+  export type NoticiaCreateNestedOneWithoutSolicitacoesInput = {
+    create?: XOR<NoticiaCreateWithoutSolicitacoesInput, NoticiaUncheckedCreateWithoutSolicitacoesInput>
+    connectOrCreate?: NoticiaCreateOrConnectWithoutSolicitacoesInput
+    connect?: NoticiaWhereUniqueInput
+  }
+
+  export type UnidadeCreateNestedOneWithoutSolicitacoesInput = {
+    create?: XOR<UnidadeCreateWithoutSolicitacoesInput, UnidadeUncheckedCreateWithoutSolicitacoesInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutSolicitacoesInput
+    connect?: UnidadeWhereUniqueInput
+  }
+
+  export type EnumSolicitacaoRecursoFieldUpdateOperationsInput = {
+    set?: $Enums.SolicitacaoRecurso
+  }
+
+  export type EnumSolicitacaoTipoFieldUpdateOperationsInput = {
+    set?: $Enums.SolicitacaoTipo
+  }
+
+  export type EnumSolicitacaoStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SolicitacaoStatus
+  }
+
+  export type RecadoUpdateOneWithoutSolicitacoesNestedInput = {
+    create?: XOR<RecadoCreateWithoutSolicitacoesInput, RecadoUncheckedCreateWithoutSolicitacoesInput>
+    connectOrCreate?: RecadoCreateOrConnectWithoutSolicitacoesInput
+    upsert?: RecadoUpsertWithoutSolicitacoesInput
+    disconnect?: RecadoWhereInput | boolean
+    delete?: RecadoWhereInput | boolean
+    connect?: RecadoWhereUniqueInput
+    update?: XOR<XOR<RecadoUpdateToOneWithWhereWithoutSolicitacoesInput, RecadoUpdateWithoutSolicitacoesInput>, RecadoUncheckedUpdateWithoutSolicitacoesInput>
+  }
+
+  export type NoticiaUpdateOneWithoutSolicitacoesNestedInput = {
+    create?: XOR<NoticiaCreateWithoutSolicitacoesInput, NoticiaUncheckedCreateWithoutSolicitacoesInput>
+    connectOrCreate?: NoticiaCreateOrConnectWithoutSolicitacoesInput
+    upsert?: NoticiaUpsertWithoutSolicitacoesInput
+    disconnect?: NoticiaWhereInput | boolean
+    delete?: NoticiaWhereInput | boolean
+    connect?: NoticiaWhereUniqueInput
+    update?: XOR<XOR<NoticiaUpdateToOneWithWhereWithoutSolicitacoesInput, NoticiaUpdateWithoutSolicitacoesInput>, NoticiaUncheckedUpdateWithoutSolicitacoesInput>
+  }
+
+  export type UnidadeUpdateOneWithoutSolicitacoesNestedInput = {
+    create?: XOR<UnidadeCreateWithoutSolicitacoesInput, UnidadeUncheckedCreateWithoutSolicitacoesInput>
+    connectOrCreate?: UnidadeCreateOrConnectWithoutSolicitacoesInput
+    upsert?: UnidadeUpsertWithoutSolicitacoesInput
+    disconnect?: UnidadeWhereInput | boolean
+    delete?: UnidadeWhereInput | boolean
+    connect?: UnidadeWhereUniqueInput
+    update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutSolicitacoesInput, UnidadeUpdateWithoutSolicitacoesInput>, UnidadeUncheckedUpdateWithoutSolicitacoesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -20181,12 +25814,65 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumSolicitacaoRecursoFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoRecurso | EnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoRecursoFilter<$PrismaModel> | $Enums.SolicitacaoRecurso
+  }
+
+  export type NestedEnumSolicitacaoTipoFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoTipo | EnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoTipoFilter<$PrismaModel> | $Enums.SolicitacaoTipo
+  }
+
+  export type NestedEnumSolicitacaoStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoStatus | EnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoStatusFilter<$PrismaModel> | $Enums.SolicitacaoStatus
+  }
+
+  export type NestedEnumSolicitacaoRecursoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoRecurso | EnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoRecurso[] | ListEnumSolicitacaoRecursoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoRecursoWithAggregatesFilter<$PrismaModel> | $Enums.SolicitacaoRecurso
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSolicitacaoRecursoFilter<$PrismaModel>
+    _max?: NestedEnumSolicitacaoRecursoFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSolicitacaoTipoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoTipo | EnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoTipo[] | ListEnumSolicitacaoTipoFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoTipoWithAggregatesFilter<$PrismaModel> | $Enums.SolicitacaoTipo
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSolicitacaoTipoFilter<$PrismaModel>
+    _max?: NestedEnumSolicitacaoTipoFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSolicitacaoStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SolicitacaoStatus | EnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SolicitacaoStatus[] | ListEnumSolicitacaoStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSolicitacaoStatusWithAggregatesFilter<$PrismaModel> | $Enums.SolicitacaoStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSolicitacaoStatusFilter<$PrismaModel>
+    _max?: NestedEnumSolicitacaoStatusFilter<$PrismaModel>
+  }
+
   export type UnidadeCreateWithoutUsersInput = {
     nome: string
     ramais?: RamalCreateNestedManyWithoutUnidadeInput
     emails?: EmailCreateNestedManyWithoutUnidadeInput
     recados?: RecadoCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutUsersInput = {
@@ -20196,6 +25882,8 @@ export namespace Prisma {
     emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
     recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutUsersInput = {
@@ -20273,6 +25961,68 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AgendaEventoCreateWithoutCriadoPorInput = {
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutAgendaEventosInput
+    atualizadoPor?: UserCreateNestedOneWithoutEventosAtualizadosInput
+  }
+
+  export type AgendaEventoUncheckedCreateWithoutCriadoPorInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    unidadeId: number
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendaEventoCreateOrConnectWithoutCriadoPorInput = {
+    where: AgendaEventoWhereUniqueInput
+    create: XOR<AgendaEventoCreateWithoutCriadoPorInput, AgendaEventoUncheckedCreateWithoutCriadoPorInput>
+  }
+
+  export type AgendaEventoCreateManyCriadoPorInputEnvelope = {
+    data: AgendaEventoCreateManyCriadoPorInput | AgendaEventoCreateManyCriadoPorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AgendaEventoCreateWithoutAtualizadoPorInput = {
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutAgendaEventosInput
+    criadoPor: UserCreateNestedOneWithoutEventosCriadosInput
+  }
+
+  export type AgendaEventoUncheckedCreateWithoutAtualizadoPorInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    unidadeId: number
+    criadoPorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendaEventoCreateOrConnectWithoutAtualizadoPorInput = {
+    where: AgendaEventoWhereUniqueInput
+    create: XOR<AgendaEventoCreateWithoutAtualizadoPorInput, AgendaEventoUncheckedCreateWithoutAtualizadoPorInput>
+  }
+
+  export type AgendaEventoCreateManyAtualizadoPorInputEnvelope = {
+    data: AgendaEventoCreateManyAtualizadoPorInput | AgendaEventoCreateManyAtualizadoPorInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UnidadeUpsertWithoutUsersInput = {
     update: XOR<UnidadeUpdateWithoutUsersInput, UnidadeUncheckedUpdateWithoutUsersInput>
     create: XOR<UnidadeCreateWithoutUsersInput, UnidadeUncheckedCreateWithoutUsersInput>
@@ -20290,6 +26040,8 @@ export namespace Prisma {
     emails?: EmailUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutUsersInput = {
@@ -20299,6 +26051,8 @@ export namespace Prisma {
     emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -20366,6 +26120,53 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Account"> | Date | string
   }
 
+  export type AgendaEventoUpsertWithWhereUniqueWithoutCriadoPorInput = {
+    where: AgendaEventoWhereUniqueInput
+    update: XOR<AgendaEventoUpdateWithoutCriadoPorInput, AgendaEventoUncheckedUpdateWithoutCriadoPorInput>
+    create: XOR<AgendaEventoCreateWithoutCriadoPorInput, AgendaEventoUncheckedCreateWithoutCriadoPorInput>
+  }
+
+  export type AgendaEventoUpdateWithWhereUniqueWithoutCriadoPorInput = {
+    where: AgendaEventoWhereUniqueInput
+    data: XOR<AgendaEventoUpdateWithoutCriadoPorInput, AgendaEventoUncheckedUpdateWithoutCriadoPorInput>
+  }
+
+  export type AgendaEventoUpdateManyWithWhereWithoutCriadoPorInput = {
+    where: AgendaEventoScalarWhereInput
+    data: XOR<AgendaEventoUpdateManyMutationInput, AgendaEventoUncheckedUpdateManyWithoutCriadoPorInput>
+  }
+
+  export type AgendaEventoScalarWhereInput = {
+    AND?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
+    OR?: AgendaEventoScalarWhereInput[]
+    NOT?: AgendaEventoScalarWhereInput | AgendaEventoScalarWhereInput[]
+    id?: IntFilter<"AgendaEvento"> | number
+    titulo?: StringFilter<"AgendaEvento"> | string
+    descricao?: StringNullableFilter<"AgendaEvento"> | string | null
+    data?: DateTimeFilter<"AgendaEvento"> | Date | string
+    unidadeId?: IntFilter<"AgendaEvento"> | number
+    criadoPorId?: StringFilter<"AgendaEvento"> | string
+    atualizadoPorId?: StringNullableFilter<"AgendaEvento"> | string | null
+    createdAt?: DateTimeFilter<"AgendaEvento"> | Date | string
+    updatedAt?: DateTimeFilter<"AgendaEvento"> | Date | string
+  }
+
+  export type AgendaEventoUpsertWithWhereUniqueWithoutAtualizadoPorInput = {
+    where: AgendaEventoWhereUniqueInput
+    update: XOR<AgendaEventoUpdateWithoutAtualizadoPorInput, AgendaEventoUncheckedUpdateWithoutAtualizadoPorInput>
+    create: XOR<AgendaEventoCreateWithoutAtualizadoPorInput, AgendaEventoUncheckedCreateWithoutAtualizadoPorInput>
+  }
+
+  export type AgendaEventoUpdateWithWhereUniqueWithoutAtualizadoPorInput = {
+    where: AgendaEventoWhereUniqueInput
+    data: XOR<AgendaEventoUpdateWithoutAtualizadoPorInput, AgendaEventoUncheckedUpdateWithoutAtualizadoPorInput>
+  }
+
+  export type AgendaEventoUpdateManyWithWhereWithoutAtualizadoPorInput = {
+    where: AgendaEventoScalarWhereInput
+    data: XOR<AgendaEventoUpdateManyMutationInput, AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorInput>
+  }
+
   export type UserCreateWithoutSessionsInput = {
     id: string
     name: string
@@ -20377,6 +26178,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     unidade?: UnidadeCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -20390,6 +26193,8 @@ export namespace Prisma {
     unidadeId?: number | null
     role?: $Enums.UserRole
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoUncheckedCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoUncheckedCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -20419,6 +26224,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     unidade?: UnidadeUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -20432,6 +26239,8 @@ export namespace Prisma {
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUncheckedUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -20445,6 +26254,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     unidade?: UnidadeCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -20458,6 +26269,8 @@ export namespace Prisma {
     unidadeId?: number | null
     role?: $Enums.UserRole
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoUncheckedCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoUncheckedCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -20487,6 +26300,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     unidade?: UnidadeUpdateOneWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -20500,6 +26315,8 @@ export namespace Prisma {
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUncheckedUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type RamalCreateWithoutUnidadeInput = {
@@ -20567,6 +26384,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserUncheckedCreateWithoutUnidadeInput = {
@@ -20580,6 +26399,8 @@ export namespace Prisma {
     role?: $Enums.UserRole
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoUncheckedCreateNestedManyWithoutCriadoPorInput
+    eventosAtualizados?: AgendaEventoUncheckedCreateNestedManyWithoutAtualizadoPorInput
   }
 
   export type UserCreateOrConnectWithoutUnidadeInput = {
@@ -20599,6 +26420,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput
   }
 
   export type RecadoUncheckedCreateWithoutUnidadeInput = {
@@ -20609,6 +26431,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput
   }
 
   export type RecadoCreateOrConnectWithoutUnidadeInput = {
@@ -20637,6 +26460,88 @@ export namespace Prisma {
 
   export type RecadoUnidadeCreateManyUnidadeInputEnvelope = {
     data: RecadoUnidadeCreateManyUnidadeInput | RecadoUnidadeCreateManyUnidadeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AgendaEventoCreateWithoutUnidadeInput = {
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    criadoPor: UserCreateNestedOneWithoutEventosCriadosInput
+    atualizadoPor?: UserCreateNestedOneWithoutEventosAtualizadosInput
+  }
+
+  export type AgendaEventoUncheckedCreateWithoutUnidadeInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    criadoPorId: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendaEventoCreateOrConnectWithoutUnidadeInput = {
+    where: AgendaEventoWhereUniqueInput
+    create: XOR<AgendaEventoCreateWithoutUnidadeInput, AgendaEventoUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type AgendaEventoCreateManyUnidadeInputEnvelope = {
+    data: AgendaEventoCreateManyUnidadeInput | AgendaEventoCreateManyUnidadeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SolicitacaoGerenciamentoCreateWithoutUnidadeInput = {
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recado?: RecadoCreateNestedOneWithoutSolicitacoesInput
+    noticia?: NoticiaCreateNestedOneWithoutSolicitacoesInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    recadoId?: number | null
+    noticiaId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolicitacaoGerenciamentoCreateOrConnectWithoutUnidadeInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    create: XOR<SolicitacaoGerenciamentoCreateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type SolicitacaoGerenciamentoCreateManyUnidadeInputEnvelope = {
+    data: SolicitacaoGerenciamentoCreateManyUnidadeInput | SolicitacaoGerenciamentoCreateManyUnidadeInput[]
     skipDuplicates?: boolean
   }
 
@@ -20783,12 +26688,71 @@ export namespace Prisma {
     unidadeId?: IntFilter<"RecadoUnidade"> | number
   }
 
+  export type AgendaEventoUpsertWithWhereUniqueWithoutUnidadeInput = {
+    where: AgendaEventoWhereUniqueInput
+    update: XOR<AgendaEventoUpdateWithoutUnidadeInput, AgendaEventoUncheckedUpdateWithoutUnidadeInput>
+    create: XOR<AgendaEventoCreateWithoutUnidadeInput, AgendaEventoUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type AgendaEventoUpdateWithWhereUniqueWithoutUnidadeInput = {
+    where: AgendaEventoWhereUniqueInput
+    data: XOR<AgendaEventoUpdateWithoutUnidadeInput, AgendaEventoUncheckedUpdateWithoutUnidadeInput>
+  }
+
+  export type AgendaEventoUpdateManyWithWhereWithoutUnidadeInput = {
+    where: AgendaEventoScalarWhereInput
+    data: XOR<AgendaEventoUpdateManyMutationInput, AgendaEventoUncheckedUpdateManyWithoutUnidadeInput>
+  }
+
+  export type SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutUnidadeInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    update: XOR<SolicitacaoGerenciamentoUpdateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedUpdateWithoutUnidadeInput>
+    create: XOR<SolicitacaoGerenciamentoCreateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedCreateWithoutUnidadeInput>
+  }
+
+  export type SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutUnidadeInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    data: XOR<SolicitacaoGerenciamentoUpdateWithoutUnidadeInput, SolicitacaoGerenciamentoUncheckedUpdateWithoutUnidadeInput>
+  }
+
+  export type SolicitacaoGerenciamentoUpdateManyWithWhereWithoutUnidadeInput = {
+    where: SolicitacaoGerenciamentoScalarWhereInput
+    data: XOR<SolicitacaoGerenciamentoUpdateManyMutationInput, SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeInput>
+  }
+
+  export type SolicitacaoGerenciamentoScalarWhereInput = {
+    AND?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+    OR?: SolicitacaoGerenciamentoScalarWhereInput[]
+    NOT?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+    id?: IntFilter<"SolicitacaoGerenciamento"> | number
+    recurso?: EnumSolicitacaoRecursoFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFilter<"SolicitacaoGerenciamento"> | $Enums.SolicitacaoStatus
+    recadoId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    noticiaId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
+    unidadeIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    titulo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    conteudo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    imagem?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    imagemAntiga?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    motivoRecusa?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    solicitanteId?: StringFilter<"SolicitacaoGerenciamento"> | string
+    solicitanteNome?: StringFilter<"SolicitacaoGerenciamento"> | string
+    revisorId?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    revisorNome?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    createdAt?: DateTimeFilter<"SolicitacaoGerenciamento"> | Date | string
+    updatedAt?: DateTimeFilter<"SolicitacaoGerenciamento"> | Date | string
+  }
+
   export type UnidadeCreateWithoutRamaisInput = {
     nome: string
     emails?: EmailCreateNestedManyWithoutUnidadeInput
     users?: UserCreateNestedManyWithoutUnidadeInput
     recados?: RecadoCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutRamaisInput = {
@@ -20798,6 +26762,8 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
     recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutRamaisInput = {
@@ -20822,6 +26788,8 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutRamaisInput = {
@@ -20831,6 +26799,8 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeCreateWithoutEmailsInput = {
@@ -20839,6 +26809,8 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutUnidadeInput
     recados?: RecadoCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutEmailsInput = {
@@ -20848,6 +26820,8 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
     recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutEmailsInput = {
@@ -20872,6 +26846,8 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutEmailsInput = {
@@ -20881,6 +26857,75 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type SolicitacaoGerenciamentoCreateWithoutNoticiaInput = {
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recado?: RecadoCreateNestedOneWithoutSolicitacoesInput
+    unidade?: UnidadeCreateNestedOneWithoutSolicitacoesInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    recadoId?: number | null
+    unidadeId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    create: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput>
+  }
+
+  export type SolicitacaoGerenciamentoCreateManyNoticiaInputEnvelope = {
+    data: SolicitacaoGerenciamentoCreateManyNoticiaInput | SolicitacaoGerenciamentoCreateManyNoticiaInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutNoticiaInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    update: XOR<SolicitacaoGerenciamentoUpdateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedUpdateWithoutNoticiaInput>
+    create: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput>
+  }
+
+  export type SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutNoticiaInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    data: XOR<SolicitacaoGerenciamentoUpdateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedUpdateWithoutNoticiaInput>
+  }
+
+  export type SolicitacaoGerenciamentoUpdateManyWithWhereWithoutNoticiaInput = {
+    where: SolicitacaoGerenciamentoScalarWhereInput
+    data: XOR<SolicitacaoGerenciamentoUpdateManyMutationInput, SolicitacaoGerenciamentoUncheckedUpdateManyWithoutNoticiaInput>
   }
 
   export type UnidadeCreateWithoutRecadosInput = {
@@ -20889,6 +26934,8 @@ export namespace Prisma {
     emails?: EmailCreateNestedManyWithoutUnidadeInput
     users?: UserCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutRecadosInput = {
@@ -20898,6 +26945,8 @@ export namespace Prisma {
     emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
     recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutRecadosInput = {
@@ -20924,6 +26973,57 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SolicitacaoGerenciamentoCreateWithoutRecadoInput = {
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    noticia?: NoticiaCreateNestedOneWithoutSolicitacoesInput
+    unidade?: UnidadeCreateNestedOneWithoutSolicitacoesInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    noticiaId?: number | null
+    unidadeId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    create: XOR<SolicitacaoGerenciamentoCreateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput>
+  }
+
+  export type SolicitacaoGerenciamentoCreateManyRecadoInputEnvelope = {
+    data: SolicitacaoGerenciamentoCreateManyRecadoInput | SolicitacaoGerenciamentoCreateManyRecadoInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UnidadeUpsertWithoutRecadosInput = {
     update: XOR<UnidadeUpdateWithoutRecadosInput, UnidadeUncheckedUpdateWithoutRecadosInput>
     create: XOR<UnidadeCreateWithoutRecadosInput, UnidadeUncheckedCreateWithoutRecadosInput>
@@ -20941,6 +27041,8 @@ export namespace Prisma {
     emails?: EmailUpdateManyWithoutUnidadeNestedInput
     users?: UserUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutRecadosInput = {
@@ -20950,6 +27052,8 @@ export namespace Prisma {
     emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
     recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type RecadoUnidadeUpsertWithWhereUniqueWithoutRecadoInput = {
@@ -20968,6 +27072,22 @@ export namespace Prisma {
     data: XOR<RecadoUnidadeUpdateManyMutationInput, RecadoUnidadeUncheckedUpdateManyWithoutRecadoInput>
   }
 
+  export type SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutRecadoInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    update: XOR<SolicitacaoGerenciamentoUpdateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedUpdateWithoutRecadoInput>
+    create: XOR<SolicitacaoGerenciamentoCreateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedCreateWithoutRecadoInput>
+  }
+
+  export type SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutRecadoInput = {
+    where: SolicitacaoGerenciamentoWhereUniqueInput
+    data: XOR<SolicitacaoGerenciamentoUpdateWithoutRecadoInput, SolicitacaoGerenciamentoUncheckedUpdateWithoutRecadoInput>
+  }
+
+  export type SolicitacaoGerenciamentoUpdateManyWithWhereWithoutRecadoInput = {
+    where: SolicitacaoGerenciamentoScalarWhereInput
+    data: XOR<SolicitacaoGerenciamentoUpdateManyMutationInput, SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoInput>
+  }
+
   export type RecadoCreateWithoutUnidadesInput = {
     titulo: string
     conteudo: string
@@ -20975,6 +27095,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     unidade: UnidadeCreateNestedOneWithoutRecadosInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput
   }
 
   export type RecadoUncheckedCreateWithoutUnidadesInput = {
@@ -20985,6 +27106,7 @@ export namespace Prisma {
     unidadeId: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput
   }
 
   export type RecadoCreateOrConnectWithoutUnidadesInput = {
@@ -20998,6 +27120,8 @@ export namespace Prisma {
     emails?: EmailCreateNestedManyWithoutUnidadeInput
     users?: UserCreateNestedManyWithoutUnidadeInput
     recados?: RecadoCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeUncheckedCreateWithoutRecadosMultiInput = {
@@ -21007,6 +27131,8 @@ export namespace Prisma {
     emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
     users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
     recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput
   }
 
   export type UnidadeCreateOrConnectWithoutRecadosMultiInput = {
@@ -21032,6 +27158,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput
   }
 
   export type RecadoUncheckedUpdateWithoutUnidadesInput = {
@@ -21042,6 +27169,7 @@ export namespace Prisma {
     unidadeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput
   }
 
   export type UnidadeUpsertWithoutRecadosMultiInput = {
@@ -21061,6 +27189,8 @@ export namespace Prisma {
     emails?: EmailUpdateManyWithoutUnidadeNestedInput
     users?: UserUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput
   }
 
   export type UnidadeUncheckedUpdateWithoutRecadosMultiInput = {
@@ -21070,6 +27200,384 @@ export namespace Prisma {
     emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
     users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
     recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeCreateWithoutAgendaEventosInput = {
+    nome: string
+    ramais?: RamalCreateNestedManyWithoutUnidadeInput
+    emails?: EmailCreateNestedManyWithoutUnidadeInput
+    users?: UserCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateWithoutAgendaEventosInput = {
+    id?: number
+    nome: string
+    ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
+    emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+    users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeCreateOrConnectWithoutAgendaEventosInput = {
+    where: UnidadeWhereUniqueInput
+    create: XOR<UnidadeCreateWithoutAgendaEventosInput, UnidadeUncheckedCreateWithoutAgendaEventosInput>
+  }
+
+  export type UserCreateWithoutEventosCriadosInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.UserRole
+    unidade?: UnidadeCreateNestedOneWithoutUsersInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    eventosAtualizados?: AgendaEventoCreateNestedManyWithoutAtualizadoPorInput
+  }
+
+  export type UserUncheckedCreateWithoutEventosCriadosInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidadeId?: number | null
+    role?: $Enums.UserRole
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    eventosAtualizados?: AgendaEventoUncheckedCreateNestedManyWithoutAtualizadoPorInput
+  }
+
+  export type UserCreateOrConnectWithoutEventosCriadosInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEventosCriadosInput, UserUncheckedCreateWithoutEventosCriadosInput>
+  }
+
+  export type UserCreateWithoutEventosAtualizadosInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    role?: $Enums.UserRole
+    unidade?: UnidadeCreateNestedOneWithoutUsersInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoCreateNestedManyWithoutCriadoPorInput
+  }
+
+  export type UserUncheckedCreateWithoutEventosAtualizadosInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidadeId?: number | null
+    role?: $Enums.UserRole
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    eventosCriados?: AgendaEventoUncheckedCreateNestedManyWithoutCriadoPorInput
+  }
+
+  export type UserCreateOrConnectWithoutEventosAtualizadosInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEventosAtualizadosInput, UserUncheckedCreateWithoutEventosAtualizadosInput>
+  }
+
+  export type UnidadeUpsertWithoutAgendaEventosInput = {
+    update: XOR<UnidadeUpdateWithoutAgendaEventosInput, UnidadeUncheckedUpdateWithoutAgendaEventosInput>
+    create: XOR<UnidadeCreateWithoutAgendaEventosInput, UnidadeUncheckedCreateWithoutAgendaEventosInput>
+    where?: UnidadeWhereInput
+  }
+
+  export type UnidadeUpdateToOneWithWhereWithoutAgendaEventosInput = {
+    where?: UnidadeWhereInput
+    data: XOR<UnidadeUpdateWithoutAgendaEventosInput, UnidadeUncheckedUpdateWithoutAgendaEventosInput>
+  }
+
+  export type UnidadeUpdateWithoutAgendaEventosInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUpdateManyWithoutUnidadeNestedInput
+    users?: UserUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateWithoutAgendaEventosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
+    users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UserUpsertWithoutEventosCriadosInput = {
+    update: XOR<UserUpdateWithoutEventosCriadosInput, UserUncheckedUpdateWithoutEventosCriadosInput>
+    create: XOR<UserCreateWithoutEventosCriadosInput, UserUncheckedCreateWithoutEventosCriadosInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEventosCriadosInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEventosCriadosInput, UserUncheckedUpdateWithoutEventosCriadosInput>
+  }
+
+  export type UserUpdateWithoutEventosCriadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    unidade?: UnidadeUpdateOneWithoutUsersNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    eventosAtualizados?: AgendaEventoUpdateManyWithoutAtualizadoPorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEventosCriadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    eventosAtualizados?: AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorNestedInput
+  }
+
+  export type UserUpsertWithoutEventosAtualizadosInput = {
+    update: XOR<UserUpdateWithoutEventosAtualizadosInput, UserUncheckedUpdateWithoutEventosAtualizadosInput>
+    create: XOR<UserCreateWithoutEventosAtualizadosInput, UserUncheckedCreateWithoutEventosAtualizadosInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEventosAtualizadosInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEventosAtualizadosInput, UserUncheckedUpdateWithoutEventosAtualizadosInput>
+  }
+
+  export type UserUpdateWithoutEventosAtualizadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    unidade?: UnidadeUpdateOneWithoutUsersNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUpdateManyWithoutCriadoPorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEventosAtualizadosInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUncheckedUpdateManyWithoutCriadoPorNestedInput
+  }
+
+  export type RecadoCreateWithoutSolicitacoesInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutRecadosInput
+    unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoUncheckedCreateWithoutSolicitacoesInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoCreateOrConnectWithoutSolicitacoesInput = {
+    where: RecadoWhereUniqueInput
+    create: XOR<RecadoCreateWithoutSolicitacoesInput, RecadoUncheckedCreateWithoutSolicitacoesInput>
+  }
+
+  export type NoticiaCreateWithoutSolicitacoesInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoticiaUncheckedCreateWithoutSolicitacoesInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NoticiaCreateOrConnectWithoutSolicitacoesInput = {
+    where: NoticiaWhereUniqueInput
+    create: XOR<NoticiaCreateWithoutSolicitacoesInput, NoticiaUncheckedCreateWithoutSolicitacoesInput>
+  }
+
+  export type UnidadeCreateWithoutSolicitacoesInput = {
+    nome: string
+    ramais?: RamalCreateNestedManyWithoutUnidadeInput
+    emails?: EmailCreateNestedManyWithoutUnidadeInput
+    users?: UserCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeUncheckedCreateWithoutSolicitacoesInput = {
+    id?: number
+    nome: string
+    ramais?: RamalUncheckedCreateNestedManyWithoutUnidadeInput
+    emails?: EmailUncheckedCreateNestedManyWithoutUnidadeInput
+    users?: UserUncheckedCreateNestedManyWithoutUnidadeInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutUnidadeInput
+    recadosMulti?: RecadoUnidadeUncheckedCreateNestedManyWithoutUnidadeInput
+    agendaEventos?: AgendaEventoUncheckedCreateNestedManyWithoutUnidadeInput
+  }
+
+  export type UnidadeCreateOrConnectWithoutSolicitacoesInput = {
+    where: UnidadeWhereUniqueInput
+    create: XOR<UnidadeCreateWithoutSolicitacoesInput, UnidadeUncheckedCreateWithoutSolicitacoesInput>
+  }
+
+  export type RecadoUpsertWithoutSolicitacoesInput = {
+    update: XOR<RecadoUpdateWithoutSolicitacoesInput, RecadoUncheckedUpdateWithoutSolicitacoesInput>
+    create: XOR<RecadoCreateWithoutSolicitacoesInput, RecadoUncheckedCreateWithoutSolicitacoesInput>
+    where?: RecadoWhereInput
+  }
+
+  export type RecadoUpdateToOneWithWhereWithoutSolicitacoesInput = {
+    where?: RecadoWhereInput
+    data: XOR<RecadoUpdateWithoutSolicitacoesInput, RecadoUncheckedUpdateWithoutSolicitacoesInput>
+  }
+
+  export type RecadoUpdateWithoutSolicitacoesInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+    unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type RecadoUncheckedUpdateWithoutSolicitacoesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type NoticiaUpsertWithoutSolicitacoesInput = {
+    update: XOR<NoticiaUpdateWithoutSolicitacoesInput, NoticiaUncheckedUpdateWithoutSolicitacoesInput>
+    create: XOR<NoticiaCreateWithoutSolicitacoesInput, NoticiaUncheckedCreateWithoutSolicitacoesInput>
+    where?: NoticiaWhereInput
+  }
+
+  export type NoticiaUpdateToOneWithWhereWithoutSolicitacoesInput = {
+    where?: NoticiaWhereInput
+    data: XOR<NoticiaUpdateWithoutSolicitacoesInput, NoticiaUncheckedUpdateWithoutSolicitacoesInput>
+  }
+
+  export type NoticiaUpdateWithoutSolicitacoesInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NoticiaUncheckedUpdateWithoutSolicitacoesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UnidadeUpsertWithoutSolicitacoesInput = {
+    update: XOR<UnidadeUpdateWithoutSolicitacoesInput, UnidadeUncheckedUpdateWithoutSolicitacoesInput>
+    create: XOR<UnidadeCreateWithoutSolicitacoesInput, UnidadeUncheckedCreateWithoutSolicitacoesInput>
+    where?: UnidadeWhereInput
+  }
+
+  export type UnidadeUpdateToOneWithWhereWithoutSolicitacoesInput = {
+    where?: UnidadeWhereInput
+    data: XOR<UnidadeUpdateWithoutSolicitacoesInput, UnidadeUncheckedUpdateWithoutSolicitacoesInput>
+  }
+
+  export type UnidadeUpdateWithoutSolicitacoesInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUpdateManyWithoutUnidadeNestedInput
+    users?: UserUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUpdateManyWithoutUnidadeNestedInput
+  }
+
+  export type UnidadeUncheckedUpdateWithoutSolicitacoesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    ramais?: RamalUncheckedUpdateManyWithoutUnidadeNestedInput
+    emails?: EmailUncheckedUpdateManyWithoutUnidadeNestedInput
+    users?: UserUncheckedUpdateManyWithoutUnidadeNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutUnidadeNestedInput
+    recadosMulti?: RecadoUnidadeUncheckedUpdateManyWithoutUnidadeNestedInput
+    agendaEventos?: AgendaEventoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -21093,6 +27601,28 @@ export namespace Prisma {
     refreshTokenExpiresAt?: Date | string | null
     scope?: string | null
     password?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendaEventoCreateManyCriadoPorInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    unidadeId: number
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AgendaEventoCreateManyAtualizadoPorInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    unidadeId: number
+    criadoPorId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21172,6 +27702,70 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AgendaEventoUpdateWithoutCriadoPorInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutAgendaEventosNestedInput
+    atualizadoPor?: UserUpdateOneWithoutEventosAtualizadosNestedInput
+  }
+
+  export type AgendaEventoUncheckedUpdateWithoutCriadoPorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoUncheckedUpdateManyWithoutCriadoPorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoUpdateWithoutAtualizadoPorInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutAgendaEventosNestedInput
+    criadoPor?: UserUpdateOneRequiredWithoutEventosCriadosNestedInput
+  }
+
+  export type AgendaEventoUncheckedUpdateWithoutAtualizadoPorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RamalCreateManyUnidadeInput = {
     id?: number
     numero: string
@@ -21213,6 +27807,38 @@ export namespace Prisma {
   export type RecadoUnidadeCreateManyUnidadeInput = {
     id?: number
     recadoId: number
+  }
+
+  export type AgendaEventoCreateManyUnidadeInput = {
+    id?: number
+    titulo: string
+    descricao?: string | null
+    data: Date | string
+    criadoPorId: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolicitacaoGerenciamentoCreateManyUnidadeInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    recadoId?: number | null
+    noticiaId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RamalUpdateWithoutUnidadeInput = {
@@ -21278,6 +27904,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUnidadeInput = {
@@ -21291,6 +27919,8 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    eventosCriados?: AgendaEventoUncheckedUpdateManyWithoutCriadoPorNestedInput
+    eventosAtualizados?: AgendaEventoUncheckedUpdateManyWithoutAtualizadoPorNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutUnidadeInput = {
@@ -21311,6 +27941,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput
   }
 
   export type RecadoUncheckedUpdateWithoutUnidadeInput = {
@@ -21321,6 +27952,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput
   }
 
   export type RecadoUncheckedUpdateManyWithoutUnidadeInput = {
@@ -21346,9 +27978,207 @@ export namespace Prisma {
     recadoId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type AgendaEventoUpdateWithoutUnidadeInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    criadoPor?: UserUpdateOneRequiredWithoutEventosCriadosNestedInput
+    atualizadoPor?: UserUpdateOneWithoutEventosAtualizadosNestedInput
+  }
+
+  export type AgendaEventoUncheckedUpdateWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AgendaEventoUncheckedUpdateManyWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUpdateWithoutUnidadeInput = {
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recado?: RecadoUpdateOneWithoutSolicitacoesNestedInput
+    noticia?: NoticiaUpdateOneWithoutSolicitacoesNestedInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    recadoId?: NullableIntFieldUpdateOperationsInput | number | null
+    noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    recadoId?: NullableIntFieldUpdateOperationsInput | number | null
+    noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoCreateManyNoticiaInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    recadoId?: number | null
+    unidadeId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUpdateWithoutNoticiaInput = {
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recado?: RecadoUpdateOneWithoutSolicitacoesNestedInput
+    unidade?: UnidadeUpdateOneWithoutSolicitacoesNestedInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateWithoutNoticiaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    recadoId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateManyWithoutNoticiaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    recadoId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RecadoUnidadeCreateManyRecadoInput = {
     id?: number
     unidadeId: number
+  }
+
+  export type SolicitacaoGerenciamentoCreateManyRecadoInput = {
+    id?: number
+    recurso: $Enums.SolicitacaoRecurso
+    tipo: $Enums.SolicitacaoTipo
+    status?: $Enums.SolicitacaoStatus
+    noticiaId?: number | null
+    unidadeId?: number | null
+    unidadeIds?: string | null
+    titulo?: string | null
+    conteudo?: string | null
+    imagem?: string | null
+    imagemAntiga?: string | null
+    motivoRecusa?: string | null
+    solicitanteId: string
+    solicitanteNome: string
+    revisorId?: string | null
+    revisorNome?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RecadoUnidadeUpdateWithoutRecadoInput = {
@@ -21363,6 +28193,68 @@ export namespace Prisma {
   export type RecadoUnidadeUncheckedUpdateManyWithoutRecadoInput = {
     id?: IntFieldUpdateOperationsInput | number
     unidadeId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type SolicitacaoGerenciamentoUpdateWithoutRecadoInput = {
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    noticia?: NoticiaUpdateOneWithoutSolicitacoesNestedInput
+    unidade?: UnidadeUpdateOneWithoutSolicitacoesNestedInput
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateWithoutRecadoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
+    tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
+    status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
+    noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
+    unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    titulo?: NullableStringFieldUpdateOperationsInput | string | null
+    conteudo?: NullableStringFieldUpdateOperationsInput | string | null
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    imagemAntiga?: NullableStringFieldUpdateOperationsInput | string | null
+    motivoRecusa?: NullableStringFieldUpdateOperationsInput | string | null
+    solicitanteId?: StringFieldUpdateOperationsInput | string
+    solicitanteNome?: StringFieldUpdateOperationsInput | string
+    revisorId?: NullableStringFieldUpdateOperationsInput | string | null
+    revisorNome?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

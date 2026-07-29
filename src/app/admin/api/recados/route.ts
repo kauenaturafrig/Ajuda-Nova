@@ -55,18 +55,15 @@ export async function GET(req: NextRequest) {
     let recadosWhere: any;
 
     if (user) {
-      // ✅ Usuário logado: filtra pela regra de permissão (role)
       recadosWhere =
         user.role === "OWNER" || user.role === "MESSAGENEWS"
           ? {}
           : { unidadeId: user.unidadeId! };
     } else {
-      // ✅ Acesso público (sem login): filtra pela unidade detectada via IP
       const ip = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip");
       const unidadeId = getUnidadeByIp(ip);
 
       if (!unidadeId) {
-        // IP não mapeado para nenhuma unidade: não expõe nenhum recado
         return NextResponse.json([], { headers: noCacheHeaders });
       }
 
@@ -105,11 +102,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (user.role === "MESSAGEONLY") {
+      return NextResponse.json(
+        { error: "⛔ Seu perfil precisa enviar uma solicitação de aprovação. Use /admin/api/recados/solicitacoes" },
+        { status: 403 }
+      );
+    }
+
     const formData = await req.formData();
     const unidadeIdsRaw = formData.getAll("unidadeIds[]") as string[];
     const unidadeIds = unidadeIdsRaw.map((id) => Number(id)).filter((id) => !isNaN(id));
 
-    if ((user.role === "ADMIN" || user.role === "MESSAGEONLY") && unidadeIds.length > 1) {
+    if (user.role === "ADMIN" && unidadeIds.length > 1) {
       return NextResponse.json(
         { error: "⛔ Apenas OWNER ou MESSAGENEWS podem criar recados para múltiplas unidades" },
         { status: 403 }
@@ -153,7 +157,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    await logAudit(recado.id, user.id, user.name, "CREATE", null, {
+    await logAudit(recado.id, user.id, user.name || "Desconhecido", "CREATE", null, {
       titulo,
       conteudo,
       unidadeIds,
@@ -180,6 +184,13 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (user.role === "MESSAGEONLY") {
+      return NextResponse.json(
+        { error: "⛔ Seu perfil precisa enviar uma solicitação de aprovação. Use /admin/api/recados/solicitacoes" },
+        { status: 403 }
+      );
+    }
+
     const formData = await req.formData();
     const id = Number(formData.get("id"));
     const unidadeIdsRaw = formData.getAll("unidadeIds[]") as string[];
@@ -197,7 +208,7 @@ export async function PUT(req: NextRequest) {
     const antigosUnidadeIds = recadoAntigo.unidades.map((u) => u.unidadeId);
     const ehMultiUnidade = antigosUnidadeIds.length > 1 || unidadeIds.length > 1;
 
-    if ((user.role === "ADMIN" || user.role === "MESSAGEONLY") && ehMultiUnidade) {
+    if (user.role === "ADMIN" && ehMultiUnidade) {
       return NextResponse.json(
         { error: "⛔ Apenas OWNER ou MESSAGENEWS podem editar recados multi-unidade" },
         { status: 403 }
@@ -229,8 +240,6 @@ export async function PUT(req: NextRequest) {
       imagem = nome;
     }
 
-    const unidadePrincipal = unidadeIds[0];
-
     const dadosAntigos = {
       titulo: recadoAntigo.titulo,
       conteudo: recadoAntigo.conteudo,
@@ -238,6 +247,8 @@ export async function PUT(req: NextRequest) {
       unidadeIds: antigosUnidadeIds,
       imagem: recadoAntigo.imagem,
     };
+
+    const unidadePrincipal = unidadeIds[0];
 
     const recado = await prisma.recado.update({
       where: { id },
@@ -257,7 +268,7 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    await logAudit(recado.id, user.id, user.name, "UPDATE", dadosAntigos, {
+    await logAudit(recado.id, user.id, user.name || "Desconhecido", "UPDATE", dadosAntigos, {
       titulo,
       conteudo,
       unidadeIds,

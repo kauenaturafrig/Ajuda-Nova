@@ -7,21 +7,40 @@ import { rm } from "fs/promises";
 import path from "path";
 import fs from "fs/promises";
 
+export const dynamic = "force-dynamic";
+
+const noCacheHeaders = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
+async function requireAuth(req: NextRequest) {
+  const session = await auth.api.getSession({ headers: req.headers });
+  if (!session?.user?.id) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { id: true, role: true, unidadeId: true, name: true },
+  });
+  return user;
+}
+
+async function apagarArquivo(nome?: string | null) {
+  if (!nome) return;
+  const p = path.join(process.cwd(), "storage", "uploads", "recados", nome);
+  try {
+    await fs.access(p);
+    await rm(p);
+  } catch {}
+}
+
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: req.headers });
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { role: true, unidadeId: true, name: true },
-    });
-
+    const user = await requireAuth(req);
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -51,7 +70,7 @@ export async function DELETE(
     await prisma.recadoAudit.create({
       data: {
         recadoId,
-        userId: session.user.id,
+        userId: user.id,
         userNome: user.name || "Desconhecido",
         acao: "DELETE",
         dadosAntigos: {
@@ -63,25 +82,12 @@ export async function DELETE(
       },
     });
 
-    if (recado.imagem) {
-      const caminho = path.join(process.cwd(), "storage", "uploads", "recados", recado.imagem);
-      try {
-        await fs.access(caminho);
-        await rm(caminho);
-      } catch {}
-    }
-
+    await apagarArquivo(recado.imagem);
     await prisma.recado.delete({ where: { id: recadoId } });
 
     return NextResponse.json(
       { success: true },
-      {
-        headers: {
-          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      }
+      { headers: noCacheHeaders }
     );
   } catch (e: any) {
     console.error("DELETE Error:", e.message);

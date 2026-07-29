@@ -1,5 +1,5 @@
 // src/types/user.ts - Tipos compartilhados
-export type AppUserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS";
+export type AppUserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS" | "EVENTS";
 
 export interface Recado {
   id: number;

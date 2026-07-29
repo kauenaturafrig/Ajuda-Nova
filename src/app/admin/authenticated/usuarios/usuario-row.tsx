@@ -5,7 +5,7 @@ import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Shield, Mail, Building, KeyRound, Trash2, Save, User } from "lucide-react";
 
-type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS";
+type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS" | "EVENTS";
 
 type Usuario = {
   id: string;
@@ -151,6 +151,7 @@ export function UsuarioRow({ usuario, unidades, setGlobalLoading }: Props) {
               <option value="MESSAGEONLY">Recados Unidade</option>
               <option value="NEWSONLY">Apenas Notícias</option>
               <option value="MESSAGENEWS">Notícias + Recados Multi</option>
+              <option value="EVENTS">Eventos</option>
             </select>
           </div>
 

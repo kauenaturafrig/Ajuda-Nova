@@ -14,6 +14,7 @@ export default function Sidebar() {
     { label: 'Emails', path: '/emails', icon: '/assets/images/icons/icons8-mail-branco.png' },
     { label: 'Notícias', path: '/noticias', icon: '/assets/images/icons/icons8-news-branco.png' },
     { label: 'Recados', path: '/recados', icon: '/assets/images/icons/icons8-megaphone-branco.png' },
+    { label: 'Agenda', path: '/agenda', icon: '/assets/images/icons/icons8-tear-off-calendar-branco.png' },
   ];
 
   const submenuItems = [
