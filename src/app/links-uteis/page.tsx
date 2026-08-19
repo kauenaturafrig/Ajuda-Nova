@@ -47,6 +47,20 @@ const sistemas = [
     color: "border-neutral-500/20 hover:border-neutral-400 group-hover:text-neutral-400 hover:shadow-neutral-500/5",
     badge: "bg-neutral-500/10 text-neutral-600 dark:text-neutral-300"
   },
+  {
+    url: "https://172.16.30.13:4010/",
+    name: "Chat Corporativo",
+    icon: "/assets/images/logos/chat-corporativo.png",
+    color: "border-orange-500/20 hover:border-orange-500 group-hover:text-orange-500 hover:shadow-orange-500/10",
+    badge: "bg-orange-500/10 text-orange-600 dark:text-orange-400"
+  },
+  {
+    url: "http://172.16.8.5:4100/",
+    name: "Controle de Vouchers",
+    icon: "/assets/images/logos/ubiquiti-unifi.png",
+    color: "border-slate-500/20 hover:border-slate-400 group-hover:text-slate-400 hover:shadow-slate-500/10",
+    badge: "bg-slate-500/10 text-slate-600 dark:text-slate-300"
+  },
 ];
 
 export default function LinksUtil() {
@@ -97,7 +111,7 @@ export default function LinksUtil() {
                 bg-white dark:bg-neutral-900 
                 border rounded-3xl p-6 shadow-sm cursor-pointer
                 transition-all duration-300 ease-out
-                hover:-translate-y-1.5 hover:shadow-xl
+                hover:-translate-y-1.5 hover:shadow-xl dark:hover:bg-white/80
                 ${color}
               `}
             >

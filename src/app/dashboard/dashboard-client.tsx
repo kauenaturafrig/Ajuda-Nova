@@ -107,6 +107,20 @@ const sistemas: Sistema[] = [
     icon: "/assets/images/logos/webmail-logo.svg",
     hoverBorder: "hover:border-neutral-400/50 hover:shadow-neutral-400/10",
   },
+  {
+    url: "https://172.16.30.13:4010/",
+    name: "Chat Corporativo",
+    description: "Comunique-se com seus colegas em tempo real",
+    icon: "/assets/images/logos/chat-corporativo.png",
+    hoverBorder: "hover:border-orange-500/50 hover:shadow-orange-500/10",
+  },
+  {
+    url: "http://172.16.8.5:4100/",
+    name: "Controle de Vouchers",
+    description: "Gerencie os vouchers",
+    icon: "/assets/images/logos/ubiquiti-unifi.png",
+    hoverBorder: "hover:border-slate-400/50 hover:shadow-slate-400/10",
+  },
 ];
 
 const userName = "Seja bem vindo(a)"; // Substitua pelo nome do usuário, se disponível

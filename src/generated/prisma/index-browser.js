@@ -129,8 +129,32 @@ exports.Prisma.UserScalarFieldEnum = {
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  unidadeId: 'unidadeId',
-  role: 'role'
+  unidadeId: 'unidadeId'
+};
+
+exports.Prisma.UserRoleAssignmentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  roleId: 'roleId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description'
+};
+
+exports.Prisma.PermissionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description'
+};
+
+exports.Prisma.RolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -325,15 +349,6 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-exports.UserRole = exports.$Enums.UserRole = {
-  OWNER: 'OWNER',
-  ADMIN: 'ADMIN',
-  MESSAGEONLY: 'MESSAGEONLY',
-  NEWSONLY: 'NEWSONLY',
-  MESSAGENEWS: 'MESSAGENEWS',
-  EVENTS: 'EVENTS'
-};
-
 exports.SolicitacaoRecurso = exports.$Enums.SolicitacaoRecurso = {
   RECADO: 'RECADO',
   NOTICIA: 'NOTICIA'
@@ -354,6 +369,10 @@ exports.SolicitacaoStatus = exports.$Enums.SolicitacaoStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  UserRoleAssignment: 'UserRoleAssignment',
+  Role: 'Role',
+  Permission: 'Permission',
+  RolePermission: 'RolePermission',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',

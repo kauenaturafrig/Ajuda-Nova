@@ -1,8 +1,11 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
+-- CreateEnum
+CREATE TYPE "SolicitacaoTipo" AS ENUM ('CREATE', 'UPDATE', 'DELETE');
 
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('OWNER', 'ADMIN', 'MESSAGEONLY', 'NEWSONLY', 'MESSAGENEWS', 'EVENTS');
+CREATE TYPE "SolicitacaoStatus" AS ENUM ('PENDENTE', 'APROVADO', 'RECUSADO', 'CANCELADO');
+
+-- CreateEnum
+CREATE TYPE "SolicitacaoRecurso" AS ENUM ('RECADO', 'NOTICIA');
 
 -- CreateTable
 CREATE TABLE "user" (
@@ -14,9 +17,43 @@ CREATE TABLE "user" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "unidadeId" INTEGER,
-    "role" "UserRole" NOT NULL DEFAULT 'ADMIN',
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user_roles" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "roleId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "user_roles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "roles" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+
+    CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "permissions" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+
+    CONSTRAINT "permissions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "role_permissions" (
+    "roleId" INTEGER NOT NULL,
+    "permissionId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
@@ -193,6 +230,9 @@ CREATE TABLE "agenda_eventos" (
 CREATE TABLE "agenda_eventos_audits" (
     "id" SERIAL NOT NULL,
     "eventoId" INTEGER NOT NULL,
+    "eventoTitulo" TEXT NOT NULL,
+    "unidadeId" INTEGER NOT NULL,
+    "unidadeNome" TEXT,
     "userId" TEXT NOT NULL,
     "userNome" TEXT NOT NULL,
     "acao" TEXT NOT NULL,
@@ -203,8 +243,51 @@ CREATE TABLE "agenda_eventos_audits" (
     CONSTRAINT "agenda_eventos_audits_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "solicitacoes_gerenciamento" (
+    "id" SERIAL NOT NULL,
+    "recurso" "SolicitacaoRecurso" NOT NULL,
+    "tipo" "SolicitacaoTipo" NOT NULL,
+    "status" "SolicitacaoStatus" NOT NULL DEFAULT 'PENDENTE',
+    "recadoId" INTEGER,
+    "noticiaId" INTEGER,
+    "unidadeId" INTEGER,
+    "unidadeIds" TEXT,
+    "titulo" TEXT,
+    "conteudo" TEXT,
+    "imagem" TEXT,
+    "imagemAntiga" TEXT,
+    "motivoRecusa" TEXT,
+    "solicitanteId" TEXT NOT NULL,
+    "solicitanteNome" TEXT NOT NULL,
+    "revisorId" TEXT,
+    "revisorNome" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "solicitacoes_gerenciamento_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+
+-- CreateIndex
+CREATE INDEX "user_roles_userId_idx" ON "user_roles"("userId");
+
+-- CreateIndex
+CREATE INDEX "user_roles_roleId_idx" ON "user_roles"("roleId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_roles_userId_roleId_key" ON "user_roles"("userId", "roleId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "roles_name_key" ON "roles"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "permissions_name_key" ON "permissions"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "role_permissions_roleId_permissionId_key" ON "role_permissions"("roleId", "permissionId");
 
 -- CreateIndex
 CREATE INDEX "session_userId_idx" ON "session"("userId");
@@ -269,8 +352,38 @@ CREATE INDEX "agenda_eventos_audits_userId_idx" ON "agenda_eventos_audits"("user
 -- CreateIndex
 CREATE INDEX "agenda_eventos_audits_createdAt_idx" ON "agenda_eventos_audits"("createdAt");
 
+-- CreateIndex
+CREATE INDEX "solicitacoes_gerenciamento_status_idx" ON "solicitacoes_gerenciamento"("status");
+
+-- CreateIndex
+CREATE INDEX "solicitacoes_gerenciamento_recurso_idx" ON "solicitacoes_gerenciamento"("recurso");
+
+-- CreateIndex
+CREATE INDEX "solicitacoes_gerenciamento_solicitanteId_idx" ON "solicitacoes_gerenciamento"("solicitanteId");
+
+-- CreateIndex
+CREATE INDEX "solicitacoes_gerenciamento_unidadeId_idx" ON "solicitacoes_gerenciamento"("unidadeId");
+
+-- CreateIndex
+CREATE INDEX "solicitacoes_gerenciamento_recadoId_idx" ON "solicitacoes_gerenciamento"("recadoId");
+
+-- CreateIndex
+CREATE INDEX "solicitacoes_gerenciamento_noticiaId_idx" ON "solicitacoes_gerenciamento"("noticiaId");
+
 -- AddForeignKey
 ALTER TABLE "user" ADD CONSTRAINT "user_unidadeId_fkey" FOREIGN KEY ("unidadeId") REFERENCES "unidades"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_roles" ADD CONSTRAINT "user_roles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "role_permissions" ADD CONSTRAINT "role_permissions_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "role_permissions" ADD CONSTRAINT "role_permissions_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "permissions"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -303,5 +416,10 @@ ALTER TABLE "agenda_eventos" ADD CONSTRAINT "agenda_eventos_criadoPorId_fkey" FO
 ALTER TABLE "agenda_eventos" ADD CONSTRAINT "agenda_eventos_atualizadoPorId_fkey" FOREIGN KEY ("atualizadoPorId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "agenda_eventos_audits" ADD CONSTRAINT "agenda_eventos_audits_eventoId_fkey" FOREIGN KEY ("eventoId") REFERENCES "agenda_eventos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "solicitacoes_gerenciamento" ADD CONSTRAINT "solicitacoes_gerenciamento_recadoId_fkey" FOREIGN KEY ("recadoId") REFERENCES "recados"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- AddForeignKey
+ALTER TABLE "solicitacoes_gerenciamento" ADD CONSTRAINT "solicitacoes_gerenciamento_noticiaId_fkey" FOREIGN KEY ("noticiaId") REFERENCES "noticias"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "solicitacoes_gerenciamento" ADD CONSTRAINT "solicitacoes_gerenciamento_unidadeId_fkey" FOREIGN KEY ("unidadeId") REFERENCES "unidades"("id") ON DELETE SET NULL ON UPDATE CASCADE;

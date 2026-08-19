@@ -35,7 +35,7 @@
     ".next/types/**/*.ts",
     "types/**/*.d.ts",
     ".next/dev/types/**/*.ts"
-  ],
+, "dist-scripts/scripts/migrate-to-flexible-rbac.js"  ],
   "exclude": [
     "node_modules"
   ]
