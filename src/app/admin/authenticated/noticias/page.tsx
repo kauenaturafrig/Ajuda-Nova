@@ -1,42 +1,42 @@
+import Layout from "@/src/components/Layout";
+import NoticiasClient from "./noticias-client";
+import { prisma } from "@/src/lib/prisma";
+import { requirePageRoles } from "@/src/lib/permissions";
+import { PAGE_ROLES } from "@/src/lib/role-permissions";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "../../../../lib/auth";
-import { prisma } from "../../../../lib/prisma";
-import Layout from "@/src/components/Layout";
-import NoticiasClient from "./noticias-client";
-import type { AppUserRole } from "@/src/types/user";
-
 export default async function GerenciarNoticiasPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user?.id) redirect("/admin");
+  const user = await requirePageRoles(
+    PAGE_ROLES.noticias,
+  );
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true, unidadeId: true },
-  });
+  const noticias =
+    await prisma.noticia.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-  if (!dbUser) {
-    redirect("/admin/authenticated");
-  }
-
-  const allowedRoles: AppUserRole[] = ["OWNER", "NEWSONLY", "MESSAGENEWS"];
-  if (!allowedRoles.includes(dbUser.role as AppUserRole)) {
-    redirect("/admin/authenticated");
-  }
-
-  const noticias = await prisma.noticia.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const serializedNoticias = noticias.map(
+    (noticia) => ({
+      id: noticia.id,
+      titulo: noticia.titulo,
+      conteudo: noticia.conteudo,
+      imagem: noticia.imagem,
+      createdAt:
+        noticia.createdAt.toISOString(),
+      updatedAt:
+        noticia.updatedAt.toISOString(),
+    }),
+  );
 
   return (
     <Layout>
       <NoticiasClient
-        initialNoticias={noticias as any[]}
-        userRole={dbUser.role as "OWNER" | "NEWSONLY" | "MESSAGENEWS"}
-        userUnidadeId={dbUser.unidadeId || null}
+        initialNoticias={serializedNoticias}
+        userRoles={user.roles}
       />
     </Layout>
   );

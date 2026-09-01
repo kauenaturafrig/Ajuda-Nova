@@ -45,37 +45,53 @@ export function LoginForm() {
   async function onSubmit(formData: LoginFormValues) {
     setIsLoading(true);
 
-    const { error } = await authClient.signIn.email(
+    await authClient.signIn.email(
       {
-        email: formData.email,
+        email: formData.email.trim().toLowerCase(),
         password: formData.password,
-        callbackURL: "/admin/authenticated",
       },
       {
-        onRequest: () => setIsLoading(true),
-        onSuccess: (ctx) => {
+        onRequest: () => {
+          setIsLoading(true);
+        },
+
+        onSuccess: () => {
           setIsLoading(false);
           router.replace("/admin/authenticated");
+          router.refresh();
         },
-        onError: (ctx) => {
-          if (ctx.error.code === "INVALID_EMAIL_OR_PASSWORD") {
+
+        onError: (context) => {
+          setIsLoading(false);
+
+          if (
+            context.error.code ===
+            "INVALID_EMAIL_OR_PASSWORD"
+          ) {
             alert("E-mail ou senha incorretos.");
           } else {
-            alert("Ocorreu um erro ao tentar acessar o painel.");
+            console.error(
+              "Erro ao entrar:",
+              context.error,
+            );
+
+            alert(
+              context.error.message ??
+              "Ocorreu um erro ao tentar acessar o painel.",
+            );
           }
-          setIsLoading(false);
         },
-      }
+      },
     );
   }
 
   return (
     <div className="relative">
       <LoadingOverlay show={isLoading} text="Autenticando..." />
-      
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          
+
           {/* Campo Email */}
           <FormField
             control={form.control}

@@ -9680,6 +9680,7 @@ export namespace Prisma {
     accountId: string | null
     providerId: string | null
     userId: string | null
+    issuer: string | null
     accessToken: string | null
     refreshToken: string | null
     idToken: string | null
@@ -9696,6 +9697,7 @@ export namespace Prisma {
     accountId: string | null
     providerId: string | null
     userId: string | null
+    issuer: string | null
     accessToken: string | null
     refreshToken: string | null
     idToken: string | null
@@ -9712,6 +9714,7 @@ export namespace Prisma {
     accountId: number
     providerId: number
     userId: number
+    issuer: number
     accessToken: number
     refreshToken: number
     idToken: number
@@ -9730,6 +9733,7 @@ export namespace Prisma {
     accountId?: true
     providerId?: true
     userId?: true
+    issuer?: true
     accessToken?: true
     refreshToken?: true
     idToken?: true
@@ -9746,6 +9750,7 @@ export namespace Prisma {
     accountId?: true
     providerId?: true
     userId?: true
+    issuer?: true
     accessToken?: true
     refreshToken?: true
     idToken?: true
@@ -9762,6 +9767,7 @@ export namespace Prisma {
     accountId?: true
     providerId?: true
     userId?: true
+    issuer?: true
     accessToken?: true
     refreshToken?: true
     idToken?: true
@@ -9851,6 +9857,7 @@ export namespace Prisma {
     accountId: string
     providerId: string
     userId: string
+    issuer: string | null
     accessToken: string | null
     refreshToken: string | null
     idToken: string | null
@@ -9884,6 +9891,7 @@ export namespace Prisma {
     accountId?: boolean
     providerId?: boolean
     userId?: boolean
+    issuer?: boolean
     accessToken?: boolean
     refreshToken?: boolean
     idToken?: boolean
@@ -9901,6 +9909,7 @@ export namespace Prisma {
     accountId?: boolean
     providerId?: boolean
     userId?: boolean
+    issuer?: boolean
     accessToken?: boolean
     refreshToken?: boolean
     idToken?: boolean
@@ -9918,6 +9927,7 @@ export namespace Prisma {
     accountId?: boolean
     providerId?: boolean
     userId?: boolean
+    issuer?: boolean
     accessToken?: boolean
     refreshToken?: boolean
     idToken?: boolean
@@ -9935,6 +9945,7 @@ export namespace Prisma {
     accountId?: boolean
     providerId?: boolean
     userId?: boolean
+    issuer?: boolean
     accessToken?: boolean
     refreshToken?: boolean
     idToken?: boolean
@@ -9946,7 +9957,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "accountId" | "providerId" | "userId" | "accessToken" | "refreshToken" | "idToken" | "accessTokenExpiresAt" | "refreshTokenExpiresAt" | "scope" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "accountId" | "providerId" | "userId" | "issuer" | "accessToken" | "refreshToken" | "idToken" | "accessTokenExpiresAt" | "refreshTokenExpiresAt" | "scope" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
   export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -9967,6 +9978,7 @@ export namespace Prisma {
       accountId: string
       providerId: string
       userId: string
+      issuer: string | null
       accessToken: string | null
       refreshToken: string | null
       idToken: string | null
@@ -10404,6 +10416,7 @@ export namespace Prisma {
     readonly accountId: FieldRef<"Account", 'String'>
     readonly providerId: FieldRef<"Account", 'String'>
     readonly userId: FieldRef<"Account", 'String'>
+    readonly issuer: FieldRef<"Account", 'String'>
     readonly accessToken: FieldRef<"Account", 'String'>
     readonly refreshToken: FieldRef<"Account", 'String'>
     readonly idToken: FieldRef<"Account", 'String'>
@@ -25620,6 +25633,7 @@ export namespace Prisma {
     accountId: 'accountId',
     providerId: 'providerId',
     userId: 'userId',
+    issuer: 'issuer',
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
     idToken: 'idToken',
@@ -26350,6 +26364,7 @@ export namespace Prisma {
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
     userId?: StringFilter<"Account"> | string
+    issuer?: StringNullableFilter<"Account"> | string | null
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -26367,6 +26382,7 @@ export namespace Prisma {
     accountId?: SortOrder
     providerId?: SortOrder
     userId?: SortOrder
+    issuer?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
     idToken?: SortOrderInput | SortOrder
@@ -26387,6 +26403,7 @@ export namespace Prisma {
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
     userId?: StringFilter<"Account"> | string
+    issuer?: StringNullableFilter<"Account"> | string | null
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -26404,6 +26421,7 @@ export namespace Prisma {
     accountId?: SortOrder
     providerId?: SortOrder
     userId?: SortOrder
+    issuer?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
     idToken?: SortOrderInput | SortOrder
@@ -26426,6 +26444,7 @@ export namespace Prisma {
     accountId?: StringWithAggregatesFilter<"Account"> | string
     providerId?: StringWithAggregatesFilter<"Account"> | string
     userId?: StringWithAggregatesFilter<"Account"> | string
+    issuer?: StringNullableWithAggregatesFilter<"Account"> | string | null
     accessToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
     refreshToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
     idToken?: StringNullableWithAggregatesFilter<"Account"> | string | null
@@ -27736,6 +27755,7 @@ export namespace Prisma {
     id: string
     accountId: string
     providerId: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -27753,6 +27773,7 @@ export namespace Prisma {
     accountId: string
     providerId: string
     userId: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -27768,6 +27789,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27785,6 +27807,7 @@ export namespace Prisma {
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27801,6 +27824,7 @@ export namespace Prisma {
     accountId: string
     providerId: string
     userId: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -27816,6 +27840,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -27832,6 +27857,7 @@ export namespace Prisma {
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29259,6 +29285,7 @@ export namespace Prisma {
     accountId?: SortOrder
     providerId?: SortOrder
     userId?: SortOrder
+    issuer?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
     idToken?: SortOrder
@@ -29275,6 +29302,7 @@ export namespace Prisma {
     accountId?: SortOrder
     providerId?: SortOrder
     userId?: SortOrder
+    issuer?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
     idToken?: SortOrder
@@ -29291,6 +29319,7 @@ export namespace Prisma {
     accountId?: SortOrder
     providerId?: SortOrder
     userId?: SortOrder
+    issuer?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
     idToken?: SortOrder
@@ -31469,6 +31498,7 @@ export namespace Prisma {
     id: string
     accountId: string
     providerId: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -31484,6 +31514,7 @@ export namespace Prisma {
     id: string
     accountId: string
     providerId: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -31679,6 +31710,7 @@ export namespace Prisma {
     accountId?: StringFilter<"Account"> | string
     providerId?: StringFilter<"Account"> | string
     userId?: StringFilter<"Account"> | string
+    issuer?: StringNullableFilter<"Account"> | string | null
     accessToken?: StringNullableFilter<"Account"> | string | null
     refreshToken?: StringNullableFilter<"Account"> | string | null
     idToken?: StringNullableFilter<"Account"> | string | null
@@ -33486,6 +33518,7 @@ export namespace Prisma {
     id: string
     accountId: string
     providerId: string
+    issuer?: string | null
     accessToken?: string | null
     refreshToken?: string | null
     idToken?: string | null
@@ -33571,6 +33604,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33586,6 +33620,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33601,6 +33636,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
+    issuer?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     idToken?: NullableStringFieldUpdateOperationsInput | string | null

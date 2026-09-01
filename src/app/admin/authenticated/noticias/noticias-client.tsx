@@ -36,8 +36,7 @@ interface Noticia {
 
 interface Props {
   initialNoticias: Noticia[];
-  userRole: AppUserRole;
-  userUnidadeId: number | null;
+  userRoles: AppUserRole[];
 }
 
 function getImagemUrl(noticia: Noticia) {
@@ -50,8 +49,7 @@ function getImagemUrl(noticia: Noticia) {
 
 export default function NoticiasClient({
   initialNoticias,
-  userRole,
-  userUnidadeId,
+  userRoles,
 }: Props) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -63,9 +61,20 @@ export default function NoticiasClient({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const isSolicitante = userRole === "NEWSONLY";
+  const isOwner = userRoles.includes("OWNER");
+  const isNewsOnly =
+    userRoles.includes("NEWSONLY");
+  const isMessageNews =
+    userRoles.includes("MESSAGENEWS");
+
+  const isSolicitante =
+    isNewsOnly &&
+    !isOwner &&
+    !isMessageNews;
+
   const podeRevisarSolicitacoes =
-    userRole === "OWNER" || userRole === "ADMIN" || userRole === "MESSAGENEWS";
+    isOwner ||
+    isMessageNews;
 
   const [formData, setFormData] = useState({
     titulo: "",
@@ -85,7 +94,7 @@ export default function NoticiasClient({
     fetch("/admin/api/noticias/solicitacoes?status=PENDENTE")
       .then((r) => r.json())
       .then((data) => setPendentesCount(Array.isArray(data) ? data.length : 0))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const refreshNoticias = useCallback(async () => {
@@ -357,8 +366,8 @@ export default function NoticiasClient({
                       ? "Solicitar Edição de Notícia"
                       : "Editar Notícia Selecionada"
                     : isSolicitante
-                    ? "Solicitar Nova Notícia"
-                    : "Escrever Nova Notícia"}
+                      ? "Solicitar Nova Notícia"
+                      : "Escrever Nova Notícia"}
                 </h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500">
                   Defina o título, conteúdo e adicione uma imagem de destaque opcional.
@@ -426,11 +435,10 @@ export default function NoticiasClient({
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Imagem de Destaque</label>
                 <div
-                  className={`relative border-2 border-dashed rounded-xl p-5 text-center transition-all duration-200 h-[198px] flex flex-col justify-center items-center ${
-                    dragActive
+                  className={`relative border-2 border-dashed rounded-xl p-5 text-center transition-all duration-200 h-[198px] flex flex-col justify-center items-center ${dragActive
                       ? "border-blue-400 bg-blue-50/20 dark:bg-blue-950/10"
                       : "border-gray-200 dark:border-neutral-800 hover:border-blue-400/60 hover:bg-gray-50/50 dark:hover:bg-neutral-800/40"
-                  }`}
+                    }`}
                   onDragEnter={handleDragIn}
                   onDragLeave={handleDragOut}
                   onDragOver={handleDrag}
@@ -472,7 +480,7 @@ export default function NoticiasClient({
                           </Button>
                         </div>
                       ) : (
-                                                <div className="flex items-center gap-2 bg-gray-50 dark:bg-neutral-950 p-2 rounded-lg border border-gray-200 dark:border-neutral-800 w-full">
+                        <div className="flex items-center gap-2 bg-gray-50 dark:bg-neutral-950 p-2 rounded-lg border border-gray-200 dark:border-neutral-800 w-full">
                           <FileText className="w-4 h-4 text-blue-500 shrink-0" />
                           <div className="flex-1 min-w-0 text-left">
                             <p className="text-[11px] font-bold text-gray-800 dark:text-gray-200 truncate">

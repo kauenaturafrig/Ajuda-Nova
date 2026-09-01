@@ -1,53 +1,127 @@
 // src/app/admin/authenticated/recados/solicitacoes/page.tsx
 
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { prisma } from "@/src/lib/prisma";
-import { auth } from "../../../../../lib/auth";
+import { requirePageRoles } from "@/src/lib/permissions";
+import { PAGE_ROLES } from "@/src/lib/role-permissions";
 import SolicitacoesClient from "./solicitacoes-client";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function SolicitacoesPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user?.id) redirect("/admin/login");
+  const user = await requirePageRoles(
+    PAGE_ROLES.recados,
+  );
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, role: true, unidadeId: true, name: true },
-  });
+  const canSeeAll =
+    user.roles.includes("OWNER") ||
+    user.roles.includes("MESSAGENEWS");
 
-  if (!user) redirect("/admin/login");
+  const where: {
+    recurso: "RECADO";
+    unidadeId?: number;
+    solicitanteId?: string;
+  } = {
+    recurso: "RECADO",
+  };
 
-  if (!["OWNER", "ADMIN", "MESSAGENEWS", "MESSAGEONLY"].includes(user.role)) {
-    redirect("/admin");
+  if (!canSeeAll) {
+    if (user.roles.includes("ADMIN")) {
+      if (user.unidadeId === null) {
+        return null;
+      }
+
+      where.unidadeId = user.unidadeId;
+    } else if (
+      user.roles.includes("MESSAGEONLY")
+    ) {
+      where.solicitanteId = user.id;
+    }
   }
 
-  const where: any = {};
-  if (user.role === "ADMIN") {
-    if (!user.unidadeId) redirect("/admin");
-    where.unidadeId = user.unidadeId;
-  }
-  if (user.role === "MESSAGEONLY") {
-    where.solicitanteId = user.id;
-  }
+  const solicitacoes =
+    await prisma.solicitacaoGerenciamento.findMany({
+      where,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        unidade: {
+          select: {
+            id: true,
+            nome: true,
+          },
+        },
+        recado: {
+          select: {
+            id: true,
+            titulo: true,
+          },
+        },
+      },
+    });
 
-  const solicitacoes = await prisma.solicitacaoGerenciamento.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-  });
-
-  const formatted = solicitacoes.map((s) => ({
-    ...s,
-    unidadeIds: s.unidadeIds ? JSON.parse(s.unidadeIds) : [],
-  }));
+  const formatted = solicitacoes.map(
+    (solicitacao) => ({
+      id: solicitacao.id,
+      tipo: solicitacao.tipo,
+      status: solicitacao.status,
+      recurso: solicitacao.recurso,
+      recadoId: solicitacao.recadoId,
+      recado: solicitacao.recado,
+      unidadeId: solicitacao.unidadeId,
+      unidade: solicitacao.unidade,
+      titulo: solicitacao.titulo,
+      conteudo: solicitacao.conteudo,
+      unidadeIds: solicitacao.unidadeIds
+        ? parseUnidadeIds(
+            solicitacao.unidadeIds,
+          )
+        : [],
+      imagem: solicitacao.imagem,
+      imagemAntiga:
+        solicitacao.imagemAntiga,
+      solicitanteId:
+        solicitacao.solicitanteId,
+      solicitanteNome:
+        solicitacao.solicitanteNome,
+      revisorId: solicitacao.revisorId,
+      revisorNome:
+        solicitacao.revisorNome,
+      motivoRecusa:
+        solicitacao.motivoRecusa,
+      createdAt:
+        solicitacao.createdAt.toISOString(),
+      updatedAt:
+        solicitacao.updatedAt.toISOString(),
+    }),
+  );
 
   return (
     <SolicitacoesClient
-      initialSolicitacoes={JSON.parse(JSON.stringify(formatted))}
-      userRole={user.role as any}
+      initialSolicitacoes={formatted}
+      userRoles={user.roles}
       userId={user.id}
-      userUnidadeId={user.unidadeId ?? null}
+      userUnidadeId={user.unidadeId}
     />
   );
+}
+
+function parseUnidadeIds(value: string): number[] {
+  try {
+    const parsed: unknown = JSON.parse(value);
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed
+      .map((item) => Number(item))
+      .filter(
+        (id) =>
+          Number.isInteger(id) && id > 0,
+      );
+  } catch {
+    return [];
+  }
 }

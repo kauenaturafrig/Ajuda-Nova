@@ -1,63 +1,113 @@
 //src/app/admin/api/noticias/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/src/lib/prisma";
-import { auth } from "../../../../../lib/auth";
-import { rm } from "fs/promises";
 import path from "path";
+import { rm } from "fs/promises";
 import fs from "fs/promises";
+
+import { prisma } from "@/src/lib/prisma";
+import {
+  getApiUser,
+  hasApiRole,
+} from "@/src/lib/api-permissions";
 
 export const dynamic = "force-dynamic";
 
 const noCacheHeaders = {
-  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  "Cache-Control":
+    "no-store, no-cache, must-revalidate, proxy-revalidate",
   Pragma: "no-cache",
   Expires: "0",
 };
 
-async function requireAuth(req: NextRequest) {
-  const session = await auth.api.getSession({ headers: req.headers });
-  if (!session?.user?.id) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, role: true, unidadeId: true, name: true },
-  });
-  return user;
+function getUploadDirectory() {
+  return path.join(
+    process.cwd(),
+    "storage",
+    "uploads",
+    "noticias",
+  );
 }
 
-async function apagarArquivo(nome?: string | null) {
-  if (!nome) return;
-  const p = path.join(process.cwd(), "storage", "uploads", "noticias", nome);
+async function apagarArquivo(
+  nome?: string | null,
+) {
+  if (!nome) {
+    return;
+  }
+
+  const filePath = path.join(
+    getUploadDirectory(),
+    nome,
+  );
+
   try {
-    await fs.access(p);
-    await rm(p);
-  } catch {}
+    await fs.access(filePath);
+    await rm(filePath);
+  } catch {
+    // Arquivo já inexistente.
+  }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  },
 ) {
   try {
-    const user = await requireAuth(req);
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const user = await getApiUser(req);
 
-    if (!["OWNER", "MESSAGENEWS"].includes(user.role)) {
+    if (!user) {
       return NextResponse.json(
-        { error: "⛔ Apenas OWNER ou MESSAGENEWS podem excluir notícias diretamente." },
-        { status: 403 }
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    const canDelete =
+      hasApiRole(user, "OWNER") ||
+      hasApiRole(user, "MESSAGENEWS");
+
+    if (!canDelete) {
+      return NextResponse.json(
+        {
+          error:
+            "Apenas OWNER ou MESSAGENEWS podem excluir notícias diretamente.",
+        },
+        { status: 403 },
       );
     }
 
     const { id } = await params;
     const noticiaId = Number(id);
 
-    const noticia = await prisma.noticia.findUnique({
-      where: { id: noticiaId },
-    });
+    if (
+      !Number.isInteger(noticiaId) ||
+      noticiaId <= 0
+    ) {
+      return NextResponse.json(
+        { error: "ID inválido." },
+        { status: 400 },
+      );
+    }
+
+    const noticia =
+      await prisma.noticia.findUnique({
+        where: {
+          id: noticiaId,
+        },
+      });
 
     if (!noticia) {
-      return NextResponse.json({ error: "Notícia não encontrada" }, { status: 404 });
+      return NextResponse.json(
+        {
+          error:
+            "Notícia não encontrada.",
+        },
+        { status: 404 },
+      );
     }
 
     await prisma.noticiaAudit.create({
@@ -75,16 +125,28 @@ export async function DELETE(
     });
 
     await apagarArquivo(noticia.imagem);
+
     await prisma.noticia.delete({
-      where: { id: noticiaId },
+      where: {
+        id: noticiaId,
+      },
     });
 
     return NextResponse.json(
       { success: true },
-      { headers: noCacheHeaders }
+      {
+        headers: noCacheHeaders,
+      },
     );
-  } catch (e: any) {
-    console.error("DELETE Error:", e.message);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (error) {
+    console.error(
+      "DELETE /admin/api/noticias/[id] error:",
+      error,
+    );
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

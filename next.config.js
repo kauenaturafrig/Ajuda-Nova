@@ -24,6 +24,12 @@ const nextConfig = {
       },
       {
         protocol: "http",
+        hostname: "172.16.11.246",
+        port: "5050",
+        pathname: "/api/uploads/noticias/**",
+      },
+      {
+        protocol: "http",
         hostname: "172.16.8.5",
         port: "5050",
         pathname: "/api/uploads/noticias/**",
@@ -53,6 +59,12 @@ const nextConfig = {
       },
       {
         protocol: "http",
+        hostname: "172.16.11.246",
+        port: "5050",
+        pathname: "/api/uploads/recados/**",
+      },
+      {
+        protocol: "http",
         hostname: "172.16.8.5",
         port: "5050",
         pathname: "/api/uploads/recados/**",
@@ -64,7 +76,7 @@ const nextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ["172.16.20.232", "localhost:3000"],
+  allowedDevOrigins: ["172.16.20.232", "localhost:3000", "172.16.11.246"],
 };
 
 module.exports = nextConfig;

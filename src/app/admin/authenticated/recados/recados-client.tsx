@@ -3,6 +3,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import type { AppUserRole } from "@/src/types/user";
 import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
@@ -22,8 +23,6 @@ import {
   ClipboardCheck,
   Info,
 } from "lucide-react";
-
-export type UserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS" | "EVENTS";
 
 interface Recado {
   id: number;
@@ -45,7 +44,7 @@ interface Unidade {
 interface Props {
   initialRecados: Recado[];
   initialUnidades: Unidade[];
-  userRole: UserRole;
+  userRoles: AppUserRole[];
   userUnidadeId: number | null;
 }
 
@@ -60,7 +59,7 @@ function getImagemUrl(recado: Recado) {
 export default function RecadosClient({
   initialRecados,
   initialUnidades,
-  userRole,
+  userRoles,
   userUnidadeId,
 }: Props) {
   const [loading, setLoading] = useState(true);
@@ -74,15 +73,22 @@ export default function RecadosClient({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const isSolicitante = userRole === "MESSAGEONLY";
+  const isOwner = userRoles.includes("OWNER");
+  const isMessageOnly =
+    userRoles.includes("MESSAGEONLY");
+  const isMessageNews =
+    userRoles.includes("MESSAGENEWS");
+
+  const isSolicitante = isMessageOnly;
   const podeRevisarSolicitacoes =
-    userRole === "OWNER" || userRole === "ADMIN" || userRole === "MESSAGENEWS";
+    isOwner ||
+    isMessageNews;
 
   const [formData, setFormData] = useState({
     titulo: "",
     conteudo: "",
     unidadeIds:
-      (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId
+      (isMessageOnly) && userUnidadeId
         ? [userUnidadeId]
         : ([] as number[]),
     imagem: null as File | null,
@@ -92,7 +98,7 @@ export default function RecadosClient({
 
   const [imagemRecado, setImagemRecado] = useState<File | null>(null);
   const [selectedUnidades, setSelectedUnidades] = useState<Record<number, boolean>>(
-    (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId
+    (isMessageOnly) && userUnidadeId
       ? { [userUnidadeId]: true }
       : {}
   );
@@ -125,12 +131,12 @@ export default function RecadosClient({
 
   const canManageRecado = useCallback(
     (recado: Recado) => {
-      if (userRole === "OWNER" || userRole === "MESSAGENEWS") return true;
+      if (isOwner || isMessageNews) return true;
       const ehMultiUnidade = recado.unidadeIds.length > 1;
       const ehSuaUnidade = recado.unidadeId === userUnidadeId;
       return !ehMultiUnidade && ehSuaUnidade;
     },
-    [userRole, userUnidadeId]
+    [isOwner, isMessageNews, userUnidadeId]
   );
 
   const resetForm = () => {
@@ -144,7 +150,7 @@ export default function RecadosClient({
     });
     setEditingId(null);
     setSelectedUnidades(
-      (userRole === "MESSAGEONLY" || userRole === "ADMIN") && userUnidadeId
+      (isMessageOnly) && userUnidadeId
         ? { [userUnidadeId]: true }
         : {}
     );
@@ -497,7 +503,7 @@ export default function RecadosClient({
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Destinatários autorizados</label>
 
-                  {userRole === "MESSAGEONLY" || userRole === "ADMIN" ? (
+                  {isMessageOnly ? (
                     <div className="p-3.5 border border-emerald-100 dark:border-emerald-900/40 bg-emerald-50/30 dark:bg-emerald-950/10 rounded-xl flex items-center gap-2.5">
                       <Check className="w-4 h-4 text-emerald-600 shrink-0" />
                       <div className="min-w-0">
@@ -530,8 +536,8 @@ export default function RecadosClient({
                 <div className="space-y-1.5">
                   <div
                     className={`relative border-2 border-dashed rounded-xl p-4 text-center transition-all duration-200 h-[106px] flex flex-col justify-center items-center ${dragActive
-                        ? "border-orange-400 bg-orange-50/20"
-                        : "border-gray-200 dark:border-neutral-800 hover:border-orange-400/60 hover:bg-gray-50/50 dark:hover:bg-neutral-800/40"
+                      ? "border-orange-400 bg-orange-50/20"
+                      : "border-gray-200 dark:border-neutral-800 hover:border-orange-400/60 hover:bg-gray-50/50 dark:hover:bg-neutral-800/40"
                       }`}
                     onDragEnter={handleDragIn}
                     onDragLeave={handleDragOut}

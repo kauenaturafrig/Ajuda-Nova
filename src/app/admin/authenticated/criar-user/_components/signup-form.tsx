@@ -20,6 +20,41 @@ import {
 } from "../../../../../components/ui/form";
 import { authClient } from "../../../../../lib/auth-client";
 
+const roleOptions = [
+  {
+    value: "ADMIN",
+    label: "Admin",
+  },
+  {
+    value: "OWNER",
+    label: "Owner (Acesso Total)",
+  },
+  {
+    value: "NEWSONLY",
+    label: "Apenas Notícias",
+  },
+  {
+    value: "MESSAGEONLY",
+    label: "Recados Unidade",
+  },
+  {
+    value: "MESSAGENEWS",
+    label: "Notícias + Recados Multi",
+  },
+  {
+    value: "EVENTS",
+    label: "Eventos",
+  },
+  {
+    value: "EXTENSION",
+    label: "Ramais",
+  },
+  {
+    value: "EMAIL",
+    label: "Emails",
+  }
+] as const;
+
 const signupSchema = z
   .object({
     name: z.string().min(3, { message: "O nome deve ter pelo menos 3 caracteres" }),
@@ -28,7 +63,22 @@ const signupSchema = z
     confirmPassword: z
       .string()
       .min(8, { message: "A confirmação deve ter pelo menos 8 caracteres" }),
-    role: z.enum(["OWNER", "ADMIN", "NEWSONLY", "MESSAGEONLY", "MESSAGENEWS", "EVENTS"], { message: "Selecione um perfil" }),
+    roles: z
+      .array(
+        z.enum([
+          "OWNER",
+          "ADMIN",
+          "NEWSONLY",
+          "MESSAGEONLY",
+          "MESSAGENEWS",
+          "EVENTS",
+          "EXTENSION",
+          "EMAIL",
+        ]),
+      )
+      .min(1, {
+        message: "Selecione pelo menos um perfil",
+      }),
     unidadeId: z.string().min(1, { message: "Selecione uma unidade" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -53,10 +103,12 @@ export function SignupForm({ unidades }: Props) {
       email: "",
       password: "",
       confirmPassword: "",
-      role: "ADMIN",
+      roles: ["ADMIN"],
       unidadeId: "",
     },
   });
+
+  const isOwnerSelected = form.watch("roles")?.includes("OWNER");
 
   async function onSubmit(values: SignupFormValues) {
     setIsLoading(true);
@@ -84,7 +136,7 @@ export function SignupForm({ unidades }: Props) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: values.email,
-        role: values.role,
+        roles: values.roles,
         unidadeId: Number(values.unidadeId),
       }),
     });
@@ -104,7 +156,7 @@ export function SignupForm({ unidades }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        
+
         {/* Campo Nome */}
         <FormField
           control={form.control}
@@ -220,24 +272,65 @@ export function SignupForm({ unidades }: Props) {
           {/* Role */}
           <FormField
             control={form.control}
-            name="role"
+            name="roles"
             render={({ field }) => (
-              <FormItem className="space-y-1.5">
-                <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Perfil de Nível</FormLabel>
-                <FormControl>
-                  <select
-                    {...field}
-                    disabled={isLoading}
-                    className="flex h-10 w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500/50"
-                  >
-                    <option value="ADMIN">Admin</option>
-                    <option value="OWNER">Owner (Acesso Total)</option>
-                    <option value="NEWSONLY">Apenas Notícias</option>
-                    <option value="MESSAGEONLY">Recados Unidade</option>
-                    <option value="MESSAGENEWS">Notícias + Recados Multi</option>
-                    <option value="EVENTS">Eventos</option>
-                  </select>
-                </FormControl>
+              <FormItem className="space-y-2">
+                <FormLabel className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                  Perfis de Acesso
+                </FormLabel>
+
+                <div className="grid grid-cols-1 gap-2 rounded-xl border border-gray-200 dark:border-neutral-800 p-3">
+                  {roleOptions.map((option) => {
+                    const checked = field.value?.includes(option.value);
+                    const isOwnerSelected = field.value?.includes("OWNER");
+                    const isDisabled = isOwnerSelected && option.value !== "OWNER";
+
+                    return (
+                      <label
+                        key={option.value}
+                        className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs ${isDisabled
+                            ? "cursor-not-allowed opacity-50"
+                            : "cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800"
+                          } text-gray-700 dark:text-gray-300`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          disabled={isLoading || isDisabled}
+                          onChange={(event) => {
+                            const currentRoles = field.value ?? [];
+
+                            if (event.target.checked) {
+                              // Se for OWNER, desmarca todas as outras roles
+                              if (option.value === "OWNER") {
+                                field.onChange(["OWNER"]);
+                              } else {
+                                // Se for outra role, adiciona normalmente
+                                field.onChange([
+                                  ...new Set([
+                                    ...currentRoles,
+                                    option.value,
+                                  ]),
+                                ]);
+                              }
+                            } else {
+                              // Desmarcar
+                              field.onChange(
+                                currentRoles.filter(
+                                  (role) => role !== option.value,
+                                ),
+                              );
+                            }
+                          }}
+                          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                        />
+
+                        <span>{option.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+
                 <FormMessage className="text-[11px] font-medium text-red-500" />
               </FormItem>
             )}
@@ -283,8 +376,8 @@ export function SignupForm({ unidades }: Props) {
             Cancelar e Voltar
           </Button>
 
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={isLoading}
             className="w-full sm:ml-auto sm:w-auto h-10 order-1 sm:order-2 gap-2 rounded-xl text-xs font-semibold bg-gray-900 dark:bg-neutral-800 hover:bg-gray-800 text-white px-6 transition-all"
           >

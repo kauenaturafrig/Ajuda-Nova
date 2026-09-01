@@ -15,13 +15,13 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String   @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean  @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   unidadeId Int?
   unidade   Unidade? @relation(fields: [unidadeId], references: [id])
@@ -59,8 +59,8 @@ model Role {
   id          Int     @id @default(autoincrement())
   name        String  @unique
   description String?
-  
-  userRoles UserRoleAssignment[]
+
+  userRoles   UserRoleAssignment[]
   permissions RolePermission[]
 
   @@map("roles")
@@ -71,7 +71,7 @@ model Permission {
   id          Int     @id @default(autoincrement())
   name        String  @unique
   description String?
-  
+
   rolePermissions RolePermission[]
 
   @@map("permissions")
@@ -111,6 +111,7 @@ model Account {
   providerId            String
   userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issuer                String?
   accessToken           String?
   refreshToken          String?
   idToken               String?

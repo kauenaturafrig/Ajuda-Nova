@@ -1,44 +1,80 @@
 //src/app/admin/api/agenda/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/src/lib/auth";
+
 import { prisma } from "@/src/lib/prisma";
+import {
+  getApiUser,
+  hasApiRole,
+} from "@/src/lib/api-permissions";
 
 export const dynamic = "force-dynamic";
 
 const noCacheHeaders = {
-  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  "Cache-Control":
+    "no-store, no-cache, must-revalidate, proxy-revalidate",
   Pragma: "no-cache",
   Expires: "0",
 };
 
-const canManage = (role?: string | null) => role === "OWNER" || role === "EVENTS";
+const canManage = (user: Awaited<
+  ReturnType<typeof getApiUser>
+>) => {
+  if (!user) {
+    return false;
+  }
 
-async function requireUser(req: NextRequest) {
-  const session = await auth.api.getSession({ headers: req.headers });
-  if (!session?.user?.id) return null;
+  return (
+    hasApiRole(user, "OWNER") ||
+    hasApiRole(user, "EVENTS")
+  );
+};
 
-  return prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, role: true, name: true },
-  });
-}
-
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  },
+) {
   try {
-    const user = await requireUser(req);
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!canManage(user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const user = await getApiUser(req);
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    if (!canManage(user)) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 },
+      );
+    }
 
     const { id } = await params;
     const eventoId = Number(id);
-    if (!eventoId) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+
+    if (!eventoId) {
+      return NextResponse.json(
+        { error: "Invalid id" },
+        { status: 400 },
+      );
+    }
 
     const evento = await prisma.agendaEvento.findUnique({
       where: { id: eventoId },
       include: { unidade: true },
     });
 
-    if (!evento) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!evento) {
+      return NextResponse.json(
+        { error: "Not found" },
+        { status: 404 },
+      );
+    }
 
     return NextResponse.json(
       {
@@ -47,23 +83,55 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         createdAt: evento.createdAt.toISOString(),
         updatedAt: evento.updatedAt.toISOString(),
       },
-      { headers: noCacheHeaders }
+      { headers: noCacheHeaders },
     );
   } catch (e: any) {
-    console.error("GET agenda/[id] Error:", e.message);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    console.error(
+      "GET agenda/[id] Error:",
+      e.message,
+    );
+
+    return NextResponse.json(
+      { error: e.message },
+      { status: 500 },
+    );
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  },
+) {
   try {
-    const user = await requireUser(req);
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!canManage(user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const user = await getApiUser(req);
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    if (!canManage(user)) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 },
+      );
+    }
 
     const { id } = await params;
     const eventoId = Number(id);
-    if (!eventoId) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+
+    if (!eventoId) {
+      return NextResponse.json(
+        { error: "Invalid id" },
+        { status: 400 },
+      );
+    }
 
     const body = await req.json();
 
@@ -71,7 +139,13 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       where: { id: eventoId },
       include: { unidade: true },
     });
-    if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    if (!before) {
+      return NextResponse.json(
+        { error: "Not found" },
+        { status: 404 },
+      );
+    }
 
     const evento = await prisma.agendaEvento.update({
       where: { id: eventoId },
@@ -116,29 +190,67 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         createdAt: evento.createdAt.toISOString(),
         updatedAt: evento.updatedAt.toISOString(),
       },
-      { headers: noCacheHeaders }
+      { headers: noCacheHeaders },
     );
   } catch (e: any) {
-    console.error("PUT agenda/[id] Error:", e.message);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    console.error(
+      "PUT agenda/[id] Error:",
+      e.message,
+    );
+
+    return NextResponse.json(
+      { error: e.message },
+      { status: 500 },
+    );
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  },
+) {
   try {
-    const user = await requireUser(req);
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!canManage(user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const user = await getApiUser(req);
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    if (!canManage(user)) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 },
+      );
+    }
 
     const { id } = await params;
     const eventoId = Number(id);
-    if (!eventoId) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+
+    if (!eventoId) {
+      return NextResponse.json(
+        { error: "Invalid id" },
+        { status: 400 },
+      );
+    }
 
     const before = await prisma.agendaEvento.findUnique({
       where: { id: eventoId },
       include: { unidade: true },
     });
-    if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    if (!before) {
+      return NextResponse.json(
+        { error: "Not found" },
+        { status: 404 },
+      );
+    }
 
     await prisma.agendaEventoAudit.create({
       data: {
@@ -158,11 +270,23 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
       },
     });
 
-    await prisma.agendaEvento.delete({ where: { id: eventoId } });
+    await prisma.agendaEvento.delete({
+      where: { id: eventoId },
+    });
 
-    return NextResponse.json({ ok: true }, { headers: noCacheHeaders });
+    return NextResponse.json(
+      { ok: true },
+      { headers: noCacheHeaders },
+    );
   } catch (e: any) {
-    console.error("DELETE agenda/[id] Error:", e.message);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    console.error(
+      "DELETE agenda/[id] Error:",
+      e.message,
+    );
+
+    return NextResponse.json(
+      { error: e.message },
+      { status: 500 },
+    );
   }
 }

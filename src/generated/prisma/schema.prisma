@@ -111,6 +111,7 @@ model Account {
   providerId            String
   userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issuer                String?
   accessToken           String?
   refreshToken          String?
   idToken               String?

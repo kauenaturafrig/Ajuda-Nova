@@ -8,41 +8,183 @@ export const dynamic = "force-dynamic";
 
 // só OWNER pode mexer
 async function requireOwner(req: NextRequest) {
-  const session = await auth.api.getSession({ headers: req.headers });
-  if (!session) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
+  const session = await auth.api.getSession({
+    headers: req.headers,
   });
 
-  if (!user || user.role !== "OWNER") return null;
-  return session;
+  if (!session) {
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      userRoles: {
+        select: {
+          role: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const isOwner = user?.userRoles.some(
+    (assignment) => assignment.role.name === "OWNER",
+  );
+
+  return isOwner ? session : null;
 }
 
 // PUT /admin/api/usuarios -> editar nome/role/unidade
 export async function PUT(req: NextRequest) {
   try {
     const session = await requireOwner(req);
+
     if (!session) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 },
+      );
     }
 
-    const body = await req.json(); // { id, name, role, unidadeId }
+    const body = await req.json();
 
-    const updated = await prisma.user.update({
-      where: { id: body.id },
-      data: {
-        name: body.name,
-        role: body.role,
-        unidadeId: body.unidadeId,
+    const id = String(body.id ?? "");
+    const name = String(body.name ?? "").trim();
+
+    const roles: string[] = Array.isArray(body.roles)
+      ? [
+          ...new Set(
+            (body.roles as unknown[]).map((value) =>
+              String(value).trim().toUpperCase(),
+            ),
+          ),
+        ]
+      : [];
+
+    const unidadeId =
+      body.unidadeId === null ||
+      body.unidadeId === undefined ||
+      body.unidadeId === ""
+        ? null
+        : Number(body.unidadeId);
+
+    const allowedRoles = [
+      "OWNER",
+      "ADMIN",
+      "NEWSONLY",
+      "MESSAGEONLY",
+      "MESSAGENEWS",
+      "EVENTS",
+      "EXTENSION",
+      "EMAIL",
+    ] as const;
+
+    if (!id || !name) {
+      return NextResponse.json(
+        { error: "ID e nome são obrigatórios" },
+        { status: 400 },
+      );
+    }
+
+    if (roles.length === 0) {
+      return NextResponse.json(
+        { error: "Selecione pelo menos uma role" },
+        { status: 400 },
+      );
+    }
+
+    const invalidRole = roles.find(
+      (role) =>
+        !allowedRoles.includes(
+          role as (typeof allowedRoles)[number],
+        ),
+    );
+
+    if (invalidRole) {
+      return NextResponse.json(
+        { error: `Role inválida: ${invalidRole}` },
+        { status: 400 },
+      );
+    }
+
+    if (
+      unidadeId !== null &&
+      (!Number.isInteger(unidadeId) || unidadeId <= 0)
+    ) {
+      return NextResponse.json(
+        { error: "Unidade inválida" },
+        { status: 400 },
+      );
+    }
+
+    const updated = await prisma.$transaction(
+      async (tx) => {
+        const roleRecords = await Promise.all(
+          roles.map((roleName) =>
+            tx.role.upsert({
+              where: {
+                name: roleName,
+              },
+              update: {},
+              create: {
+                name: roleName,
+              },
+            }),
+          ),
+        );
+
+        return tx.user.update({
+          where: {
+            id,
+          },
+          data: {
+            name,
+            unidadeId,
+
+            userRoles: {
+              deleteMany: {},
+              create: roleRecords.map((role) => ({
+                roleId: role.id,
+              })),
+            },
+          },
+          include: {
+            unidade: true,
+            userRoles: {
+              include: {
+                role: true,
+              },
+            },
+          },
+        });
       },
-    });
+    );
 
-    return NextResponse.json(updated);
-  } catch (e) {
-    console.error("Erro no PUT /admin/api/usuarios:", e);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({
+      id: updated.id,
+      name: updated.name,
+      email: updated.email,
+      unidadeId: updated.unidadeId,
+      roles: updated.userRoles.map(
+        (assignment) => assignment.role.name,
+      ),
+    });
+  } catch (error) {
+    console.error(
+      "Erro no PUT /admin/api/usuarios:",
+      error,
+    );
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -108,11 +250,31 @@ export async function DELETE(req: NextRequest) {
     }
 
     // apaga contas e sessões ligadas ao user, depois o user
-    await prisma.$transaction([
-      prisma.account.deleteMany({ where: { userId: id } }),
-      prisma.session.deleteMany({ where: { userId: id } }),
-      prisma.user.delete({ where: { id } }),
-    ]); // [web:400][web:404]
+    await prisma.$transaction(async (tx) => {
+      await tx.userRoleAssignment.deleteMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      await tx.account.deleteMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      await tx.session.deleteMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      await tx.user.delete({
+        where: {
+          id,
+        },
+      });
+    }); // [web:400][web:404]
 
     return NextResponse.json({ ok: true });
   } catch (e) {

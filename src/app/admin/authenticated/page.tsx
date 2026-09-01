@@ -1,5 +1,4 @@
 // src/app/admin/authenticated/page.tsx
-// src/app/admin/authenticated/page.tsx
 import Link from "next/link";
 import Image from "next/image";
 import { headers } from "next/headers";
@@ -19,22 +18,42 @@ export default async function Authenticated() {
     redirect("/admin");
   }
 
-  // carrega o usuário completo do Prisma, incluindo role/unidade
   const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true, unidadeId: true },
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      unidadeId: true,
+      userRoles: {
+        select: {
+          role: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   if (!dbUser) {
     redirect("/admin");
   }
 
-  const isOwner = dbUser.role === "OWNER";
-  const isAdmin = dbUser.role === "ADMIN";
-  const isNewsOnly = dbUser.role === "NEWSONLY";
-  const isMessageOnly = dbUser.role === "MESSAGEONLY";
-  const isMessageNews = dbUser.role === "MESSAGENEWS";
-  const isEvents = dbUser.role === "EVENTS";
+  const roles = dbUser.userRoles.map(
+    (assignment) => assignment.role.name,
+  );
+
+  const isOwner = roles.includes("OWNER");
+  const isAdmin = roles.includes("ADMIN");
+  const isNewsOnly = roles.includes("NEWSONLY");
+  const isMessageOnly = roles.includes("MESSAGEONLY");
+  const isMessageNews = roles.includes("MESSAGENEWS");
+  const isEvents = roles.includes("EVENTS");
+  const isExtension = roles.includes("EXTENSION");
+  const isEmail = roles.includes("EMAIL");
+
+  const roleLabel = roles.join(", ");
 
   return (
     <Layout>
@@ -70,7 +89,7 @@ export default async function Authenticated() {
                   {session.user.email}
                 </p>
                 <span className="inline-block text-[9px] font-bold uppercase tracking-wider bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400 px-1.5 py-0.5 rounded mt-1">
-                  Nível: {dbUser.role}
+                  Nível: {roleLabel || "Sem função"}
                 </span>
               </div>
               <div className="border-l border-gray-200 dark:border-neutral-800 pl-4 h-9 flex items-center">
@@ -83,7 +102,7 @@ export default async function Authenticated() {
           <nav className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 
             {/* RAMAIS */}
-            {(isOwner || isAdmin) && (
+            {(isOwner || isExtension) && (
               <Link
                 href="/admin/authenticated/ramais"
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-amber-500/50 hover:shadow-amber-500/5"
@@ -97,7 +116,7 @@ export default async function Authenticated() {
             )}
 
             {/* EMAILS */}
-            {(isOwner || isAdmin) && (
+            {(isOwner || isEmail) && (
               <Link
                 href="/admin/authenticated/emails"
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-purple-500/50 hover:shadow-purple-500/5"
@@ -154,7 +173,7 @@ export default async function Authenticated() {
             )}
 
             {/* RECADOS */}
-            {(isOwner || isAdmin || isMessageOnly || isMessageNews) && (
+            {(isOwner || isMessageOnly || isMessageNews) && (
               <Link
                 href="/admin/authenticated/recados"
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-orange-500/50 hover:shadow-orange-500/5"

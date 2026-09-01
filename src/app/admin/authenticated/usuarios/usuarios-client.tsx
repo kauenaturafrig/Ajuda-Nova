@@ -8,7 +8,7 @@ import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { LoadingOverlay } from "../../../../components/ui/loading-overlay";
 import { UsuarioRow } from "./usuario-row";
-import { Usuario } from "@/src/types/usuario"; 
+import type { Usuario } from "@/src/types/user";
 import { ArrowLeft, Users, UserPlus, Search } from "lucide-react";
 
 type Unidade = {

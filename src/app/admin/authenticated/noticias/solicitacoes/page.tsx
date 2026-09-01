@@ -1,53 +1,113 @@
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 import { prisma } from "@/src/lib/prisma";
-import { auth } from "../../../../../lib/auth";
+import { requirePageRoles } from "@/src/lib/permissions";
+import { PAGE_ROLES } from "@/src/lib/role-permissions";
 import NoticiasSolicitacoesClient from "./solicitacoes-client";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function NoticiasSolicitacoesPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user?.id) redirect("/admin/login");
+  const user = await requirePageRoles(
+    PAGE_ROLES.noticias,
+  );
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, role: true, unidadeId: true, name: true },
-  });
+  const canSeeAll =
+    user.roles.includes("OWNER") ||
+    user.roles.includes("MESSAGENEWS");
 
-  if (!user) redirect("/admin/login");
+  const where: {
+    recurso: "NOTICIA";
+    unidadeId?: number;
+    solicitanteId?: string;
+  } = {
+    recurso: "NOTICIA",
+  };
 
-  if (!["OWNER", "ADMIN", "MESSAGENEWS", "NEWSONLY"].includes(user.role)) {
-    redirect("/admin");
+  if (!canSeeAll) {
+    if (user.roles.includes("ADMIN")) {
+      if (user.unidadeId === null) {
+        return null;
+      }
+
+      where.unidadeId = user.unidadeId;
+    } else if (
+      user.roles.includes("NEWSONLY")
+    ) {
+      where.solicitanteId = user.id;
+    }
   }
 
-  const where: any = { recurso: "NOTICIA" };
+  const solicitacoes =
+    await prisma.solicitacaoGerenciamento.findMany({
+      where,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-  if (user.role === "ADMIN") {
-    if (!user.unidadeId) redirect("/admin");
-    where.unidadeId = user.unidadeId;
-  }
-
-  if (user.role === "NEWSONLY") {
-    where.solicitanteId = user.id;
-  }
-
-  const solicitacoes = await prisma.solicitacaoGerenciamento.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-  });
-
-  const formatted = solicitacoes.map((s) => ({
-    ...s,
-    unidadeIds: s.unidadeIds ? JSON.parse(s.unidadeIds) : [],
-  }));
+  const formatted = solicitacoes.map(
+    (solicitacao) => ({
+      id: solicitacao.id,
+      recurso: "NOTICIA" as const,
+      tipo: solicitacao.tipo,
+      status: solicitacao.status,
+      noticiaId: solicitacao.noticiaId,
+      unidadeId: solicitacao.unidadeId,
+      unidadeIds: parseUnidadeIds(
+        solicitacao.unidadeIds,
+      ),
+      titulo: solicitacao.titulo,
+      conteudo: solicitacao.conteudo,
+      imagem: solicitacao.imagem,
+      imagemAntiga:
+        solicitacao.imagemAntiga,
+      solicitanteId:
+        solicitacao.solicitanteId,
+      solicitanteNome:
+        solicitacao.solicitanteNome,
+      revisorId: solicitacao.revisorId,
+      revisorNome:
+        solicitacao.revisorNome,
+      motivoRecusa:
+        solicitacao.motivoRecusa,
+      createdAt:
+        solicitacao.createdAt.toISOString(),
+      updatedAt:
+        solicitacao.updatedAt.toISOString(),
+    }),
+  );
 
   return (
     <NoticiasSolicitacoesClient
-      initialSolicitacoes={JSON.parse(JSON.stringify(formatted))}
-      userRole={user.role as any}
+      initialSolicitacoes={formatted}
+      userRoles={user.roles}
       userId={user.id}
-      userUnidadeId={user.unidadeId ?? null}
+      userUnidadeId={user.unidadeId}
     />
   );
+}
+
+function parseUnidadeIds(
+  value: string | null,
+): number[] {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed
+      .map(Number)
+      .filter(
+        (id) =>
+          Number.isInteger(id) && id > 0,
+      );
+  } catch {
+    return [];
+  }
 }

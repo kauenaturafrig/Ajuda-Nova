@@ -11,11 +11,27 @@ export default async function CriarUserPage() {
   if (!session) redirect("/admin");
 
   const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      userRoles: {
+        select: {
+          role: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
-  if (!dbUser || dbUser.role !== "OWNER") {
+  const isOwner = dbUser?.userRoles.some(
+    (assignment) => assignment.role.name === "OWNER",
+  );
+
+  if (!isOwner) {
     redirect("/admin/authenticated");
   }
 
@@ -27,7 +43,7 @@ export default async function CriarUserPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50/50 dark:bg-neutral-950 p-4 sm:p-6 lg:p-8">
       <div className="w-full max-w-lg bg-white dark:bg-neutral-900/40 border border-gray-100 dark:border-neutral-800/80 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-        
+
         {/* Header Interno do Card */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">

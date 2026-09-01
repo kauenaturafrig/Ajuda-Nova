@@ -1,167 +1,391 @@
 //src/app/admin/api/noticias/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/src/lib/prisma";
-import { auth } from "../../../../lib/auth";
 import path from "path";
-import { writeFile, rm, mkdir } from "fs/promises";
+import { mkdir, rm, writeFile } from "fs/promises";
 import fs from "fs/promises";
 import crypto from "crypto";
+
+import { prisma } from "@/src/lib/prisma";
+import {
+  getApiUser,
+  hasAnyApiRole,
+  hasApiRole,
+} from "@/src/lib/api-permissions";
+import { PAGE_ROLES } from "@/src/lib/role-permissions";
 
 export const dynamic = "force-dynamic";
 
 const noCacheHeaders = {
-  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  "Cache-Control":
+    "no-store, no-cache, must-revalidate, proxy-revalidate",
   Pragma: "no-cache",
   Expires: "0",
 };
 
-async function requireAuth(req: NextRequest) {
-  const session = await auth.api.getSession({ headers: req.headers });
-  if (!session?.user?.id) return null;
+function getUploadDirectory() {
+  return path.join(
+    process.cwd(),
+    "storage",
+    "uploads",
+    "noticias",
+  );
+}
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, role: true, unidadeId: true, name: true },
+async function apagarArquivo(
+  nome?: string | null,
+) {
+  if (!nome) {
+    return;
+  }
+
+  const filePath = path.join(
+    getUploadDirectory(),
+    nome,
+  );
+
+  try {
+    await fs.access(filePath);
+    await rm(filePath);
+  } catch {
+    // Arquivo já inexistente.
+  }
+}
+
+async function salvarImagem(
+  file: File | null,
+) {
+  if (!file || file.size === 0) {
+    return null;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    throw new Error(
+      "O arquivo precisa ser uma imagem.",
+    );
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error(
+      "A imagem não pode ultrapassar 5 MB.",
+    );
+  }
+
+  const uploadDirectory =
+    getUploadDirectory();
+
+  await mkdir(uploadDirectory, {
+    recursive: true,
   });
-  return user;
+
+  const extension =
+    file.name.split(".").pop()?.toLowerCase() ||
+    "jpg";
+
+  const safeExtension =
+    extension.replace(/[^a-z0-9]/gi, "") ||
+    "jpg";
+
+  const filename =
+    [
+      "noticia",
+      Date.now(),
+      crypto.randomUUID().slice(0, 8),
+    ].join("-") + `.${safeExtension}`;
+
+  const filePath = path.join(
+    uploadDirectory,
+    filename,
+  );
+
+  const buffer = Buffer.from(
+    await file.arrayBuffer(),
+  );
+
+  await writeFile(filePath, buffer);
+
+  return filename;
 }
 
 async function logAudit(
   noticiaId: number,
   userId: string,
-  userNome: string,
-  acao: string,
-  dadosAntigos: any = null,
-  dadosNovos: any = null
+  userName: string,
+  action: string,
+  oldData: unknown = null,
+  newData: unknown = null,
 ) {
   await prisma.noticiaAudit.create({
     data: {
       noticiaId,
       userId,
-      userNome,
-      acao,
-      dadosAntigos: dadosAntigos ? JSON.parse(JSON.stringify(dadosAntigos)) : null,
-      dadosNovos: dadosNovos ? JSON.parse(JSON.stringify(dadosNovos)) : null,
+      userNome: userName,
+      acao: action,
+      dadosAntigos: oldData
+        ? JSON.parse(JSON.stringify(oldData))
+        : null,
+      dadosNovos: newData
+        ? JSON.parse(JSON.stringify(newData))
+        : null,
     },
   });
 }
 
 export async function GET(req: NextRequest) {
   try {
-    const noticias = await prisma.noticia.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    const user = await getApiUser(req);
 
-    return NextResponse.json(noticias, { headers: noCacheHeaders });
-  } catch (e: any) {
-    console.error("GET Error:", e.message);
-    return NextResponse.json([], { status: 200 });
+    if (
+      user &&
+      !hasAnyApiRole(
+        user,
+        PAGE_ROLES.noticias,
+      )
+    ) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 },
+      );
+    }
+
+    const noticias =
+      await prisma.noticia.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+    return NextResponse.json(
+      noticias,
+      {
+        headers: noCacheHeaders,
+      },
+    );
+  } catch (error) {
+    console.error(
+      "GET /admin/api/noticias error:",
+      error,
+    );
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
 export async function POST(req: NextRequest) {
-  try {
-    const user = await requireAuth(req);
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  let uploadedImage: string | null = null;
 
-    if (!["OWNER", "MESSAGENEWS"].includes(user.role)) {
+  try {
+    const user = await getApiUser(req);
+
+    if (!user) {
       return NextResponse.json(
-        { error: "⛔ Apenas OWNER ou MESSAGENEWS podem criar notícias diretamente." },
-        { status: 403 }
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    const canCreate =
+      hasApiRole(user, "OWNER") ||
+      hasApiRole(user, "MESSAGENEWS");
+
+    if (!canCreate) {
+      return NextResponse.json(
+        {
+          error:
+            "Apenas OWNER ou MESSAGENEWS podem criar notícias diretamente.",
+        },
+        { status: 403 },
       );
     }
 
     const formData = await req.formData();
-    const titulo = formData.get("titulo") as string;
-    const conteudo = formData.get("conteudo") as string;
-    const imagemFile = formData.get("imagem") as File | null;
+
+    const titulo = String(
+      formData.get("titulo") ?? "",
+    ).trim();
+
+    const conteudo = String(
+      formData.get("conteudo") ?? "",
+    ).trim();
 
     if (!titulo || !conteudo) {
-      return NextResponse.json({ error: "Dados obrigatórios" }, { status: 400 });
+      return NextResponse.json(
+        {
+          error:
+            "Título e conteúdo são obrigatórios.",
+        },
+        { status: 400 },
+      );
     }
 
-    let filename: string | null = null;
-    if (imagemFile && imagemFile.size > 0) {
-      const uploadDir = path.join(process.cwd(), "storage", "uploads", "noticias");
-      await mkdir(uploadDir, { recursive: true });
+    const imageValue =
+      formData.get("imagem");
 
-      const buffer = Buffer.from(await imagemFile.arrayBuffer());
-      const ext = imagemFile.name.split(".").pop() || "jpg";
-      filename = `noticia-${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
-      const filepath = path.join(uploadDir, filename);
-      await writeFile(filepath, buffer);
+    if (imageValue instanceof File) {
+      uploadedImage =
+        await salvarImagem(imageValue);
     }
 
-    const noticia = await prisma.noticia.create({
-      data: { titulo, conteudo, imagem: filename },
-    });
+    const noticia =
+      await prisma.noticia.create({
+        data: {
+          titulo,
+          conteudo,
+          imagem: uploadedImage,
+        },
+      });
 
-    await logAudit(noticia.id, user.id, user.name || "Usuário", "CREATE", null, {
-      id: noticia.id,
-      titulo: noticia.titulo,
-      conteudo: noticia.conteudo,
-      imagem: noticia.imagem,
-    });
+    await logAudit(
+      noticia.id,
+      user.id,
+      user.name || "Usuário",
+      "CREATE",
+      null,
+      {
+        id: noticia.id,
+        titulo: noticia.titulo,
+        conteudo: noticia.conteudo,
+        imagem: noticia.imagem,
+      },
+    );
 
-    return NextResponse.json(noticia, { headers: noCacheHeaders });
-  } catch (e: any) {
-    console.error("POST Error:", e.message);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json(
+      noticia,
+      {
+        headers: noCacheHeaders,
+      },
+    );
+  } catch (error) {
+    if (uploadedImage) {
+      await apagarArquivo(uploadedImage);
+    }
+
+    console.error(
+      "POST /admin/api/noticias error:",
+      error,
+    );
+
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Internal server error",
+      },
+      { status: 500 },
+    );
   }
 }
 
 export async function PUT(req: NextRequest) {
-  try {
-    const user = await requireAuth(req);
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  let uploadedImage: string | null = null;
 
-    if (!["OWNER", "MESSAGENEWS"].includes(user.role)) {
+  try {
+    const user = await getApiUser(req);
+
+    if (!user) {
       return NextResponse.json(
-        { error: "⛔ Apenas OWNER ou MESSAGENEWS podem editar notícias diretamente." },
-        { status: 403 }
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    const canUpdate =
+      hasApiRole(user, "OWNER") ||
+      hasApiRole(user, "MESSAGENEWS");
+
+    if (!canUpdate) {
+      return NextResponse.json(
+        {
+          error:
+            "Apenas OWNER ou MESSAGENEWS podem editar notícias diretamente.",
+        },
+        { status: 403 },
       );
     }
 
     const formData = await req.formData();
+
     const id = Number(formData.get("id"));
-    const titulo = formData.get("titulo") as string;
-    const conteudo = formData.get("conteudo") as string;
-    const file = formData.get("imagem") as File | null;
-    const imagemAntiga = (formData.get("imagemAntiga") as string) || null;
 
-    if (!id || !titulo || !conteudo) {
-      return NextResponse.json({ error: "Dados obrigatórios" }, { status: 400 });
+    const titulo = String(
+      formData.get("titulo") ?? "",
+    ).trim();
+
+    const conteudo = String(
+      formData.get("conteudo") ?? "",
+    ).trim();
+
+    const imagemAntiga =
+      String(
+        formData.get("imagemAntiga") ?? "",
+      ).trim() || null;
+
+    if (
+      !Number.isInteger(id) ||
+      id <= 0 ||
+      !titulo ||
+      !conteudo
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "ID, título e conteúdo são obrigatórios.",
+        },
+        { status: 400 },
+      );
     }
 
-    const noticiaAntes = await prisma.noticia.findUnique({ where: { id } });
+    const noticiaAntes =
+      await prisma.noticia.findUnique({
+        where: {
+          id,
+        },
+      });
+
     if (!noticiaAntes) {
-      return NextResponse.json({ error: "Notícia não encontrada" }, { status: 404 });
+      return NextResponse.json(
+        {
+          error:
+            "Notícia não encontrada.",
+        },
+        { status: 404 },
+      );
     }
 
-    let imagem = imagemAntiga;
+    let imagem =
+      imagemAntiga || noticiaAntes.imagem;
 
-    if (file && file.size > 0) {
-      if (imagemAntiga) {
-        const oldPath = path.join(process.cwd(), "storage", "uploads", "noticias", imagemAntiga);
-        try {
-          await fs.access(oldPath);
-          await rm(oldPath);
-        } catch {}
-      }
+    const imageValue =
+      formData.get("imagem");
 
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const ext = file.name.split(".").pop() || "jpg";
-      const nome = `noticia-${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
-      const caminho = path.join(process.cwd(), "storage", "uploads", "noticias", nome);
-      await mkdir(path.dirname(caminho), { recursive: true });
-      await writeFile(caminho, buffer);
-      imagem = nome;
+    if (
+      imageValue instanceof File &&
+      imageValue.size > 0
+    ) {
+      uploadedImage =
+        await salvarImagem(imageValue);
+
+      imagem = uploadedImage;
+
+      await apagarArquivo(
+        imagemAntiga || noticiaAntes.imagem,
+      );
     }
 
-    const noticiaDepois = await prisma.noticia.update({
-      where: { id },
-      data: { titulo, conteudo, imagem: imagem || null },
-    });
+    const noticiaDepois =
+      await prisma.noticia.update({
+        where: {
+          id,
+        },
+        data: {
+          titulo,
+          conteudo,
+          imagem,
+        },
+      });
 
     await logAudit(
       noticiaDepois.id,
@@ -177,12 +401,33 @@ export async function PUT(req: NextRequest) {
         titulo: noticiaDepois.titulo,
         conteudo: noticiaDepois.conteudo,
         imagem: noticiaDepois.imagem,
-      }
+      },
     );
 
-    return NextResponse.json(noticiaDepois, { headers: noCacheHeaders });
-  } catch (e: any) {
-    console.error("PUT Error:", e.message);
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json(
+      noticiaDepois,
+      {
+        headers: noCacheHeaders,
+      },
+    );
+  } catch (error) {
+    if (uploadedImage) {
+      await apagarArquivo(uploadedImage);
+    }
+
+    console.error(
+      "PUT /admin/api/noticias error:",
+      error,
+    );
+
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Internal server error",
+      },
+      { status: 500 },
+    );
   }
 }

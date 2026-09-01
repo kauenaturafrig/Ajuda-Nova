@@ -1,38 +1,71 @@
 //src/app/admin/api/agenda/route.ts
-import { NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { auth } from "@/src/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+
 import { prisma } from "@/src/lib/prisma";
+import {
+  getApiUser,
+  hasApiRole,
+} from "@/src/lib/api-permissions";
 
 export const dynamic = "force-dynamic";
 
-const canManage = (role?: string | null) =>
-  role === "OWNER" || role === "EVENTS";
+const canManage = (user: ReturnType<
+  typeof getApiUser
+> extends Promise<infer U>
+  ? U
+  : never) => {
+  if (!user) {
+    return false;
+  }
+
+  return (
+    hasApiRole(user, "OWNER") ||
+    hasApiRole(user, "EVENTS")
+  );
+};
 
 const serializeEvento = (ev: any) => ({
   ...ev,
-  data: ev.data instanceof Date ? ev.data.toISOString() : ev.data,
-  createdAt: ev.createdAt instanceof Date ? ev.createdAt.toISOString() : ev.createdAt,
-  updatedAt: ev.updatedAt instanceof Date ? ev.updatedAt.toISOString() : ev.updatedAt,
+  data:
+    ev.data instanceof Date
+      ? ev.data.toISOString()
+      : ev.data,
+  createdAt:
+    ev.createdAt instanceof Date
+      ? ev.createdAt.toISOString()
+      : ev.createdAt,
+  updatedAt:
+    ev.updatedAt instanceof Date
+      ? ev.updatedAt.toISOString()
+      : ev.updatedAt,
 });
 
-export async function GET() {
-  const session = await auth.api.getSession({ headers: await headers() });
+export async function GET(req: NextRequest) {
+  const user = await getApiUser(req);
 
   const eventos = await prisma.agendaEvento.findMany({
     orderBy: { data: "asc" },
     include: { unidade: true },
   });
 
-  const serialized = eventos.map(serializeEvento);
+  const serialized = eventos.map(
+    serializeEvento,
+  );
 
-  if (!session) {
-    return NextResponse.json({ eventos: serialized }, { status: 200 });
+  if (!user) {
+    return NextResponse.json(
+      { eventos: serialized },
+      { status: 200 },
+    );
   }
 
   const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true, unidadeId: true, name: true },
+    where: { id: user.id },
+    select: {
+      id: true,
+      unidadeId: true,
+      name: true,
+    },
   });
 
   return NextResponse.json(
@@ -40,27 +73,31 @@ export async function GET() {
       eventos: serialized,
       user: dbUser
         ? {
-            role: dbUser.role,
+            id: dbUser.id,
             unidadeId: dbUser.unidadeId,
             name: dbUser.name,
           }
         : null,
     },
-    { status: 200 }
+    { status: 200 },
   );
 }
 
-export async function POST(req: Request) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function POST(req: NextRequest) {
+  const user = await getApiUser(req);
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true, name: true },
-  });
+  if (!user) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 },
+    );
+  }
 
-  if (!dbUser || !canManage(dbUser.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!canManage(user)) {
+    return NextResponse.json(
+      { error: "Forbidden" },
+      { status: 403 },
+    );
   }
 
   const body = await req.json();
@@ -71,11 +108,10 @@ export async function POST(req: Request) {
       descricao: body.descricao ?? null,
       data: new Date(body.data),
       unidadeId: Number(body.unidadeId),
-      criadoPorId: session.user.id,
+      criadoPorId: user.id,
     },
   });
 
-  // Busca unidade separadamente para o audit
   const unidade = await prisma.unidade.findUnique({
     where: { id: Number(body.unidadeId) },
     select: { nome: true },
@@ -87,8 +123,8 @@ export async function POST(req: Request) {
       eventoTitulo: evento.titulo,
       unidadeId: evento.unidadeId,
       unidadeNome: unidade?.nome ?? null,
-      userId: session.user.id,
-      userNome: dbUser.name ?? "Usuário",
+      userId: user.id,
+      userNome: user.name ?? "Usuário",
       acao: "CREATE",
       dadosNovos: {
         titulo: evento.titulo,
@@ -99,20 +135,27 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ evento: serializeEvento(evento) }, { status: 201 });
+  return NextResponse.json(
+    { evento: serializeEvento(evento) },
+    { status: 201 },
+  );
 }
 
-export async function PUT(req: Request) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function PUT(req: NextRequest) {
+  const user = await getApiUser(req);
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true, name: true },
-  });
+  if (!user) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 },
+    );
+  }
 
-  if (!dbUser || !canManage(dbUser.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!canManage(user)) {
+    return NextResponse.json(
+      { error: "Forbidden" },
+      { status: 403 },
+    );
   }
 
   const body = await req.json();
@@ -122,8 +165,12 @@ export async function PUT(req: Request) {
     where: { id },
     include: { unidade: true },
   });
+
   if (!before) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Not found" },
+      { status: 404 },
+    );
   }
 
   const evento = await prisma.agendaEvento.update({
@@ -133,7 +180,7 @@ export async function PUT(req: Request) {
       descricao: body.descricao ?? null,
       data: new Date(body.data),
       unidadeId: Number(body.unidadeId),
-      atualizadoPorId: session.user.id,
+      atualizadoPorId: user.id,
     },
     include: { unidade: true },
   });
@@ -144,8 +191,8 @@ export async function PUT(req: Request) {
       eventoTitulo: evento.titulo,
       unidadeId: evento.unidadeId,
       unidadeNome: evento.unidade?.nome ?? null,
-      userId: session.user.id,
-      userNome: dbUser.name ?? "Usuário",
+      userId: user.id,
+      userNome: user.name ?? "Usuário",
       acao: "UPDATE",
       dadosAntigos: {
         titulo: before.titulo,
@@ -162,35 +209,49 @@ export async function PUT(req: Request) {
     },
   });
 
-  return NextResponse.json({ evento: serializeEvento(evento) }, { status: 200 });
+  return NextResponse.json(
+    { evento: serializeEvento(evento) },
+    { status: 200 },
+  );
 }
 
-export async function DELETE(req: Request) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function DELETE(req: NextRequest) {
+  const user = await getApiUser(req);
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true, name: true },
-  });
+  if (!user) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 },
+    );
+  }
 
-  if (!dbUser || !canManage(dbUser.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!canManage(user)) {
+    return NextResponse.json(
+      { error: "Forbidden" },
+      { status: 403 },
+    );
   }
 
   const { searchParams } = new URL(req.url);
   const id = Number(searchParams.get("id"));
 
   if (!id) {
-    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid id" },
+      { status: 400 },
+    );
   }
 
   const before = await prisma.agendaEvento.findUnique({
     where: { id },
     include: { unidade: true },
   });
+
   if (!before) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Not found" },
+      { status: 404 },
+    );
   }
 
   await prisma.agendaEventoAudit.create({
@@ -199,8 +260,8 @@ export async function DELETE(req: Request) {
       eventoTitulo: before.titulo,
       unidadeId: before.unidadeId,
       unidadeNome: before.unidade?.nome ?? null,
-      userId: session.user.id,
-      userNome: dbUser.name ?? "Usuário",
+      userId: user.id,
+      userNome: user.name ?? "Usuário",
       acao: "DELETE",
       dadosAntigos: {
         titulo: before.titulo,
@@ -211,7 +272,12 @@ export async function DELETE(req: Request) {
     },
   });
 
-  await prisma.agendaEvento.delete({ where: { id } });
+  await prisma.agendaEvento.delete({
+    where: { id },
+  });
 
-  return NextResponse.json({ ok: true }, { status: 200 });
+  return NextResponse.json(
+    { ok: true },
+    { status: 200 },
+  );
 }

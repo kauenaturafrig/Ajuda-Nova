@@ -5,7 +5,10 @@ import { auth } from "../../../../lib/auth";
 import { prisma } from "../../../../lib/prisma";
 import Layout from "@/src/components/Layout";
 import { UsuariosClient } from "./usuarios-client";
-import { Usuario } from "@/src/types/usuario";
+import type {
+  AppUserRole,
+  Usuario,
+} from "@/src/types/user";
 
 // type Usuario = {
 //   id: string;
@@ -22,29 +25,54 @@ export default async function UsuariosPage() {
 
   const dbUser = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { role: true },
+    select: {
+      userRoles: {
+        select: {
+          role: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
-  if (!dbUser || dbUser.role !== "OWNER") {
+  const isOwner = dbUser?.userRoles.some(
+    (assignment) => assignment.role.name === "OWNER",
+  );
+
+  if (!isOwner) {
     redirect("/admin/authenticated");
   }
 
   // ✅ REMOVIDO: Promise.all duplicado e variável não usada
   const [usuariosRaw, unidades] = await Promise.all([
     prisma.user.findMany({
-      orderBy: { createdAt: "desc" },
-      include: { unidade: true },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        unidade: true,
+        userRoles: {
+          include: {
+            role: true,
+          },
+        },
+      },
     }),
     prisma.unidade.findMany({
       orderBy: { nome: "asc" },
     }),
   ]);
 
-  const usuarios: Usuario[] = usuariosRaw.map(u => ({
+  const usuarios: Usuario[] = usuariosRaw.map((u) => ({
     id: u.id,
     name: u.name,
     email: u.email,
-    role: u.role,
+    roles: u.userRoles.map(
+      (assignment) => assignment.role.name as AppUserRole,
+    ),
     unidadeId: u.unidadeId,
     unidade: u.unidade,
   }));
