@@ -19,3 +19,10 @@
   transform-origin: center;
   transition: transform 0.5s ease-in-out;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-carousel-slide-next,
+  .animate-carousel-slide-prev {
+    animation: none;
+  }
+}
