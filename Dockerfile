@@ -5,7 +5,9 @@ WORKDIR /app
 ENV NPM_CONFIG_CACHE=/tmp/npm-cache
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && apt-get install -y --no-install-recommends \
+    openssl \
+    ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
@@ -20,7 +22,9 @@ WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && apt-get install -y --no-install-recommends \
+    openssl \
+    ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -40,20 +44,30 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+ENV NPM_CONFIG_CACHE=/tmp/npm-cache
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && apt-get install -y --no-install-recommends \
+    openssl \
+    ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --system --create-home --uid 1001 nextjs
+RUN useradd \
+  --system \
+  --create-home \
+  --uid 1001 \
+  nextjs
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
 
-RUN mkdir -p /app/public/uploads \
-  && chown -R nextjs:nextjs /app
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+
+RUN mkdir -p /app/public/uploads /tmp/npm-cache \
+  && chown -R nextjs:nextjs /app /tmp/npm-cache
 
 USER nextjs
 
