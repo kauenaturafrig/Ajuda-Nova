@@ -1,52 +1,152 @@
-// app/admin/api/noticias/[id]/route.ts
+//src/app/admin/api/noticias/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/src/lib/prisma";
-import { auth } from "../../../../../lib/auth";
-import { rm } from "fs/promises";  // ✅ rm
-import { existsSync } from "fs";
 import path from "path";
+import { rm } from "fs/promises";
+import fs from "fs/promises";
 
-export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+import { prisma } from "@/src/lib/prisma";
+import {
+  getApiUser,
+  hasApiRole,
+} from "@/src/lib/api-permissions";
+
+export const dynamic = "force-dynamic";
+
+const noCacheHeaders = {
+  "Cache-Control":
+    "no-store, no-cache, must-revalidate, proxy-revalidate",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
+function getUploadDirectory() {
+  return path.join(
+    process.cwd(),
+    "storage",
+    "uploads",
+    "noticias",
+  );
+}
+
+async function apagarArquivo(
+  nome?: string | null,
+) {
+  if (!nome) {
+    return;
+  }
+
+  const filePath = path.join(
+    getUploadDirectory(),
+    nome,
+  );
+
   try {
-    const session = await auth.api.getSession({ headers: req.headers });
-    if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    await fs.access(filePath);
+    await rm(filePath);
+  } catch {
+    // Arquivo já inexistente.
+  }
+}
 
-    const user = await prisma.user.findUnique({ where: { id: session.user.id } });
-    const { id } = await params;
+export async function DELETE(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>;
+  },
+) {
+  try {
+    const user = await getApiUser(req);
 
-    // ✅ PEGAR DADOS ANTES da exclusão
-    const noticia = await prisma.noticia.findUnique({ where: { id: Number(id) } });
-    if (!noticia) return NextResponse.json({ error: "Notícia não encontrada" }, { status: 404 });
-
-    // ✅ AUDIT ANTES da exclusão
-    await prisma.noticiaAudit.create({
-      data: {
-        noticiaId: noticia.id,
-        userId: session.user.id,
-        userNome: user!.name || "Usuário",
-        acao: "DELETE",
-        dadosAntigos: {
-          id: noticia.id,
-          titulo: noticia.titulo,
-          conteudo: noticia.conteudo,
-          imagem: noticia.imagem
-        }
-      }
-    });
-
-    // ✅ DELETAR IMAGEM
-    if (noticia.imagem) {
-      const caminho = path.join(process.cwd(), "public", "uploads", "noticias", noticia.imagem);
-      if (existsSync(caminho)) await rm(caminho);
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
     }
 
-    // ✅ DELETAR NOTÍCIA
-    await prisma.noticia.delete({ where: { id: Number(id) } });
+    const canDelete =
+      hasApiRole(user, "OWNER") ||
+      hasApiRole(user, "MESSAGENEWS");
 
-    console.log(`✅ Notícia ${id} excluída + AUDIT`);
-    return NextResponse.json({ success: true });
-  } catch (e: any) {
-    console.error("💥 DELETE Error:", e.message);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    if (!canDelete) {
+      return NextResponse.json(
+        {
+          error:
+            "Apenas OWNER ou MESSAGENEWS podem excluir notícias diretamente.",
+        },
+        { status: 403 },
+      );
+    }
+
+    const { id } = await params;
+    const noticiaId = Number(id);
+
+    if (
+      !Number.isInteger(noticiaId) ||
+      noticiaId <= 0
+    ) {
+      return NextResponse.json(
+        { error: "ID inválido." },
+        { status: 400 },
+      );
+    }
+
+    const noticia =
+      await prisma.noticia.findUnique({
+        where: {
+          id: noticiaId,
+        },
+      });
+
+    if (!noticia) {
+      return NextResponse.json(
+        {
+          error:
+            "Notícia não encontrada.",
+        },
+        { status: 404 },
+      );
+    }
+
+    await prisma.noticiaAudit.create({
+      data: {
+        noticiaId,
+        userId: user.id,
+        userNome: user.name || "Usuário",
+        acao: "DELETE",
+        dadosAntigos: {
+          titulo: noticia.titulo,
+          conteudo: noticia.conteudo,
+          imagem: noticia.imagem,
+        },
+      },
+    });
+
+    await apagarArquivo(noticia.imagem);
+
+    await prisma.noticia.delete({
+      where: {
+        id: noticiaId,
+      },
+    });
+
+    return NextResponse.json(
+      { success: true },
+      {
+        headers: noCacheHeaders,
+      },
+    );
+  } catch (error) {
+    console.error(
+      "DELETE /admin/api/noticias/[id] error:",
+      error,
+    );
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

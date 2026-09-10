@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -23,26 +24,70 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  // novo: relação com Unidade
   unidadeId Int?
   unidade   Unidade? @relation(fields: [unidadeId], references: [id])
 
-  // novo: papel do usuário na aplicação
-  role UserRole @default(ADMIN)
+  // NOVO: Múltiplas roles
+  userRoles UserRoleAssignment[]
 
-  sessions Session[]
-  accounts Account[]
+  sessions           Session[]
+  accounts           Account[]
+  eventosCriados     AgendaEvento[] @relation("AgendaEventoCriadoPor")
+  eventosAtualizados AgendaEvento[] @relation("AgendaEventoAtualizadoPor")
 
   @@unique([email])
   @@map("user")
 }
 
-enum UserRole {
-  OWNER
-  ADMIN
-  MESSAGEONLY
-  NEWSONLY
-  MESSAGENEWS
+// NOVO: Tabela intermediária
+model UserRoleAssignment {
+  id        String   @id @default(cuid())
+  userId    String
+  roleId    Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@map("user_roles")
+}
+
+// NOVO: Model de Role (substitui o enum)
+model Role {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  userRoles   UserRoleAssignment[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+// OPCIONAL: Permissões granulares
+model Permission {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  createdAt    DateTime @default(now())
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@map("role_permissions")
 }
 
 model Session {
@@ -67,6 +112,7 @@ model Account {
   providerId            String
   userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issuer                String?
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -97,12 +143,13 @@ model Unidade {
   id   Int    @id @default(autoincrement())
   nome String
 
-  // relacionamentos
-  ramais       Ramal[]
-  emails       Email[]
-  users        User[]
-  recados      Recado[]        @relation("RecadoUnidadePrincipal") // Nomeia a relação principal
-  recadosMulti RecadoUnidade[] // NOVO: Relação Many-to-Many
+  ramais        Ramal[]
+  emails        Email[]
+  users         User[]
+  recados       Recado[]                   @relation("RecadoUnidadePrincipal")
+  recadosMulti  RecadoUnidade[]
+  agendaEventos AgendaEvento[]
+  solicitacoes  SolicitacaoGerenciamento[]
 
   @@map("unidades")
 }
@@ -156,6 +203,8 @@ model Noticia {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  solicitacoes SolicitacaoGerenciamento[]
+
   @@map("noticias")
 }
 
@@ -180,13 +229,13 @@ model Recado {
   titulo    String
   conteudo  String
   imagem    String?
-  unidadeId Int // Unidade principal (para legenda/backup)
+  unidadeId Int
   unidade   Unidade  @relation("RecadoUnidadePrincipal", fields: [unidadeId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relação Many-to-Many com Unidades
-  unidades RecadoUnidade[]
+  unidades     RecadoUnidade[]
+  solicitacoes SolicitacaoGerenciamento[]
 
   @@map("recados")
 }
@@ -220,4 +269,101 @@ model RecadoAudit {
   @@index([userId])
   @@index([createdAt])
   @@map("recados_audits")
+}
+
+model AgendaEvento {
+  id              Int      @id @default(autoincrement())
+  titulo          String
+  descricao       String?
+  data            DateTime
+  unidadeId       Int
+  unidade         Unidade  @relation(fields: [unidadeId], references: [id])
+  criadoPorId     String
+  criadoPor       User     @relation("AgendaEventoCriadoPor", fields: [criadoPorId], references: [id])
+  atualizadoPorId String?
+  atualizadoPor   User?    @relation("AgendaEventoAtualizadoPor", fields: [atualizadoPorId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([data])
+  @@index([unidadeId])
+  @@index([criadoPorId])
+  @@map("agenda_eventos")
+}
+
+model AgendaEventoAudit {
+  id           Int      @id @default(autoincrement())
+  eventoId     Int
+  eventoTitulo String
+  unidadeId    Int
+  unidadeNome  String?
+  userId       String
+  userNome     String
+  acao         String
+  dadosAntigos Json?
+  dadosNovos   Json?
+  createdAt    DateTime @default(now())
+
+  @@index([eventoId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("agenda_eventos_audits")
+}
+
+enum SolicitacaoTipo {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+enum SolicitacaoStatus {
+  PENDENTE
+  APROVADO
+  RECUSADO
+  CANCELADO
+}
+
+enum SolicitacaoRecurso {
+  RECADO
+  NOTICIA
+}
+
+model SolicitacaoGerenciamento {
+  id      Int                @id @default(autoincrement())
+  recurso SolicitacaoRecurso
+  tipo    SolicitacaoTipo
+  status  SolicitacaoStatus  @default(PENDENTE)
+
+  recadoId Int?
+  recado   Recado? @relation(fields: [recadoId], references: [id], onDelete: SetNull)
+
+  noticiaId Int?
+  noticia   Noticia? @relation(fields: [noticiaId], references: [id], onDelete: SetNull)
+
+  unidadeId Int?
+  unidade   Unidade? @relation(fields: [unidadeId], references: [id], onDelete: SetNull)
+
+  unidadeIds String?
+
+  titulo       String?
+  conteudo     String?
+  imagem       String?
+  imagemAntiga String?
+  motivoRecusa String?
+
+  solicitanteId   String
+  solicitanteNome String
+  revisorId       String?
+  revisorNome     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([recurso])
+  @@index([solicitanteId])
+  @@index([unidadeId])
+  @@index([recadoId])
+  @@index([noticiaId])
+  @@map("solicitacoes_gerenciamento")
 }

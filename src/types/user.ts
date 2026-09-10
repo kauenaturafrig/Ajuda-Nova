@@ -1,17 +1,31 @@
 // src/types/user.ts - Tipos compartilhados
-export type AppUserRole = "OWNER" | "ADMIN" | "MESSAGEONLY" | "NEWSONLY" | "MESSAGENEWS";
+export const APP_USER_ROLES = [
+  "OWNER",
+  "ADMIN",
+  "MESSAGEONLY",
+  "NEWSONLY",
+  "MESSAGENEWS",
+  "EVENTS",
+  "EXTENSION",
+  "EMAIL",
+] as const;
 
-export interface Recado {
-  id: number;
-  titulo: string;
-  conteudo: string;
-  imagem?: string;
-  unidadeId: number;
-  unidade: { nome: string };
-  createdAt: Date;
-}
+export type AppUserRole =
+  (typeof APP_USER_ROLES)[number];
 
-export interface Unidade {
+export type Usuario = {
+  id: string;
+  name: string;
+  email: string;
+  roles: AppUserRole[];
+  unidadeId: number | null;
+  unidade: {
+    id: number;
+    nome: string;
+  } | null;
+};
+
+export type Unidade = {
   id: number;
   nome: string;
-}
+};

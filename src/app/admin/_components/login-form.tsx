@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, Lock } from "lucide-react";
 
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
@@ -17,16 +17,14 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../components/ui/form";
-import { TwitchLogo } from "@phosphor-icons/react";
 import { authClient } from "../../../lib/auth-client";
-import Layout from "@/src/components/Layout";
 import { LoadingOverlay } from "../../../components/ui/loading-overlay";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "Email inválido" }),
+  email: z.string().email({ message: "Insira um e-mail válido" }),
   password: z
     .string()
-    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
+    .min(8, { message: "A senha deve conter no mínimo 8 caracteres" }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -47,106 +45,131 @@ export function LoginForm() {
   async function onSubmit(formData: LoginFormValues) {
     setIsLoading(true);
 
-    const { error } = await authClient.signIn.email(
+    await authClient.signIn.email(
       {
-        email: formData.email,
+        email: formData.email.trim().toLowerCase(),
         password: formData.password,
-        callbackURL: "/admin/authenticated",
       },
       {
-        onRequest: () => setIsLoading(true),
-        onSuccess: (ctx) => {
-          console.log("LOGADO", ctx);
+        onRequest: () => {
+          setIsLoading(true);
+        },
+
+        onSuccess: () => {
           setIsLoading(false);
           router.replace("/admin/authenticated");
+          router.refresh();
         },
-        onError: (ctx) => {
-          console.log("ERRO AO LOGAR");
-          if (ctx.error.code === "INVALID_EMAIL_OR_PASSWORD") {
-            alert("Email ou senha incorretos");
-          }
+
+        onError: (context) => {
           setIsLoading(false);
+
+          if (
+            context.error.code ===
+            "INVALID_EMAIL_OR_PASSWORD"
+          ) {
+            alert("E-mail ou senha incorretos.");
+          } else {
+            console.error(
+              "Erro ao entrar:",
+              context.error,
+            );
+
+            alert(
+              context.error.message ??
+              "Ocorreu um erro ao tentar acessar o painel.",
+            );
+          }
         },
-      }
+      },
     );
   }
 
   return (
-    <div>
-      <LoadingOverlay show={isLoading} text="Entrando..." />
+    <div className="relative">
+      <LoadingOverlay show={isLoading} text="Autenticando..." />
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+
+          {/* Campo Email */}
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="dark:text-white">Email</FormLabel>
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-xs font-semibold text-gray-700 dark:text-neutral-300">
+                  E-mail institucional
+                </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="seu@email.com"
-                    type="email"
-                    {...field}
-                    disabled={isLoading}
-                    className="dark:text-white"
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Input
+                      placeholder="nome.sobrenome@naturafrig.com.br"
+                      type="email"
+                      {...field}
+                      disabled={isLoading}
+                      className="pl-9 h-10 rounded-xl bg-gray-50/50 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-sm focus-visible:ring-orange-500/30"
+                    />
+                  </div>
                 </FormControl>
-                <FormMessage className="!text-red-500" />
+                <FormMessage className="text-xs font-medium text-red-500" />
               </FormItem>
             )}
           />
 
+          {/* Campo Senha */}
           <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="dark:text-white">Senha</FormLabel>
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-xs font-semibold text-gray-700 dark:text-neutral-300">
+                  Senha de acesso
+                </FormLabel>
                 <FormControl>
                   <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <Input
                       placeholder="••••••••"
                       type={showPassword ? "text" : "password"}
                       {...field}
                       disabled={isLoading}
-                      className="dark:text-white"
+                      className="pl-9 pr-10 h-10 rounded-xl bg-gray-50/50 dark:bg-neutral-900 border-gray-200 dark:border-neutral-800 text-sm focus-visible:ring-orange-500/30"
                     />
                     <Button
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent dark:text-white"
+                      size="icon"
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-gray-400 hover:text-gray-600 dark:hover:text-neutral-200 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading}
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4 text-muted-foreground dark:text-white" />
-                      ) : (
-                        <Eye className="h-4 w-4 text-muted-foreground dark:text-white" />
-                      )}
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       <span className="sr-only">
-                        {showPassword ? "Esconder senha" : "Mostrar senha"}
+                        {showPassword ? "Ocultar senha" : "Exibir senha"}
                       </span>
                     </Button>
                   </div>
                 </FormControl>
-                <FormMessage className="!text-red-500" />
+                <FormMessage className="text-xs font-medium text-red-500" />
               </FormItem>
             )}
           />
 
+          {/* Botão de Envio */}
           <Button
             type="submit"
-            className="w-full text-white bg-blue-500 rounded hover:scale-110"
-            disabled={form.formState.isSubmitting}
+            disabled={isLoading}
+            className="w-full h-10 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-medium text-sm transition-all shadow-sm shadow-orange-600/10 active:scale-[0.98] mt-2 gap-2"
           >
-            {form.formState.isSubmitting ? (
+            {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />
-                Entrando...
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Carregando...
               </>
             ) : (
-              "Entrar"
+              "Acessar Painel"
             )}
           </Button>
         </form>

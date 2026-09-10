@@ -8,7 +8,7 @@ export function getUnidadeByIp(ip: string | null): number | null {
   let cleanIp = ip;
   if (ip.startsWith('::ffff:')) {
     cleanIp = ip.replace('::ffff:', '');
-  }
+  } 
   
   // ✅ Remove porta :8080
   cleanIp = cleanIp.split(':')[0];
@@ -20,7 +20,7 @@ export function getUnidadeByIp(ip: string | null): number | null {
   
   const prefix = `${parts[0]}.${parts[1]}.${parts[2]}`;
   const map: Record<string, number> = {
-    '172.16.1': 4,   // Pirapozinho
+    '172.16.10': 4,   // Pirapozinho
     '172.16.11': 4,   // Pirapozinho
     '172.16.12': 4,   // Pirapozinho
     '172.16.13': 4,   // Pirapozinho
@@ -30,7 +30,7 @@ export function getUnidadeByIp(ip: string | null): number | null {
     '172.16.17': 4,   // Pirapozinho
     '172.16.18': 4,   // Pirapozinho
 
-    '172.16.2': 2,   // Nova Andradina
+    '172.16.20': 2,   // Nova Andradina
     '172.16.21': 2,  // Nova Andradina
     '172.16.22': 2,  // Nova Andradina
     '172.16.23': 2,  // Nova Andradina
@@ -42,7 +42,7 @@ export function getUnidadeByIp(ip: string | null): number | null {
   
     '172.16.28': 1,  // Rochedo
     '172.16.29': 1,  // Rochedo
-    '172.16.3': 1,   // Rochedo
+    '172.16.30': 1,   // Rochedo
     '172.16.31': 1,   // Rochedo
     '172.16.32': 1,   // Rochedo
     '172.16.33': 1,   // Rochedo
@@ -53,16 +53,16 @@ export function getUnidadeByIp(ip: string | null): number | null {
     '172.16.38': 1,   // Rochedo
     '172.16.39': 1,   // Rochedo
 
-    '172.16.4': 3,   // Barra dos Bugres
-    '172.16.41': 3,  // Barra dos Bugres
-    '172.16.42': 3,  // Barra dos Bugres
-    '172.16.43': 3,  // Barra dos Bugres
-    '172.16.44': 3,  // Barra dos Bugres
-    '172.16.45': 3,  // Barra dos Bugres
-    '172.16.46': 3,  // Barra dos Bugres
-    '172.16.47': 3,  // Barra dos Bugres
-    '172.16.48': 3,  // Barra dos Bugres
-    '172.16.49': 3,  // Barra dos Bugres
+    '172.16.40': 3,   // Barra do Bugres
+    '172.16.41': 3,  // Barra do Bugres
+    '172.16.42': 3,  // Barra do Bugres
+    '172.16.43': 3,  // Barra do Bugres
+    '172.16.44': 3,  // Barra do Bugres
+    '172.16.45': 3,  // Barra do Bugres
+    '172.16.46': 3,  // Barra do Bugres
+    '172.16.47': 3,  // Barra do Bugres
+    '172.16.48': 3,  // Barra do Bugres
+    '172.16.49': 3,  // Barra do Bugres
 
     '127.0.0': 2,    // LOCALHOST
   };

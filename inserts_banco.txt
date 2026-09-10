@@ -35,7 +35,7 @@ INSERT INTO unidades (nome)
 VALUES
     ('Rochedo-MS'),        -- ID 1
     ('Nova Andradina-MS'), -- ID 2
-    ('Barra dos Bugres-MT'),-- ID 3
+    ('Barra do Bugres-MT'),-- ID 3
     ('Pirapozinho-SP');    -- ID 4
 
 INSERT INTO ramais (numero, setor, nome, "unidadeId", "createdAt", "updatedAt")

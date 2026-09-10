@@ -178,7 +178,53 @@ bash
     npx prisma migrate dev --name add_unique_ramal_unidade_numero --create-only
 Depois abre o arquivo .sql em prisma/migrations/... e verifica se está fazendo algo seguro (ex.: ALTER TABLE ramais ADD CONSTRAINT ...).
 ​
+/////////////////////////////////////////////////////////////////////
 
+COMO APAGAR BANCO SEGURAMENTE E ATUALIZAR O PRISMA (CUIDADO: EM PRODUÇÃO)
+
+(SEU_USUARIO: ramais_db)
+
+DENTRO DO DIRETORIO
+
+pg_dump -h localhost -p 5432 -U SEU_USUARIO -d ramais_db_testes -f backup_ramais_db_testes.sql
+
+pg_dump -h localhost -p 5432 -U SEU_USUARIO -d ramais_db_testes \
+  -t public.user \
+  -t public.session \
+  -t public.account \
+  -t public.verification \
+  --data-only \
+  -f auth_data.sql
+
+dropdb -h localhost -p 5432 -U SEU_USUARIO ramais_db_testes
+createdb -h localhost -p 5432 -U SEU_USUARIO ramais_db_testes
+
+CREATE USER ramais_user WITH PASSWORD 'SUA_SENHA'; (NAO PRECISOU)
+CREATE DATABASE ramais_db_testes OWNER ramais_user;
+
+npx prisma migrate deploy
+
+
+VA PARA O BANCO
+
+kaue_santos@SrvLab01:~$ sudo -i -u postgres
+postgres@SrvLab01:~$ psql
+psql (17.6 (Debian 17.6-0+deb13u1))
+Digite "help" para obter ajuda.
+
+\c ramais_db ou \c ramais_db_testes
+
+INSERT INTO unidades (nome)
+VALUES
+    ('Rochedo-MS'),        -- ID 1
+    ('Nova Andradina-MS'), -- ID 2
+    ('Barra do Bugres-MT'),-- ID 3
+    ('Pirapozinho-SP');    -- ID 4
+
+
+VOLTANDO NO DIRETORIO
+
+psql -h localhost -p 5432 -U SEU_USUARIO -d ramais_db_testes -f auth_data.sql
 
 
 

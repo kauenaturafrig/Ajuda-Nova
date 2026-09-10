@@ -1,0 +1,37 @@
+services:
+  app:
+    build: .
+    container_name: portal-app
+    restart: unless-stopped
+    ports:
+      - "5050:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/public/uploads
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # depends_on removido pois o banco está fora do container
+
+  backup:
+    image: postgres:18
+    container_name: portal-backup
+    restart: unless-stopped
+    environment:
+      PGHOST: ${PGHOST}  # <- IP ou hostname do banco
+      PGPORT: ${PGPORT}
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./backups:/backups
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        sleep 10
+        while true; do
+          FILE="/backups/portal-$$(date +%Y-%m-%d_%H-%M-%S).dump"
+          pg_dump -Fc -f "$$FILE" 2>/dev/null || echo "Backup failed"
+          find /backups -type f -name "*.dump" -mtime +14 -delete
+          sleep 86400
+        done

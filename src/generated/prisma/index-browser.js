@@ -21,11 +21,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.1
+ * Prisma Client JS version: 6.19.3
  * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 Prisma.prismaVersion = {
-  client: "6.19.1",
+  client: "6.19.3",
   engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
@@ -129,8 +129,32 @@ exports.Prisma.UserScalarFieldEnum = {
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  unidadeId: 'unidadeId',
-  role: 'role'
+  unidadeId: 'unidadeId'
+};
+
+exports.Prisma.UserRoleAssignmentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  roleId: 'roleId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description'
+};
+
+exports.Prisma.PermissionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description'
+};
+
+exports.Prisma.RolePermissionScalarFieldEnum = {
+  roleId: 'roleId',
+  permissionId: 'permissionId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -149,6 +173,7 @@ exports.Prisma.AccountScalarFieldEnum = {
   accountId: 'accountId',
   providerId: 'providerId',
   userId: 'userId',
+  issuer: 'issuer',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
   idToken: 'idToken',
@@ -252,6 +277,54 @@ exports.Prisma.RecadoAuditScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.AgendaEventoScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  data: 'data',
+  unidadeId: 'unidadeId',
+  criadoPorId: 'criadoPorId',
+  atualizadoPorId: 'atualizadoPorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AgendaEventoAuditScalarFieldEnum = {
+  id: 'id',
+  eventoId: 'eventoId',
+  eventoTitulo: 'eventoTitulo',
+  unidadeId: 'unidadeId',
+  unidadeNome: 'unidadeNome',
+  userId: 'userId',
+  userNome: 'userNome',
+  acao: 'acao',
+  dadosAntigos: 'dadosAntigos',
+  dadosNovos: 'dadosNovos',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SolicitacaoGerenciamentoScalarFieldEnum = {
+  id: 'id',
+  recurso: 'recurso',
+  tipo: 'tipo',
+  status: 'status',
+  recadoId: 'recadoId',
+  noticiaId: 'noticiaId',
+  unidadeId: 'unidadeId',
+  unidadeIds: 'unidadeIds',
+  titulo: 'titulo',
+  conteudo: 'conteudo',
+  imagem: 'imagem',
+  imagemAntiga: 'imagemAntiga',
+  motivoRecusa: 'motivoRecusa',
+  solicitanteId: 'solicitanteId',
+  solicitanteNome: 'solicitanteNome',
+  revisorId: 'revisorId',
+  revisorNome: 'revisorNome',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -277,16 +350,30 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-exports.UserRole = exports.$Enums.UserRole = {
-  OWNER: 'OWNER',
-  ADMIN: 'ADMIN',
-  MESSAGEONLY: 'MESSAGEONLY',
-  NEWSONLY: 'NEWSONLY',
-  MESSAGENEWS: 'MESSAGENEWS'
+exports.SolicitacaoRecurso = exports.$Enums.SolicitacaoRecurso = {
+  RECADO: 'RECADO',
+  NOTICIA: 'NOTICIA'
+};
+
+exports.SolicitacaoTipo = exports.$Enums.SolicitacaoTipo = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE'
+};
+
+exports.SolicitacaoStatus = exports.$Enums.SolicitacaoStatus = {
+  PENDENTE: 'PENDENTE',
+  APROVADO: 'APROVADO',
+  RECUSADO: 'RECUSADO',
+  CANCELADO: 'CANCELADO'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
+  UserRoleAssignment: 'UserRoleAssignment',
+  Role: 'Role',
+  Permission: 'Permission',
+  RolePermission: 'RolePermission',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
@@ -298,7 +385,10 @@ exports.Prisma.ModelName = {
   NoticiaAudit: 'NoticiaAudit',
   Recado: 'Recado',
   RecadoUnidade: 'RecadoUnidade',
-  RecadoAudit: 'RecadoAudit'
+  RecadoAudit: 'RecadoAudit',
+  AgendaEvento: 'AgendaEvento',
+  AgendaEventoAudit: 'AgendaEventoAudit',
+  SolicitacaoGerenciamento: 'SolicitacaoGerenciamento'
 };
 
 /**

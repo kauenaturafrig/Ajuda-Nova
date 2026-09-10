@@ -1,29 +1,36 @@
 // src/app/admin/authenticated/emails/page.tsx
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "../../../../lib/auth";
-import { prisma } from "../../../../lib/prisma";
-import Layout from "../../../../components/Layout";
+import { requirePageRoles } from "@/src/lib/permissions";
+import { PAGE_ROLES } from "@/src/lib/role-permissions";
+import Layout from "@/src/components/Layout";
 import EmailsClient from "./emails-client";
+import { prisma } from "@/src/lib/prisma";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function EmailsPage() {
-  const sessionUser = await auth.api.getSession({ headers: await headers() });
-  if (!sessionUser) redirect("/admin");
+  const user = await requirePageRoles(
+    PAGE_ROLES.emails,
+  );
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: sessionUser.user.id },
-    select: { role: true, unidadeId: true },
-  });
+  let userUnidadeNome: string | null = null;
 
-  // 🚫 BLOQUEIA NEWSONLY, MESSAGEONLY e MESSAGENEWS - comparação string simples
-  if (!dbUser || dbUser.role === "NEWSONLY" || dbUser.role === "MESSAGEONLY" || dbUser.role === "MESSAGENEWS") {
-    redirect("/admin/authenticated");
+  if (user.unidadeId) {
+    const unidade = await prisma.unidade.findUnique({
+      where: { id: user.unidadeId },
+      select: { nome: true },
+    });
+
+    userUnidadeNome = unidade?.nome ?? null;
   }
 
   return (
     <Layout>
-      <EmailsClient/>
+      <EmailsClient
+        userRoles={user.roles}
+        userUnidadeId={user.unidadeId}
+        userUnidadeNome={userUnidadeNome}
+      />
     </Layout>
-  )
-  
+  );
 }
