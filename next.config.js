@@ -77,6 +77,7 @@ const nextConfig = {
     ],
   },
   allowedDevOrigins: ["172.16.20.232", "localhost:3000", "172.16.11.246"],
+  output: "standalone",
 };
 
 module.exports = nextConfig;
