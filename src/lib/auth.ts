@@ -19,6 +19,6 @@ export const auth = betterAuth({
   },
 
   trustedOrigins: [
-    "https://intranet.naturafrig.com.br",
+    appUrl,
   ],
 });
