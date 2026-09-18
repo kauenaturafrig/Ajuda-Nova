@@ -7,12 +7,6 @@ import Layout from "@/src/components/Layout";
 import { LockKeyhole } from "lucide-react";
 
 export default async function Home() {
-  // se já tiver sessão, manda para /admin/authenticated
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (session) {
-    redirect("/admin/authenticated");
-  }
-
   return (
     <Layout>
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-12">
