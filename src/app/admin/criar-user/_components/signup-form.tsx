@@ -8,8 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2, ArrowLeft, ArrowRight } from "lucide-react";
 
-import { Button } from "../../../../../components/ui/button";
-import { Input } from "../../../../../components/ui/input";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
 import {
   Form,
   FormControl,
@@ -17,8 +17,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../../components/ui/form";
-import { authClient } from "../../../../../lib/auth-client";
+} from "../../../../components/ui/form";
+import { authClient } from "../../../../lib/auth-client";
 
 const roleOptions = [
   {
