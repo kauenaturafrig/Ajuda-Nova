@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../../lib/prisma";
-import { auth } from "../../../../../lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -21,63 +20,23 @@ function isAllowedRole(value: string): value is AllowedRole {
   return allowedRoles.includes(value as AllowedRole);
 }
 
-// async function requireOwner(req: NextRequest) {
-//   const session = await auth.api.getSession({
-//     headers: req.headers,
-//   });
-
-//   if (!session) {
-//     return null;
-//   }
-
-//   const user = await prisma.user.findUnique({
-//     where: {
-//       id: session.user.id,
-//     },
-//     select: {
-//       userRoles: {
-//         select: {
-//           role: {
-//             select: {
-//               name: true,
-//             },
-//           },
-//         },
-//       },
-//     },
-//   });
-
-//   const isOwner = user?.userRoles.some(
-//     (assignment) => assignment.role.name === "OWNER",
-//   );
-
-//   return isOwner ? session : null;
-// }
-
 export async function POST(req: NextRequest) {
   try {
-    // const session = await requireOwner(req);
-
-    // if (!session) {
-    //   return NextResponse.json(
-    //     { error: "Forbidden" },
-    //     { status: 403 },
-    //   );
-    // }
-
     const body = await req.json();
 
     const email = String(body.email ?? "")
       .trim()
       .toLowerCase();
 
+    const name = String(body.name ?? "").trim();
+
     const inputRoles: unknown[] = Array.isArray(body.roles)
       ? body.roles
       : [];
 
-    const roleNames: string[] = [
+    const roleNames = [
       ...new Set(
-        inputRoles.map((value: unknown): string =>
+        inputRoles.map((value) =>
           String(value).trim().toUpperCase(),
         ),
       ),
@@ -85,9 +44,16 @@ export async function POST(req: NextRequest) {
 
     const unidadeId = Number(body.unidadeId);
 
-    if (!email || roleNames.length === 0) {
+    if (!email || !email.includes("@")) {
       return NextResponse.json(
-        { error: "Email e roles são obrigatórios" },
+        { error: "E-mail inválido" },
+        { status: 400 },
+      );
+    }
+
+    if (roleNames.length === 0) {
+      return NextResponse.json(
+        { error: "Pelo menos uma role é obrigatória" },
         { status: 400 },
       );
     }
@@ -111,12 +77,8 @@ export async function POST(req: NextRequest) {
     }
 
     const unidade = await prisma.unidade.findUnique({
-      where: {
-        id: unidadeId,
-      },
-      select: {
-        id: true,
-      },
+      where: { id: unidadeId },
+      select: { id: true },
     });
 
     if (!unidade) {
@@ -127,17 +89,16 @@ export async function POST(req: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-      select: {
-        id: true,
-      },
+      where: { email },
+      select: { id: true, email: true },
     });
 
     if (!user) {
       return NextResponse.json(
-        { error: "Usuário não encontrado" },
+        {
+          error:
+            "Usuário não encontrado. O cadastro Better Auth precisa ser concluído antes desta etapa.",
+        },
         { status: 404 },
       );
     }
@@ -146,24 +107,17 @@ export async function POST(req: NextRequest) {
       const roles = await Promise.all(
         roleNames.map((name) =>
           tx.role.upsert({
-            where: {
-              name,
-            },
+            where: { name },
             update: {},
-            create: {
-              name,
-            },
+            create: { name },
           }),
         ),
       );
 
       return tx.user.update({
-        where: {
-          id: user.id,
-        },
+        where: { id: user.id },
         data: {
           unidadeId,
-
           userRoles: {
             connectOrCreate: roles.map((role) => ({
               where: {
@@ -179,7 +133,6 @@ export async function POST(req: NextRequest) {
           },
         },
         include: {
-          unidade: true,
           userRoles: {
             include: {
               role: true,

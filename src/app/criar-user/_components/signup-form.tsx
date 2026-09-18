@@ -8,8 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff, Loader2, ArrowLeft, ArrowRight } from "lucide-react";
 
-import { Button } from "../../../../components/ui/button";
-import { Input } from "../../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import {
   Form,
   FormControl,
@@ -17,8 +17,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../components/ui/form";
-import { authClient } from "../../../../lib/auth-client";
+} from "../../../components/ui/form";
+import { authClient } from "../../../lib/auth-client";
 
 const roleOptions = [
   {
@@ -113,44 +113,54 @@ export function SignupForm({ unidades }: Props) {
   async function onSubmit(values: SignupFormValues) {
     setIsLoading(true);
 
-    const { error } = await authClient.signUp.email(
-      {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      },
-      {
-        onRequest: () => setIsLoading(true),
-        onResponse: () => setIsLoading(false),
+    try {
+      const email = values.email.trim().toLowerCase();
+
+      const { error } = await authClient.signUp.email(
+        {
+          name: values.name.trim(),
+          email,
+          password: values.password,
+        },
+        {
+          onRequest: () => setIsLoading(true),
+          onResponse: () => setIsLoading(false),
+        },
+      );
+
+      if (error) {
+        console.error("Erro ao criar usuário", error);
+        alert(error.message ?? "Erro ao criar usuário.");
+        return;
       }
-    );
 
-    if (error) {
-      console.log("ERRO AO CRIAR USUÁRIO", error);
+      const res = await fetch("/admin/api/usuarios/set-role-unidade", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          roles: values.roles,
+          unidadeId: Number(values.unidadeId),
+        }),
+      });
+
+      const result = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        console.error("Erro ao definir role/unidade", result);
+        alert(`Erro ao salvar unidade/role: ${result?.error ?? res.status}`);
+        return;
+      }
+
+      router.replace("/admin/authenticated/usuarios");
+    } catch (error) {
+      console.error("Erro inesperado ao criar usuário", error);
+      alert("Erro inesperado ao criar usuário.");
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    const res = await fetch("/admin/api/usuarios/set-role-unidade", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: values.email,
-        roles: values.roles,
-        unidadeId: Number(values.unidadeId),
-      }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      console.error("Erro ao setar role/unidade", err);
-      alert(`Erro ao salvar unidade/role: ${err.error ?? res.status}`);
-      setIsLoading(false);
-      return;
-    }
-
-    setIsLoading(false);
-    router.replace("/admin/authenticated/usuarios");
   }
 
   return (
@@ -289,8 +299,8 @@ export function SignupForm({ unidades }: Props) {
                       <label
                         key={option.value}
                         className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs ${isDisabled
-                            ? "cursor-not-allowed opacity-50"
-                            : "cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800"
+                          ? "cursor-not-allowed opacity-50"
+                          : "cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800"
                           } text-gray-700 dark:text-gray-300`}
                       >
                         <input
