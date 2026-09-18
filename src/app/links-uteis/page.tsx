@@ -48,7 +48,7 @@ const sistemas = [
     badge: "bg-neutral-500/10 text-neutral-600 dark:text-neutral-300"
   },
   {
-    url: "https://172.16.30.13:4010/",
+    url: "https://chatcorporativo.naturafrig.com.br/",
     name: "Chat Corporativo",
     icon: "/assets/images/logos/chat-corporativo.png",
     color: "border-orange-500/20 hover:border-orange-500 group-hover:text-orange-500 hover:shadow-orange-500/10",

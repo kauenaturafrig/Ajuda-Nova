@@ -139,7 +139,7 @@ const sistemas: Sistema[] = [
       "hover:border-neutral-400/50 hover:shadow-neutral-400/10",
   },
   {
-    url: "https://172.16.30.13:4010/",
+    url: "https://chatcorporativo.naturafrig.com.br/",
     name: "Chat Corporativo",
     description:
       "Comunique-se com seus colegas em tempo real",
