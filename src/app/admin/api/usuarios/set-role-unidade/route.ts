@@ -21,49 +21,49 @@ function isAllowedRole(value: string): value is AllowedRole {
   return allowedRoles.includes(value as AllowedRole);
 }
 
-async function requireOwner(req: NextRequest) {
-  const session = await auth.api.getSession({
-    headers: req.headers,
-  });
+// async function requireOwner(req: NextRequest) {
+//   const session = await auth.api.getSession({
+//     headers: req.headers,
+//   });
 
-  if (!session) {
-    return null;
-  }
+//   if (!session) {
+//     return null;
+//   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-    select: {
-      userRoles: {
-        select: {
-          role: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       id: session.user.id,
+//     },
+//     select: {
+//       userRoles: {
+//         select: {
+//           role: {
+//             select: {
+//               name: true,
+//             },
+//           },
+//         },
+//       },
+//     },
+//   });
 
-  const isOwner = user?.userRoles.some(
-    (assignment) => assignment.role.name === "OWNER",
-  );
+//   const isOwner = user?.userRoles.some(
+//     (assignment) => assignment.role.name === "OWNER",
+//   );
 
-  return isOwner ? session : null;
-}
+//   return isOwner ? session : null;
+// }
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await requireOwner(req);
+    // const session = await requireOwner(req);
 
-    if (!session) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 },
-      );
-    }
+    // if (!session) {
+    //   return NextResponse.json(
+    //     { error: "Forbidden" },
+    //     { status: 403 },
+    //   );
+    // }
 
     const body = await req.json();
 
