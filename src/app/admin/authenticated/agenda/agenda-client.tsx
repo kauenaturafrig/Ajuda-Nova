@@ -386,7 +386,7 @@ export default function AgendaAdminClient({
         }
       `}</style>
 
-      <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
+      <div className="container max-w-6xl mx-auto py-8 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-100 dark:border-neutral-800/60">
             <div>

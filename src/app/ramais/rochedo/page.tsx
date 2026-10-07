@@ -1,7 +1,7 @@
 // src/app/ramais/rochedo/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { RamaisList } from "../_components/ramais-list";
+import { RochedoClient } from "./rochedo-client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function RamaisRochedoPage() {
           </Button>
         </Link>
 
-        <RamaisList
+        <RochedoClient
           titulo="Rochedo - MS"
           imagem="/assets/images/unidades/ROCHEDO2023.jpg"
           ramais={ramais.map((r) => ({

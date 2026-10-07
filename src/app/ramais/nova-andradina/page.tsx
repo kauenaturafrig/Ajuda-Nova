@@ -1,7 +1,7 @@
 // src/app/ramais/nova-andradina/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { RamaisList } from "../_components/ramais-list";
+import { NovaAndradinaClient } from "./nova-andradina-client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function RamaisNovaAndradinaPage() {
           </Button>
         </Link>
 
-        <RamaisList
+        <NovaAndradinaClient
           titulo="Nova Andradina - MS"
           imagem="/assets/images/unidades/NOVA2023.jpg"
           ramais={ramais.map((r) => ({

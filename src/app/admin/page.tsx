@@ -1,12 +1,18 @@
 // src/app/admin/page.tsx
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "../../lib/auth";
 import { LoginForm } from "./_components/login-form";
 import Layout from "@/src/components/Layout";
 import { LockKeyhole } from "lucide-react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/src/lib/auth";
 
 export default async function Home() {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (session) {
+    redirect("/admin/authenticated");
+  }
+
   return (
     <Layout>
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-12">

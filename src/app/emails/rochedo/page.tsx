@@ -1,7 +1,7 @@
 // src/app/emails/rochedo/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { EmailsList } from "../_components/emails-list";
+import { RochedoClient } from "./rochedo.client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function EmailsRochedoPage() {
           </Button>
         </Link>
 
-        <EmailsList
+        <RochedoClient
           titulo="Rochedo - MS"
           imagem="/assets/images/unidades/ROCHEDO2023.jpg"
           emails={emails.map((e) => ({

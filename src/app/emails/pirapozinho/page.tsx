@@ -1,7 +1,7 @@
 // src/app/emails/pirapozinho/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { EmailsList } from "../_components/emails-list";
+import { PirapozinhoClient } from "./pirapozinho-client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function EmailsPirapozinhoPage() {
           </Button>
         </Link>
 
-        <EmailsList
+        <PirapozinhoClient
           titulo="Pirapozinho - SP"
           imagem="/assets/images/unidades/PIRAPOZINHO2023.jpg"
           emails={emails.map((e) => ({
