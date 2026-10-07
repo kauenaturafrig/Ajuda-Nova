@@ -1,7 +1,7 @@
 // src/app/emails/nova-andradina/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { EmailsList } from "../_components/emails-list";
+import { NovaAndradinaClient } from "./nova-andradina-client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function EmailsNovaAndradinaPage() {
           </Button>
         </Link>
 
-        <EmailsList
+        <NovaAndradinaClient
           titulo="Nova Andradina - MS"
           imagem="/assets/images/unidades/NOVA2023.jpg"
           emails={emails.map((e) => ({

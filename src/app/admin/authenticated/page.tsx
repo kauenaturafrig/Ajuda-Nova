@@ -7,7 +7,19 @@ import { auth } from "../../../lib/auth";
 import { prisma } from "../../../lib/prisma";
 import { ButtonSignOut } from "./_components/button-signout";
 import Layout from "@/src/components/Layout";
-import { ShieldCheck, User } from "lucide-react";
+import { 
+  ShieldCheck, 
+  User,
+  Phone,
+  Mail,
+  Signature,
+  Newspaper,
+  Megaphone,
+  Calendar,
+  UserPlus,
+  Users,
+  Key 
+} from "lucide-react";
 
 export default async function Authenticated() {
   const session = await auth.api.getSession({
@@ -108,7 +120,9 @@ export default async function Authenticated() {
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-amber-500/50 hover:shadow-amber-500/5"
               >
                 <div className="relative w-20 h-20 bg-amber-500 border border-amber-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-amber-600">
-                  <Image src="/assets/images/icons/icons8-phone-branco.png" alt="Ramais" fill className="object-contain p-3 dark:invert" />
+                  <span className="text-white">
+                    <Phone size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Ramais</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Ver e editar ramais da sua unidade.</p>
@@ -122,7 +136,9 @@ export default async function Authenticated() {
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-purple-500/50 hover:shadow-purple-500/5"
               >
                 <div className="relative w-20 h-20 bg-purple-500 border border-purple-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-purple-600">
-                  <Image src="/assets/images/icons/icons8-mail-branco.png" alt="E-mails" fill className="object-contain p-3 dark:invert" />
+                  <span className="text-white">
+                    <Mail size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">E-mails</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Gerenciar lista de e-mails corporativos.</p>
@@ -137,7 +153,9 @@ export default async function Authenticated() {
               >
                 <div className="relative w-20 h-20 bg-blue-500 border border-blue-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-blue-600">
                   {/* Removido o 'invert' fixo e deixado uniforme */}
-                  <Image src="/assets/images/logos/assinatura.png" alt="Assinatura" fill className="object-contain p-2 dark:brightness-110" />
+                  <span className="text-white">
+                    <Signature size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Criar Assinatura</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Criar assinatura padrão de e-mail.</p>
@@ -151,7 +169,9 @@ export default async function Authenticated() {
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-blue-600/50 hover:shadow-blue-600/5"
               >
                 <div className="relative w-20 h-20 bg-blue-600 border border-blue-600/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-blue-700">
-                  <Image src="/assets/images/icons/icons8-news-branco.png" alt="Notícias" fill className="object-contain p-3 dark:invert" />
+                  <span className="text-white">
+                    <Newspaper size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-500 transition-colors">Notícias</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Gerenciar notícias em nível global.</p>
@@ -165,7 +185,9 @@ export default async function Authenticated() {
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-indigo-500/50 hover:shadow-indigo-500/5"
               >
                 <div className="relative w-20 h-20 bg-indigo-500 border border-indigo-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-indigo-600">
-                  <Image src="/assets/images/icons/icons8-news-branco.png" alt="Log Notícias" fill className="object-contain p-3 dark:invert" />
+                  <span className="text-white">
+                    <Newspaper size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Log de Notícias</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Auditoria e histórico de publicações.</p>
@@ -179,7 +201,9 @@ export default async function Authenticated() {
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-orange-500/50 hover:shadow-orange-500/5"
               >
                 <div className="relative w-20 h-20 bg-orange-500 border border-orange-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-orange-600">
-                  <Image src="/assets/images/icons/icons8-megaphone-branco.png" alt="Recados" fill className="object-contain p-3 dark:invert" />
+                  <span className="text-white">
+                    <Megaphone size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">Recados</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">{isOwner ? 'Painel de todas as unidades' : 'Restrito à minha unidade'}</p>
@@ -193,7 +217,9 @@ export default async function Authenticated() {
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-red-500/50 hover:shadow-red-500/5"
               >
                 <div className="relative w-20 h-20 bg-red-500 border border-red-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-red-600">
-                  <Image src="/assets/images/icons/icons8-megaphone-branco.png" alt="Log Recados" fill className="object-contain p-3 dark:invert" />
+                  <span className="text-white">
+                    <Megaphone size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">Log de Recados</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Auditoria e histórico de recados.</p>
@@ -204,17 +230,14 @@ export default async function Authenticated() {
             {(isOwner || isEvents) && (
               <Link
                 href="/admin/authenticated/agenda"
-                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/5"
+                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-green-500/50 hover:shadow-green-500/5"
               >
-                <div className="relative w-20 h-20 bg-emerald-500 border border-emerald-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-emerald-600">
-                  <Image
-                    src="/assets/images/icons/icons8-tear-off-calendar-branco.png"
-                    alt="Agenda"
-                    fill
-                    className="object-contain p-3 dark:invert"
-                  />
+                <div className="relative w-20 h-20 bg-green-500 border border-green-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-green-600">
+                  <span className="text-white">
+                    <Calendar size={50} />
+                  </span>
                 </div>
-                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                   Agenda
                 </h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">
@@ -227,17 +250,14 @@ export default async function Authenticated() {
             {isOwner && (
               <Link
                 href="/admin/authenticated/agenda/logs"
-                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-violet-500/50 hover:shadow-violet-500/5"
+                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/5"
               >
-                <div className="relative w-20 h-20 bg-violet-500 border border-violet-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-violet-600">
-                  <Image
-                    src="/assets/images/icons/icons8-tear-off-calendar-branco.png"
-                    alt="Log da Agenda"
-                    fill
-                    className="object-contain p-3 dark:invert"
-                  />
+                <div className="relative w-20 h-20 bg-emerald-500 border border-emerald-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-emerald-600">
+                  <span className="text-white">
+                    <Calendar size={50} />
+                  </span>
                 </div>
-                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                   Log da Agenda
                 </h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">
@@ -250,12 +270,14 @@ export default async function Authenticated() {
             {isOwner && (
               <Link
                 href="/admin/authenticated/criar-user"
-                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/5"
+                className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-cyan-500/50 hover:shadow-cyan-500/5"
               >
-                <div className="relative w-20 h-20 bg-emerald-500 border border-emerald-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-emerald-600">
-                  <Image src="/assets/images/icons/icons8-user-plus-branco.png" alt="Criar Usuário" fill className="object-contain p-3 dark:invert" />
+                <div className="relative w-20 h-20 bg-cyan-500 border border-cyan-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-cyan-600">
+                  <span className="text-white">
+                    <UserPlus size={50} />
+                  </span>
                 </div>
-                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Criar Usuário</h2>
+                <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Criar Usuário</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Cadastrar novas contas e definir permissões.</p>
               </Link>
             )}
@@ -267,7 +289,9 @@ export default async function Authenticated() {
                 className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-rose-600/50 hover:shadow-rose-600/5"
               >
                 <div className="relative w-20 h-20 bg-rose-600 border border-rose-600/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-rose-700">
-                  <Image src="/assets/images/icons/icons8-users-branco.png" alt="Gerenciar Usuários" fill className="object-contain p-3 dark:invert" />
+                  <span className="text-white">
+                    <Users size={50} />
+                  </span>
                 </div>
                 <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Gerenciar Usuários</h2>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Modificar acessos e perfis das contas ativas.</p>
@@ -280,7 +304,9 @@ export default async function Authenticated() {
               className="group relative flex flex-col items-center justify-center text-center h-56 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:border-zinc-500/50 hover:shadow-zinc-500/5"
             >
               <div className="relative w-20 h-20 bg-zinc-500 border border-zinc-500/20 rounded-2xl p-3.5 flex items-center justify-center overflow-hidden mb-3 transition-colors duration-300 group-hover:bg-zinc-600">
-                <Image src="/assets/images/icons/icons8-password-branco.png" alt="Minha Senha" fill className="object-contain p-3 dark:invert" />
+                <span className="text-white">
+                  <Key size={50} />
+                </span>
               </div>
               <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors">Minha Senha</h2>
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Alterar as credenciais de segurança da sua conta.</p>

@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/src/components/ui/button";
+import { ArrowLeft, Newspaper } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { JsonViewer } from "@/src/components/JsonViewer";
 
@@ -37,28 +40,29 @@ export default function AuditoriaNoticiasClient({
   audits,
   total,
 }: Props) {
+  const router = useRouter();
+
   return (
-    <div className="container mx-auto py-8 px-4 w-full">
+    <div className="container max-w-6xl mx-auto py-8 px-4">
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-8">
-        <Link
-          href="/admin/authenticated"
-          className="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-        >
-          ← Voltar
-        </Link>
-
         <div className="flex items-center gap-3">
-          <Image
-            src="/assets/images/icons/icons8-news-preto.png"
-            alt="Ícone de notícias"
-            width={40}
-            height={40}
-            className="dark:invert h-auto w-10"
-          />
-
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-            Auditoria de Notícias
-          </h1>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => router.back()}
+            className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <div className="flex items-center gap-3">
+            <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+              <Newspaper size={30} />
+            </span>
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+              Auditoria de Notícias
+            </h1>
+          </div>
         </div>
 
         <span className="px-3 py-1.5 bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200 text-xs font-bold rounded-full">

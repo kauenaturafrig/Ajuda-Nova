@@ -1,7 +1,7 @@
 // src/app/emails/barra-do-bugres/page.tsx
 import { prisma } from "../../../lib/prisma";
 import Layout from "../../../components/Layout";
-import { EmailsList } from "../_components/emails-list";
+import { BarraDoBugresClient } from "./barra-do-bugres-client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -30,7 +30,7 @@ export default async function EmailsBarradoBugresPage() {
           </Button>
         </Link>
 
-        <EmailsList
+        <BarraDoBugresClient
           titulo="Barra do Bugres - MT"
           imagem="/assets/images/unidades/BARRA2023.jpg"
           emails={emails.map((e) => ({
