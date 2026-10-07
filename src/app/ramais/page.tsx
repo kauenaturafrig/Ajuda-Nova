@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../../components/ui/button";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Phone, Edit } from "lucide-react";
+import { Phone, Edit } from "lucide-react";
 import MapaBrasil from "../../components/MapaBrasil";
 
 export default function Ramais() {
@@ -13,29 +13,12 @@ export default function Ramais() {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto py-4">
-        {/* Topo: Botão Voltar Padronizado */}
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.back()}
-          className="mb-6 gap-2 text-gray-600 dark:text-gray-300 transition-all duration-300"
-        >
-          <ArrowLeft size={16} />
-          Voltar
-        </Button>
-
+      <div className="container max-w-6xl mx-auto py-8 px-4">
         {/* Header com Ícone Embalado, Título e Ação Admin */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <span className="flex items-center justify-center w-14 h-14 rounded-2xl bg-zinc-100 dark:bg-neutral-800 shrink-0 shadow-sm p-2.5">
-              <Image
-                src="/assets/images/icons/icons8-phone-preto.png"
-                alt="Ícone Ramais"
-                width={28}
-                height={28}
-                className="dark:invert object-contain"
-              />
+            <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-orange-50 dark:bg-orange-900/30 text-orange-400 dark:text-orange-400">
+              <Phone size={30} />
             </span>
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -49,7 +32,7 @@ export default function Ramais() {
 
           {/* Botão de Edição Padronizado */}
           <Link href="/admin" passHref>
-            <Button className="gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-sm transition-all duration-300">
+            <Button className="gap-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl shadow-sm transition-all duration-300">
               <Edit size={16} />
               Editar ramais
             </Button>

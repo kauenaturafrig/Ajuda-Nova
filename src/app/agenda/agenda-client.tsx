@@ -86,10 +86,10 @@ function EventoCard({ ev, compact = false }: { ev: EventoPúblico; compact?: boo
                 {status.label && (
                     <span
                         className={`shrink-0 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${status.tone === "live"
-                                ? "bg-emerald-500 text-white"
-                                : status.tone === "soon"
-                                    ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
-                                    : "bg-gray-100 text-gray-500 dark:bg-neutral-800 dark:text-gray-400"
+                            ? "bg-emerald-500 text-white"
+                            : status.tone === "soon"
+                                ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                                : "bg-gray-100 text-gray-500 dark:bg-neutral-800 dark:text-gray-400"
                             }`}
                     >
                         {status.label}
@@ -197,23 +197,21 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
         }
       `}</style>
 
-            <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
+            <div className="container max-w-6xl mx-auto min-h-screen py-8 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-100 dark:border-neutral-800/60">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
-                                Agenda de Auditorias
-                                <Image
-                                    src="/assets/images/icons/icons8-tear-off-calendar-preto.png"
-                                    alt="Logo Link"
-                                    width={28}
-                                    height={28}
-                                    className="dark:invert opacity-80"
-                                />
-                            </h1>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base mt-1">
-                                Visualização pública das próximas auditorias em todas as unidades
-                            </p>
+                        <div className="flex items-center gap-4">
+                            <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-green-50 dark:bg-green-900/30 text-green-400 dark:text-green-400">
+                                <Calendar size={30} />
+                            </span>
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                                    Agenda de Auditorias
+                                </h1>
+                                <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base mt-1">
+                                    Visualização pública das próximas auditorias em todas as unidades
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -265,8 +263,8 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                                     key={`day-${dayNum}`}
                                     onClick={() => setDiaSelecionado(date)}
                                     className={`h-24 rounded-2xl border p-2 flex flex-col gap-1 overflow-hidden text-left transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-emerald-500/50 cursor-pointer ${isToday
-                                            ? "bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30"
-                                            : "bg-white dark:bg-neutral-900 border-gray-100 dark:border-neutral-800"
+                                        ? "bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30"
+                                        : "bg-white dark:bg-neutral-900 border-gray-100 dark:border-neutral-800"
                                         }`}
                                 >
                                     <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">{dayNum}</div>

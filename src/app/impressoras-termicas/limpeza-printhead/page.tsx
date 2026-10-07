@@ -19,22 +19,20 @@ export default function PrintHeadClean() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto py-4">
-        {/* Botão Voltar */}
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.back()}
-          className="mb-6 gap-2 text-gray-600 dark:text-gray-300"
-        >
-          <ArrowLeft size={16} />
-          Voltar
-        </Button>
-
+      <div className="container max-w-6xl mx-auto py-8 px-4">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <span className="flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shrink-0">
-            <Printer size={28} />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => router.back()}
+            className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+            <Printer size={30} />
           </span>
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

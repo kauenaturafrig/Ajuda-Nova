@@ -6,11 +6,11 @@ import { ScanLine } from "lucide-react";
 export default function ImpressorasTermicas() {
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto py-4">
+      <div className="container max-w-6xl mx-auto py-8 px-4">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <span className="flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shrink-0">
-            <ScanLine size={36} />
+          <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+            <ScanLine size={30} />
           </span>
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

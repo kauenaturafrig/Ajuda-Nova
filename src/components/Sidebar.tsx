@@ -3,26 +3,43 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import {
+  LayoutDashboard,
+  Link as Link1,
+  Phone,
+  Mail,
+  Newspaper,
+  Megaphone,
+  Calendar,
+  TableOfContents,
+  ScanLine,
+  Scale,
+  Terminal,
+  Printer,
+  Monitor,
+  ShieldUser,
+  type LucideIcon
+} from 'lucide-react';
 
 export default function Sidebar() {
   const [openSubmenu, setOpenSubmenu] = useState(false);
 
-  const menuItems = [
-    { label: 'Início', path: '/dashboard', icon: '/assets/images/icons/icons8-dashboard-branco.png' },
-    { label: 'Sistemas', path: '/links-uteis', icon: '/assets/images/icons/icons8-link-branco.png' },
-    { label: 'Ramais', path: '/ramais', icon: '/assets/images/icons/icons8-phone-branco.png' },
-    { label: 'Emails', path: '/emails', icon: '/assets/images/icons/icons8-mail-branco.png' },
-    { label: 'Notícias', path: '/noticias', icon: '/assets/images/icons/icons8-news-branco.png' },
-    { label: 'Recados', path: '/recados', icon: '/assets/images/icons/icons8-megaphone-branco.png' },
-    { label: 'Agenda', path: '/agenda', icon: '/assets/images/icons/icons8-tear-off-calendar-branco.png' },
+  const menuItems: { label: string; path: string; icon: LucideIcon }[] = [
+    { label: 'Início', path: '/dashboard', icon: LayoutDashboard },
+    { label: 'Sistemas', path: '/links-uteis', icon: Link1 },
+    { label: 'Ramais', path: '/ramais', icon: Phone },
+    { label: 'Emails', path: '/emails', icon: Mail },
+    { label: 'Notícias', path: '/noticias', icon: Newspaper },
+    { label: 'Recados', path: '/recados', icon: Megaphone },
+    { label: 'Agenda', path: '/agenda', icon: Calendar },
   ];
 
-  const submenuItems = [
-    { label: 'Leitores', path: '/leitores', icon: '/assets/images/icons/icons8-barcode-reader-branco.png' },
-    { label: 'Balanças', path: '/balancas', icon: '/assets/images/icons/icons8-scales-branco.png' },
-    { label: 'Tanuresoft', path: '/tanuresoft', icon: '/assets/images/icons/icons8-cmd-branco.png' },
-    { label: 'Impressora Zebra', path: '/impressoras-termicas', icon: '/assets/images/icons/icons8-print-branco.png' },
-    { label: 'Windows', path: '/windows-page', icon: '/assets/images/icons/icons8-windows-branco.png' },
+  const submenuItems: { label: string; path: string; icon: LucideIcon }[] = [
+    { label: 'Leitores', path: '/leitores', icon: ScanLine },
+    { label: 'Balanças', path: '/balancas', icon: Scale },
+    { label: 'Tanuresoft', path: '/tanuresoft', icon: Terminal },
+    { label: 'Impressora Zebra', path: '/impressoras-termicas', icon: Printer },
+    { label: 'Windows', path: '/windows-page', icon: Monitor },
   ];
 
   return (
@@ -46,43 +63,41 @@ export default function Sidebar() {
 
       {/* Menu Principal + Submenu */}
       <nav className="flex-1 space-y-3 mb-6 overflow-y-auto overflow-x-hidden">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            href={item.path}
-            className="hover:bg-yellow-500 rounded flex items-center my-1 transition-all duration-200 mx-2.5"
-          >
-            {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
-            <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
-              <Image
-                src={item.icon}
-                alt={item.label}
-                width={20}
-                height={20}
-              />
-            </div>
+        {menuItems.map((item) => {
+          const Icon = item.icon;
 
-            {/* Legenda só aparece quando expandido */}
-            <span className="font-normal text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-              {item.label}
-            </span>
-          </Link>
-        ))}
+          return (
+            <Link
+              key={item.path}
+              href={item.path}
+              className="hover:bg-yellow-500 rounded flex items-center my-1 hover:p-2 transition-all duration-200 mx-2.5"
+            >
+              {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
+              <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
+                <span className="flex items-center justify-center w-6 h-6">
+                  <Icon size={20} />
+                </span>
+              </div>
+
+              {/* Legenda só aparece quando expandido */}
+              <span className="font-normal text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
 
         {/* Submenu */}
         <div className="relative">
           <button
             onClick={() => setOpenSubmenu(!openSubmenu)}
-            className="w-full hover:bg-yellow-500 rounded flex items-center my-1 transition-all duration-200 mx-2.5"
+            className="w-full hover:bg-yellow-500 rounded flex items-center my-1 hover:p-2 transition-all duration-200 mx-2.5"
           >
             {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
             <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
-              <Image
-                src="/assets/images/icons/icons8-manual-branco.png"
-                alt="Configurações"
-                width={20}
-                height={20}
-              />
+              <span className="flex items-center justify-center w-6 h-6">
+                <TableOfContents size={20} />
+              </span>
             </div>
 
             <span className="font-normal text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
@@ -91,43 +106,40 @@ export default function Sidebar() {
           </button>
 
           <div className={`overflow-hidden transition-all duration-300 ${openSubmenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} mx-3`}>
-            {submenuItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className="hover:bg-yellow-400 bg-opacity-20 rounded flex items-center my-1 ml-2 text-xs sm:text-sm transition-all duration-200"
-              >
-                {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
-                <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
-                  <Image
-                    src={item.icon}
-                    alt={item.label}
-                    width={18}
-                    height={18}
-                  />
-                </div>
+            {submenuItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className="hover:bg-yellow-400 bg-opacity-20 rounded flex items-center my-1 hover:p-2 ml-2 text-xs sm:text-sm transition-all duration-200"
+                >
+                  {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
+                  <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
+                    <span className="flex items-center justify-center w-6 h-6">
+                      <Icon size={20} />
+                    </span>
+                  </div>
 
-                <span className="whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                  {item.label}
-                </span>
-              </Link>
-            ))}
+                  <span className="whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
 
         <Link
           key={"/admin"}
           href={"/admin"}
-          className="hover:bg-yellow-500 rounded flex items-center my-1 transition-all duration-200 mx-2.5"
+          className="hover:bg-yellow-500 rounded flex items-center my-1 hover:p-2 transition-all duration-200 mx-2.5"
         >
           {/* Ícone centralizado quando minimizado, alinhado à esquerda quando expandido */}
           <div className="flex items-center justify-center w-10 shrink-0 group-hover:justify-start">
-            <Image
-              src="/assets/images/icons/icons8-admin-branco.png"
-              alt="Admin"
-              width={20}
-              height={20}
-            />
+            <span className="flex items-center justify-center w-6 h-6">
+              <ShieldUser size={20} />
+            </span>
           </div>
 
           <span className="font-normal text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">

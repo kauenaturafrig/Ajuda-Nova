@@ -2,7 +2,7 @@
 
 import Layout from "../../components/Layout";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Link } from "lucide-react";
 
 const sistemas = [
   {
@@ -71,21 +71,17 @@ export default function LinksUtil() {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto py-8 px-4">
+      <div className="container max-w-6xl mx-auto py-8 px-4">
         {/* Header no mesmo alinhamento fino dos painéis anteriores */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-gray-100 dark:border-neutral-800">
           <div>
             <div className="flex items-center gap-3 mb-2">
+              <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-gray-50 dark:bg-gray-600/30 text-gray-600 dark:text-gray-400">
+                <Link size={30} />
+              </span>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
                 Sistemas Naturafrig
               </h1>
-              <Image
-                src="/assets/images/icons/icons8-link-preto.png"
-                alt="Logo Link"
-                width={28}
-                height={28}
-                className="dark:invert opacity-80"
-              />
             </div>
             <p className="text-base text-gray-500 dark:text-gray-400">
               Acesso corporativo unificado aos sistemas essenciais da empresa.

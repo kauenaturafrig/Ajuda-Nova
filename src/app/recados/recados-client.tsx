@@ -124,12 +124,12 @@ export default function RecadosClient({ initialRecados, unidadeId }: Props) {
     return (
         <div className="relative">
             <Layout>
-                <div className="container mx-auto py-4 w-[90%] max-w-6xl">
+                <div className="container max-w-6xl mx-auto py-8 px-4">
                     {/* Header */}
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
                         <div className="flex items-center gap-3">
-                            <span className="flex items-center justify-center w-11 h-11 rounded-xl bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
-                                <Megaphone size={24} />
+                            <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+                                <Megaphone size={30} />
                             </span>
                             <div>
                                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

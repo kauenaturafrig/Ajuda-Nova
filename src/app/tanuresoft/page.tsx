@@ -17,20 +17,20 @@ import {
 export default function Tanuresoft() {
   return (
     <Layout>
-      <div className="max-w-[1100px] mx-auto pt-2 p-1">
+      <div className="container max-w-6xl mx-auto py-8 px-4">
         {/* Header */}
         <div className="flex items-center gap-3 mb-1">
-          <h1 className="font-bold text-4xl dark:text-white">Tanuresoft</h1>
-          <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400">
-            <Terminal size={20} />
+          <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400">
+            <Terminal size={30} />
           </span>
+          <h1 className="font-bold text-4xl dark:text-white">Tanuresoft</h1>
         </div>
         <p className="mb-8 text-gray-500 dark:text-gray-400">
           Central de informações e manuais dos programas Tanure
         </p>
 
         {/* Programas de CMD */}
-        <section className="border-l-4 border-green-600 bg-white dark:bg-neutral-900 rounded-r-xl shadow-sm p-6 mb-6">
+        <section className="border-l-4 border-green-600 bg-white dark:bg-neutral-900 rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-start gap-4 mb-5">
             <span className="flex items-center justify-center w-11 h-11 shrink-0 rounded-lg bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400">
               <Terminal size={22} />
@@ -74,7 +74,7 @@ export default function Tanuresoft() {
         </section>
 
         {/* Programas executados no Windows */}
-        <section className="border-l-4 border-red-600 bg-white dark:bg-neutral-900 rounded-r-xl shadow-sm p-6 mb-6">
+        <section className="border-l-4 border-red-600 bg-white dark:bg-neutral-900 rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-start gap-4 mb-5">
             <span className="flex items-center justify-center w-11 h-11 shrink-0 rounded-lg bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400">
               <AppWindow size={22} />
@@ -116,7 +116,7 @@ export default function Tanuresoft() {
         </section>
 
         {/* Configurar e atualizar CMD */}
-        <section className="border-l-4 border-yellow-500 bg-white dark:bg-neutral-900 rounded-r-xl shadow-sm p-6 mb-6">
+        <section className="border-l-4 border-yellow-500 bg-white dark:bg-neutral-900 rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-start gap-4 mb-5">
             <span className="flex items-center justify-center w-11 h-11 shrink-0 rounded-lg bg-yellow-50 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400">
               <Settings size={22} />

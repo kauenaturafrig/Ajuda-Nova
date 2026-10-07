@@ -76,7 +76,7 @@ const nextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ["172.16.20.232", "localhost:3000", "172.16.11.246"],
+  allowedDevOrigins: ["172.16.20.232", "172.16.20.232:3000", "localhost:3000", "172.16.11.246"],
   output: "standalone",
 };
 
