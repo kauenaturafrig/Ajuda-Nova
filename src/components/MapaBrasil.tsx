@@ -26,28 +26,28 @@ export default function RamaisMapaSVG({ basePath }: MapaBrasilProps) {
   const cities = useMemo(
     () => [
       {
-        name: "Nova Andradina - MS",
-        slug: "nova-andradina",
-        lat: -21.74,
-        lon: -53.34,
-      },
-      {
-        name: "Pirapozinho - SP",
-        slug: "pirapozinho",
-        lat: -21.78,
-        lon: -51.5,
-      },
-      {
         name: "Rochedo - MS",
         slug: "rochedo",
         lat: -18.96,
         lon: -55.29,
       },
       {
+        name: "Nova Andradina - MS",
+        slug: "nova-andradina",
+        lat: -21.74,
+        lon: -53.34,
+      },
+      {
         name: "Barra do Bugres - MT",
         slug: "barra-do-bugres",
         lat: -14.57,
         lon: -58.18,
+      },
+      {
+        name: "Pirapozinho - SP",
+        slug: "pirapozinho",
+        lat: -21.78,
+        lon: -51.5,
       },
     ],
     []
@@ -79,7 +79,7 @@ export default function RamaisMapaSVG({ basePath }: MapaBrasilProps) {
       {/* MENU DE UNIDADES REESTILIZADO */}
       <section className="w-full lg:w-1/3 shrink-0">
         <h3 className="text-xs font-semibold text-gray-400 dark:text-neutral-500 uppercase tracking-wider mb-4">
-          Unidades Disponíveis
+          Unidades
         </h3>
         <div className="space-y-3">
           {cityPoints.map((c) => {
@@ -90,18 +90,16 @@ export default function RamaisMapaSVG({ basePath }: MapaBrasilProps) {
                 href={`${basePath}/${c.slug}`}
                 onMouseEnter={() => setHovered(c.slug)}
                 onMouseLeave={() => setHovered(null)}
-                className={`flex items-center gap-3 p-4 border rounded-2xl shadow-sm transition-all duration-300 group ${
-                  isHovered
+                className={`flex items-center gap-3 p-4 border rounded-2xl shadow-sm transition-all duration-300 group ${isHovered
                     ? "border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400"
                     : "border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/50 text-gray-700 dark:text-gray-300 hover:border-gray-200 dark:hover:border-neutral-700"
-                }`}
+                  }`}
               >
                 <span
-                  className={`flex items-center justify-center w-9 h-9 rounded-xl transition-colors duration-300 shrink-0 ${
-                    isHovered
+                  className={`flex items-center justify-center w-9 h-9 rounded-xl transition-colors duration-300 shrink-0 ${isHovered
                       ? "bg-emerald-500 text-white"
                       : "bg-gray-50 text-gray-500 dark:bg-neutral-800 dark:text-neutral-400 group-hover:bg-gray-100"
-                  }`}
+                    }`}
                 >
                   <MapPin size={18} />
                 </span>
@@ -133,7 +131,7 @@ export default function RamaisMapaSVG({ basePath }: MapaBrasilProps) {
             {/* Base dos Estados do Brasil */}
             <g
               id="features"
-              className="fill-white dark:fill-neutral-900 stroke-gray-200 dark:stroke-neutral-800"
+              className="fill-white dark:fill-neutral-500/60 stroke-gray-200 dark:stroke-neutral-800"
               strokeWidth="1.2"
             >
               {/* Cole o conteúdo de paths/polygons do br.svg aqui */}

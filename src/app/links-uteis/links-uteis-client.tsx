@@ -69,7 +69,7 @@ export function LinksUtilClient() {
   };
 
   return (
-    <div className="container max-w-6xl mx-auto py-8 px-4">
+    <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-8 ml-20">
       {/* Header no mesmo alinhamento fino dos painéis anteriores */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-gray-100 dark:border-neutral-800">
         <div>
@@ -102,10 +102,10 @@ export function LinksUtilClient() {
             }}
             className={`
               group relative flex flex-col items-center justify-center h-48
-              bg-white dark:bg-neutral-900 
+              bg-white dark:bg-[#111a2d] 
               border rounded-3xl p-6 shadow-sm cursor-pointer
               transition-all duration-300 ease-out
-              hover:-translate-y-1.5 hover:shadow-xl dark:hover:bg-white/80
+              hover:-translate-y-1.5 hover:shadow-xl dark:hover:bg-neutral-500/60
               ${color}
             `}
           >

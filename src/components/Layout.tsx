@@ -1,3 +1,4 @@
+//src/components/Layout.tsx
 "use client";
 
 import { ReactNode } from 'react'
@@ -14,9 +15,10 @@ export default function Layout({ children }: { children: ReactNode }) {
           <meta name="description" content="Links úteis e tutoriais" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <div className="flex">
+        <div className="flex min-h-screen">
           <Sidebar />
-          <main className="ml-10 p-6 w-full bg-gray-200 dark:bg-gray-900 min-h-screen">
+
+          <main className="min-w-0 flex-1 bg-[#e5e7eb] dark:bg-[#0a111f]">
             {children}
           </main>
         </div>

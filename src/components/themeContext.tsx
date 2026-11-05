@@ -1,66 +1,122 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 interface ThemeContextType {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType | undefined>(
+  undefined,
+);
 
 interface ThemeProviderProps {
   children: ReactNode;
 }
 
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  // ✅ Inicializa CORRETAMENTE do localStorage
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+export function ThemeProvider({
+  children,
+}: ThemeProviderProps) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  // Carrega a preferência salva.
   useEffect(() => {
-    // ✅ Carrega do localStorage no mount
-    if (typeof window !== 'undefined') {
-      const storedTheme = localStorage.getItem('theme') || 'light';
-      const initialDarkMode = storedTheme === 'dark';
-      setIsDarkMode(initialDarkMode);
-      setMounted(true);
+    let initialDarkMode = false;
+
+    try {
+      initialDarkMode =
+        window.localStorage.getItem("theme") === "dark";
+    } catch {
+      initialDarkMode = false;
     }
+
+    setIsDarkMode(initialDarkMode);
+    setMounted(true);
   }, []);
 
-  // ✅ Aplica tema ao HTML
+  // Aplica e persiste o tema.
   useEffect(() => {
-    if (mounted) {
-      if (isDarkMode) {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      }
+    if (!mounted) return;
+
+    const root = document.documentElement;
+
+    root.classList.toggle("dark", isDarkMode);
+    root.style.colorScheme = isDarkMode ? "dark" : "light";
+
+    try {
+      window.localStorage.setItem(
+        "theme",
+        isDarkMode ? "dark" : "light",
+      );
+    } catch {
+      // O tema continua funcionando sem armazenamento local.
     }
   }, [isDarkMode, mounted]);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(prev => !prev);
-  };
+  // Sincroniza mudanças realizadas em outras abas.
+  useEffect(() => {
+    function handleStorage(event: StorageEvent) {
+      if (event.key === "theme") {
+        setIsDarkMode(event.newValue === "dark");
+      }
 
-  // ✅ Não renderiza até mounted
-  if (!mounted) {
-    return <div className="animate-pulse h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800" />;
-  }
+      if (event.key === null) {
+        setIsDarkMode(false);
+      }
+    }
+
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, []);
+
+  const toggleDarkMode = useCallback(() => {
+    setIsDarkMode((previous) => !previous);
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
-      {children}
+    <ThemeContext.Provider
+      value={{
+        isDarkMode,
+        toggleDarkMode,
+      }}
+    >
+      {!mounted ? (
+        <div
+          role="status"
+          aria-label="Carregando interface"
+          className="min-h-screen animate-pulse bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800"
+        >
+          <span className="sr-only">
+            Carregando interface...
+          </span>
+        </div>
+      ) : (
+        children
+      )}
     </ThemeContext.Provider>
   );
-};
+}
 
-export const useTheme = () => {
+export function useTheme() {
   const context = useContext(ThemeContext);
+
   if (context === undefined) {
-    throw new Error('useTheme deve ser usado dentro de um ThemeProvider');
+    throw new Error(
+      "useTheme deve ser usado dentro de um ThemeProvider",
+    );
   }
+
   return context;
-};
+}
