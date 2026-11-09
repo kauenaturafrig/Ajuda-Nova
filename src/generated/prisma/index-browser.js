@@ -230,6 +230,18 @@ exports.Prisma.JornalScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CategoriaScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  slug: 'slug',
+  descricao: 'descricao',
+  cor: 'cor',
+  ativo: 'ativo',
+  ordem: 'ordem',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.NoticiaScalarFieldEnum = {
   id: 'id',
   titulo: 'titulo',
@@ -312,6 +324,7 @@ exports.Prisma.SolicitacaoGerenciamentoScalarFieldEnum = {
   noticiaId: 'noticiaId',
   unidadeId: 'unidadeId',
   unidadeIds: 'unidadeIds',
+  categoriaIds: 'categoriaIds',
   titulo: 'titulo',
   conteudo: 'conteudo',
   imagem: 'imagem',
@@ -381,6 +394,7 @@ exports.Prisma.ModelName = {
   Ramal: 'Ramal',
   Email: 'Email',
   Jornal: 'Jornal',
+  Categoria: 'Categoria',
   Noticia: 'Noticia',
   NoticiaAudit: 'NoticiaAudit',
   Recado: 'Recado',

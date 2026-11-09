@@ -1,8 +1,6 @@
 "use client";
 
-import Layout from "../../components/Layout";
 import Link from "next/link";
-import { Button } from "../../components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Monitor, Terminal, RefreshCw } from "lucide-react";
 

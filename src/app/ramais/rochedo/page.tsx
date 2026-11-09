@@ -1,6 +1,5 @@
 // src/app/ramais/rochedo/page.tsx
 import { prisma } from "../../../lib/prisma";
-import Layout from "../../../components/Layout";
 import { RochedoClient } from "./rochedo-client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
@@ -17,7 +16,6 @@ export default async function RamaisRochedoPage() {
   const ramais = unidade?.ramais ?? [];
 
   return (
-    <Layout>
       <div className="max-w-6xl mx-auto py-4">
         {/* Botão Voltar Alinhado com a Identidade */}
         <Link href="/ramais" prefetch={false} passHref>
@@ -40,6 +38,5 @@ export default async function RamaisRochedoPage() {
           }))}
         />
       </div>
-    </Layout>
   );
 }

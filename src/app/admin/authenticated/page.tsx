@@ -1,12 +1,10 @@
 // src/app/admin/authenticated/page.tsx
 import Link from "next/link";
-import Image from "next/image";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "../../../lib/auth";
 import { prisma } from "../../../lib/prisma";
 import { ButtonSignOut } from "./_components/button-signout";
-import Layout from "@/src/components/Layout";
 import { 
   ShieldCheck, 
   User,
@@ -68,7 +66,6 @@ export default async function Authenticated() {
   const roleLabel = roles.join(", ");
 
   return (
-    <Layout>
       <div className="min-h-screen py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
 
@@ -311,10 +308,8 @@ export default async function Authenticated() {
               <h2 className="font-bold text-xl text-gray-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors">Minha Senha</h2>
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-1 max-w-[200px]">Alterar as credenciais de segurança da sua conta.</p>
             </Link>
-
           </nav>
         </div>
       </div>
-    </Layout>
   );
 }

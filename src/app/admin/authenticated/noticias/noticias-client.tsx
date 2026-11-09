@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { LoadingOverlay } from "@/src/components/ui/loading-overlay";
+import { categoriaCores } from "@/src/lib/categoria-cor";
 import {
   ArrowLeft,
   Newspaper,
@@ -32,10 +33,19 @@ interface Noticia {
   createdAt: string | Date;
   updatedAt?: string | Date;
   unidadeId?: number | null;
+  categorias: Categoria[];
+}
+
+interface Categoria {
+  id: number;
+  nome: string;
+  slug: string;
+  cor?: string | null;
 }
 
 interface Props {
   initialNoticias: Noticia[];
+  initialCategorias: Categoria[];
   userRoles: AppUserRole[];
 }
 
@@ -49,12 +59,14 @@ function getImagemUrl(noticia: Noticia) {
 
 export default function NoticiasClient({
   initialNoticias,
+  initialCategorias,
   userRoles,
 }: Props) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [noticias, setNoticias] = useState<Noticia[]>(initialNoticias);
+  const [categorias] = useState<Categoria[]>(initialCategorias);
   const [dragActive, setDragActive] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [pendentesCount, setPendentesCount] = useState(0);
@@ -82,6 +94,7 @@ export default function NoticiasClient({
     imagem: null as File | null,
     imagemPreview: "",
     imagemAntiga: "",
+    categoriaIds: [] as number[],
   });
 
   const [imagemNoticia, setImagemNoticia] = useState<File | null>(null);
@@ -104,6 +117,15 @@ export default function NoticiasClient({
     router.refresh();
   }, [router]);
 
+  const toggleCategoria = (id: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      categoriaIds: prev.categoriaIds.includes(id)
+        ? prev.categoriaIds.filter((categoriaId) => categoriaId !== id)
+        : [...prev.categoriaIds, id],
+    }));
+  };
+
   const handleEdit = (noticia: Noticia) => {
     setEditingId(noticia.id);
     setFormData({
@@ -112,6 +134,7 @@ export default function NoticiasClient({
       imagem: null,
       imagemPreview: noticia.imagem ? getImagemUrl(noticia) : "",
       imagemAntiga: noticia.imagem || "",
+      categoriaIds: (noticia.categorias ?? []).map((categoria) => categoria.id),
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -179,6 +202,9 @@ export default function NoticiasClient({
       const fd = new FormData();
       fd.append("titulo", formData.titulo);
       fd.append("conteudo", formData.conteudo);
+      formData.categoriaIds.forEach((id) =>
+        fd.append("categoriaIds[]", id.toString()),
+      );
       if (formData.imagem) fd.append("imagem", formData.imagem);
 
       let url = "/admin/api/noticias";
@@ -211,6 +237,7 @@ export default function NoticiasClient({
         imagem: null,
         imagemPreview: "",
         imagemAntiga: "",
+        categoriaIds: [],
       });
       setEditingId(null);
       setImagemNoticia(null);
@@ -296,8 +323,8 @@ export default function NoticiasClient({
       {loading && <LoadingOverlay show={true} />}
       {saving && <LoadingOverlay show={true} />}
 
-      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-6">
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <div className="mb-7 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white/80 p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]/80 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
               <Button
@@ -305,20 +332,20 @@ export default function NoticiasClient({
                 variant="ghost"
                 size="icon"
                 onClick={() => router.back()}
-                className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+                className="h-10 w-10 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Button>
               <div className="flex items-center gap-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
-                  <Newspaper size={18} />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                  <Newspaper size={22} />
                 </span>
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                   Gerenciar Notícias
                 </h1>
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 pl-12">
+            <p className="pl-14 text-sm text-gray-500 dark:text-gray-400">
               {isSolicitante
                 ? "Envie solicitações de notícias para aprovação."
                 : "Publique informativos, avisos gerais e comunicados internos na plataforma."}
@@ -332,7 +359,7 @@ export default function NoticiasClient({
                 variant="outline"
                 size="sm"
                 onClick={() => router.push("/admin/authenticated/noticias/solicitacoes")}
-                className="relative rounded-xl text-xs font-semibold gap-1.5 border-gray-200 dark:border-neutral-800 h-9"
+                className="relative h-10 gap-2 rounded-xl border-gray-200 px-4 text-sm font-semibold dark:border-neutral-800"
               >
                 <ClipboardCheck className="w-3.5 h-3.5" />
                 {isSolicitante ? "Minhas Solicitações" : "Solicitações"}
@@ -355,12 +382,12 @@ export default function NoticiasClient({
           </div>
         </div>
 
-        <section className="bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 p-6 shadow-sm">
+        <section className="mb-8 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-neutral-800/80 dark:bg-[#111a2d] sm:p-7">
           <div className="flex items-center justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-4 mb-6">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
               <div>
-                <h2 className="text-base font-bold text-gray-900 dark:text-white">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                   {editingId
                     ? isSolicitante
                       ? "Solicitar Edição de Notícia"
@@ -369,7 +396,7 @@ export default function NoticiasClient({
                       ? "Solicitar Nova Notícia"
                       : "Escrever Nova Notícia"}
                 </h2>
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Defina o título, conteúdo e adicione uma imagem de destaque opcional.
                 </p>
               </div>
@@ -388,6 +415,7 @@ export default function NoticiasClient({
                     imagem: null,
                     imagemPreview: "",
                     imagemAntiga: "",
+                    categoriaIds: [],
                   });
                   setImagemNoticia(null);
                 }}
@@ -406,34 +434,89 @@ export default function NoticiasClient({
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2 space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Título da Notícia</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Título da Notícia</label>
                   <Input
                     value={formData.titulo}
                     onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
                     placeholder="Escreva um título chamativo e direto..."
-                    className="rounded-xl h-11 border-gray-200 dark:border-neutral-800 text-xs"
+                    className="h-12 rounded-xl border-gray-200 text-sm dark:border-neutral-800"
                     required
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Corpo da Publicação</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Corpo da Publicação</label>
                   <textarea
                     value={formData.conteudo}
                     onChange={(e) => setFormData({ ...formData, conteudo: e.target.value })}
                     placeholder="Digite o conteúdo detalhado da notícia aqui..."
-                    rows={5}
-                    className="flex w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 resize-y"
+                    rows={7}
+                    className="flex w-full resize-y rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white"
                     required
                   />
+                </div>
+
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      Categorias
+                    </label>
+                    <span className="text-[10px] text-gray-400">
+                      {formData.categoriaIds.length > 0
+                        ? `${formData.categoriaIds.length} selecionada(s)`
+                        : "Opcional"}
+                    </span>
+                  </div>
+                  {categorias.length === 0 ? (
+                    <p className="rounded-xl border border-dashed border-gray-200 px-3 py-3 text-[11px] text-gray-400 dark:border-neutral-800">
+                      Nenhuma categoria ativa cadastrada.
+                    </p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {categorias.map((categoria) => {
+                        const selecionada = formData.categoriaIds.includes(categoria.id);
+                        const cores = categoriaCores(categoria.cor);
+
+                        return (
+                          <button
+                            key={categoria.id}
+                            type="button"
+                            onClick={() => toggleCategoria(categoria.id)}
+                            aria-pressed={selecionada}
+                            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                              selecionada
+                                ? ""
+                                : "border-gray-200 text-gray-500 hover:border-gray-300 dark:border-neutral-800 dark:text-gray-400"
+                            }`}
+                            style={
+                              selecionada
+                                ? {
+                                    backgroundColor: cores.soft,
+                                    color: cores.solid,
+                                    borderColor: cores.border,
+                                  }
+                                : undefined
+                            }
+                          >
+                            <span
+                              className="h-2 w-2 rounded-full"
+                              style={{ backgroundColor: cores.solid }}
+                            />
+                            {categoria.nome}
+                            {selecionada && <Check className="h-3 w-3" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Imagem de Destaque</label>
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Imagem de Destaque</label>
                 <div
                   className={`relative border-2 border-dashed rounded-xl p-5 text-center transition-all duration-200 h-[198px] flex flex-col justify-center items-center ${dragActive
                       ? "border-blue-400 bg-blue-50/20 dark:bg-blue-950/10"
@@ -601,6 +684,25 @@ export default function NoticiasClient({
                           <h4 className="text-sm font-bold text-gray-900 dark:text-white leading-snug break-words group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
                             {noticia.titulo}
                           </h4>
+                          {(noticia.categorias ?? []).length > 0 && (
+                            <div className="flex flex-wrap gap-1.5">
+                              {noticia.categorias.map((categoria) => {
+                                const cores = categoriaCores(categoria.cor);
+                                return (
+                                  <span
+                                    key={categoria.id}
+                                    className="rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+                                    style={{
+                                      backgroundColor: cores.soft,
+                                      color: cores.solid,
+                                    }}
+                                  >
+                                    {categoria.nome}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          )}
                           <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed break-words whitespace-pre-wrap">
                             {noticia.conteudo}
                           </p>

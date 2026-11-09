@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { LoadingOverlay } from "@/src/components/ui/loading-overlay";
+import { categoriaCores } from "@/src/lib/categoria-cor";
 import {
   ArrowLeft,
   Megaphone,
@@ -24,6 +25,13 @@ import {
   Info,
 } from "lucide-react";
 
+interface Categoria {
+  id: number;
+  nome: string;
+  slug: string;
+  cor?: string | null;
+}
+
 interface Recado {
   id: number;
   titulo: string;
@@ -32,6 +40,7 @@ interface Recado {
   unidadeId: number;
   unidadeIds: number[];
   unidade: { id: number; nome: string };
+  categorias: Categoria[];
   createdAt: string | Date;
   updatedAt?: string | Date;
 }
@@ -44,6 +53,7 @@ interface Unidade {
 interface Props {
   initialRecados: Recado[];
   initialUnidades: Unidade[];
+  initialCategorias: Categoria[];
   userRoles: AppUserRole[];
   userUnidadeId: number | null;
 }
@@ -56,9 +66,23 @@ function getImagemUrl(recado: Recado) {
   return `/admin/api/uploads/recados/${recado.imagem}?v=${version}`;
 }
 
+/* Pequeno selo colorido de categoria */
+function CategoriaTag({ categoria }: { categoria: Categoria }) {
+  const cores = categoriaCores(categoria.cor);
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+      style={{ backgroundColor: cores.soft, color: cores.solid }}
+    >
+      {categoria.nome}
+    </span>
+  );
+}
+
 export default function RecadosClient({
   initialRecados,
   initialUnidades,
+  initialCategorias,
   userRoles,
   userUnidadeId,
 }: Props) {
@@ -67,6 +91,8 @@ export default function RecadosClient({
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [recados, setRecados] = useState<Recado[]>(initialRecados);
   const [unidades] = useState<Unidade[]>(initialUnidades);
+  const [categorias] = useState<Categoria[]>(initialCategorias);
+  const [filtroCategoria, setFiltroCategoria] = useState<number | "todas">("todas");
   const [dragActive, setDragActive] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [pendentesCount, setPendentesCount] = useState(0);
@@ -91,6 +117,7 @@ export default function RecadosClient({
       (isMessageOnly) && userUnidadeId
         ? [userUnidadeId]
         : ([] as number[]),
+    categoriaIds: [] as number[],
     imagem: null as File | null,
     imagemPreview: "",
     imagemAntiga: "",
@@ -129,6 +156,15 @@ export default function RecadosClient({
     });
   };
 
+  const toggleCategoria = (id: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      categoriaIds: prev.categoriaIds.includes(id)
+        ? prev.categoriaIds.filter((c) => c !== id)
+        : [...prev.categoriaIds, id],
+    }));
+  };
+
   const canManageRecado = useCallback(
     (recado: Recado) => {
       if (isOwner || isMessageNews) return true;
@@ -144,6 +180,7 @@ export default function RecadosClient({
       titulo: "",
       conteudo: "",
       unidadeIds: [],
+      categoriaIds: [],
       imagem: null,
       imagemPreview: "",
       imagemAntiga: "",
@@ -170,6 +207,7 @@ export default function RecadosClient({
       titulo: recado.titulo,
       conteudo: recado.conteudo,
       unidadeIds: ids,
+      categoriaIds: (recado.categorias ?? []).map((c) => c.id),
       imagem: null,
       imagemPreview: recado.imagem ? getImagemUrl(recado) : "",
       imagemAntiga: recado.imagem || "",
@@ -258,6 +296,7 @@ export default function RecadosClient({
       fd.append("titulo", formData.titulo);
       fd.append("conteudo", formData.conteudo);
       currentUnidadeIds.forEach((id) => fd.append("unidadeIds[]", id.toString()));
+      formData.categoriaIds.forEach((id) => fd.append("categoriaIds[]", id.toString()));
       if (formData.imagem) fd.append("imagem", formData.imagem);
 
       let url = "/admin/api/recados";
@@ -299,6 +338,7 @@ export default function RecadosClient({
             imagem: r.imagem || undefined,
             unidade: r.unidade,
             unidadeIds: r.unidadeIds || [],
+            categorias: r.categorias || [],
           }))
           : []
       );
@@ -364,15 +404,20 @@ export default function RecadosClient({
     setFormData((prev) => ({ ...prev, imagem: null, imagemPreview: editingId ? prev.imagemAntiga : "" }));
   }, [editingId]);
 
+  const recadosVisiveis =
+    filtroCategoria === "todas"
+      ? recados
+      : recados.filter((r) => (r.categorias ?? []).some((c) => c.id === filtroCategoria));
+
   return (
     <>
       {loading && <LoadingOverlay show={true} />}
       {saving && <LoadingOverlay show={true} />}
 
-      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
         {/* Topbar / Header Administrativo */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-6">
+        <div className="mb-7 flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white/80 p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]/80 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
               <Button
@@ -380,20 +425,20 @@ export default function RecadosClient({
                 variant="ghost"
                 size="icon"
                 onClick={() => router.back()}
-                className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+                className="h-10 w-10 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
               >
                 <ArrowLeft className="w-4 h-4" />
               </Button>
               <div className="flex items-center gap-2">
-                <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 shrink-0">
-                  <Megaphone size={18} />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                  <Megaphone className="h-5 w-5" />
                 </span>
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                   Gerenciar Recados
                 </h1>
               </div>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 pl-12">
+            <p className="pl-14 text-sm text-gray-500 dark:text-gray-400">
               {isSolicitante
                 ? "Envie solicitações de comunicados para aprovação da sua unidade."
                 : "Envie comunicados instantâneos direcionados a uma ou múltiplas unidades."}
@@ -407,7 +452,7 @@ export default function RecadosClient({
                 variant="outline"
                 size="sm"
                 onClick={() => router.push("/admin/authenticated/recados/solicitacoes")}
-                className="relative rounded-xl text-xs font-semibold gap-1.5 border-gray-200 dark:border-neutral-800 h-9"
+                className="relative h-10 gap-2 rounded-xl border-gray-200 px-4 text-sm font-semibold dark:border-neutral-800"
               >
                 <ClipboardCheck className="w-3.5 h-3.5" />
                 {isSolicitante ? "Minhas Solicitações" : "Solicitações"}
@@ -431,17 +476,17 @@ export default function RecadosClient({
         </div>
 
         {/* Formulário de Criação/Edição */}
-        <section className="bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 p-6 shadow-sm">
+        <section className="mb-8 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-neutral-800/80 dark:bg-[#111a2d] sm:p-7">
           <div className="flex items-center justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-4 mb-6">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
               <div>
-                <h2 className="text-base font-bold text-gray-900 dark:text-white">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                   {editingId
                     ? isSolicitante ? "Solicitar Edição de Recado" : "Editar Recado Selecionado"
                     : isSolicitante ? "Solicitar Novo Comunicado" : "Escrever Novo Comunicado"}
                 </h2>
-                <p className="text-xs text-gray-400 dark:text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Defina o escopo, corpo da mensagem e configure os destinatários de destino.
                 </p>
               </div>
@@ -468,31 +513,81 @@ export default function RecadosClient({
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 
               {/* Inputs de Conteúdo */}
               <div className="lg:col-span-2 space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Título do Recado</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Título do Recado</label>
                   <Input
                     value={formData.titulo}
                     onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
                     placeholder="Ex: Manutenção agendada, Reunião geral..."
-                    className="rounded-xl h-11 border-gray-200 dark:border-neutral-800 text-xs"
+                    className="h-12 rounded-xl border-gray-200 text-sm dark:border-neutral-800"
                     required
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Mensagem</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Mensagem</label>
                   <textarea
                     value={formData.conteudo}
                     onChange={(e) => setFormData({ ...formData, conteudo: e.target.value })}
                     placeholder="Descreva aqui o aviso de forma clara..."
-                    rows={5}
-                    className="flex w-full rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs text-gray-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 resize-y"
+                    rows={7}
+                    className="flex w-full resize-y rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-white"
                     required
                   />
+                </div>
+
+                {/* Categorias */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Categorias</label>
+                    <span className="text-[10px] text-gray-400">
+                      {formData.categoriaIds.length > 0
+                        ? `${formData.categoriaIds.length} selecionada(s)`
+                        : "Opcional"}
+                    </span>
+                  </div>
+
+                  {categorias.length === 0 ? (
+                    <p className="rounded-xl border border-dashed border-gray-200 dark:border-neutral-800 px-3 py-3 text-[11px] text-gray-400">
+                      Nenhuma categoria cadastrada.
+                    </p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {categorias.map((c) => {
+                        const selecionada = formData.categoriaIds.includes(c.id);
+                        const cores = categoriaCores(c.cor);
+
+                        return (
+                          <button
+                            key={c.id}
+                            type="button"
+                            onClick={() => toggleCategoria(c.id)}
+                            aria-pressed={selecionada}
+                            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-all duration-200 ${selecionada
+                              ? ""
+                              : "border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:border-neutral-800 dark:text-gray-400 dark:hover:border-neutral-700"
+                              }`}
+                            style={
+                              selecionada
+                                ? { backgroundColor: cores.soft, color: cores.solid, borderColor: cores.border }
+                                : undefined
+                            }
+                          >
+                            <span
+                              className="h-2 w-2 rounded-full"
+                              style={{ backgroundColor: cores.solid }}
+                            />
+                            {c.nome}
+                            {selecionada && <Check className="h-3 w-3" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -610,35 +705,98 @@ export default function RecadosClient({
 
         {/* Feed de Recados */}
         <div className="space-y-4">
-          <div className="flex items-center gap-2 px-1">
-            <span className="w-1.5 h-3 rounded-full bg-orange-500" />
-            <h3 className="text-base font-bold text-gray-900 dark:text-white">Mural de Recados Ativos</h3>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-1">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-3 rounded-full bg-orange-500" />
+              <h3 className="text-base font-bold text-gray-900 dark:text-white">Mural de Recados Ativos</h3>
+              <span className="text-xs text-gray-400">
+                {recadosVisiveis.length} de {recados.length}
+              </span>
+            </div>
+
+            {/* Filtro por categoria */}
+            {categorias.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setFiltroCategoria("todas")}
+                  aria-pressed={filtroCategoria === "todas"}
+                  className={`rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors duration-200 ${filtroCategoria === "todas"
+                    ? "border-orange-300 bg-orange-50 text-orange-700 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-400"
+                    : "border-gray-200 text-gray-500 hover:border-gray-300 dark:border-neutral-800 dark:text-gray-400"
+                    }`}
+                >
+                  Todas
+                </button>
+
+                {categorias.map((c) => {
+                  const ativa = filtroCategoria === c.id;
+                  const cores = categoriaCores(c.cor);
+
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setFiltroCategoria(c.id)}
+                      aria-pressed={ativa}
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors duration-200 ${ativa
+                        ? ""
+                        : "border-gray-200 text-gray-500 hover:border-gray-300 dark:border-neutral-800 dark:text-gray-400"
+                        }`}
+                      style={
+                        ativa
+                          ? { backgroundColor: cores.soft, color: cores.solid, borderColor: cores.border }
+                          : undefined
+                      }
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: cores.solid }} />
+                      {c.nome}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {recados.length === 0 ? (
+          {recadosVisiveis.length === 0 ? (
             <div className="text-center py-16 bg-white dark:bg-neutral-900/20 rounded-2xl border border-gray-100 dark:border-neutral-800/80">
               <Megaphone className="w-8 h-8 text-gray-300 dark:text-neutral-700 mx-auto mb-2" />
-              <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200">Nenhum recado no mural</h4>
+              <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                {recados.length === 0 ? "Nenhum recado no mural" : "Nenhum recado nesta categoria"}
+              </h4>
               <p className="text-xs text-gray-400 dark:text-gray-500 max-w-xs mx-auto mt-0.5">
-                Crie o seu primeiro recado de aviso utilizando as ferramentas do formulário acima.
+                {recados.length === 0
+                  ? "Crie o seu primeiro recado de aviso utilizando as ferramentas do formulário acima."
+                  : "Escolha outra categoria ou volte para \"Todas\"."}
               </p>
             </div>
           ) : (
             /* Layout Estritamente Vertical */
             <div className="flex flex-col gap-4">
-              {recados.map((recado) => {
+              {recadosVisiveis.map((recado) => {
                 const isDeleting = deletingId === recado.id;
                 const podeGerenciar = canManageRecado(recado);
                 const imagemUrl = getImagemUrl(recado);
                 const unidadesExibicao = unidades.filter((u) =>
                   recado.unidadeIds.length > 0 ? recado.unidadeIds.includes(u.id) : u.id === recado.unidadeId
                 );
+                const corPrincipal = recado.categorias?.[0]
+                  ? categoriaCores(recado.categorias[0].cor).solid
+                  : null;
 
                 return (
                   <div
                     key={recado.id}
-                    className="p-5 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 relative flex flex-col justify-between transition-all hover:shadow-sm hover:border-gray-200/60 dark:hover:border-neutral-800 group"
+                    className="p-5 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 relative flex flex-col justify-between transition-all hover:shadow-sm hover:border-gray-200/60 dark:hover:border-neutral-800 group overflow-hidden"
                   >
+                    {/* Faixa com a cor da primeira categoria */}
+                    {corPrincipal && (
+                      <span
+                        className="absolute inset-y-0 left-0 w-1"
+                        style={{ backgroundColor: corPrincipal }}
+                      />
+                    )}
+
                     {isDeleting && (
                       <div className="absolute inset-0 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm flex items-center justify-center rounded-2xl z-20 border border-orange-500/20">
                         <div className="flex items-center gap-2.5 bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-md border border-gray-100 dark:border-neutral-800">
@@ -719,6 +877,14 @@ export default function RecadosClient({
                         )}
 
                         <div className="space-y-1.5 min-w-0 flex-1">
+                          {(recado.categorias ?? []).length > 0 && (
+                            <div className="flex flex-wrap gap-1.5">
+                              {recado.categorias.map((c) => (
+                                <CategoriaTag key={c.id} categoria={c} />
+                              ))}
+                            </div>
+                          )}
+
                           <h4 className="text-sm font-bold text-gray-900 dark:text-white leading-snug break-words group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">
                             {recado.titulo}
                           </h4>

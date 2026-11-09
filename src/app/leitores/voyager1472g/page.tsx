@@ -1,6 +1,5 @@
 "use client";
 
-import Layout from "../../../components/Layout";
 import Image from "next/image";
 import { Button } from "../../../components/ui/button";
 import { useRouter } from "next/navigation";
@@ -111,105 +110,103 @@ export default function PrintHeadClean() {
   const router = useRouter();
 
   return (
-    <Layout>
-      <div className="container max-w-6xl mx-auto py-8 px-4">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => router.back()}
-            className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-            <ScanLine size={30} />
-          </span>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Voyager 1472G
-            </h1>
-            <p className="text-gray-500 dark:text-gray-400">
-              Escaneie os códigos abaixo para configurar o leitor rapidamente
-            </p>
-          </div>
-        </div>
-
-        {/* Índice rápido */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {secoes.map((secao) => (
-            <a
-              key={secao.id}
-              href={`#${secao.id}`}
-              className="flex items-center gap-1.5 text-xs font-medium bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-gray-300 rounded-full px-3 py-1.5 shadow-sm hover:border-blue-300 hover:text-blue-600 transition-colors"
-            >
-              {secao.icon}
-              {secao.titulo}
-            </a>
-          ))}
-        </div>
-
-        {/* Seções */}
-        <div className="space-y-6">
-          {secoes.map((secao) => (
-            <section
-              key={secao.id}
-              id={secao.id}
-              className="bg-white dark:bg-neutral-900 rounded-2xl border border-gray-100 dark:border-neutral-800 shadow-sm p-6 sm:p-8 scroll-mt-6"
-            >
-              <div className="flex items-start gap-4 mb-5">
-                <span
-                  className={`flex items-center justify-center w-11 h-11 rounded-xl shrink-0 ${secao.corIcone}`}
-                >
-                  {secao.icon}
-                </span>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-gray-400">
-                      {String(secao.numero).padStart(2, "0")}
-                    </span>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                      {secao.titulo}
-                    </h2>
-                  </div>
-                  <p className="text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                    {secao.descricao}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-center bg-gray-50 dark:bg-neutral-800/60 rounded-xl p-6">
-                <Image
-                  src={secao.imagem}
-                  alt={`Código de barras - ${secao.titulo}`}
-                  width={420}
-                  height={420}
-                  className="object-contain"
-                />
-              </div>
-
-              {secao.imagemExtra && (
-                <>
-                  <p className="text-gray-700 dark:text-gray-300 mt-6 leading-relaxed">
-                    Depois escaneie esse código para funcionar corretamente:
-                  </p>
-                  <div className="flex justify-center bg-gray-50 dark:bg-neutral-800/60 rounded-xl p-6">
-                    <Image
-                      src={secao.imagemExtra}
-                      alt={`Código de barras secundário - ${secao.titulo}`}
-                      width={420}
-                      height={420}
-                      className="object-contain"
-                    />
-                  </div>
-                </>
-              )}
-            </section>
-          ))}
+    <div className="container max-w-6xl mx-auto py-8 px-4">
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-8">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+          className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </Button>
+        <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+          <ScanLine size={30} />
+        </span>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Voyager 1472G
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400">
+            Escaneie os códigos abaixo para configurar o leitor rapidamente
+          </p>
         </div>
       </div>
-    </Layout>
+
+      {/* Índice rápido */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        {secoes.map((secao) => (
+          <a
+            key={secao.id}
+            href={`#${secao.id}`}
+            className="flex items-center gap-1.5 text-xs font-medium bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-gray-300 rounded-full px-3 py-1.5 shadow-sm hover:border-blue-300 hover:text-blue-600 transition-colors"
+          >
+            {secao.icon}
+            {secao.titulo}
+          </a>
+        ))}
+      </div>
+
+      {/* Seções */}
+      <div className="space-y-6">
+        {secoes.map((secao) => (
+          <section
+            key={secao.id}
+            id={secao.id}
+            className="bg-white dark:bg-neutral-900 rounded-2xl border border-gray-100 dark:border-neutral-800 shadow-sm p-6 sm:p-8 scroll-mt-6"
+          >
+            <div className="flex items-start gap-4 mb-5">
+              <span
+                className={`flex items-center justify-center w-11 h-11 rounded-xl shrink-0 ${secao.corIcone}`}
+              >
+                {secao.icon}
+              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-gray-400">
+                    {String(secao.numero).padStart(2, "0")}
+                  </span>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {secao.titulo}
+                  </h2>
+                </div>
+                <p className="text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+                  {secao.descricao}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-center bg-gray-50 dark:bg-neutral-800/60 rounded-xl p-6">
+              <Image
+                src={secao.imagem}
+                alt={`Código de barras - ${secao.titulo}`}
+                width={420}
+                height={420}
+                className="object-contain"
+              />
+            </div>
+
+            {secao.imagemExtra && (
+              <>
+                <p className="text-gray-700 dark:text-gray-300 mt-6 leading-relaxed">
+                  Depois escaneie esse código para funcionar corretamente:
+                </p>
+                <div className="flex justify-center bg-gray-50 dark:bg-neutral-800/60 rounded-xl p-6">
+                  <Image
+                    src={secao.imagemExtra}
+                    alt={`Código de barras secundário - ${secao.titulo}`}
+                    width={420}
+                    height={420}
+                    className="object-contain"
+                  />
+                </div>
+              </>
+            )}
+          </section>
+        ))}
+      </div>
+    </div>
   );
 }

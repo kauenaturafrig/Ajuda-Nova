@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { prisma } from "../../lib/prisma";
-import Layout from "../../components/Layout";
 import AgendaPublicClient from "./agenda-client";
 
 export default async function AgendaPage() {
@@ -21,8 +20,6 @@ export default async function AgendaPage() {
   }));
 
   return (
-    <Layout>
       <AgendaPublicClient initialEventos={eventosSerializados} />
-    </Layout>
   );
 }

@@ -41,7 +41,40 @@ function formatSolicitacao(solicitacao: any) {
     unidadeIds: parseUnidadeIds(
       solicitacao.unidadeIds,
     ),
+    categoriaIds: parseCategoriaIds(
+      solicitacao.categoriaIds,
+    ),
   };
+}
+
+function parseCategoriaIds(value: string | null): number[] {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return [...new Set(
+      parsed
+        .map(Number)
+        .filter((id) => Number.isInteger(id) && id > 0),
+    )];
+  } catch {
+    return [];
+  }
+}
+
+function getCategoryIds(formData: FormData) {
+  return [...new Set(
+    formData
+      .getAll("categoriaIds[]")
+      .map((value) => Number(value))
+      .filter((id) => Number.isInteger(id) && id > 0),
+  )];
 }
 
 function parseUnidadeIds(
@@ -262,6 +295,17 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
+    const categoriaIds = getCategoryIds(formData);
+    const categoryCount = await prisma.categoria.count({
+      where: { id: { in: categoriaIds } },
+    });
+
+    if (categoryCount !== categoriaIds.length) {
+      return NextResponse.json(
+        { error: "Uma ou mais categorias não existem." },
+        { status: 400 },
+      );
+    }
 
     const tipo = String(
       formData.get("tipo") ?? "",
@@ -429,6 +473,7 @@ export async function POST(req: NextRequest) {
             unidadeIds: JSON.stringify([
               user.unidadeId,
             ]),
+            categoriaIds: JSON.stringify(categoriaIds),
             imagem,
             imagemAntiga,
             solicitanteId: user.id,

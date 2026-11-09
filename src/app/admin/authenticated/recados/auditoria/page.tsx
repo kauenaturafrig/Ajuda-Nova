@@ -1,4 +1,3 @@
-import Layout from "@/src/components/Layout";
 import { prisma } from "@/src/lib/prisma";
 import { requirePageRoles } from "@/src/lib/permissions";
 import { PAGE_ROLES } from "@/src/lib/role-permissions";
@@ -47,8 +46,6 @@ export default async function AuditoriaRecadosPage() {
   }));
 
   return (
-    <Layout>
-      <AuditoriaClient audits={serializedAudits} />
-    </Layout>
+    <AuditoriaClient audits={serializedAudits} />
   );
 }

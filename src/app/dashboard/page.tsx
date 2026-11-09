@@ -42,6 +42,11 @@ export default async function Page() {
           imagem: true,
           createdAt: true,
           updatedAt: true,
+          categorias: {
+            where: { ativo: true },
+            orderBy: { ordem: "asc" },
+            select: { id: true, nome: true, slug: true, cor: true },
+          },
         },
       }),
 
@@ -50,7 +55,14 @@ export default async function Page() {
             where: recadoWhere,
             orderBy: { createdAt: "desc" },
             take: 3,
-            include: { unidade: true },
+            include: {
+              unidade: true,
+              categorias: {
+                where: { ativo: true },
+                orderBy: { ordem: "asc" },
+                select: { id: true, nome: true, slug: true, cor: true },
+              },
+            },
           })
         : [],
 
@@ -110,12 +122,16 @@ export default async function Page() {
         imagem: n.imagem,
         createdAt: n.createdAt.toISOString(),
         updatedAt: n.updatedAt ? n.updatedAt.toISOString() : null,
+        categorias: n.categorias,
       }))}
       recados={recados.map((r) => ({
         id: r.id,
         titulo: r.titulo,
         conteudo: r.conteudo,
+        imagem: r.imagem,
         createdAt: r.createdAt.toISOString(),
+        updatedAt: r.updatedAt.toISOString(),
+        categorias: r.categorias,
         unidade: {
           id: r.unidade.id,
           nome: r.unidade.nome,

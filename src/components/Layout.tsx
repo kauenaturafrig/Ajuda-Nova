@@ -18,8 +18,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="flex min-h-screen">
           <Sidebar />
 
-          <main className="min-w-0 flex-1 bg-[#e5e7eb] dark:bg-[#0a111f]">
-            {children}
+          <main className="ml-20 min-w-0 flex-1 bg-[#e5e7eb] dark:bg-[#0a111f]">
+            <div className="mx-auto w-full max-w-[120rem]">{children}</div>
           </main>
         </div>
       </ThemeProvider>

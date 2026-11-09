@@ -18,7 +18,6 @@ import {
   AlignLeft,
   ListFilter,
 } from "lucide-react";
-import Image from "next/image";
 
 import type { AppUserRole } from "@/src/types/user";
 
@@ -365,7 +364,7 @@ export default function AgendaAdminClient({
 
   return (
     <>
-      <style jsx global>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -386,30 +385,27 @@ export default function AgendaAdminClient({
         }
       `}</style>
 
-      <div className="container max-w-6xl mx-auto py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-100 dark:border-neutral-800/60">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+      <main className="mx-auto w-full max-w-7xl space-y-7 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+          <header className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white/80 p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]/80 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+            <div className="flex items-center gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 sm:h-14 sm:w-14">
+                <Calendar size={26} />
+              </span>
+              <div>
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                 Gerenciamento de Auditorias
-                <Image
-                  src="/assets/images/icons/icons8-tear-off-calendar-preto.png"
-                  alt="Logo Link"
-                  width={28}
-                  height={28}
-                  className="dark:invert opacity-80"
-                />
               </h1>
 
-              <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base mt-1">
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 sm:text-base">
                 Área exclusiva para criar, editar e remover eventos
               </p>
+              </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/agenda"
-                className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-600 hover:text-gray-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-300 dark:hover:text-white"
               >
                 <ArrowLeft size={16} />
                 Voltar à agenda pública
@@ -417,15 +413,16 @@ export default function AgendaAdminClient({
 
               <button
                 onClick={() => openForm()}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
               >
                 <Plus size={16} />
                 Novo evento
               </button>
             </div>
-          </div>
+          </header>
 
-          <div className="flex items-center gap-3 mb-4">
+          <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d] sm:p-6">
+          <div className="mb-5 flex items-center gap-3">
             <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
               <ListFilter size={16} />
             </span>
@@ -441,7 +438,7 @@ export default function AgendaAdminClient({
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 mb-8">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <div className="relative flex-1">
               <Search
                 size={16}
@@ -454,7 +451,7 @@ export default function AgendaAdminClient({
                   setBusca(e.target.value)
                 }
                 placeholder="Buscar por título, unidade ou descrição..."
-                className="w-full rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 pl-10 pr-9 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-9 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
               />
 
               {busca && (
@@ -467,7 +464,7 @@ export default function AgendaAdminClient({
               )}
             </div>
 
-            <div className="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2">
+            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-3 dark:border-neutral-700 dark:bg-neutral-900">
               <MapPin
                 size={15}
                 className="text-gray-400 shrink-0"
@@ -507,7 +504,7 @@ export default function AgendaAdminClient({
                     150,
                   )
                 }
-                className="w-full sm:w-auto inline-flex items-center justify-between gap-2 rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-gray-900 dark:text-white hover:border-emerald-500/50 transition-colors"
+                className="inline-flex min-h-11 w-full items-center justify-between gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 transition-colors hover:border-emerald-500/50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2">
                   <ArrowUpDown
@@ -544,25 +541,26 @@ export default function AgendaAdminClient({
               )}
             </div>
           </div>
+          </section>
 
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+          <section className="mb-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                 Eventos cadastrados
               </h3>
 
-              <span className="text-xs text-gray-400">
+              <span className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 dark:bg-neutral-800 dark:text-gray-300">
                 {eventosFiltrados.length} de{" "}
                 {eventos.length}
               </span>
             </div>
 
             {loading ? (
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="rounded-2xl border border-gray-100 bg-white p-6 text-sm text-gray-500 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d] dark:text-gray-400">
                 Carregando eventos...
               </div>
             ) : eventosFiltrados.length === 0 ? (
-              <div className="text-center py-16 rounded-2xl border border-dashed border-gray-200 dark:border-neutral-800">
+              <div className="rounded-2xl border border-dashed border-gray-200 bg-white py-20 text-center dark:border-neutral-800 dark:bg-[#111a2d]">
                 <Calendar
                   size={28}
                   className="mx-auto text-gray-300 dark:text-neutral-600 mb-3"
@@ -575,7 +573,7 @@ export default function AgendaAdminClient({
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {eventosFiltrados.map((ev) => {
                   const status = statusDoEvento(
                     ev.data,
@@ -584,7 +582,7 @@ export default function AgendaAdminClient({
                   return (
                     <div
                       key={ev.id}
-                      className={`group relative flex flex-col gap-3 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 shadow-sm p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-emerald-500/50 ${
+                      className={`group relative flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-lg dark:border-neutral-800/80 dark:bg-[#111a2d] sm:p-6 ${
                         status.tone === "past"
                           ? "opacity-60"
                           : ""
@@ -600,11 +598,11 @@ export default function AgendaAdminClient({
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                            <div className="truncate text-base font-bold text-gray-900 dark:text-white">
                               {ev.titulo}
                             </div>
 
-                            <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            <div className="mt-1 truncate text-sm text-gray-500 dark:text-gray-400">
                               {ev.unidade.nome}
                             </div>
                           </div>
@@ -625,8 +623,8 @@ export default function AgendaAdminClient({
                         )}
                       </div>
 
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                        <Clock size={12} />
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                        <Clock size={15} className="text-emerald-600 dark:text-emerald-400" />
 
                         {new Date(
                           ev.data,
@@ -637,15 +635,15 @@ export default function AgendaAdminClient({
                       </div>
 
                       {ev.descricao ? (
-                        <div className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
+                        <div className="text-sm leading-relaxed text-gray-500 dark:text-gray-400 line-clamp-3">
                           {ev.descricao}
                         </div>
                       ) : null}
 
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="mt-auto flex items-center gap-2 border-t border-gray-100 pt-4 dark:border-neutral-800">
                         <button
                           onClick={() => openForm(ev)}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300 text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-500/20"
+                          className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-blue-50 px-3 text-sm font-semibold text-blue-600 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-300 dark:hover:bg-blue-500/20"
                         >
                           <Pencil size={12} />
                           Editar
@@ -655,7 +653,7 @@ export default function AgendaAdminClient({
                           onClick={() =>
                             handleDelete(ev.id)
                           }
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-300 text-xs font-semibold hover:bg-red-100 dark:hover:bg-red-500/20"
+                          className="inline-flex min-h-9 items-center gap-1.5 rounded-lg bg-red-50 px-3 text-sm font-semibold text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-300 dark:hover:bg-red-500/20"
                         >
                           <Trash2 size={12} />
                           Remover
@@ -666,9 +664,7 @@ export default function AgendaAdminClient({
                 })}
               </div>
             )}
-          </div>
-        </div>
-      </div>
+          </section>
 
       {formOpen && (
         <div
@@ -683,11 +679,11 @@ export default function AgendaAdminClient({
           />
 
           <div
-            className="relative w-full max-w-lg rounded-2xl border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-2xl p-6"
+            className="relative w-full max-w-2xl rounded-2xl border border-gray-100 bg-white p-6 shadow-2xl dark:border-neutral-800 dark:bg-neutral-900 sm:p-8"
             style={{ animation: "popIn 0.2s ease" }}
           >
             <div className="flex items-center justify-between mb-5">
-              <h4 className="text-base font-semibold text-gray-900 dark:text-white">
+              <h4 className="text-xl font-bold text-gray-900 dark:text-white">
                 {editando
                   ? "Editar evento"
                   : "Novo evento"}
@@ -703,7 +699,7 @@ export default function AgendaAdminClient({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Título
                 </label>
 
@@ -717,12 +713,12 @@ export default function AgendaAdminClient({
                     })
                   }
                   placeholder="Ex: Auditoria de qualidade — Linha 3"
-                  className="mt-1 w-full rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-2 h-12 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Unidade
                 </label>
 
@@ -736,7 +732,7 @@ export default function AgendaAdminClient({
                       ),
                     })
                   }
-                  className="mt-1 w-full rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-2 h-12 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
                 >
                   {unidades.map((u) => (
                     <option key={u.id} value={u.id}>
@@ -747,7 +743,7 @@ export default function AgendaAdminClient({
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Data
                 </label>
 
@@ -760,12 +756,12 @@ export default function AgendaAdminClient({
                       data: e.target.value,
                     })
                   }
-                  className="mt-1 w-full rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-2 h-12 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide">
+                <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Hora
                 </label>
 
@@ -778,12 +774,12 @@ export default function AgendaAdminClient({
                       hora: e.target.value,
                     })
                   }
-                  className="mt-1 w-full rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-2 h-12 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
                 />
               </div>
 
               <div className="sm:col-span-2">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wide inline-flex items-center gap-1.5">
+                <label className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-700 dark:text-gray-300">
                   <AlignLeft size={12} />
                   Descrição
                 </label>
@@ -798,7 +794,7 @@ export default function AgendaAdminClient({
                   }
                   rows={3}
                   placeholder="Detalhes adicionais sobre a auditoria (opcional)"
-                  className="mt-1 w-full rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                  className="mt-2 w-full resize-y rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
                 />
               </div>
             </div>
@@ -807,7 +803,7 @@ export default function AgendaAdminClient({
               <button
                 onClick={closeForm}
                 disabled={saving}
-                className="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 text-sm font-semibold hover:bg-gray-200 dark:hover:bg-neutral-700 disabled:opacity-50"
+                className="min-h-10 rounded-xl bg-gray-100 px-4 text-sm font-semibold text-gray-700 hover:bg-gray-200 disabled:opacity-50 dark:bg-neutral-800 dark:text-gray-300 dark:hover:bg-neutral-700"
               >
                 Cancelar
               </button>
@@ -815,7 +811,7 @@ export default function AgendaAdminClient({
               <button
                 onClick={handleSubmit}
                 disabled={saving}
-                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600 disabled:opacity-60"
+                className="min-h-10 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
               >
                 {saving
                   ? "Salvando..."
@@ -827,6 +823,7 @@ export default function AgendaAdminClient({
           </div>
         </div>
       )}
+    </main>
     </>
   );
 }

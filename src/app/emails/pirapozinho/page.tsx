@@ -1,6 +1,5 @@
 // src/app/emails/pirapozinho/page.tsx
 import { prisma } from "../../../lib/prisma";
-import Layout from "../../../components/Layout";
 import { PirapozinhoClient } from "./pirapozinho-client";
 import Link from "next/link";
 import { Button } from "../../../components/ui/button";
@@ -17,7 +16,6 @@ export default async function EmailsPirapozinhoPage() {
   const emails = unidade?.emails ?? [];
 
   return (
-    <Layout>
       <div className="max-w-6xl mx-auto py-4">
         {/* Botão Voltar Padronizado */}
         <Link href="/emails" prefetch={false} passHref>
@@ -40,6 +38,5 @@ export default async function EmailsPirapozinhoPage() {
           }))}
         />
       </div>
-    </Layout>
   );
 }

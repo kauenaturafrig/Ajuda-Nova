@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import Layout from "@/src/components/Layout";
 import RecadosClient from "./recados-client";
 import { prisma } from "@/src/lib/prisma";
 import { requirePageRoles } from "@/src/lib/permissions";
@@ -26,7 +25,7 @@ export default async function GerenciarRecadosPage() {
         ? { unidadeId: user.unidadeId }
         : { unidadeId: -1 };
 
-  const [recadosRaw, unidades] = await Promise.all([
+  const [recadosRaw, unidades, categorias] = await Promise.all([
     prisma.recado.findMany({
       where: recadosWhere,
       orderBy: {
@@ -49,6 +48,10 @@ export default async function GerenciarRecadosPage() {
             },
           },
         },
+        categorias: {
+          orderBy: { ordem: "asc" },
+          select: { id: true, nome: true, slug: true, cor: true },
+        },
       },
     }),
 
@@ -56,6 +59,13 @@ export default async function GerenciarRecadosPage() {
       orderBy: {
         nome: "asc",
       },
+    }),
+
+    // Só categorias ativas aparecem no formulário
+    prisma.categoria.findMany({
+      where: { ativo: true },
+      orderBy: [{ ordem: "asc" }, { nome: "asc" }],
+      select: { id: true, nome: true, slug: true, cor: true },
     }),
   ]);
 
@@ -69,17 +79,17 @@ export default async function GerenciarRecadosPage() {
     unidadeIds: recado.unidades.map(
       (item) => item.unidade.id,
     ),
+    categorias: recado.categorias,
     createdAt: recado.createdAt,
   }));
 
   return (
-    <Layout>
-      <RecadosClient
-        initialRecados={recados}
-        initialUnidades={unidades}
-        userRoles={user.roles}
-        userUnidadeId={user.unidadeId}
-      />
-    </Layout>
+    <RecadosClient
+      initialRecados={recados}
+      initialUnidades={unidades}
+      initialCategorias={categorias}
+      userRoles={user.roles}
+      userUnidadeId={user.unidadeId}
+    />
   );
 }

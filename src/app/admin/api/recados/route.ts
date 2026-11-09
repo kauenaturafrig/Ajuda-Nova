@@ -56,6 +56,29 @@ function parseUnitIds(formData: FormData) {
   ];
 }
 
+function parseCategoryIds(formData: FormData) {
+  const rawIds = formData.getAll("categoriaIds[]");
+
+  return [
+    ...new Set(
+      rawIds
+        .map((value) => Number(value))
+        .filter(
+          (value) =>
+            Number.isInteger(value) && value > 0,
+        ),
+    ),
+  ];
+}
+
+async function categoryIdsExist(categoryIds: number[]) {
+  const count = await prisma.categoria.count({
+    where: { id: { in: categoryIds } },
+  });
+
+  return count === categoryIds.length;
+}
+
 function getUploadDirectory() {
   return path.join(
     process.cwd(),
@@ -228,6 +251,10 @@ export async function GET(req: NextRequest) {
             },
           },
         },
+        categorias: {
+          orderBy: { ordem: "asc" },
+          select: { id: true, nome: true, slug: true, cor: true },
+        },
       },
     });
 
@@ -301,6 +328,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
 
     const unitIds = parseUnitIds(formData);
+    const categoryIds = parseCategoryIds(formData);
 
     if (unitIds.length === 0) {
       return NextResponse.json(
@@ -308,6 +336,13 @@ export async function POST(req: NextRequest) {
           error:
             "Selecione pelo menos uma unidade.",
         },
+        { status: 400 },
+      );
+    }
+
+    if (!(await categoryIdsExist(categoryIds))) {
+      return NextResponse.json(
+        { error: "Uma ou mais categorias não existem." },
         { status: 400 },
       );
     }
@@ -396,6 +431,11 @@ export async function POST(req: NextRequest) {
             unidadeId: unitId,
           })),
         },
+        categorias: {
+          connect: categoryIds.map((categoryId) => ({
+            id: categoryId,
+          })),
+        },
       },
       include: {
         unidade: {
@@ -414,6 +454,10 @@ export async function POST(req: NextRequest) {
             },
           },
         },
+        categorias: {
+          orderBy: { ordem: "asc" },
+          select: { id: true, nome: true, slug: true, cor: true },
+        },
       },
     });
 
@@ -427,6 +471,7 @@ export async function POST(req: NextRequest) {
         titulo: title,
         conteudo: content,
         unidadeIds: unitIds,
+        categoriaIds: categoryIds,
         imagem: uploadedImage,
       },
     );
@@ -517,6 +562,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const unitIds = parseUnitIds(formData);
+    const categoryIds = parseCategoryIds(formData);
 
     if (unitIds.length === 0) {
       return NextResponse.json(
@@ -528,6 +574,13 @@ export async function PUT(req: NextRequest) {
       );
     }
 
+    if (!(await categoryIdsExist(categoryIds))) {
+      return NextResponse.json(
+        { error: "Uma ou mais categorias não existem." },
+        { status: 400 },
+      );
+    }
+
     const recadoAntigo =
       await prisma.recado.findUnique({
         where: {
@@ -535,6 +588,9 @@ export async function PUT(req: NextRequest) {
         },
         include: {
           unidades: true,
+          categorias: {
+            select: { id: true },
+          },
         },
       });
 
@@ -650,6 +706,9 @@ export async function PUT(req: NextRequest) {
       unidadeId: recadoAntigo.unidadeId,
       unidadeIds: antigosUnitIds,
       imagem: recadoAntigo.imagem,
+      categoriaIds: recadoAntigo.categorias.map(
+        (categoria) => categoria.id,
+      ),
     };
 
     const principalUnitId = unitIds[0];
@@ -667,6 +726,11 @@ export async function PUT(req: NextRequest) {
           deleteMany: {},
           create: unitIds.map((unitId) => ({
             unidadeId: unitId,
+          })),
+        },
+        categorias: {
+          set: categoryIds.map((categoryId) => ({
+            id: categoryId,
           })),
         },
       },
@@ -687,6 +751,10 @@ export async function PUT(req: NextRequest) {
             },
           },
         },
+        categorias: {
+          orderBy: { ordem: "asc" },
+          select: { id: true, nome: true, slug: true, cor: true },
+        },
       },
     });
 
@@ -700,6 +768,7 @@ export async function PUT(req: NextRequest) {
         titulo: title,
         conteudo: content,
         unidadeIds: unitIds,
+        categoriaIds: categoryIds,
         imagem: image,
       },
     );

@@ -22,6 +22,25 @@ const noCacheHeaders = {
   Expires: "0",
 };
 
+function parseCategoryIds(formData: FormData) {
+  return [
+    ...new Set(
+      formData
+        .getAll("categoriaIds[]")
+        .map((value) => Number(value))
+        .filter((id) => Number.isInteger(id) && id > 0),
+    ),
+  ];
+}
+
+async function categoryIdsExist(categoryIds: number[]) {
+  const count = await prisma.categoria.count({
+    where: { id: { in: categoryIds } },
+  });
+
+  return count === categoryIds.length;
+}
+
 function getUploadDirectory() {
   return path.join(
     process.cwd(),
@@ -152,6 +171,12 @@ export async function GET(req: NextRequest) {
         orderBy: {
           createdAt: "desc",
         },
+        include: {
+          categorias: {
+            orderBy: { ordem: "asc" },
+            select: { id: true, nome: true, slug: true, cor: true },
+          },
+        },
       });
 
     return NextResponse.json(
@@ -201,6 +226,14 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
+    const categoriaIds = parseCategoryIds(formData);
+
+    if (!(await categoryIdsExist(categoriaIds))) {
+      return NextResponse.json(
+        { error: "Uma ou mais categorias não existem." },
+        { status: 400 },
+      );
+    }
 
     const titulo = String(
       formData.get("titulo") ?? "",
@@ -234,6 +267,15 @@ export async function POST(req: NextRequest) {
           titulo,
           conteudo,
           imagem: uploadedImage,
+          categorias: {
+            connect: categoriaIds.map((id) => ({ id })),
+          },
+        },
+        include: {
+          categorias: {
+            orderBy: { ordem: "asc" },
+            select: { id: true, nome: true, slug: true, cor: true },
+          },
         },
       });
 
@@ -248,6 +290,7 @@ export async function POST(req: NextRequest) {
         titulo: noticia.titulo,
         conteudo: noticia.conteudo,
         imagem: noticia.imagem,
+        categoriaIds,
       },
     );
 
@@ -307,6 +350,14 @@ export async function PUT(req: NextRequest) {
     }
 
     const formData = await req.formData();
+    const categoriaIds = parseCategoryIds(formData);
+
+    if (!(await categoryIdsExist(categoriaIds))) {
+      return NextResponse.json(
+        { error: "Uma ou mais categorias não existem." },
+        { status: 400 },
+      );
+    }
 
     const id = Number(formData.get("id"));
 
@@ -342,6 +393,11 @@ export async function PUT(req: NextRequest) {
       await prisma.noticia.findUnique({
         where: {
           id,
+        },
+        include: {
+          categorias: {
+            select: { id: true },
+          },
         },
       });
 
@@ -384,6 +440,17 @@ export async function PUT(req: NextRequest) {
           titulo,
           conteudo,
           imagem,
+          categorias: {
+            set: categoriaIds.map((categoriaId) => ({
+              id: categoriaId,
+            })),
+          },
+        },
+        include: {
+          categorias: {
+            orderBy: { ordem: "asc" },
+            select: { id: true, nome: true, slug: true, cor: true },
+          },
         },
       });
 
@@ -396,11 +463,13 @@ export async function PUT(req: NextRequest) {
         titulo: noticiaAntes.titulo,
         conteudo: noticiaAntes.conteudo,
         imagem: noticiaAntes.imagem,
+        categoriaIds: noticiaAntes.categorias.map((categoria) => categoria.id),
       },
       {
         titulo: noticiaDepois.titulo,
         conteudo: noticiaDepois.conteudo,
         imagem: noticiaDepois.imagem,
+        categoriaIds,
       },
     );
 

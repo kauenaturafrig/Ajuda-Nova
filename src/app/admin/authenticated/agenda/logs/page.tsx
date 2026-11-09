@@ -2,7 +2,6 @@
 import { prisma } from "@/src/lib/prisma";
 import { requirePageRoles } from "@/src/lib/permissions";
 import { PAGE_ROLES } from "@/src/lib/role-permissions";
-import Layout from "@/src/components/Layout";
 import AgendaLogsClient from "./logs-client";
 
 export const dynamic = "force-dynamic";
@@ -49,11 +48,9 @@ export default async function AgendaLogsPage() {
   }));
 
   return (
-    <Layout>
-      <AgendaLogsClient
-        audits={audits}
-        total={audits.length}
-      />
-    </Layout>
+    <AgendaLogsClient
+      audits={audits}
+      total={audits.length}
+    />
   );
 }

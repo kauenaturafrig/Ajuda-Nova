@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "../../../../lib/auth";
 import { prisma } from "../../../../lib/prisma";
-import Layout from "@/src/components/Layout";
 import { UsuariosClient } from "./usuarios-client";
 import type {
   AppUserRole,
@@ -78,8 +77,6 @@ export default async function UsuariosPage() {
   }));
 
   return (
-    <Layout>
-      <UsuariosClient usuarios={usuarios} unidades={unidades} />
-    </Layout>
+    <UsuariosClient usuarios={usuarios} unidades={unidades} />
   );
 }

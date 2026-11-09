@@ -15,7 +15,6 @@ import {
     ListFilter,
     CalendarDays,
 } from "lucide-react";
-import Image from "next/image";
 
 type EventoPúblico = {
     id: number;
@@ -176,7 +175,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
 
     return (
         <>
-            <style jsx global>{`
+            <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;
@@ -197,58 +196,65 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
         }
       `}</style>
 
-            <div className="container max-w-6xl mx-auto min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-6xl mx-auto">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-100 dark:border-neutral-800/60">
+            <main className="mx-auto min-h-screen w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+                <div className="space-y-7">
+                    <header className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white/80 p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]/80 sm:flex-row sm:items-center sm:justify-between sm:p-6">
                         <div className="flex items-center gap-4">
-                            <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-green-50 dark:bg-green-900/30 text-green-400 dark:text-green-400">
-                                <Calendar size={30} />
+                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm dark:bg-emerald-900/30 dark:text-emerald-400 sm:h-14 sm:w-14">
+                                <Calendar size={26} />
                             </span>
                             <div>
-                                <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                                     Agenda de Auditorias
                                 </h1>
-                                <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base mt-1">
+                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 sm:text-base">
                                     Visualização pública das próximas auditorias em todas as unidades
                                 </p>
                             </div>
                         </div>
-                    </div>
+                        <div className="flex w-fit items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-300">
+                            <CalendarDays size={16} />
+                            {eventosFiltrados.length} evento{eventosFiltrados.length === 1 ? "" : "s"} encontrado{eventosFiltrados.length === 1 ? "" : "s"}
+                        </div>
+                    </header>
 
                     {/* Navegação de mês */}
-                    <div className="flex items-center justify-between mb-6">
+                    <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d] sm:p-6">
+                    <div className="mb-5 flex items-center justify-between">
                         <button
                             onClick={prevMonth}
-                            className="flex items-center justify-center w-9 h-9 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-neutral-800"
+                            aria-label="Mês anterior"
+                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-300 dark:hover:bg-neutral-800"
                         >
                             <ChevronLeft size={18} />
                         </button>
 
-                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white capitalize">
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white capitalize sm:text-xl">
                             {currMonth.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}
                         </h2>
 
                         <button
                             onClick={nextMonth}
-                            className="flex items-center justify-center w-9 h-9 rounded-xl bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-neutral-800"
+                            aria-label="Próximo mês"
+                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-gray-300 dark:hover:bg-neutral-800"
                         >
                             <ChevronRight size={18} />
                         </button>
                     </div>
 
                     {/* Calendário */}
-                    <div className="grid grid-cols-7 gap-2 mb-10">
+                    <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
                         {["D", "S", "T", "Q", "Q", "S", "S"].map((d, i) => (
                             <div
                                 key={`${d}-${i}`}
-                                className="text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+                                className="pb-2 text-center text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 sm:text-xs"
                             >
                                 {d}
                             </div>
                         ))}
 
                         {Array.from({ length: startWeekday }).map((_, i) => (
-                            <div key={`empty-start-${i}`} className="h-24" />
+                            <div key={`empty-start-${i}`} className="h-16 sm:h-24" />
                         ))}
 
                         {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -262,12 +268,13 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                                 <button
                                     key={`day-${dayNum}`}
                                     onClick={() => setDiaSelecionado(date)}
-                                    className={`h-24 rounded-2xl border p-2 flex flex-col gap-1 overflow-hidden text-left transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-emerald-500/50 cursor-pointer ${isToday
+                                    aria-label={`${date.toLocaleDateString("pt-BR", { day: "numeric", month: "long" })}: ${eventosDoDia.length} evento${eventosDoDia.length === 1 ? "" : "s"}`}
+                                    className={`h-16 sm:h-24 rounded-xl sm:rounded-2xl border p-1.5 sm:p-2 flex flex-col gap-1 overflow-hidden text-left transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-emerald-500/50 cursor-pointer ${isToday
                                         ? "bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30"
                                         : "bg-white dark:bg-neutral-900 border-gray-100 dark:border-neutral-800"
                                         }`}
                                 >
-                                    <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">{dayNum}</div>
+                                    <div className={`text-xs font-semibold ${isToday ? "text-blue-700 dark:text-blue-300" : "text-gray-700 dark:text-gray-200"}`}>{dayNum}</div>
 
                                     {eventosDoDia.length === 0 ? (
                                         <div className="text-xs text-gray-300 dark:text-gray-600">—</div>
@@ -275,7 +282,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                                         eventosDoDia.slice(0, 2).map((ev) => (
                                             <div
                                                 key={ev.id}
-                                                className="text-xs rounded-md px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-500/20"
+                                                className="rounded-md border border-emerald-100 bg-emerald-50 px-1.5 py-1 text-[10px] text-emerald-700 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-300 sm:px-2 sm:text-xs"
                                             >
                                                 <div className="font-semibold truncate">{ev.titulo}</div>
                                                 <div className="text-[10px] text-emerald-600/80 dark:text-emerald-400/80 truncate">
@@ -293,9 +300,11 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                             );
                         })}
                     </div>
+                    </section>
 
                     {/* Buscar e filtrar */}
-                    <div className="flex items-center gap-3 mb-4">
+                    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d] sm:p-6">
+                    <div className="mb-5 flex items-center gap-3">
                         <span className="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0">
                             <ListFilter size={16} />
                         </span>
@@ -309,7 +318,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                         </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 mb-8">
+                    <div className="flex flex-col gap-3 sm:flex-row">
                         <div className="relative flex-1">
                             <Search
                                 size={16}
@@ -319,7 +328,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                                 value={busca}
                                 onChange={(e) => setBusca(e.target.value)}
                                 placeholder="Buscar auditoria por título, unidade ou descrição..."
-                                className="w-full rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 pl-10 pr-9 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-9 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
                             />
                             {busca && (
                                 <button
@@ -331,7 +340,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                             )}
                         </div>
 
-                        <div className="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2">
+                        <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-3 dark:border-neutral-700 dark:bg-neutral-900">
                             <MapPin size={15} className="text-gray-400 shrink-0" />
                             <select
                                 value={filtroUnidade}
@@ -350,13 +359,15 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                         </div>
                     </div>
 
+                    </section>
+
                     {/* Lista completa */}
                     <div>
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                        <div className="mb-4 flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                                 Próximas auditorias
                             </h3>
-                            <span className="text-xs text-gray-400">
+                            <span className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 dark:bg-neutral-800 dark:text-gray-300">
                                 {eventosFiltrados.length} de {eventos.length}
                             </span>
                         </div>
@@ -371,15 +382,15 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                                 </p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                                 {eventosFiltrados.map((ev) => (
                                     <EventoCard key={ev.id} ev={ev} />
                                 ))}
                             </div>
                         )}
                     </div>
-                </div>
-            </div>
+                    </div>
+                </main>
 
             {/* Zoom do dia selecionado */}
             {diaSelecionado && (

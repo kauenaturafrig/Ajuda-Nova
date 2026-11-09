@@ -98,6 +98,11 @@ export async function DELETE(
         where: {
           id: noticiaId,
         },
+        include: {
+          categorias: {
+            select: { id: true },
+          },
+        },
       });
 
     if (!noticia) {
@@ -120,6 +125,7 @@ export async function DELETE(
           titulo: noticia.titulo,
           conteudo: noticia.conteudo,
           imagem: noticia.imagem,
+          categoriaIds: noticia.categorias.map((categoria) => categoria.id),
         },
       },
     });

@@ -62,7 +62,7 @@ const manuais: NavEntry[] = [
 // Substitua "-" pela URL real do sistema de chamados.
 const abrirChamado: NavEntry = {
   label: "Abrir chamado",
-  path: "-",
+  path: "https://helpdesk.naturafrig.com.br",
   icon: CircleHelp,
   external: true,
 };

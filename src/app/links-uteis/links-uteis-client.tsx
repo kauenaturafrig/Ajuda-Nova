@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, Link } from "lucide-react";
+import { ArrowUpRight, Link2 } from "lucide-react";
 
 const sistemas = [
   {
@@ -69,70 +69,69 @@ export function LinksUtilClient() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-8 ml-20">
-      {/* Header no mesmo alinhamento fino dos painéis anteriores */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-gray-100 dark:border-neutral-800">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-gray-50 dark:bg-gray-600/30 text-gray-600 dark:text-gray-400">
-              <Link size={30} />
-            </span>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
-              Sistemas Naturafrig
-            </h1>
+    <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[100rem]">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-gray-100 dark:border-neutral-800">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-gray-50 dark:bg-gray-600/30 text-gray-600 dark:text-gray-400">
+                <Link2 className="h-[1.875rem] w-[1.875rem]" />
+              </span>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+                Sistemas Naturafrig
+              </h1>
+            </div>
+            <p className="text-base text-gray-500 dark:text-gray-400">
+              Acesso corporativo unificado aos sistemas essenciais da empresa.
+            </p>
           </div>
-          <p className="text-base text-gray-500 dark:text-gray-400">
-            Acesso corporativo unificado aos sistemas essenciais da empresa.
-          </p>
         </div>
-      </div>
 
-      {/* Dashboard Grid Futurista e Clean */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sistemas.map(({ url, name, icon, color, badge }) => (
-          <div
-            key={url}
-            onClick={() => openInNewTab(url)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                openInNewTab(url);
-              }
-            }}
-            className={`
-              group relative flex flex-col items-center justify-center h-48
-              bg-white dark:bg-[#111a2d] 
-              border rounded-3xl p-6 shadow-sm cursor-pointer
-              transition-all duration-300 ease-out
-              hover:-translate-y-1.5 hover:shadow-xl dark:hover:bg-neutral-500/60
-              ${color}
-            `}
-          >
-            {/* Badge indicadora discreta no topo superior direito */}
-            <div className={`absolute top-4 right-4 flex items-center justify-center p-1.5 rounded-xl opacity-40 group-hover:opacity-100 transition-opacity duration-300 ${badge}`}>
-              <ArrowUpRight size={14} />
+        {/* Flex com justify-center: a última linha (incompleta) também fica centralizada */}
+        <div className="flex flex-wrap justify-center gap-6">
+          {sistemas.map(({ url, name, icon, color, badge }) => (
+            <div
+              key={name}
+              onClick={() => openInNewTab(url)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  openInNewTab(url);
+                }
+              }}
+              className={`
+                group relative flex flex-col items-center justify-center h-48
+                w-full sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] xl:w-[calc((100%-4.5rem)/4)]
+                bg-white dark:bg-[#111a2d]
+                border rounded-3xl p-6 shadow-sm cursor-pointer
+                transition-all duration-300 ease-out
+                hover:-translate-y-1.5 hover:shadow-xl dark:hover:bg-neutral-500/60
+                ${color}
+              `}
+            >
+              <div className={`absolute top-4 right-4 flex items-center justify-center p-1.5 rounded-xl opacity-40 group-hover:opacity-100 transition-opacity duration-300 ${badge}`}>
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </div>
+
+              <div className="relative w-36 h-16 mb-4 transform group-hover:scale-105 transition-transform duration-300">
+                <Image
+                  src={icon}
+                  alt={name}
+                  fill
+                  className="object-contain filter dark:brightness-110 drop-shadow-sm"
+                />
+              </div>
+
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
+                {name}
+              </h3>
+
+              <div className="absolute inset-x-12 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
             </div>
-
-            {/* Logo Centralizado com efeito de flutuação */}
-            <div className="relative w-36 h-16 mb-4 transform group-hover:scale-105 transition-transform duration-300">
-              <Image
-                src={icon}
-                alt={name}
-                fill
-                className="object-contain filter dark:brightness-110 drop-shadow-sm"
-              />
-            </div>
-
-            {/* Nome do Sistema em Texto Sólido e Clean */}
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-neutral-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
-              {name}
-            </h3>
-
-            {/* Linha de brilho sutil no fundo interno do card */}
-            <div className="absolute inset-x-12 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

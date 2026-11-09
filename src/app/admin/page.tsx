@@ -1,6 +1,5 @@
 // src/app/admin/page.tsx
 import { LoginForm } from "./_components/login-form";
-import Layout from "@/src/components/Layout";
 import { LockKeyhole } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -14,7 +13,6 @@ export default async function Home() {
   }
 
   return (
-    <Layout>
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-12">
         <div className="w-full max-w-[400px] space-y-6 bg-white dark:bg-neutral-900/40 border border-gray-100 dark:border-neutral-800/80 rounded-2xl p-6 sm:p-8 shadow-sm">
           
@@ -36,6 +34,5 @@ export default async function Home() {
           
         </div>
       </div>
-    </Layout>
   );
 }
