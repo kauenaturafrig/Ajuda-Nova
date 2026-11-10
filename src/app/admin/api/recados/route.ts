@@ -681,11 +681,9 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    const oldImage = String(
-      formData.get("imagemAntiga") ?? "",
-    ).trim();
-
-    let image = oldImage || null;
+    const removeImage =
+      formData.get("removerImagem") === "true";
+    let image = recadoAntigo.imagem;
 
     const imageFile = formData.get("imagem");
 
@@ -696,8 +694,8 @@ export async function PUT(req: NextRequest) {
       );
 
       image = newUploadedImage;
-
-      await removeUploadedImage(oldImage);
+    } else if (removeImage) {
+      image = null;
     }
 
     const oldData = {
@@ -757,6 +755,10 @@ export async function PUT(req: NextRequest) {
         },
       },
     });
+
+    if (recadoAntigo.imagem !== image) {
+      await removeUploadedImage(recadoAntigo.imagem);
+    }
 
     await logAudit(
       recado.id,

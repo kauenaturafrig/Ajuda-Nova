@@ -372,15 +372,11 @@ export async function PUT(
         );
       }
 
-      let finalImage =
-        recadoBefore.imagem;
-
+      let finalImage = recadoBefore.imagem;
       if (request.imagem) {
-        await apagarArquivo(
-          recadoBefore.imagem,
-        );
-
         finalImage = request.imagem;
+      } else if (request.imagemAntiga === "") {
+        finalImage = null;
       }
 
       const oldData = {
@@ -423,6 +419,10 @@ export async function PUT(
                 },
         },
       });
+
+      if (recadoBefore.imagem !== finalImage) {
+        await apagarArquivo(recadoBefore.imagem);
+      }
 
       await logAudit(
         recadoBefore.id,

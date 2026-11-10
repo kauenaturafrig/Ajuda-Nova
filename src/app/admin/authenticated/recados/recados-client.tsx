@@ -121,6 +121,7 @@ export default function RecadosClient({
     imagem: null as File | null,
     imagemPreview: "",
     imagemAntiga: "",
+    imagemRemovida: false,
   });
 
   const [imagemRecado, setImagemRecado] = useState<File | null>(null);
@@ -184,6 +185,7 @@ export default function RecadosClient({
       imagem: null,
       imagemPreview: "",
       imagemAntiga: "",
+      imagemRemovida: false,
     });
     setEditingId(null);
     setSelectedUnidades(
@@ -211,6 +213,7 @@ export default function RecadosClient({
       imagem: null,
       imagemPreview: recado.imagem ? getImagemUrl(recado) : "",
       imagemAntiga: recado.imagem || "",
+      imagemRemovida: false,
     });
 
     const selected: Record<number, boolean> = {};
@@ -308,11 +311,12 @@ export default function RecadosClient({
         fd.append("tipo", editingId ? "UPDATE" : "CREATE");
         if (editingId) {
           fd.append("recadoId", editingId.toString());
-          fd.append("imagemAntiga", formData.imagemAntiga);
+          fd.append("imagemAntiga", formData.imagemRemovida ? "" : formData.imagemAntiga);
         }
       } else if (editingId) {
         fd.append("id", editingId.toString());
         fd.append("imagemAntiga", formData.imagemAntiga);
+        fd.append("removerImagem", String(formData.imagemRemovida));
       }
 
       const res = await fetch(url, { method, body: fd });
@@ -370,7 +374,11 @@ export default function RecadosClient({
 
   const handleImageUpload = useCallback((file: File) => {
     const preview = URL.createObjectURL(file);
-    setFormData((prev) => ({ ...prev, imagem: file, imagemPreview: preview, imagemAntiga: "" }));
+    setFormData((prev) => ({
+      ...prev,
+      imagem: file,
+      imagemPreview: preview,
+    }));
     setImagemRecado(file);
   }, []);
 
@@ -401,8 +409,25 @@ export default function RecadosClient({
 
   const removeImage = useCallback(() => {
     setImagemRecado(null);
-    setFormData((prev) => ({ ...prev, imagem: null, imagemPreview: editingId ? prev.imagemAntiga : "" }));
-  }, [editingId]);
+    setFormData((prev) => {
+      const removingReplacement = Boolean(prev.imagem);
+      const preserveOriginal = Boolean(
+        removingReplacement && editingId && prev.imagemAntiga && !prev.imagemRemovida,
+      );
+      const originalRecado = editingId
+        ? recados.find((recado) => recado.id === editingId)
+        : undefined;
+
+      return {
+        ...prev,
+        imagem: null,
+        imagemPreview: preserveOriginal && originalRecado
+          ? getImagemUrl(originalRecado)
+          : "",
+        imagemRemovida: !preserveOriginal,
+      };
+    });
+  }, [editingId, recados]);
 
   const recadosVisiveis =
     filtroCategoria === "todas"
@@ -654,16 +679,17 @@ export default function RecadosClient({
                     </div>
 
                     {(imagemRecado || formData.imagemPreview) && (
-                      <div className="absolute inset-1 bg-white dark:bg-neutral-900 flex flex-col items-center justify-center z-30 rounded-lg p-1 border border-gray-100 dark:border-neutral-800">
+                      <div className="pointer-events-none absolute inset-1 z-30 flex flex-col items-center justify-center rounded-lg border border-gray-100 bg-white p-1 dark:border-neutral-800 dark:bg-neutral-900">
                         {formData.imagemPreview ? (
                           <div className="relative w-full h-full flex items-center justify-center bg-gray-50 dark:bg-neutral-950 rounded overflow-hidden">
                             <img src={formData.imagemPreview} alt="Preview" className="max-w-full max-h-full object-contain" />
                             <Button
                               type="button"
-                              variant="destructive"
+                              variant="ghost"
                               size="icon"
                               onClick={removeImage}
-                              className="absolute top-1 right-1 h-5 w-5 rounded-md"
+                              aria-label="Remover imagem"
+                              className="pointer-events-auto absolute right-1 top-1 h-6 w-6 rounded-md border border-gray-200 bg-white text-red-600 shadow-md hover:bg-red-50 hover:text-red-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-red-400 dark:hover:bg-neutral-700 dark:hover:text-red-300"
                             >
                               <X className="h-3 w-3" />
                             </Button>
@@ -674,7 +700,7 @@ export default function RecadosClient({
                             <p className="text-[10px] font-bold text-gray-800 dark:text-gray-200 truncate flex-1 text-left">
                               {imagemRecado?.name}
                             </p>
-                            <Button type="button" variant="ghost" size="icon" onClick={removeImage} className="h-5 w-5 p-0">
+                            <Button type="button" variant="ghost" size="icon" onClick={removeImage} aria-label="Remover imagem" className="pointer-events-auto h-5 w-5 p-0 text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-neutral-800">
                               <X className="h-3 w-3" />
                             </Button>
                           </div>

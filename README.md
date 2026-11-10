@@ -134,3 +134,59 @@ Coloque o AjudaNova.exe dentro dessa pasta.
     pm2 save
     pm2 startup
 ```
+
+## Banco PostgreSQL e Prisma
+
+O PostgreSQL pode continuar instalado no servidor, fora do Docker. O Compose
+executa as migrations em um container de tarefa (`migrate`) antes de iniciar o
+app; o banco não precisa estar em um container.
+
+### Configuração da conexão
+
+Configure `DATABASE_URL` no `.env` com o endereço do PostgreSQL acessível a
+partir do host Docker. `localhost` dentro de um container aponta para o próprio
+container, não para o servidor do banco. Se o PostgreSQL estiver no mesmo host
+Docker, use `host.docker.internal` (o Compose já inclui o mapeamento necessário
+para Linux); se estiver em outro servidor, use o hostname ou IP desse servidor.
+Confirme também que a porta está liberada e que o PostgreSQL aceita conexões do
+host Docker.
+
+### Verificar antes de atualizar
+
+```bash
+npm run db:check:docker
+```
+
+O comando verifica o histórico de migrations do Prisma e compara o schema do
+`prisma/schema.prisma` com o banco configurado. Ele não modifica o banco. Se
+houver migrations pendentes, alterações fora do Prisma ou falha de conexão, o
+comando termina com erro para que o problema seja investigado.
+
+### Criar migrations e atualizar o servidor
+
+Em desenvolvimento, crie uma migration a partir da alteração em
+`prisma/schema.prisma` e versione os arquivos gerados:
+
+```bash
+npm run db:migrate -- --name nome_da_mudanca
+```
+
+Depois de revisar e enviar a migration ao repositório, faça backup do banco de
+produção. No servidor, atualize o `compose.yml` com esta configuração e continue
+usando os comandos de deploy atuais:
+
+```bash
+docker compose -p ajuda-nova pull app
+docker compose -p ajuda-nova up -d --force-recreate app
+```
+
+O segundo comando inicia primeiro o serviço `migrate` e só inicia o app se
+`prisma migrate deploy` concluir com sucesso. A imagem de migrations é a mesma
+do app, então inclui o schema e as migrations publicados no deploy. Se a
+migration falhar, o app não sobe; consulte os logs com
+`docker compose -p ajuda-nova logs migrate`.
+
+`npm run db:check:docker` executa verificações sem alterar o banco. Para aplicar
+migrations manualmente, `npm run db:deploy:docker` altera o banco e deve ser
+executado apenas após revisar as migrations e confirmar a `DATABASE_URL`. Não
+use `prisma migrate reset` em produção.
