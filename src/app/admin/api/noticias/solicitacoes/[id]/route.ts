@@ -19,6 +19,27 @@ const noCacheHeaders = {
   Expires: "0",
 };
 
+function parseCategoriaIds(value: string | null): number[] {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return [...new Set(
+      parsed
+        .map(Number)
+        .filter((id) => Number.isInteger(id) && id > 0),
+    )];
+  } catch {
+    return [];
+  }
+}
+
 function getUploadDirectory() {
   return path.join(
     process.cwd(),
@@ -246,6 +267,24 @@ export async function PUT(
       );
     }
 
+    const categoriaIds = parseCategoriaIds(
+      solicitacao.categoriaIds,
+    );
+    if (
+      solicitacao.categoriaIds !== null &&
+      (await prisma.categoria.count({
+        where: { id: { in: categoriaIds } },
+      })) !== categoriaIds.length
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Uma ou mais categorias da solicitação não existem mais.",
+        },
+        { status: 400 },
+      );
+    }
+
     if (solicitacao.tipo === "CREATE") {
       const noticia =
         await prisma.noticia.create({
@@ -253,6 +292,12 @@ export async function PUT(
             titulo: solicitacao.titulo!,
             conteudo: solicitacao.conteudo!,
             imagem: solicitacao.imagem,
+            categorias:
+              solicitacao.categoriaIds === null
+                ? undefined
+                : {
+                    connect: categoriaIds.map((id) => ({ id })),
+                  },
           },
         });
 
@@ -266,6 +311,7 @@ export async function PUT(
           titulo: solicitacao.titulo,
           conteudo: solicitacao.conteudo,
           imagem: solicitacao.imagem,
+          categoriaIds,
           origemSolicitacaoId:
             solicitacao.id,
           solicitadoPor:
@@ -282,6 +328,11 @@ export async function PUT(
         await prisma.noticia.findUnique({
           where: {
             id: solicitacao.noticiaId,
+          },
+          include: {
+            categorias: {
+              select: { id: true },
+            },
           },
         });
 
@@ -314,6 +365,12 @@ export async function PUT(
           titulo: solicitacao.titulo!,
           conteudo: solicitacao.conteudo!,
           imagem: imagemFinal,
+          categorias:
+            solicitacao.categoriaIds === null
+              ? undefined
+              : {
+                  set: categoriaIds.map((id) => ({ id })),
+                },
         },
       });
 
@@ -326,11 +383,13 @@ export async function PUT(
           titulo: noticiaAntes.titulo,
           conteudo: noticiaAntes.conteudo,
           imagem: noticiaAntes.imagem,
+          categoriaIds: noticiaAntes.categorias.map((categoria) => categoria.id),
         },
         {
           titulo: solicitacao.titulo,
           conteudo: solicitacao.conteudo,
           imagem: imagemFinal,
+          categoriaIds,
           origemSolicitacaoId:
             solicitacao.id,
           solicitadoPor:

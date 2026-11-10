@@ -9,9 +9,13 @@
     "lint": "next lint",
     "export": "next export",
     "start-static": "cd out && python -m http.server 5050",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:status": "prisma migrate status",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:check:docker": "docker compose run --build --rm prisma-tool",
+    "db:deploy:docker": "docker compose run --build --rm --entrypoint npx prisma-tool prisma migrate deploy",
     "create:owner": "node dist-scripts/scripts/create-initial-owner.js"
   },
   "dependencies": {

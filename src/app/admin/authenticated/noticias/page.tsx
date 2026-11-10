@@ -1,4 +1,3 @@
-import Layout from "@/src/components/Layout";
 import NoticiasClient from "./noticias-client";
 import { prisma } from "@/src/lib/prisma";
 import { requirePageRoles } from "@/src/lib/permissions";
@@ -12,12 +11,24 @@ export default async function GerenciarNoticiasPage() {
     PAGE_ROLES.noticias,
   );
 
-  const noticias =
-    await prisma.noticia.findMany({
+  const [noticias, categorias] = await Promise.all([
+    prisma.noticia.findMany({
       orderBy: {
         createdAt: "desc",
       },
-    });
+      include: {
+        categorias: {
+          orderBy: { ordem: "asc" },
+          select: { id: true, nome: true, slug: true, cor: true },
+        },
+      },
+    }),
+    prisma.categoria.findMany({
+      where: { ativo: true },
+      orderBy: [{ ordem: "asc" }, { nome: "asc" }],
+      select: { id: true, nome: true, slug: true, cor: true },
+    }),
+  ]);
 
   const serializedNoticias = noticias.map(
     (noticia) => ({
@@ -29,15 +40,15 @@ export default async function GerenciarNoticiasPage() {
         noticia.createdAt.toISOString(),
       updatedAt:
         noticia.updatedAt.toISOString(),
+      categorias: noticia.categorias,
     }),
   );
 
   return (
-    <Layout>
-      <NoticiasClient
-        initialNoticias={serializedNoticias}
-        userRoles={user.roles}
-      />
-    </Layout>
+    <NoticiasClient
+      initialNoticias={serializedNoticias}
+      initialCategorias={categorias}
+      userRoles={user.roles}
+    />
   );
 }

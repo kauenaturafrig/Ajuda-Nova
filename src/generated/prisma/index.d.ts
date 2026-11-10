@@ -74,6 +74,11 @@ export type Email = $Result.DefaultSelection<Prisma.$EmailPayload>
  */
 export type Jornal = $Result.DefaultSelection<Prisma.$JornalPayload>
 /**
+ * Model Categoria
+ * 
+ */
+export type Categoria = $Result.DefaultSelection<Prisma.$CategoriaPayload>
+/**
  * Model Noticia
  * 
  */
@@ -395,6 +400,16 @@ export class PrismaClient<
     * ```
     */
   get jornal(): Prisma.JornalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.categoria`: Exposes CRUD operations for the **Categoria** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Categorias
+    * const categorias = await prisma.categoria.findMany()
+    * ```
+    */
+  get categoria(): Prisma.CategoriaDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.noticia`: Exposes CRUD operations for the **Noticia** model.
@@ -928,6 +943,7 @@ export namespace Prisma {
     Ramal: 'Ramal',
     Email: 'Email',
     Jornal: 'Jornal',
+    Categoria: 'Categoria',
     Noticia: 'Noticia',
     NoticiaAudit: 'NoticiaAudit',
     Recado: 'Recado',
@@ -954,7 +970,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userRoleAssignment" | "role" | "permission" | "rolePermission" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal" | "noticia" | "noticiaAudit" | "recado" | "recadoUnidade" | "recadoAudit" | "agendaEvento" | "agendaEventoAudit" | "solicitacaoGerenciamento"
+      modelProps: "user" | "userRoleAssignment" | "role" | "permission" | "rolePermission" | "session" | "account" | "verification" | "unidade" | "ramal" | "email" | "jornal" | "categoria" | "noticia" | "noticiaAudit" | "recado" | "recadoUnidade" | "recadoAudit" | "agendaEvento" | "agendaEventoAudit" | "solicitacaoGerenciamento"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1846,6 +1862,80 @@ export namespace Prisma {
           }
         }
       }
+      Categoria: {
+        payload: Prisma.$CategoriaPayload<ExtArgs>
+        fields: Prisma.CategoriaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CategoriaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CategoriaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>
+          }
+          findFirst: {
+            args: Prisma.CategoriaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CategoriaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>
+          }
+          findMany: {
+            args: Prisma.CategoriaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>[]
+          }
+          create: {
+            args: Prisma.CategoriaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>
+          }
+          createMany: {
+            args: Prisma.CategoriaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CategoriaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>[]
+          }
+          delete: {
+            args: Prisma.CategoriaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>
+          }
+          update: {
+            args: Prisma.CategoriaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>
+          }
+          deleteMany: {
+            args: Prisma.CategoriaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CategoriaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CategoriaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>[]
+          }
+          upsert: {
+            args: Prisma.CategoriaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaPayload>
+          }
+          aggregate: {
+            args: Prisma.CategoriaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCategoria>
+          }
+          groupBy: {
+            args: Prisma.CategoriaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CategoriaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CategoriaCountArgs<ExtArgs>
+            result: $Utils.Optional<CategoriaCountAggregateOutputType> | number
+          }
+        }
+      }
       Noticia: {
         payload: Prisma.$NoticiaPayload<ExtArgs>
         fields: Prisma.NoticiaFieldRefs
@@ -2546,6 +2636,7 @@ export namespace Prisma {
     ramal?: RamalOmit
     email?: EmailOmit
     jornal?: JornalOmit
+    categoria?: CategoriaOmit
     noticia?: NoticiaOmit
     noticiaAudit?: NoticiaAuditOmit
     recado?: RecadoOmit
@@ -2853,14 +2944,56 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CategoriaCountOutputType
+   */
+
+  export type CategoriaCountOutputType = {
+    noticias: number
+    recados: number
+  }
+
+  export type CategoriaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    noticias?: boolean | CategoriaCountOutputTypeCountNoticiasArgs
+    recados?: boolean | CategoriaCountOutputTypeCountRecadosArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CategoriaCountOutputType without action
+   */
+  export type CategoriaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCountOutputType
+     */
+    select?: CategoriaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CategoriaCountOutputType without action
+   */
+  export type CategoriaCountOutputTypeCountNoticiasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NoticiaWhereInput
+  }
+
+  /**
+   * CategoriaCountOutputType without action
+   */
+  export type CategoriaCountOutputTypeCountRecadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RecadoWhereInput
+  }
+
+
+  /**
    * Count Type NoticiaCountOutputType
    */
 
   export type NoticiaCountOutputType = {
+    categorias: number
     solicitacoes: number
   }
 
   export type NoticiaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categorias?: boolean | NoticiaCountOutputTypeCountCategoriasArgs
     solicitacoes?: boolean | NoticiaCountOutputTypeCountSolicitacoesArgs
   }
 
@@ -2878,6 +3011,13 @@ export namespace Prisma {
   /**
    * NoticiaCountOutputType without action
    */
+  export type NoticiaCountOutputTypeCountCategoriasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoriaWhereInput
+  }
+
+  /**
+   * NoticiaCountOutputType without action
+   */
   export type NoticiaCountOutputTypeCountSolicitacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SolicitacaoGerenciamentoWhereInput
   }
@@ -2888,11 +3028,13 @@ export namespace Prisma {
    */
 
   export type RecadoCountOutputType = {
+    categorias: number
     unidades: number
     solicitacoes: number
   }
 
   export type RecadoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categorias?: boolean | RecadoCountOutputTypeCountCategoriasArgs
     unidades?: boolean | RecadoCountOutputTypeCountUnidadesArgs
     solicitacoes?: boolean | RecadoCountOutputTypeCountSolicitacoesArgs
   }
@@ -2906,6 +3048,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the RecadoCountOutputType
      */
     select?: RecadoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * RecadoCountOutputType without action
+   */
+  export type RecadoCountOutputTypeCountCategoriasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoriaWhereInput
   }
 
   /**
@@ -16394,6 +16543,1194 @@ export namespace Prisma {
 
 
   /**
+   * Model Categoria
+   */
+
+  export type AggregateCategoria = {
+    _count: CategoriaCountAggregateOutputType | null
+    _avg: CategoriaAvgAggregateOutputType | null
+    _sum: CategoriaSumAggregateOutputType | null
+    _min: CategoriaMinAggregateOutputType | null
+    _max: CategoriaMaxAggregateOutputType | null
+  }
+
+  export type CategoriaAvgAggregateOutputType = {
+    id: number | null
+    ordem: number | null
+  }
+
+  export type CategoriaSumAggregateOutputType = {
+    id: number | null
+    ordem: number | null
+  }
+
+  export type CategoriaMinAggregateOutputType = {
+    id: number | null
+    nome: string | null
+    slug: string | null
+    descricao: string | null
+    cor: string | null
+    ativo: boolean | null
+    ordem: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CategoriaMaxAggregateOutputType = {
+    id: number | null
+    nome: string | null
+    slug: string | null
+    descricao: string | null
+    cor: string | null
+    ativo: boolean | null
+    ordem: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CategoriaCountAggregateOutputType = {
+    id: number
+    nome: number
+    slug: number
+    descricao: number
+    cor: number
+    ativo: number
+    ordem: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CategoriaAvgAggregateInputType = {
+    id?: true
+    ordem?: true
+  }
+
+  export type CategoriaSumAggregateInputType = {
+    id?: true
+    ordem?: true
+  }
+
+  export type CategoriaMinAggregateInputType = {
+    id?: true
+    nome?: true
+    slug?: true
+    descricao?: true
+    cor?: true
+    ativo?: true
+    ordem?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CategoriaMaxAggregateInputType = {
+    id?: true
+    nome?: true
+    slug?: true
+    descricao?: true
+    cor?: true
+    ativo?: true
+    ordem?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CategoriaCountAggregateInputType = {
+    id?: true
+    nome?: true
+    slug?: true
+    descricao?: true
+    cor?: true
+    ativo?: true
+    ordem?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CategoriaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Categoria to aggregate.
+     */
+    where?: CategoriaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categorias to fetch.
+     */
+    orderBy?: CategoriaOrderByWithRelationInput | CategoriaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CategoriaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categorias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categorias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Categorias
+    **/
+    _count?: true | CategoriaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CategoriaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CategoriaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CategoriaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CategoriaMaxAggregateInputType
+  }
+
+  export type GetCategoriaAggregateType<T extends CategoriaAggregateArgs> = {
+        [P in keyof T & keyof AggregateCategoria]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCategoria[P]>
+      : GetScalarType<T[P], AggregateCategoria[P]>
+  }
+
+
+
+
+  export type CategoriaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoriaWhereInput
+    orderBy?: CategoriaOrderByWithAggregationInput | CategoriaOrderByWithAggregationInput[]
+    by: CategoriaScalarFieldEnum[] | CategoriaScalarFieldEnum
+    having?: CategoriaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CategoriaCountAggregateInputType | true
+    _avg?: CategoriaAvgAggregateInputType
+    _sum?: CategoriaSumAggregateInputType
+    _min?: CategoriaMinAggregateInputType
+    _max?: CategoriaMaxAggregateInputType
+  }
+
+  export type CategoriaGroupByOutputType = {
+    id: number
+    nome: string
+    slug: string
+    descricao: string | null
+    cor: string | null
+    ativo: boolean
+    ordem: number
+    createdAt: Date
+    updatedAt: Date
+    _count: CategoriaCountAggregateOutputType | null
+    _avg: CategoriaAvgAggregateOutputType | null
+    _sum: CategoriaSumAggregateOutputType | null
+    _min: CategoriaMinAggregateOutputType | null
+    _max: CategoriaMaxAggregateOutputType | null
+  }
+
+  type GetCategoriaGroupByPayload<T extends CategoriaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CategoriaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CategoriaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CategoriaGroupByOutputType[P]>
+            : GetScalarType<T[P], CategoriaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CategoriaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    cor?: boolean
+    ativo?: boolean
+    ordem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    noticias?: boolean | Categoria$noticiasArgs<ExtArgs>
+    recados?: boolean | Categoria$recadosArgs<ExtArgs>
+    _count?: boolean | CategoriaCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["categoria"]>
+
+  export type CategoriaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    cor?: boolean
+    ativo?: boolean
+    ordem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["categoria"]>
+
+  export type CategoriaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    cor?: boolean
+    ativo?: boolean
+    ordem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["categoria"]>
+
+  export type CategoriaSelectScalar = {
+    id?: boolean
+    nome?: boolean
+    slug?: boolean
+    descricao?: boolean
+    cor?: boolean
+    ativo?: boolean
+    ordem?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CategoriaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "slug" | "descricao" | "cor" | "ativo" | "ordem" | "createdAt" | "updatedAt", ExtArgs["result"]["categoria"]>
+  export type CategoriaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    noticias?: boolean | Categoria$noticiasArgs<ExtArgs>
+    recados?: boolean | Categoria$recadosArgs<ExtArgs>
+    _count?: boolean | CategoriaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CategoriaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type CategoriaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $CategoriaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Categoria"
+    objects: {
+      noticias: Prisma.$NoticiaPayload<ExtArgs>[]
+      recados: Prisma.$RecadoPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      nome: string
+      slug: string
+      descricao: string | null
+      cor: string | null
+      ativo: boolean
+      ordem: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["categoria"]>
+    composites: {}
+  }
+
+  type CategoriaGetPayload<S extends boolean | null | undefined | CategoriaDefaultArgs> = $Result.GetResult<Prisma.$CategoriaPayload, S>
+
+  type CategoriaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CategoriaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CategoriaCountAggregateInputType | true
+    }
+
+  export interface CategoriaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Categoria'], meta: { name: 'Categoria' } }
+    /**
+     * Find zero or one Categoria that matches the filter.
+     * @param {CategoriaFindUniqueArgs} args - Arguments to find a Categoria
+     * @example
+     * // Get one Categoria
+     * const categoria = await prisma.categoria.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CategoriaFindUniqueArgs>(args: SelectSubset<T, CategoriaFindUniqueArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Categoria that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CategoriaFindUniqueOrThrowArgs} args - Arguments to find a Categoria
+     * @example
+     * // Get one Categoria
+     * const categoria = await prisma.categoria.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CategoriaFindUniqueOrThrowArgs>(args: SelectSubset<T, CategoriaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Categoria that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaFindFirstArgs} args - Arguments to find a Categoria
+     * @example
+     * // Get one Categoria
+     * const categoria = await prisma.categoria.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CategoriaFindFirstArgs>(args?: SelectSubset<T, CategoriaFindFirstArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Categoria that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaFindFirstOrThrowArgs} args - Arguments to find a Categoria
+     * @example
+     * // Get one Categoria
+     * const categoria = await prisma.categoria.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CategoriaFindFirstOrThrowArgs>(args?: SelectSubset<T, CategoriaFindFirstOrThrowArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Categorias that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Categorias
+     * const categorias = await prisma.categoria.findMany()
+     * 
+     * // Get first 10 Categorias
+     * const categorias = await prisma.categoria.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const categoriaWithIdOnly = await prisma.categoria.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CategoriaFindManyArgs>(args?: SelectSubset<T, CategoriaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Categoria.
+     * @param {CategoriaCreateArgs} args - Arguments to create a Categoria.
+     * @example
+     * // Create one Categoria
+     * const Categoria = await prisma.categoria.create({
+     *   data: {
+     *     // ... data to create a Categoria
+     *   }
+     * })
+     * 
+     */
+    create<T extends CategoriaCreateArgs>(args: SelectSubset<T, CategoriaCreateArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Categorias.
+     * @param {CategoriaCreateManyArgs} args - Arguments to create many Categorias.
+     * @example
+     * // Create many Categorias
+     * const categoria = await prisma.categoria.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CategoriaCreateManyArgs>(args?: SelectSubset<T, CategoriaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Categorias and returns the data saved in the database.
+     * @param {CategoriaCreateManyAndReturnArgs} args - Arguments to create many Categorias.
+     * @example
+     * // Create many Categorias
+     * const categoria = await prisma.categoria.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Categorias and only return the `id`
+     * const categoriaWithIdOnly = await prisma.categoria.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CategoriaCreateManyAndReturnArgs>(args?: SelectSubset<T, CategoriaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Categoria.
+     * @param {CategoriaDeleteArgs} args - Arguments to delete one Categoria.
+     * @example
+     * // Delete one Categoria
+     * const Categoria = await prisma.categoria.delete({
+     *   where: {
+     *     // ... filter to delete one Categoria
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CategoriaDeleteArgs>(args: SelectSubset<T, CategoriaDeleteArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Categoria.
+     * @param {CategoriaUpdateArgs} args - Arguments to update one Categoria.
+     * @example
+     * // Update one Categoria
+     * const categoria = await prisma.categoria.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CategoriaUpdateArgs>(args: SelectSubset<T, CategoriaUpdateArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Categorias.
+     * @param {CategoriaDeleteManyArgs} args - Arguments to filter Categorias to delete.
+     * @example
+     * // Delete a few Categorias
+     * const { count } = await prisma.categoria.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CategoriaDeleteManyArgs>(args?: SelectSubset<T, CategoriaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Categorias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Categorias
+     * const categoria = await prisma.categoria.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CategoriaUpdateManyArgs>(args: SelectSubset<T, CategoriaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Categorias and returns the data updated in the database.
+     * @param {CategoriaUpdateManyAndReturnArgs} args - Arguments to update many Categorias.
+     * @example
+     * // Update many Categorias
+     * const categoria = await prisma.categoria.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Categorias and only return the `id`
+     * const categoriaWithIdOnly = await prisma.categoria.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CategoriaUpdateManyAndReturnArgs>(args: SelectSubset<T, CategoriaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Categoria.
+     * @param {CategoriaUpsertArgs} args - Arguments to update or create a Categoria.
+     * @example
+     * // Update or create a Categoria
+     * const categoria = await prisma.categoria.upsert({
+     *   create: {
+     *     // ... data to create a Categoria
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Categoria we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CategoriaUpsertArgs>(args: SelectSubset<T, CategoriaUpsertArgs<ExtArgs>>): Prisma__CategoriaClient<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Categorias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCountArgs} args - Arguments to filter Categorias to count.
+     * @example
+     * // Count the number of Categorias
+     * const count = await prisma.categoria.count({
+     *   where: {
+     *     // ... the filter for the Categorias we want to count
+     *   }
+     * })
+    **/
+    count<T extends CategoriaCountArgs>(
+      args?: Subset<T, CategoriaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CategoriaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Categoria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CategoriaAggregateArgs>(args: Subset<T, CategoriaAggregateArgs>): Prisma.PrismaPromise<GetCategoriaAggregateType<T>>
+
+    /**
+     * Group by Categoria.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CategoriaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CategoriaGroupByArgs['orderBy'] }
+        : { orderBy?: CategoriaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CategoriaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCategoriaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Categoria model
+   */
+  readonly fields: CategoriaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Categoria.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CategoriaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    noticias<T extends Categoria$noticiasArgs<ExtArgs> = {}>(args?: Subset<T, Categoria$noticiasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NoticiaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recados<T extends Categoria$recadosArgs<ExtArgs> = {}>(args?: Subset<T, Categoria$recadosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Categoria model
+   */
+  interface CategoriaFieldRefs {
+    readonly id: FieldRef<"Categoria", 'Int'>
+    readonly nome: FieldRef<"Categoria", 'String'>
+    readonly slug: FieldRef<"Categoria", 'String'>
+    readonly descricao: FieldRef<"Categoria", 'String'>
+    readonly cor: FieldRef<"Categoria", 'String'>
+    readonly ativo: FieldRef<"Categoria", 'Boolean'>
+    readonly ordem: FieldRef<"Categoria", 'Int'>
+    readonly createdAt: FieldRef<"Categoria", 'DateTime'>
+    readonly updatedAt: FieldRef<"Categoria", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Categoria findUnique
+   */
+  export type CategoriaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * Filter, which Categoria to fetch.
+     */
+    where: CategoriaWhereUniqueInput
+  }
+
+  /**
+   * Categoria findUniqueOrThrow
+   */
+  export type CategoriaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * Filter, which Categoria to fetch.
+     */
+    where: CategoriaWhereUniqueInput
+  }
+
+  /**
+   * Categoria findFirst
+   */
+  export type CategoriaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * Filter, which Categoria to fetch.
+     */
+    where?: CategoriaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categorias to fetch.
+     */
+    orderBy?: CategoriaOrderByWithRelationInput | CategoriaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Categorias.
+     */
+    cursor?: CategoriaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categorias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categorias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categorias.
+     */
+    distinct?: CategoriaScalarFieldEnum | CategoriaScalarFieldEnum[]
+  }
+
+  /**
+   * Categoria findFirstOrThrow
+   */
+  export type CategoriaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * Filter, which Categoria to fetch.
+     */
+    where?: CategoriaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categorias to fetch.
+     */
+    orderBy?: CategoriaOrderByWithRelationInput | CategoriaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Categorias.
+     */
+    cursor?: CategoriaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categorias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categorias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Categorias.
+     */
+    distinct?: CategoriaScalarFieldEnum | CategoriaScalarFieldEnum[]
+  }
+
+  /**
+   * Categoria findMany
+   */
+  export type CategoriaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * Filter, which Categorias to fetch.
+     */
+    where?: CategoriaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Categorias to fetch.
+     */
+    orderBy?: CategoriaOrderByWithRelationInput | CategoriaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Categorias.
+     */
+    cursor?: CategoriaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Categorias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Categorias.
+     */
+    skip?: number
+    distinct?: CategoriaScalarFieldEnum | CategoriaScalarFieldEnum[]
+  }
+
+  /**
+   * Categoria create
+   */
+  export type CategoriaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Categoria.
+     */
+    data: XOR<CategoriaCreateInput, CategoriaUncheckedCreateInput>
+  }
+
+  /**
+   * Categoria createMany
+   */
+  export type CategoriaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Categorias.
+     */
+    data: CategoriaCreateManyInput | CategoriaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Categoria createManyAndReturn
+   */
+  export type CategoriaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * The data used to create many Categorias.
+     */
+    data: CategoriaCreateManyInput | CategoriaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Categoria update
+   */
+  export type CategoriaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Categoria.
+     */
+    data: XOR<CategoriaUpdateInput, CategoriaUncheckedUpdateInput>
+    /**
+     * Choose, which Categoria to update.
+     */
+    where: CategoriaWhereUniqueInput
+  }
+
+  /**
+   * Categoria updateMany
+   */
+  export type CategoriaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Categorias.
+     */
+    data: XOR<CategoriaUpdateManyMutationInput, CategoriaUncheckedUpdateManyInput>
+    /**
+     * Filter which Categorias to update
+     */
+    where?: CategoriaWhereInput
+    /**
+     * Limit how many Categorias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Categoria updateManyAndReturn
+   */
+  export type CategoriaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * The data used to update Categorias.
+     */
+    data: XOR<CategoriaUpdateManyMutationInput, CategoriaUncheckedUpdateManyInput>
+    /**
+     * Filter which Categorias to update
+     */
+    where?: CategoriaWhereInput
+    /**
+     * Limit how many Categorias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Categoria upsert
+   */
+  export type CategoriaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Categoria to update in case it exists.
+     */
+    where: CategoriaWhereUniqueInput
+    /**
+     * In case the Categoria found by the `where` argument doesn't exist, create a new Categoria with this data.
+     */
+    create: XOR<CategoriaCreateInput, CategoriaUncheckedCreateInput>
+    /**
+     * In case the Categoria was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CategoriaUpdateInput, CategoriaUncheckedUpdateInput>
+  }
+
+  /**
+   * Categoria delete
+   */
+  export type CategoriaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    /**
+     * Filter which Categoria to delete.
+     */
+    where: CategoriaWhereUniqueInput
+  }
+
+  /**
+   * Categoria deleteMany
+   */
+  export type CategoriaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Categorias to delete
+     */
+    where?: CategoriaWhereInput
+    /**
+     * Limit how many Categorias to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Categoria.noticias
+   */
+  export type Categoria$noticiasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Noticia
+     */
+    select?: NoticiaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Noticia
+     */
+    omit?: NoticiaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NoticiaInclude<ExtArgs> | null
+    where?: NoticiaWhereInput
+    orderBy?: NoticiaOrderByWithRelationInput | NoticiaOrderByWithRelationInput[]
+    cursor?: NoticiaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NoticiaScalarFieldEnum | NoticiaScalarFieldEnum[]
+  }
+
+  /**
+   * Categoria.recados
+   */
+  export type Categoria$recadosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Recado
+     */
+    select?: RecadoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Recado
+     */
+    omit?: RecadoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RecadoInclude<ExtArgs> | null
+    where?: RecadoWhereInput
+    orderBy?: RecadoOrderByWithRelationInput | RecadoOrderByWithRelationInput[]
+    cursor?: RecadoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RecadoScalarFieldEnum | RecadoScalarFieldEnum[]
+  }
+
+  /**
+   * Categoria without action
+   */
+  export type CategoriaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Noticia
    */
 
@@ -16599,6 +17936,7 @@ export namespace Prisma {
     imagem?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categorias?: boolean | Noticia$categoriasArgs<ExtArgs>
     solicitacoes?: boolean | Noticia$solicitacoesArgs<ExtArgs>
     _count?: boolean | NoticiaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["noticia"]>
@@ -16632,6 +17970,7 @@ export namespace Prisma {
 
   export type NoticiaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "conteudo" | "imagem" | "createdAt" | "updatedAt", ExtArgs["result"]["noticia"]>
   export type NoticiaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categorias?: boolean | Noticia$categoriasArgs<ExtArgs>
     solicitacoes?: boolean | Noticia$solicitacoesArgs<ExtArgs>
     _count?: boolean | NoticiaCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -16641,6 +17980,7 @@ export namespace Prisma {
   export type $NoticiaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Noticia"
     objects: {
+      categorias: Prisma.$CategoriaPayload<ExtArgs>[]
       solicitacoes: Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -17044,6 +18384,7 @@ export namespace Prisma {
    */
   export interface Prisma__NoticiaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    categorias<T extends Noticia$categoriasArgs<ExtArgs> = {}>(args?: Subset<T, Noticia$categoriasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     solicitacoes<T extends Noticia$solicitacoesArgs<ExtArgs> = {}>(args?: Subset<T, Noticia$solicitacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -17465,6 +18806,30 @@ export namespace Prisma {
      * Limit how many Noticias to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Noticia.categorias
+   */
+  export type Noticia$categoriasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    where?: CategoriaWhereInput
+    orderBy?: CategoriaOrderByWithRelationInput | CategoriaOrderByWithRelationInput[]
+    cursor?: CategoriaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CategoriaScalarFieldEnum | CategoriaScalarFieldEnum[]
   }
 
   /**
@@ -18793,6 +20158,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    categorias?: boolean | Recado$categoriasArgs<ExtArgs>
     unidades?: boolean | Recado$unidadesArgs<ExtArgs>
     solicitacoes?: boolean | Recado$solicitacoesArgs<ExtArgs>
     _count?: boolean | RecadoCountOutputTypeDefaultArgs<ExtArgs>
@@ -18833,6 +20199,7 @@ export namespace Prisma {
   export type RecadoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "conteudo" | "imagem" | "unidadeId" | "createdAt" | "updatedAt", ExtArgs["result"]["recado"]>
   export type RecadoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     unidade?: boolean | UnidadeDefaultArgs<ExtArgs>
+    categorias?: boolean | Recado$categoriasArgs<ExtArgs>
     unidades?: boolean | Recado$unidadesArgs<ExtArgs>
     solicitacoes?: boolean | Recado$solicitacoesArgs<ExtArgs>
     _count?: boolean | RecadoCountOutputTypeDefaultArgs<ExtArgs>
@@ -18848,6 +20215,7 @@ export namespace Prisma {
     name: "Recado"
     objects: {
       unidade: Prisma.$UnidadePayload<ExtArgs>
+      categorias: Prisma.$CategoriaPayload<ExtArgs>[]
       unidades: Prisma.$RecadoUnidadePayload<ExtArgs>[]
       solicitacoes: Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>[]
     }
@@ -19254,6 +20622,7 @@ export namespace Prisma {
   export interface Prisma__RecadoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     unidade<T extends UnidadeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UnidadeDefaultArgs<ExtArgs>>): Prisma__UnidadeClient<$Result.GetResult<Prisma.$UnidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    categorias<T extends Recado$categoriasArgs<ExtArgs> = {}>(args?: Subset<T, Recado$categoriasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     unidades<T extends Recado$unidadesArgs<ExtArgs> = {}>(args?: Subset<T, Recado$unidadesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RecadoUnidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     solicitacoes<T extends Recado$solicitacoesArgs<ExtArgs> = {}>(args?: Subset<T, Recado$solicitacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SolicitacaoGerenciamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -19685,6 +21054,30 @@ export namespace Prisma {
      * Limit how many Recados to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Recado.categorias
+   */
+  export type Recado$categoriasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Categoria
+     */
+    select?: CategoriaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Categoria
+     */
+    omit?: CategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaInclude<ExtArgs> | null
+    where?: CategoriaWhereInput
+    orderBy?: CategoriaOrderByWithRelationInput | CategoriaOrderByWithRelationInput[]
+    cursor?: CategoriaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CategoriaScalarFieldEnum | CategoriaScalarFieldEnum[]
   }
 
   /**
@@ -24225,6 +25618,7 @@ export namespace Prisma {
     noticiaId: number | null
     unidadeId: number | null
     unidadeIds: string | null
+    categoriaIds: string | null
     titulo: string | null
     conteudo: string | null
     imagem: string | null
@@ -24247,6 +25641,7 @@ export namespace Prisma {
     noticiaId: number | null
     unidadeId: number | null
     unidadeIds: string | null
+    categoriaIds: string | null
     titulo: string | null
     conteudo: string | null
     imagem: string | null
@@ -24269,6 +25664,7 @@ export namespace Prisma {
     noticiaId: number
     unidadeId: number
     unidadeIds: number
+    categoriaIds: number
     titulo: number
     conteudo: number
     imagem: number
@@ -24307,6 +25703,7 @@ export namespace Prisma {
     noticiaId?: true
     unidadeId?: true
     unidadeIds?: true
+    categoriaIds?: true
     titulo?: true
     conteudo?: true
     imagem?: true
@@ -24329,6 +25726,7 @@ export namespace Prisma {
     noticiaId?: true
     unidadeId?: true
     unidadeIds?: true
+    categoriaIds?: true
     titulo?: true
     conteudo?: true
     imagem?: true
@@ -24351,6 +25749,7 @@ export namespace Prisma {
     noticiaId?: true
     unidadeId?: true
     unidadeIds?: true
+    categoriaIds?: true
     titulo?: true
     conteudo?: true
     imagem?: true
@@ -24460,6 +25859,7 @@ export namespace Prisma {
     noticiaId: number | null
     unidadeId: number | null
     unidadeIds: string | null
+    categoriaIds: string | null
     titulo: string | null
     conteudo: string | null
     imagem: string | null
@@ -24501,6 +25901,7 @@ export namespace Prisma {
     noticiaId?: boolean
     unidadeId?: boolean
     unidadeIds?: boolean
+    categoriaIds?: boolean
     titulo?: boolean
     conteudo?: boolean
     imagem?: boolean
@@ -24526,6 +25927,7 @@ export namespace Prisma {
     noticiaId?: boolean
     unidadeId?: boolean
     unidadeIds?: boolean
+    categoriaIds?: boolean
     titulo?: boolean
     conteudo?: boolean
     imagem?: boolean
@@ -24551,6 +25953,7 @@ export namespace Prisma {
     noticiaId?: boolean
     unidadeId?: boolean
     unidadeIds?: boolean
+    categoriaIds?: boolean
     titulo?: boolean
     conteudo?: boolean
     imagem?: boolean
@@ -24576,6 +25979,7 @@ export namespace Prisma {
     noticiaId?: boolean
     unidadeId?: boolean
     unidadeIds?: boolean
+    categoriaIds?: boolean
     titulo?: boolean
     conteudo?: boolean
     imagem?: boolean
@@ -24589,7 +25993,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SolicitacaoGerenciamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recurso" | "tipo" | "status" | "recadoId" | "noticiaId" | "unidadeId" | "unidadeIds" | "titulo" | "conteudo" | "imagem" | "imagemAntiga" | "motivoRecusa" | "solicitanteId" | "solicitanteNome" | "revisorId" | "revisorNome" | "createdAt" | "updatedAt", ExtArgs["result"]["solicitacaoGerenciamento"]>
+  export type SolicitacaoGerenciamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "recurso" | "tipo" | "status" | "recadoId" | "noticiaId" | "unidadeId" | "unidadeIds" | "categoriaIds" | "titulo" | "conteudo" | "imagem" | "imagemAntiga" | "motivoRecusa" | "solicitanteId" | "solicitanteNome" | "revisorId" | "revisorNome" | "createdAt" | "updatedAt", ExtArgs["result"]["solicitacaoGerenciamento"]>
   export type SolicitacaoGerenciamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     recado?: boolean | SolicitacaoGerenciamento$recadoArgs<ExtArgs>
     noticia?: boolean | SolicitacaoGerenciamento$noticiaArgs<ExtArgs>
@@ -24622,6 +26026,7 @@ export namespace Prisma {
       noticiaId: number | null
       unidadeId: number | null
       unidadeIds: string | null
+      categoriaIds: string | null
       titulo: string | null
       conteudo: string | null
       imagem: string | null
@@ -25067,6 +26472,7 @@ export namespace Prisma {
     readonly noticiaId: FieldRef<"SolicitacaoGerenciamento", 'Int'>
     readonly unidadeId: FieldRef<"SolicitacaoGerenciamento", 'Int'>
     readonly unidadeIds: FieldRef<"SolicitacaoGerenciamento", 'String'>
+    readonly categoriaIds: FieldRef<"SolicitacaoGerenciamento", 'String'>
     readonly titulo: FieldRef<"SolicitacaoGerenciamento", 'String'>
     readonly conteudo: FieldRef<"SolicitacaoGerenciamento", 'String'>
     readonly imagem: FieldRef<"SolicitacaoGerenciamento", 'String'>
@@ -25708,6 +27114,21 @@ export namespace Prisma {
   export type JornalScalarFieldEnum = (typeof JornalScalarFieldEnum)[keyof typeof JornalScalarFieldEnum]
 
 
+  export const CategoriaScalarFieldEnum: {
+    id: 'id',
+    nome: 'nome',
+    slug: 'slug',
+    descricao: 'descricao',
+    cor: 'cor',
+    ativo: 'ativo',
+    ordem: 'ordem',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CategoriaScalarFieldEnum = (typeof CategoriaScalarFieldEnum)[keyof typeof CategoriaScalarFieldEnum]
+
+
   export const NoticiaScalarFieldEnum: {
     id: 'id',
     titulo: 'titulo',
@@ -25811,6 +27232,7 @@ export namespace Prisma {
     noticiaId: 'noticiaId',
     unidadeId: 'unidadeId',
     unidadeIds: 'unidadeIds',
+    categoriaIds: 'categoriaIds',
     titulo: 'titulo',
     conteudo: 'conteudo',
     imagem: 'imagem',
@@ -26778,6 +28200,86 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Jornal"> | Date | string
   }
 
+  export type CategoriaWhereInput = {
+    AND?: CategoriaWhereInput | CategoriaWhereInput[]
+    OR?: CategoriaWhereInput[]
+    NOT?: CategoriaWhereInput | CategoriaWhereInput[]
+    id?: IntFilter<"Categoria"> | number
+    nome?: StringFilter<"Categoria"> | string
+    slug?: StringFilter<"Categoria"> | string
+    descricao?: StringNullableFilter<"Categoria"> | string | null
+    cor?: StringNullableFilter<"Categoria"> | string | null
+    ativo?: BoolFilter<"Categoria"> | boolean
+    ordem?: IntFilter<"Categoria"> | number
+    createdAt?: DateTimeFilter<"Categoria"> | Date | string
+    updatedAt?: DateTimeFilter<"Categoria"> | Date | string
+    noticias?: NoticiaListRelationFilter
+    recados?: RecadoListRelationFilter
+  }
+
+  export type CategoriaOrderByWithRelationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    cor?: SortOrderInput | SortOrder
+    ativo?: SortOrder
+    ordem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    noticias?: NoticiaOrderByRelationAggregateInput
+    recados?: RecadoOrderByRelationAggregateInput
+  }
+
+  export type CategoriaWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    nome?: string
+    slug?: string
+    AND?: CategoriaWhereInput | CategoriaWhereInput[]
+    OR?: CategoriaWhereInput[]
+    NOT?: CategoriaWhereInput | CategoriaWhereInput[]
+    descricao?: StringNullableFilter<"Categoria"> | string | null
+    cor?: StringNullableFilter<"Categoria"> | string | null
+    ativo?: BoolFilter<"Categoria"> | boolean
+    ordem?: IntFilter<"Categoria"> | number
+    createdAt?: DateTimeFilter<"Categoria"> | Date | string
+    updatedAt?: DateTimeFilter<"Categoria"> | Date | string
+    noticias?: NoticiaListRelationFilter
+    recados?: RecadoListRelationFilter
+  }, "id" | "nome" | "slug">
+
+  export type CategoriaOrderByWithAggregationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    cor?: SortOrderInput | SortOrder
+    ativo?: SortOrder
+    ordem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CategoriaCountOrderByAggregateInput
+    _avg?: CategoriaAvgOrderByAggregateInput
+    _max?: CategoriaMaxOrderByAggregateInput
+    _min?: CategoriaMinOrderByAggregateInput
+    _sum?: CategoriaSumOrderByAggregateInput
+  }
+
+  export type CategoriaScalarWhereWithAggregatesInput = {
+    AND?: CategoriaScalarWhereWithAggregatesInput | CategoriaScalarWhereWithAggregatesInput[]
+    OR?: CategoriaScalarWhereWithAggregatesInput[]
+    NOT?: CategoriaScalarWhereWithAggregatesInput | CategoriaScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Categoria"> | number
+    nome?: StringWithAggregatesFilter<"Categoria"> | string
+    slug?: StringWithAggregatesFilter<"Categoria"> | string
+    descricao?: StringNullableWithAggregatesFilter<"Categoria"> | string | null
+    cor?: StringNullableWithAggregatesFilter<"Categoria"> | string | null
+    ativo?: BoolWithAggregatesFilter<"Categoria"> | boolean
+    ordem?: IntWithAggregatesFilter<"Categoria"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Categoria"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Categoria"> | Date | string
+  }
+
   export type NoticiaWhereInput = {
     AND?: NoticiaWhereInput | NoticiaWhereInput[]
     OR?: NoticiaWhereInput[]
@@ -26788,6 +28290,7 @@ export namespace Prisma {
     imagem?: StringNullableFilter<"Noticia"> | string | null
     createdAt?: DateTimeFilter<"Noticia"> | Date | string
     updatedAt?: DateTimeFilter<"Noticia"> | Date | string
+    categorias?: CategoriaListRelationFilter
     solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }
 
@@ -26798,6 +28301,7 @@ export namespace Prisma {
     imagem?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    categorias?: CategoriaOrderByRelationAggregateInput
     solicitacoes?: SolicitacaoGerenciamentoOrderByRelationAggregateInput
   }
 
@@ -26811,6 +28315,7 @@ export namespace Prisma {
     imagem?: StringNullableFilter<"Noticia"> | string | null
     createdAt?: DateTimeFilter<"Noticia"> | Date | string
     updatedAt?: DateTimeFilter<"Noticia"> | Date | string
+    categorias?: CategoriaListRelationFilter
     solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }, "id">
 
@@ -26921,6 +28426,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Recado"> | Date | string
     updatedAt?: DateTimeFilter<"Recado"> | Date | string
     unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+    categorias?: CategoriaListRelationFilter
     unidades?: RecadoUnidadeListRelationFilter
     solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }
@@ -26934,6 +28440,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     unidade?: UnidadeOrderByWithRelationInput
+    categorias?: CategoriaOrderByRelationAggregateInput
     unidades?: RecadoUnidadeOrderByRelationAggregateInput
     solicitacoes?: SolicitacaoGerenciamentoOrderByRelationAggregateInput
   }
@@ -26950,6 +28457,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Recado"> | Date | string
     updatedAt?: DateTimeFilter<"Recado"> | Date | string
     unidade?: XOR<UnidadeScalarRelationFilter, UnidadeWhereInput>
+    categorias?: CategoriaListRelationFilter
     unidades?: RecadoUnidadeListRelationFilter
     solicitacoes?: SolicitacaoGerenciamentoListRelationFilter
   }, "id">
@@ -27281,6 +28789,7 @@ export namespace Prisma {
     noticiaId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    categoriaIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     titulo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     conteudo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     imagem?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
@@ -27306,6 +28815,7 @@ export namespace Prisma {
     noticiaId?: SortOrderInput | SortOrder
     unidadeId?: SortOrderInput | SortOrder
     unidadeIds?: SortOrderInput | SortOrder
+    categoriaIds?: SortOrderInput | SortOrder
     titulo?: SortOrderInput | SortOrder
     conteudo?: SortOrderInput | SortOrder
     imagem?: SortOrderInput | SortOrder
@@ -27334,6 +28844,7 @@ export namespace Prisma {
     noticiaId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    categoriaIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     titulo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     conteudo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     imagem?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
@@ -27359,6 +28870,7 @@ export namespace Prisma {
     noticiaId?: SortOrderInput | SortOrder
     unidadeId?: SortOrderInput | SortOrder
     unidadeIds?: SortOrderInput | SortOrder
+    categoriaIds?: SortOrderInput | SortOrder
     titulo?: SortOrderInput | SortOrder
     conteudo?: SortOrderInput | SortOrder
     imagem?: SortOrderInput | SortOrder
@@ -27389,6 +28901,7 @@ export namespace Prisma {
     noticiaId?: IntNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeId?: IntNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeIds?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
+    categoriaIds?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
     titulo?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
     conteudo?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
     imagem?: StringNullableWithAggregatesFilter<"SolicitacaoGerenciamento"> | string | null
@@ -28198,12 +29711,102 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CategoriaCreateInput = {
+    nome: string
+    slug: string
+    descricao?: string | null
+    cor?: string | null
+    ativo?: boolean
+    ordem?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    noticias?: NoticiaCreateNestedManyWithoutCategoriasInput
+    recados?: RecadoCreateNestedManyWithoutCategoriasInput
+  }
+
+  export type CategoriaUncheckedCreateInput = {
+    id?: number
+    nome: string
+    slug: string
+    descricao?: string | null
+    cor?: string | null
+    ativo?: boolean
+    ordem?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    noticias?: NoticiaUncheckedCreateNestedManyWithoutCategoriasInput
+    recados?: RecadoUncheckedCreateNestedManyWithoutCategoriasInput
+  }
+
+  export type CategoriaUpdateInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    noticias?: NoticiaUpdateManyWithoutCategoriasNestedInput
+    recados?: RecadoUpdateManyWithoutCategoriasNestedInput
+  }
+
+  export type CategoriaUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    noticias?: NoticiaUncheckedUpdateManyWithoutCategoriasNestedInput
+    recados?: RecadoUncheckedUpdateManyWithoutCategoriasNestedInput
+  }
+
+  export type CategoriaCreateManyInput = {
+    id?: number
+    nome: string
+    slug: string
+    descricao?: string | null
+    cor?: string | null
+    ativo?: boolean
+    ordem?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CategoriaUpdateManyMutationInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CategoriaUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type NoticiaCreateInput = {
     titulo: string
     conteudo: string
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaCreateNestedManyWithoutNoticiasInput
     solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutNoticiaInput
   }
 
@@ -28214,6 +29817,7 @@ export namespace Prisma {
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutNoticiasInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutNoticiaInput
   }
 
@@ -28223,6 +29827,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUpdateManyWithoutNoticiasNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutNoticiaNestedInput
   }
 
@@ -28233,6 +29838,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutNoticiasNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutNoticiaNestedInput
   }
 
@@ -28343,6 +29949,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     unidade: UnidadeCreateNestedOneWithoutRecadosInput
+    categorias?: CategoriaCreateNestedManyWithoutRecadosInput
     unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
     solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput
   }
@@ -28355,6 +29962,7 @@ export namespace Prisma {
     unidadeId: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutRecadosInput
     unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput
   }
@@ -28366,6 +29974,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+    categorias?: CategoriaUpdateManyWithoutRecadosNestedInput
     unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput
   }
@@ -28378,6 +29987,7 @@ export namespace Prisma {
     unidadeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutRecadosNestedInput
     unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput
   }
@@ -28700,6 +30310,7 @@ export namespace Prisma {
     tipo: $Enums.SolicitacaoTipo
     status?: $Enums.SolicitacaoStatus
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -28725,6 +30336,7 @@ export namespace Prisma {
     noticiaId?: number | null
     unidadeId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -28743,6 +30355,7 @@ export namespace Prisma {
     tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
     status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28768,6 +30381,7 @@ export namespace Prisma {
     noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28790,6 +30404,7 @@ export namespace Prisma {
     noticiaId?: number | null
     unidadeId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -28808,6 +30423,7 @@ export namespace Prisma {
     tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
     status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28830,6 +30446,7 @@ export namespace Prisma {
     noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29591,6 +31208,72 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type NoticiaListRelationFilter = {
+    every?: NoticiaWhereInput
+    some?: NoticiaWhereInput
+    none?: NoticiaWhereInput
+  }
+
+  export type NoticiaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CategoriaCountOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrder
+    cor?: SortOrder
+    ativo?: SortOrder
+    ordem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CategoriaAvgOrderByAggregateInput = {
+    id?: SortOrder
+    ordem?: SortOrder
+  }
+
+  export type CategoriaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrder
+    cor?: SortOrder
+    ativo?: SortOrder
+    ordem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CategoriaMinOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    slug?: SortOrder
+    descricao?: SortOrder
+    cor?: SortOrder
+    ativo?: SortOrder
+    ordem?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CategoriaSumOrderByAggregateInput = {
+    id?: SortOrder
+    ordem?: SortOrder
+  }
+
+  export type CategoriaListRelationFilter = {
+    every?: CategoriaWhereInput
+    some?: CategoriaWhereInput
+    none?: CategoriaWhereInput
+  }
+
+  export type CategoriaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type NoticiaCountOrderByAggregateInput = {
     id?: SortOrder
     titulo?: SortOrder
@@ -29974,6 +31657,7 @@ export namespace Prisma {
     noticiaId?: SortOrder
     unidadeId?: SortOrder
     unidadeIds?: SortOrder
+    categoriaIds?: SortOrder
     titulo?: SortOrder
     conteudo?: SortOrder
     imagem?: SortOrder
@@ -30003,6 +31687,7 @@ export namespace Prisma {
     noticiaId?: SortOrder
     unidadeId?: SortOrder
     unidadeIds?: SortOrder
+    categoriaIds?: SortOrder
     titulo?: SortOrder
     conteudo?: SortOrder
     imagem?: SortOrder
@@ -30025,6 +31710,7 @@ export namespace Prisma {
     noticiaId?: SortOrder
     unidadeId?: SortOrder
     unidadeIds?: SortOrder
+    categoriaIds?: SortOrder
     titulo?: SortOrder
     conteudo?: SortOrder
     imagem?: SortOrder
@@ -30869,6 +32555,88 @@ export namespace Prisma {
     update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutEmailsInput, UnidadeUpdateWithoutEmailsInput>, UnidadeUncheckedUpdateWithoutEmailsInput>
   }
 
+  export type NoticiaCreateNestedManyWithoutCategoriasInput = {
+    create?: XOR<NoticiaCreateWithoutCategoriasInput, NoticiaUncheckedCreateWithoutCategoriasInput> | NoticiaCreateWithoutCategoriasInput[] | NoticiaUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: NoticiaCreateOrConnectWithoutCategoriasInput | NoticiaCreateOrConnectWithoutCategoriasInput[]
+    connect?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+  }
+
+  export type RecadoCreateNestedManyWithoutCategoriasInput = {
+    create?: XOR<RecadoCreateWithoutCategoriasInput, RecadoUncheckedCreateWithoutCategoriasInput> | RecadoCreateWithoutCategoriasInput[] | RecadoUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutCategoriasInput | RecadoCreateOrConnectWithoutCategoriasInput[]
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+  }
+
+  export type NoticiaUncheckedCreateNestedManyWithoutCategoriasInput = {
+    create?: XOR<NoticiaCreateWithoutCategoriasInput, NoticiaUncheckedCreateWithoutCategoriasInput> | NoticiaCreateWithoutCategoriasInput[] | NoticiaUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: NoticiaCreateOrConnectWithoutCategoriasInput | NoticiaCreateOrConnectWithoutCategoriasInput[]
+    connect?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+  }
+
+  export type RecadoUncheckedCreateNestedManyWithoutCategoriasInput = {
+    create?: XOR<RecadoCreateWithoutCategoriasInput, RecadoUncheckedCreateWithoutCategoriasInput> | RecadoCreateWithoutCategoriasInput[] | RecadoUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutCategoriasInput | RecadoCreateOrConnectWithoutCategoriasInput[]
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+  }
+
+  export type NoticiaUpdateManyWithoutCategoriasNestedInput = {
+    create?: XOR<NoticiaCreateWithoutCategoriasInput, NoticiaUncheckedCreateWithoutCategoriasInput> | NoticiaCreateWithoutCategoriasInput[] | NoticiaUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: NoticiaCreateOrConnectWithoutCategoriasInput | NoticiaCreateOrConnectWithoutCategoriasInput[]
+    upsert?: NoticiaUpsertWithWhereUniqueWithoutCategoriasInput | NoticiaUpsertWithWhereUniqueWithoutCategoriasInput[]
+    set?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    disconnect?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    delete?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    connect?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    update?: NoticiaUpdateWithWhereUniqueWithoutCategoriasInput | NoticiaUpdateWithWhereUniqueWithoutCategoriasInput[]
+    updateMany?: NoticiaUpdateManyWithWhereWithoutCategoriasInput | NoticiaUpdateManyWithWhereWithoutCategoriasInput[]
+    deleteMany?: NoticiaScalarWhereInput | NoticiaScalarWhereInput[]
+  }
+
+  export type RecadoUpdateManyWithoutCategoriasNestedInput = {
+    create?: XOR<RecadoCreateWithoutCategoriasInput, RecadoUncheckedCreateWithoutCategoriasInput> | RecadoCreateWithoutCategoriasInput[] | RecadoUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutCategoriasInput | RecadoCreateOrConnectWithoutCategoriasInput[]
+    upsert?: RecadoUpsertWithWhereUniqueWithoutCategoriasInput | RecadoUpsertWithWhereUniqueWithoutCategoriasInput[]
+    set?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    disconnect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    delete?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    update?: RecadoUpdateWithWhereUniqueWithoutCategoriasInput | RecadoUpdateWithWhereUniqueWithoutCategoriasInput[]
+    updateMany?: RecadoUpdateManyWithWhereWithoutCategoriasInput | RecadoUpdateManyWithWhereWithoutCategoriasInput[]
+    deleteMany?: RecadoScalarWhereInput | RecadoScalarWhereInput[]
+  }
+
+  export type NoticiaUncheckedUpdateManyWithoutCategoriasNestedInput = {
+    create?: XOR<NoticiaCreateWithoutCategoriasInput, NoticiaUncheckedCreateWithoutCategoriasInput> | NoticiaCreateWithoutCategoriasInput[] | NoticiaUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: NoticiaCreateOrConnectWithoutCategoriasInput | NoticiaCreateOrConnectWithoutCategoriasInput[]
+    upsert?: NoticiaUpsertWithWhereUniqueWithoutCategoriasInput | NoticiaUpsertWithWhereUniqueWithoutCategoriasInput[]
+    set?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    disconnect?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    delete?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    connect?: NoticiaWhereUniqueInput | NoticiaWhereUniqueInput[]
+    update?: NoticiaUpdateWithWhereUniqueWithoutCategoriasInput | NoticiaUpdateWithWhereUniqueWithoutCategoriasInput[]
+    updateMany?: NoticiaUpdateManyWithWhereWithoutCategoriasInput | NoticiaUpdateManyWithWhereWithoutCategoriasInput[]
+    deleteMany?: NoticiaScalarWhereInput | NoticiaScalarWhereInput[]
+  }
+
+  export type RecadoUncheckedUpdateManyWithoutCategoriasNestedInput = {
+    create?: XOR<RecadoCreateWithoutCategoriasInput, RecadoUncheckedCreateWithoutCategoriasInput> | RecadoCreateWithoutCategoriasInput[] | RecadoUncheckedCreateWithoutCategoriasInput[]
+    connectOrCreate?: RecadoCreateOrConnectWithoutCategoriasInput | RecadoCreateOrConnectWithoutCategoriasInput[]
+    upsert?: RecadoUpsertWithWhereUniqueWithoutCategoriasInput | RecadoUpsertWithWhereUniqueWithoutCategoriasInput[]
+    set?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    disconnect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    delete?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    connect?: RecadoWhereUniqueInput | RecadoWhereUniqueInput[]
+    update?: RecadoUpdateWithWhereUniqueWithoutCategoriasInput | RecadoUpdateWithWhereUniqueWithoutCategoriasInput[]
+    updateMany?: RecadoUpdateManyWithWhereWithoutCategoriasInput | RecadoUpdateManyWithWhereWithoutCategoriasInput[]
+    deleteMany?: RecadoScalarWhereInput | RecadoScalarWhereInput[]
+  }
+
+  export type CategoriaCreateNestedManyWithoutNoticiasInput = {
+    create?: XOR<CategoriaCreateWithoutNoticiasInput, CategoriaUncheckedCreateWithoutNoticiasInput> | CategoriaCreateWithoutNoticiasInput[] | CategoriaUncheckedCreateWithoutNoticiasInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutNoticiasInput | CategoriaCreateOrConnectWithoutNoticiasInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+  }
+
   export type SolicitacaoGerenciamentoCreateNestedManyWithoutNoticiaInput = {
     create?: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput> | SolicitacaoGerenciamentoCreateWithoutNoticiaInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput[]
     connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput | SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput[]
@@ -30876,11 +32644,30 @@ export namespace Prisma {
     connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
   }
 
+  export type CategoriaUncheckedCreateNestedManyWithoutNoticiasInput = {
+    create?: XOR<CategoriaCreateWithoutNoticiasInput, CategoriaUncheckedCreateWithoutNoticiasInput> | CategoriaCreateWithoutNoticiasInput[] | CategoriaUncheckedCreateWithoutNoticiasInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutNoticiasInput | CategoriaCreateOrConnectWithoutNoticiasInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+  }
+
   export type SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutNoticiaInput = {
     create?: XOR<SolicitacaoGerenciamentoCreateWithoutNoticiaInput, SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput> | SolicitacaoGerenciamentoCreateWithoutNoticiaInput[] | SolicitacaoGerenciamentoUncheckedCreateWithoutNoticiaInput[]
     connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput | SolicitacaoGerenciamentoCreateOrConnectWithoutNoticiaInput[]
     createMany?: SolicitacaoGerenciamentoCreateManyNoticiaInputEnvelope
     connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+  }
+
+  export type CategoriaUpdateManyWithoutNoticiasNestedInput = {
+    create?: XOR<CategoriaCreateWithoutNoticiasInput, CategoriaUncheckedCreateWithoutNoticiasInput> | CategoriaCreateWithoutNoticiasInput[] | CategoriaUncheckedCreateWithoutNoticiasInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutNoticiasInput | CategoriaCreateOrConnectWithoutNoticiasInput[]
+    upsert?: CategoriaUpsertWithWhereUniqueWithoutNoticiasInput | CategoriaUpsertWithWhereUniqueWithoutNoticiasInput[]
+    set?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    disconnect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    delete?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    update?: CategoriaUpdateWithWhereUniqueWithoutNoticiasInput | CategoriaUpdateWithWhereUniqueWithoutNoticiasInput[]
+    updateMany?: CategoriaUpdateManyWithWhereWithoutNoticiasInput | CategoriaUpdateManyWithWhereWithoutNoticiasInput[]
+    deleteMany?: CategoriaScalarWhereInput | CategoriaScalarWhereInput[]
   }
 
   export type SolicitacaoGerenciamentoUpdateManyWithoutNoticiaNestedInput = {
@@ -30895,6 +32682,19 @@ export namespace Prisma {
     update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutNoticiaInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutNoticiaInput[]
     updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutNoticiaInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutNoticiaInput[]
     deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+  }
+
+  export type CategoriaUncheckedUpdateManyWithoutNoticiasNestedInput = {
+    create?: XOR<CategoriaCreateWithoutNoticiasInput, CategoriaUncheckedCreateWithoutNoticiasInput> | CategoriaCreateWithoutNoticiasInput[] | CategoriaUncheckedCreateWithoutNoticiasInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutNoticiasInput | CategoriaCreateOrConnectWithoutNoticiasInput[]
+    upsert?: CategoriaUpsertWithWhereUniqueWithoutNoticiasInput | CategoriaUpsertWithWhereUniqueWithoutNoticiasInput[]
+    set?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    disconnect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    delete?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    update?: CategoriaUpdateWithWhereUniqueWithoutNoticiasInput | CategoriaUpdateWithWhereUniqueWithoutNoticiasInput[]
+    updateMany?: CategoriaUpdateManyWithWhereWithoutNoticiasInput | CategoriaUpdateManyWithWhereWithoutNoticiasInput[]
+    deleteMany?: CategoriaScalarWhereInput | CategoriaScalarWhereInput[]
   }
 
   export type SolicitacaoGerenciamentoUncheckedUpdateManyWithoutNoticiaNestedInput = {
@@ -30917,6 +32717,12 @@ export namespace Prisma {
     connect?: UnidadeWhereUniqueInput
   }
 
+  export type CategoriaCreateNestedManyWithoutRecadosInput = {
+    create?: XOR<CategoriaCreateWithoutRecadosInput, CategoriaUncheckedCreateWithoutRecadosInput> | CategoriaCreateWithoutRecadosInput[] | CategoriaUncheckedCreateWithoutRecadosInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutRecadosInput | CategoriaCreateOrConnectWithoutRecadosInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+  }
+
   export type RecadoUnidadeCreateNestedManyWithoutRecadoInput = {
     create?: XOR<RecadoUnidadeCreateWithoutRecadoInput, RecadoUnidadeUncheckedCreateWithoutRecadoInput> | RecadoUnidadeCreateWithoutRecadoInput[] | RecadoUnidadeUncheckedCreateWithoutRecadoInput[]
     connectOrCreate?: RecadoUnidadeCreateOrConnectWithoutRecadoInput | RecadoUnidadeCreateOrConnectWithoutRecadoInput[]
@@ -30929,6 +32735,12 @@ export namespace Prisma {
     connectOrCreate?: SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput | SolicitacaoGerenciamentoCreateOrConnectWithoutRecadoInput[]
     createMany?: SolicitacaoGerenciamentoCreateManyRecadoInputEnvelope
     connect?: SolicitacaoGerenciamentoWhereUniqueInput | SolicitacaoGerenciamentoWhereUniqueInput[]
+  }
+
+  export type CategoriaUncheckedCreateNestedManyWithoutRecadosInput = {
+    create?: XOR<CategoriaCreateWithoutRecadosInput, CategoriaUncheckedCreateWithoutRecadosInput> | CategoriaCreateWithoutRecadosInput[] | CategoriaUncheckedCreateWithoutRecadosInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutRecadosInput | CategoriaCreateOrConnectWithoutRecadosInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
   }
 
   export type RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput = {
@@ -30951,6 +32763,19 @@ export namespace Prisma {
     upsert?: UnidadeUpsertWithoutRecadosInput
     connect?: UnidadeWhereUniqueInput
     update?: XOR<XOR<UnidadeUpdateToOneWithWhereWithoutRecadosInput, UnidadeUpdateWithoutRecadosInput>, UnidadeUncheckedUpdateWithoutRecadosInput>
+  }
+
+  export type CategoriaUpdateManyWithoutRecadosNestedInput = {
+    create?: XOR<CategoriaCreateWithoutRecadosInput, CategoriaUncheckedCreateWithoutRecadosInput> | CategoriaCreateWithoutRecadosInput[] | CategoriaUncheckedCreateWithoutRecadosInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutRecadosInput | CategoriaCreateOrConnectWithoutRecadosInput[]
+    upsert?: CategoriaUpsertWithWhereUniqueWithoutRecadosInput | CategoriaUpsertWithWhereUniqueWithoutRecadosInput[]
+    set?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    disconnect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    delete?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    update?: CategoriaUpdateWithWhereUniqueWithoutRecadosInput | CategoriaUpdateWithWhereUniqueWithoutRecadosInput[]
+    updateMany?: CategoriaUpdateManyWithWhereWithoutRecadosInput | CategoriaUpdateManyWithWhereWithoutRecadosInput[]
+    deleteMany?: CategoriaScalarWhereInput | CategoriaScalarWhereInput[]
   }
 
   export type RecadoUnidadeUpdateManyWithoutRecadoNestedInput = {
@@ -30979,6 +32804,19 @@ export namespace Prisma {
     update?: SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutRecadoInput | SolicitacaoGerenciamentoUpdateWithWhereUniqueWithoutRecadoInput[]
     updateMany?: SolicitacaoGerenciamentoUpdateManyWithWhereWithoutRecadoInput | SolicitacaoGerenciamentoUpdateManyWithWhereWithoutRecadoInput[]
     deleteMany?: SolicitacaoGerenciamentoScalarWhereInput | SolicitacaoGerenciamentoScalarWhereInput[]
+  }
+
+  export type CategoriaUncheckedUpdateManyWithoutRecadosNestedInput = {
+    create?: XOR<CategoriaCreateWithoutRecadosInput, CategoriaUncheckedCreateWithoutRecadosInput> | CategoriaCreateWithoutRecadosInput[] | CategoriaUncheckedCreateWithoutRecadosInput[]
+    connectOrCreate?: CategoriaCreateOrConnectWithoutRecadosInput | CategoriaCreateOrConnectWithoutRecadosInput[]
+    upsert?: CategoriaUpsertWithWhereUniqueWithoutRecadosInput | CategoriaUpsertWithWhereUniqueWithoutRecadosInput[]
+    set?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    disconnect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    delete?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    connect?: CategoriaWhereUniqueInput | CategoriaWhereUniqueInput[]
+    update?: CategoriaUpdateWithWhereUniqueWithoutRecadosInput | CategoriaUpdateWithWhereUniqueWithoutRecadosInput[]
+    updateMany?: CategoriaUpdateManyWithWhereWithoutRecadosInput | CategoriaUpdateManyWithWhereWithoutRecadosInput[]
+    deleteMany?: CategoriaScalarWhereInput | CategoriaScalarWhereInput[]
   }
 
   export type RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput = {
@@ -32338,6 +34176,7 @@ export namespace Prisma {
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaCreateNestedManyWithoutRecadosInput
     unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
     solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput
   }
@@ -32349,6 +34188,7 @@ export namespace Prisma {
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutRecadosInput
     unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput
   }
@@ -32418,6 +34258,7 @@ export namespace Prisma {
     tipo: $Enums.SolicitacaoTipo
     status?: $Enums.SolicitacaoStatus
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -32441,6 +34282,7 @@ export namespace Prisma {
     recadoId?: number | null
     noticiaId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -32650,6 +34492,7 @@ export namespace Prisma {
     noticiaId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeId?: IntNullableFilter<"SolicitacaoGerenciamento"> | number | null
     unidadeIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
+    categoriaIds?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     titulo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     conteudo?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
     imagem?: StringNullableFilter<"SolicitacaoGerenciamento"> | string | null
@@ -32779,11 +34622,138 @@ export namespace Prisma {
     solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
+  export type NoticiaCreateWithoutCategoriasInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutNoticiaInput
+  }
+
+  export type NoticiaUncheckedCreateWithoutCategoriasInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutNoticiaInput
+  }
+
+  export type NoticiaCreateOrConnectWithoutCategoriasInput = {
+    where: NoticiaWhereUniqueInput
+    create: XOR<NoticiaCreateWithoutCategoriasInput, NoticiaUncheckedCreateWithoutCategoriasInput>
+  }
+
+  export type RecadoCreateWithoutCategoriasInput = {
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidade: UnidadeCreateNestedOneWithoutRecadosInput
+    unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
+    solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoUncheckedCreateWithoutCategoriasInput = {
+    id?: number
+    titulo: string
+    conteudo: string
+    imagem?: string | null
+    unidadeId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput
+  }
+
+  export type RecadoCreateOrConnectWithoutCategoriasInput = {
+    where: RecadoWhereUniqueInput
+    create: XOR<RecadoCreateWithoutCategoriasInput, RecadoUncheckedCreateWithoutCategoriasInput>
+  }
+
+  export type NoticiaUpsertWithWhereUniqueWithoutCategoriasInput = {
+    where: NoticiaWhereUniqueInput
+    update: XOR<NoticiaUpdateWithoutCategoriasInput, NoticiaUncheckedUpdateWithoutCategoriasInput>
+    create: XOR<NoticiaCreateWithoutCategoriasInput, NoticiaUncheckedCreateWithoutCategoriasInput>
+  }
+
+  export type NoticiaUpdateWithWhereUniqueWithoutCategoriasInput = {
+    where: NoticiaWhereUniqueInput
+    data: XOR<NoticiaUpdateWithoutCategoriasInput, NoticiaUncheckedUpdateWithoutCategoriasInput>
+  }
+
+  export type NoticiaUpdateManyWithWhereWithoutCategoriasInput = {
+    where: NoticiaScalarWhereInput
+    data: XOR<NoticiaUpdateManyMutationInput, NoticiaUncheckedUpdateManyWithoutCategoriasInput>
+  }
+
+  export type NoticiaScalarWhereInput = {
+    AND?: NoticiaScalarWhereInput | NoticiaScalarWhereInput[]
+    OR?: NoticiaScalarWhereInput[]
+    NOT?: NoticiaScalarWhereInput | NoticiaScalarWhereInput[]
+    id?: IntFilter<"Noticia"> | number
+    titulo?: StringFilter<"Noticia"> | string
+    conteudo?: StringFilter<"Noticia"> | string
+    imagem?: StringNullableFilter<"Noticia"> | string | null
+    createdAt?: DateTimeFilter<"Noticia"> | Date | string
+    updatedAt?: DateTimeFilter<"Noticia"> | Date | string
+  }
+
+  export type RecadoUpsertWithWhereUniqueWithoutCategoriasInput = {
+    where: RecadoWhereUniqueInput
+    update: XOR<RecadoUpdateWithoutCategoriasInput, RecadoUncheckedUpdateWithoutCategoriasInput>
+    create: XOR<RecadoCreateWithoutCategoriasInput, RecadoUncheckedCreateWithoutCategoriasInput>
+  }
+
+  export type RecadoUpdateWithWhereUniqueWithoutCategoriasInput = {
+    where: RecadoWhereUniqueInput
+    data: XOR<RecadoUpdateWithoutCategoriasInput, RecadoUncheckedUpdateWithoutCategoriasInput>
+  }
+
+  export type RecadoUpdateManyWithWhereWithoutCategoriasInput = {
+    where: RecadoScalarWhereInput
+    data: XOR<RecadoUpdateManyMutationInput, RecadoUncheckedUpdateManyWithoutCategoriasInput>
+  }
+
+  export type CategoriaCreateWithoutNoticiasInput = {
+    nome: string
+    slug: string
+    descricao?: string | null
+    cor?: string | null
+    ativo?: boolean
+    ordem?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recados?: RecadoCreateNestedManyWithoutCategoriasInput
+  }
+
+  export type CategoriaUncheckedCreateWithoutNoticiasInput = {
+    id?: number
+    nome: string
+    slug: string
+    descricao?: string | null
+    cor?: string | null
+    ativo?: boolean
+    ordem?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recados?: RecadoUncheckedCreateNestedManyWithoutCategoriasInput
+  }
+
+  export type CategoriaCreateOrConnectWithoutNoticiasInput = {
+    where: CategoriaWhereUniqueInput
+    create: XOR<CategoriaCreateWithoutNoticiasInput, CategoriaUncheckedCreateWithoutNoticiasInput>
+  }
+
   export type SolicitacaoGerenciamentoCreateWithoutNoticiaInput = {
     recurso: $Enums.SolicitacaoRecurso
     tipo: $Enums.SolicitacaoTipo
     status?: $Enums.SolicitacaoStatus
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -32807,6 +34777,7 @@ export namespace Prisma {
     recadoId?: number | null
     unidadeId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -32828,6 +34799,37 @@ export namespace Prisma {
   export type SolicitacaoGerenciamentoCreateManyNoticiaInputEnvelope = {
     data: SolicitacaoGerenciamentoCreateManyNoticiaInput | SolicitacaoGerenciamentoCreateManyNoticiaInput[]
     skipDuplicates?: boolean
+  }
+
+  export type CategoriaUpsertWithWhereUniqueWithoutNoticiasInput = {
+    where: CategoriaWhereUniqueInput
+    update: XOR<CategoriaUpdateWithoutNoticiasInput, CategoriaUncheckedUpdateWithoutNoticiasInput>
+    create: XOR<CategoriaCreateWithoutNoticiasInput, CategoriaUncheckedCreateWithoutNoticiasInput>
+  }
+
+  export type CategoriaUpdateWithWhereUniqueWithoutNoticiasInput = {
+    where: CategoriaWhereUniqueInput
+    data: XOR<CategoriaUpdateWithoutNoticiasInput, CategoriaUncheckedUpdateWithoutNoticiasInput>
+  }
+
+  export type CategoriaUpdateManyWithWhereWithoutNoticiasInput = {
+    where: CategoriaScalarWhereInput
+    data: XOR<CategoriaUpdateManyMutationInput, CategoriaUncheckedUpdateManyWithoutNoticiasInput>
+  }
+
+  export type CategoriaScalarWhereInput = {
+    AND?: CategoriaScalarWhereInput | CategoriaScalarWhereInput[]
+    OR?: CategoriaScalarWhereInput[]
+    NOT?: CategoriaScalarWhereInput | CategoriaScalarWhereInput[]
+    id?: IntFilter<"Categoria"> | number
+    nome?: StringFilter<"Categoria"> | string
+    slug?: StringFilter<"Categoria"> | string
+    descricao?: StringNullableFilter<"Categoria"> | string | null
+    cor?: StringNullableFilter<"Categoria"> | string | null
+    ativo?: BoolFilter<"Categoria"> | boolean
+    ordem?: IntFilter<"Categoria"> | number
+    createdAt?: DateTimeFilter<"Categoria"> | Date | string
+    updatedAt?: DateTimeFilter<"Categoria"> | Date | string
   }
 
   export type SolicitacaoGerenciamentoUpsertWithWhereUniqueWithoutNoticiaInput = {
@@ -32872,6 +34874,36 @@ export namespace Prisma {
     create: XOR<UnidadeCreateWithoutRecadosInput, UnidadeUncheckedCreateWithoutRecadosInput>
   }
 
+  export type CategoriaCreateWithoutRecadosInput = {
+    nome: string
+    slug: string
+    descricao?: string | null
+    cor?: string | null
+    ativo?: boolean
+    ordem?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    noticias?: NoticiaCreateNestedManyWithoutCategoriasInput
+  }
+
+  export type CategoriaUncheckedCreateWithoutRecadosInput = {
+    id?: number
+    nome: string
+    slug: string
+    descricao?: string | null
+    cor?: string | null
+    ativo?: boolean
+    ordem?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    noticias?: NoticiaUncheckedCreateNestedManyWithoutCategoriasInput
+  }
+
+  export type CategoriaCreateOrConnectWithoutRecadosInput = {
+    where: CategoriaWhereUniqueInput
+    create: XOR<CategoriaCreateWithoutRecadosInput, CategoriaUncheckedCreateWithoutRecadosInput>
+  }
+
   export type RecadoUnidadeCreateWithoutRecadoInput = {
     unidade: UnidadeCreateNestedOneWithoutRecadosMultiInput
   }
@@ -32896,6 +34928,7 @@ export namespace Prisma {
     tipo: $Enums.SolicitacaoTipo
     status?: $Enums.SolicitacaoStatus
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -32919,6 +34952,7 @@ export namespace Prisma {
     noticiaId?: number | null
     unidadeId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -32974,6 +35008,22 @@ export namespace Prisma {
     solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutUnidadeNestedInput
   }
 
+  export type CategoriaUpsertWithWhereUniqueWithoutRecadosInput = {
+    where: CategoriaWhereUniqueInput
+    update: XOR<CategoriaUpdateWithoutRecadosInput, CategoriaUncheckedUpdateWithoutRecadosInput>
+    create: XOR<CategoriaCreateWithoutRecadosInput, CategoriaUncheckedCreateWithoutRecadosInput>
+  }
+
+  export type CategoriaUpdateWithWhereUniqueWithoutRecadosInput = {
+    where: CategoriaWhereUniqueInput
+    data: XOR<CategoriaUpdateWithoutRecadosInput, CategoriaUncheckedUpdateWithoutRecadosInput>
+  }
+
+  export type CategoriaUpdateManyWithWhereWithoutRecadosInput = {
+    where: CategoriaScalarWhereInput
+    data: XOR<CategoriaUpdateManyMutationInput, CategoriaUncheckedUpdateManyWithoutRecadosInput>
+  }
+
   export type RecadoUnidadeUpsertWithWhereUniqueWithoutRecadoInput = {
     where: RecadoUnidadeWhereUniqueInput
     update: XOR<RecadoUnidadeUpdateWithoutRecadoInput, RecadoUnidadeUncheckedUpdateWithoutRecadoInput>
@@ -33013,6 +35063,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     unidade: UnidadeCreateNestedOneWithoutRecadosInput
+    categorias?: CategoriaCreateNestedManyWithoutRecadosInput
     solicitacoes?: SolicitacaoGerenciamentoCreateNestedManyWithoutRecadoInput
   }
 
@@ -33024,6 +35075,7 @@ export namespace Prisma {
     unidadeId: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutRecadosInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedCreateNestedManyWithoutRecadoInput
   }
 
@@ -33076,6 +35128,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+    categorias?: CategoriaUpdateManyWithoutRecadosNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput
   }
 
@@ -33087,6 +35140,7 @@ export namespace Prisma {
     unidadeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutRecadosNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput
   }
 
@@ -33339,6 +35393,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     unidade: UnidadeCreateNestedOneWithoutRecadosInput
+    categorias?: CategoriaCreateNestedManyWithoutRecadosInput
     unidades?: RecadoUnidadeCreateNestedManyWithoutRecadoInput
   }
 
@@ -33350,6 +35405,7 @@ export namespace Prisma {
     unidadeId: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutRecadosInput
     unidades?: RecadoUnidadeUncheckedCreateNestedManyWithoutRecadoInput
   }
 
@@ -33364,6 +35420,7 @@ export namespace Prisma {
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaCreateNestedManyWithoutNoticiasInput
   }
 
   export type NoticiaUncheckedCreateWithoutSolicitacoesInput = {
@@ -33373,6 +35430,7 @@ export namespace Prisma {
     imagem?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    categorias?: CategoriaUncheckedCreateNestedManyWithoutNoticiasInput
   }
 
   export type NoticiaCreateOrConnectWithoutSolicitacoesInput = {
@@ -33424,6 +35482,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+    categorias?: CategoriaUpdateManyWithoutRecadosNestedInput
     unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
   }
 
@@ -33435,6 +35494,7 @@ export namespace Prisma {
     unidadeId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutRecadosNestedInput
     unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
   }
 
@@ -33455,6 +35515,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUpdateManyWithoutNoticiasNestedInput
   }
 
   export type NoticiaUncheckedUpdateWithoutSolicitacoesInput = {
@@ -33464,6 +35525,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutNoticiasNestedInput
   }
 
   export type UnidadeUpsertWithoutSolicitacoesInput = {
@@ -33837,6 +35899,7 @@ export namespace Prisma {
     recadoId?: number | null
     noticiaId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -33948,6 +36011,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUpdateManyWithoutRecadosNestedInput
     unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput
   }
@@ -33959,6 +36023,7 @@ export namespace Prisma {
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categorias?: CategoriaUncheckedUpdateManyWithoutRecadosNestedInput
     unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
     solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput
   }
@@ -34023,6 +36088,7 @@ export namespace Prisma {
     tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
     status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34046,6 +36112,7 @@ export namespace Prisma {
     recadoId?: NullableIntFieldUpdateOperationsInput | number | null
     noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34067,6 +36134,7 @@ export namespace Prisma {
     recadoId?: NullableIntFieldUpdateOperationsInput | number | null
     noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34080,6 +36148,67 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NoticiaUpdateWithoutCategoriasInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutNoticiaNestedInput
+  }
+
+  export type NoticiaUncheckedUpdateWithoutCategoriasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutNoticiaNestedInput
+  }
+
+  export type NoticiaUncheckedUpdateManyWithoutCategoriasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RecadoUpdateWithoutCategoriasInput = {
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidade?: UnidadeUpdateOneRequiredWithoutRecadosNestedInput
+    unidades?: RecadoUnidadeUpdateManyWithoutRecadoNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type RecadoUncheckedUpdateWithoutCategoriasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    unidades?: RecadoUnidadeUncheckedUpdateManyWithoutRecadoNestedInput
+    solicitacoes?: SolicitacaoGerenciamentoUncheckedUpdateManyWithoutRecadoNestedInput
+  }
+
+  export type RecadoUncheckedUpdateManyWithoutCategoriasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    conteudo?: StringFieldUpdateOperationsInput | string
+    imagem?: NullableStringFieldUpdateOperationsInput | string | null
+    unidadeId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SolicitacaoGerenciamentoCreateManyNoticiaInput = {
     id?: number
     recurso: $Enums.SolicitacaoRecurso
@@ -34088,6 +36217,7 @@ export namespace Prisma {
     recadoId?: number | null
     unidadeId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -34101,11 +36231,49 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type CategoriaUpdateWithoutNoticiasInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recados?: RecadoUpdateManyWithoutCategoriasNestedInput
+  }
+
+  export type CategoriaUncheckedUpdateWithoutNoticiasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recados?: RecadoUncheckedUpdateManyWithoutCategoriasNestedInput
+  }
+
+  export type CategoriaUncheckedUpdateManyWithoutNoticiasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SolicitacaoGerenciamentoUpdateWithoutNoticiaInput = {
     recurso?: EnumSolicitacaoRecursoFieldUpdateOperationsInput | $Enums.SolicitacaoRecurso
     tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
     status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34129,6 +36297,7 @@ export namespace Prisma {
     recadoId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34150,6 +36319,7 @@ export namespace Prisma {
     recadoId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34176,6 +36346,7 @@ export namespace Prisma {
     noticiaId?: number | null
     unidadeId?: number | null
     unidadeIds?: string | null
+    categoriaIds?: string | null
     titulo?: string | null
     conteudo?: string | null
     imagem?: string | null
@@ -34187,6 +36358,43 @@ export namespace Prisma {
     revisorNome?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type CategoriaUpdateWithoutRecadosInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    noticias?: NoticiaUpdateManyWithoutCategoriasNestedInput
+  }
+
+  export type CategoriaUncheckedUpdateWithoutRecadosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    noticias?: NoticiaUncheckedUpdateManyWithoutCategoriasNestedInput
+  }
+
+  export type CategoriaUncheckedUpdateManyWithoutRecadosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    cor?: NullableStringFieldUpdateOperationsInput | string | null
+    ativo?: BoolFieldUpdateOperationsInput | boolean
+    ordem?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RecadoUnidadeUpdateWithoutRecadoInput = {
@@ -34208,6 +36416,7 @@ export namespace Prisma {
     tipo?: EnumSolicitacaoTipoFieldUpdateOperationsInput | $Enums.SolicitacaoTipo
     status?: EnumSolicitacaoStatusFieldUpdateOperationsInput | $Enums.SolicitacaoStatus
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34231,6 +36440,7 @@ export namespace Prisma {
     noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34252,6 +36462,7 @@ export namespace Prisma {
     noticiaId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeId?: NullableIntFieldUpdateOperationsInput | number | null
     unidadeIds?: NullableStringFieldUpdateOperationsInput | string | null
+    categoriaIds?: NullableStringFieldUpdateOperationsInput | string | null
     titulo?: NullableStringFieldUpdateOperationsInput | string | null
     conteudo?: NullableStringFieldUpdateOperationsInput | string | null
     imagem?: NullableStringFieldUpdateOperationsInput | string | null

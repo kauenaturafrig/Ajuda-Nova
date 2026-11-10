@@ -1,5 +1,6 @@
 services:
   app:
+    image: ghcr.io/kauenaturafrig/ajuda-nova:latest
     build: .
     container_name: portal-app
     restart: unless-stopped
@@ -11,7 +12,18 @@ services:
       - ./uploads:/app/public/uploads
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    # depends_on removido pois o banco está fora do container
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  migrate:
+    image: ghcr.io/kauenaturafrig/ajuda-nova:latest
+    build: .
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["npx", "prisma", "migrate", "deploy"]
 
   backup:
     image: postgres:18
@@ -35,3 +47,22 @@ services:
           find /backups -type f -name "*.dump" -mtime +14 -delete
           sleep 86400
         done
+
+
+  prisma-tool:
+    profiles:
+      - db-tools
+    build: .
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command:
+      - sh
+      - -c
+      - >-
+        npx prisma migrate status &&
+        npx prisma migrate diff
+        --from-schema-datamodel prisma/schema.prisma
+        --to-url "$$DATABASE_URL"
+        --exit-code

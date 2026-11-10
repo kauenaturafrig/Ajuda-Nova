@@ -2,7 +2,6 @@
 import { prisma } from "@/src/lib/prisma";
 import { requirePageRoles } from "@/src/lib/permissions";
 import { PAGE_ROLES } from "@/src/lib/role-permissions";
-import Layout from "@/src/components/Layout";
 import AgendaAdminClient from "./agenda-client";
 
 export const dynamic = "force-dynamic";
@@ -33,7 +32,6 @@ export default async function AgendaAdminPage() {
   );
 
   return (
-    <Layout>
       <AgendaAdminClient
         initialEventos={
           eventosSerializados as any[]
@@ -43,6 +41,5 @@ export default async function AgendaAdminPage() {
         userUnidadeId={user.unidadeId}
         userName={user.name}
       />
-    </Layout>
   );
 }

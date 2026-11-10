@@ -1,6 +1,5 @@
 import { requirePageRoles } from "@/src/lib/permissions";
 import { PAGE_ROLES } from "@/src/lib/role-permissions";
-import Layout from "@/src/components/Layout";
 import RamaisClient from "./ramais-client";
 import { prisma } from "@/src/lib/prisma";
 
@@ -24,12 +23,10 @@ export default async function RamaisPage() {
   }
 
   return (
-    <Layout>
-      <RamaisClient
-        userRoles={user.roles}
-        userUnidadeId={user.unidadeId}
-        userUnidadeNome={userUnidadeNome}
-      />
-    </Layout>
+    <RamaisClient
+      userRoles={user.roles}
+      userUnidadeId={user.unidadeId}
+      userUnidadeNome={userUnidadeNome}
+    />
   );
 }

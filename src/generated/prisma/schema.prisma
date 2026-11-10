@@ -7,7 +7,7 @@
 generator client {
   provider      = "prisma-client-js"
   output        = "../src/generated/prisma"
-  binaryTargets = ["native", "debian-openssl-1.1.x"]
+  binaryTargets = ["native", "windows", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -195,6 +195,23 @@ model Jornal {
   @@map("jornais")
 }
 
+model Categoria {
+  id        Int      @id @default(autoincrement())
+  nome      String   @unique
+  slug      String   @unique
+  descricao String?
+  cor       String? // Ex.: "#ef4444", "red", "emerald"
+  ativo     Boolean  @default(true)
+  ordem     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  noticias Noticia[]
+  recados  Recado[]
+
+  @@map("categorias")
+}
+
 model Noticia {
   id        Int      @id @default(autoincrement())
   titulo    String
@@ -203,6 +220,7 @@ model Noticia {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  categorias   Categoria[]
   solicitacoes SolicitacaoGerenciamento[]
 
   @@map("noticias")
@@ -234,6 +252,7 @@ model Recado {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  categorias   Categoria[]
   unidades     RecadoUnidade[]
   solicitacoes SolicitacaoGerenciamento[]
 

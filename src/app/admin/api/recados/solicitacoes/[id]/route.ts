@@ -98,6 +98,27 @@ function parseUnitIds(
   }
 }
 
+function parseCategoryIds(value: string | null): number[] {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return [...new Set(
+      parsed
+        .map(Number)
+        .filter((id) => Number.isInteger(id) && id > 0),
+    )];
+  } catch {
+    return [];
+  }
+}
+
 export async function PUT(
   req: NextRequest,
   {
@@ -249,6 +270,9 @@ export async function PUT(
     const unitIds = parseUnitIds(
       request.unidadeIds,
     );
+    const categoryIds = parseCategoryIds(
+      request.categoriaIds,
+    );
 
     if (request.tipo === "CREATE") {
       if (
@@ -279,6 +303,11 @@ export async function PUT(
                 }),
               ),
             },
+            categorias: {
+              connect: categoryIds.map((categoryId) => ({
+                id: categoryId,
+              })),
+            },
           },
         });
 
@@ -292,6 +321,7 @@ export async function PUT(
           titulo: request.titulo,
           conteudo: request.conteudo,
           unidadeIds: unitIds,
+          categoriaIds: categoryIds,
           imagem: request.imagem,
           origemSolicitacaoId:
             request.id,
@@ -312,6 +342,9 @@ export async function PUT(
           },
           include: {
             unidades: true,
+            categorias: {
+              select: { id: true },
+            },
           },
         });
 
@@ -339,15 +372,11 @@ export async function PUT(
         );
       }
 
-      let finalImage =
-        recadoBefore.imagem;
-
+      let finalImage = recadoBefore.imagem;
       if (request.imagem) {
-        await apagarArquivo(
-          recadoBefore.imagem,
-        );
-
         finalImage = request.imagem;
+      } else if (request.imagemAntiga === "") {
+        finalImage = null;
       }
 
       const oldData = {
@@ -358,6 +387,9 @@ export async function PUT(
           (item) => item.unidadeId,
         ),
         imagem: recadoBefore.imagem,
+        categoriaIds: recadoBefore.categorias.map(
+          (categoria) => categoria.id,
+        ),
       };
 
       await prisma.recado.update({
@@ -377,8 +409,20 @@ export async function PUT(
               }),
             ),
           },
+          categorias:
+            request.categoriaIds === null
+              ? undefined
+              : {
+                  set: categoryIds.map((categoryId) => ({
+                    id: categoryId,
+                  })),
+                },
         },
       });
+
+      if (recadoBefore.imagem !== finalImage) {
+        await apagarArquivo(recadoBefore.imagem);
+      }
 
       await logAudit(
         recadoBefore.id,
@@ -390,6 +434,7 @@ export async function PUT(
           titulo: request.titulo,
           conteudo: request.conteudo,
           unidadeIds: unitIds,
+          categoriaIds: categoryIds,
           imagem: finalImage,
           origemSolicitacaoId:
             request.id,

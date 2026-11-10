@@ -1,9 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/src/components/ui/button";
-import { ArrowLeft, Newspaper } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarClock,
+  FileClock,
+  Newspaper,
+  UserRound,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { JsonViewer } from "@/src/components/JsonViewer";
@@ -36,6 +40,19 @@ function actionClassName(action: string) {
   return "bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-200";
 }
 
+function actionLabel(action: string) {
+  if (action === "CREATE") return "Criação";
+  if (action === "UPDATE") return "Edição";
+  if (action === "DELETE") return "Exclusão";
+  return action;
+}
+
+function isValidJsonValue(
+  value: unknown,
+): value is Record<string, unknown> | unknown[] {
+  return value !== null && typeof value === "object";
+}
+
 export default function AuditoriaNoticiasClient({
   audits,
   total,
@@ -43,144 +60,99 @@ export default function AuditoriaNoticiasClient({
   const router = useRouter();
 
   return (
-    <div className="container max-w-6xl mx-auto py-8 px-4">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-8">
-        <div className="flex items-center gap-3">
+    <main className="mx-auto w-full max-w-7xl space-y-7 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <header className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white/80 p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]/80 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex items-center gap-3 sm:gap-4">
           <Button
             type="button"
             variant="ghost"
             size="icon"
             onClick={() => router.back()}
-            className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+            className="h-10 w-10 shrink-0 rounded-xl border border-gray-100 bg-white text-gray-500 shadow-sm hover:text-gray-900 dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:text-white"
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
-          <div className="flex items-center gap-3">
-            <span className="flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 shadow-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-              <Newspaper size={30} />
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm dark:bg-blue-900/30 dark:text-blue-400 sm:h-14 sm:w-14">
+            <Newspaper size={26} />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
               Auditoria de Notícias
             </h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Histórico de alterações e responsáveis pelas publicações.
+            </p>
           </div>
         </div>
 
-        <span className="px-3 py-1.5 bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-200 text-xs font-bold rounded-full">
-          {total} registros
-        </span>
-      </div>
-
-      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/50 dark:border-gray-700/50 shadow-2xl overflow-hidden">
-        <div
-          className="overflow-x-auto"
-          style={{
-            maxHeight: "calc(100vh - 300px)",
-            overflowY: "auto",
-          }}
-        >
-          <table className="w-full min-w-[1000px]">
-            <thead className="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 dark:from-blue-500/30 dark:to-indigo-500/30 border-b border-blue-200 dark:border-blue-800/50 sticky top-0 z-10">
-              <tr>
-                <th className="p-4 text-left font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider whitespace-nowrap">
-                  Data/Hora
-                </th>
-
-                <th className="p-4 text-left font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider whitespace-nowrap">
-                  Usuário
-                </th>
-
-                <th className="p-4 text-left font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider whitespace-nowrap">
-                  Notícia ID
-                </th>
-
-                <th className="p-4 text-left font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider whitespace-nowrap">
-                  Ação
-                </th>
-
-                <th className="p-4 text-left font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider whitespace-nowrap min-w-[200px]">
-                  Antes
-                </th>
-
-                <th className="p-4 text-left font-bold text-gray-900 dark:text-white text-xs uppercase tracking-wider whitespace-nowrap min-w-[200px]">
-                  Depois
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {audits.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={6}
-                    className="p-10 text-center text-sm text-gray-500 dark:text-gray-400"
-                  >
-                    Nenhum registro de auditoria encontrado.
-                  </td>
-                </tr>
-              ) : (
-                audits.map((audit) => (
-                  <tr
-                    key={audit.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-                  >
-                    <td className="p-4 font-mono text-xs text-gray-900 dark:text-gray-100 whitespace-nowrap">
-                      {new Date(
-                        audit.createdAt,
-                      ).toLocaleString("pt-BR")}
-                    </td>
-
-                    <td className="p-4 font-medium text-xs text-gray-900 dark:text-gray-100 whitespace-nowrap">
-                      {audit.userNome}
-                    </td>
-
-                    <td className="p-4 whitespace-nowrap">
-                      <span className="font-mono bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full text-xs font-bold">
-                        #{audit.noticiaId}
-                      </span>
-                    </td>
-
-                    <td className="p-4 whitespace-nowrap">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold ${actionClassName(
-                          audit.acao,
-                        )}`}
-                      >
-                        {audit.acao}
-                      </span>
-                    </td>
-
-                    <td className="p-4 align-top">
-                      {audit.dadosAntigos ? (
-                        <JsonViewer
-                          data={audit.dadosAntigos}
-                          color="gray"
-                        />
-                      ) : (
-                        <span className="text-gray-500 dark:text-gray-400 italic text-xs">
-                          —
-                        </span>
-                      )}
-                    </td>
-
-                    <td className="p-4 align-top">
-                      {audit.dadosNovos ? (
-                        <JsonViewer
-                          data={audit.dadosNovos}
-                          color="emerald"
-                        />
-                      ) : (
-                        <span className="text-gray-500 dark:text-gray-400 italic text-xs">
-                          —
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+        <div className="flex w-fit items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-4 py-2 dark:border-blue-900/40 dark:bg-blue-950/30">
+          <FileClock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+          <span className="text-sm font-bold text-blue-700 dark:text-blue-300">
+            {total} {total === 1 ? "registro" : "registros"}
+          </span>
         </div>
-      </div>
-    </div>
+      </header>
+
+      {audits.length === 0 ? (
+        <section className="rounded-2xl border border-gray-100 bg-white px-6 py-20 text-center shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]">
+          <FileClock className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-neutral-700" />
+          <h2 className="text-base font-bold text-gray-800 dark:text-gray-200">
+            Nenhum registro de auditoria encontrado
+          </h2>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            As alterações nas notícias aparecerão aqui.
+          </p>
+        </section>
+      ) : (
+        <section aria-label="Registros de auditoria" className="space-y-4">
+          {audits.map((audit) => (
+            <article
+              key={audit.id}
+              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-neutral-800 dark:bg-[#111a2d] sm:p-6"
+            >
+              <div className="flex flex-col gap-4 border-b border-gray-100 pb-4 dark:border-neutral-800 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`rounded-lg px-3 py-1.5 text-xs font-bold ${actionClassName(audit.acao)}`}>
+                    {actionLabel(audit.acao)}
+                  </span>
+                  <span className="rounded-lg bg-blue-50 px-3 py-1.5 font-mono text-xs font-bold text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
+                    Notícia #{audit.noticiaId}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
+                  <span className="inline-flex items-center gap-2">
+                    <UserRound className="h-4 w-4 text-gray-400" />
+                    <span className="font-medium text-gray-700 dark:text-gray-200">{audit.userNome}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-2">
+                    <CalendarClock className="h-4 w-4 text-gray-400" />
+                    {new Date(audit.createdAt).toLocaleString("pt-BR")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid gap-4 pt-5 md:grid-cols-2">
+                <div className="min-w-0 rounded-xl border border-gray-100 bg-gray-50/70 p-4 dark:border-neutral-800 dark:bg-neutral-900/40">
+                  <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Antes</h2>
+                  {isValidJsonValue(audit.dadosAntigos) ? (
+                    <JsonViewer data={audit.dadosAntigos} color="gray" />
+                  ) : (
+                    <p className="text-sm italic text-gray-400 dark:text-gray-500">Sem dados anteriores</p>
+                  )}
+                </div>
+                <div className="min-w-0 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4 dark:border-emerald-900/40 dark:bg-emerald-950/10">
+                  <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Depois</h2>
+                  {isValidJsonValue(audit.dadosNovos) ? (
+                    <JsonViewer data={audit.dadosNovos} color="emerald" />
+                  ) : (
+                    <p className="text-sm italic text-gray-400 dark:text-gray-500">Sem dados novos</p>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
+    </main>
   );
 }

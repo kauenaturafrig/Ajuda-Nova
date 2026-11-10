@@ -1,7 +1,6 @@
 import { prisma } from "@/src/lib/prisma";
 import { requirePageRoles } from "@/src/lib/permissions";
 import { PAGE_ROLES } from "@/src/lib/role-permissions";
-import Layout from "@/src/components/Layout";
 import AuditoriaNoticiasClient from "./auditoria-client";
 
 export const dynamic = "force-dynamic";
@@ -42,11 +41,9 @@ export default async function AuditoriaNoticiasPage() {
   }));
 
   return (
-    <Layout>
-      <AuditoriaNoticiasClient
-        audits={audits}
-        total={audits.length}
-      />
-    </Layout>
+    <AuditoriaNoticiasClient
+      audits={audits}
+      total={audits.length}
+    />
   );
 }

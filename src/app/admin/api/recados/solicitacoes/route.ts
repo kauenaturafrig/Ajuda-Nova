@@ -58,10 +58,45 @@ function parseUnitIds(
   }
 }
 
+function parseCategoryIds(formData: FormData) {
+  return [
+    ...new Set(
+      formData
+        .getAll("categoriaIds[]")
+        .map((value) => Number(value))
+        .filter(
+          (id) => Number.isInteger(id) && id > 0,
+        ),
+    ),
+  ];
+}
+
+function parseStoredCategoryIds(value: string | null) {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return [...new Set(
+      parsed
+        .map(Number)
+        .filter((id) => Number.isInteger(id) && id > 0),
+    )];
+  } catch {
+    return [];
+  }
+}
+
 function formatRequest(item: any) {
   return {
     ...item,
     unidadeIds: parseUnitIds(item.unidadeIds),
+    categoriaIds: parseStoredCategoryIds(item.categoriaIds),
   };
 }
 
@@ -210,6 +245,17 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
+    const categoryIds = parseCategoryIds(formData);
+    const categoryCount = await prisma.categoria.count({
+      where: { id: { in: categoryIds } },
+    });
+
+    if (categoryCount !== categoryIds.length) {
+      return NextResponse.json(
+        { error: "Uma ou mais categorias não existem." },
+        { status: 400 },
+      );
+    }
 
     const type = String(
       formData.get("tipo") ?? "",
@@ -353,10 +399,11 @@ export async function POST(req: NextRequest) {
         formData.get("conteudo") ?? "",
       ).trim();
 
+      const imagemAntigaForm = formData.get("imagemAntiga");
       oldImage =
-        String(
-          formData.get("imagemAntiga") ?? "",
-        ).trim() || null;
+        imagemAntigaForm === null
+          ? null
+          : String(imagemAntigaForm).trim();
 
       if (!title || !content) {
         return NextResponse.json(
@@ -466,6 +513,7 @@ export async function POST(req: NextRequest) {
             unidadeIds: JSON.stringify([
               user.unidadeId,
             ]),
+            categoriaIds: JSON.stringify(categoryIds),
             imagem: image,
             imagemAntiga: oldImage,
             solicitanteId: user.id,

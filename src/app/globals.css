@@ -3,15 +3,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==================================================
+   Escala geral da interface
+   ================================================== */
+
+/* Celulares e telas grandes mantêm a escala padrão. */
+html {
+  font-size: 100%;
+}
+
+/*
+ * Notebooks e desktops com menor largura disponível.
+ * Equivale a 15px quando a fonte padrão é 16px.
+ */
+@media (min-width: 1024px) and (max-width: 1919px) {
+  html {
+    font-size: 93.75%;
+  }
+}
+
+/*
+ * Larguras intermediárias.
+ * Equivale a 15.5px quando a fonte padrão é 16px.
+ */
+@media (min-width: 1920px) and (max-width: 2199px) {
+  html {
+    font-size: 96.875%;
+  }
+}
+
+/* ==================================================
+   Mapa
+   ================================================== */
+
 .map-container {
   @apply relative w-full h-full;
-  /* Garante que o contêiner do mapa ocupe a tela e que os elementos se posicionem de forma relativa. */
+  /* Mantém o posicionamento dos elementos relativo ao mapa. */
 }
 
 .mapa-brasil {
   @apply absolute top-0 left-0 w-full h-full;
   @apply transition-transform duration-500 ease-in-out;
-  /* Define a transição para que a animação seja suave. */
 }
 
 .cidade {
@@ -19,6 +51,10 @@
   transform-origin: center;
   transition: transform 0.5s ease-in-out;
 }
+
+/* ==================================================
+   Preferência por movimento reduzido
+   ================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .animate-carousel-slide-next,

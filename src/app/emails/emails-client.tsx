@@ -38,7 +38,7 @@ export function EmailsClient() {
       </div>
 
       {/* Container do Mapa e Menu Unificado */}
-      <section className="bg-white dark:bg-neutral-900 border border-gray-100 dark:border-neutral-800 rounded-3xl p-6 shadow-sm">
+      <section className="bg-white dark:bg-[#111a2d] border border-gray-100 dark:border-neutral-800 rounded-3xl p-6 shadow-sm">
         <MapaBrasil basePath="/emails" />
       </section>
     </div>

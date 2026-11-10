@@ -1,7 +1,6 @@
 // src/app/admin/authenticated/emails/page.tsx
 import { requirePageRoles } from "@/src/lib/permissions";
 import { PAGE_ROLES } from "@/src/lib/role-permissions";
-import Layout from "@/src/components/Layout";
 import EmailsClient from "./emails-client";
 import { prisma } from "@/src/lib/prisma";
 
@@ -25,12 +24,10 @@ export default async function EmailsPage() {
   }
 
   return (
-    <Layout>
-      <EmailsClient
-        userRoles={user.roles}
-        userUnidadeId={user.unidadeId}
-        userUnidadeNome={userUnidadeNome}
-      />
-    </Layout>
+    <EmailsClient
+      userRoles={user.roles}
+      userUnidadeId={user.unidadeId}
+      userUnidadeNome={userUnidadeNome}
+    />
   );
 }

@@ -18,6 +18,7 @@ import {
 
 import { Button } from "../../../../../components/ui/button";
 import type { AppUserRole } from "@/src/types/user";
+import { categoriaCores } from "@/src/lib/categoria-cor";
 
 type Tipo = "CREATE" | "UPDATE" | "DELETE";
 
@@ -45,6 +46,11 @@ type Solicitacao = {
   } | null;
   titulo: string | null;
   conteudo: string | null;
+  categorias: {
+    id: number;
+    nome: string;
+    cor: string | null;
+  }[];
   unidadeIds: number[];
   imagem: string | null;
   imagemAntiga: string | null;
@@ -85,6 +91,31 @@ function imagemUrl(nome?: string | null) {
   }
 
   return `/admin/api/uploads/recados/${nome}`;
+}
+
+function CategoriasTags({
+  categorias,
+}: {
+  categorias: Solicitacao["categorias"];
+}) {
+  if (categorias.length === 0) return null;
+
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {categorias.map((categoria) => {
+        const cores = categoriaCores(categoria.cor);
+        return (
+          <span
+            key={categoria.id}
+            className="rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+            style={{ backgroundColor: cores.soft, color: cores.solid }}
+          >
+            {categoria.nome}
+          </span>
+        );
+      })}
+    </div>
+  );
 }
 
 export default function SolicitacoesClient({
@@ -331,32 +362,32 @@ export default function SolicitacoesClient({
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-gray-100 dark:border-neutral-800/60 pb-6">
+    <div className="mx-auto w-full max-w-7xl space-y-7 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <div className="flex flex-col gap-5 rounded-2xl border border-gray-100 bg-white/80 p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]/80 sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="flex items-center gap-3">
           <Button
             type="button"
             variant="ghost"
             size="icon"
             onClick={() => router.back()}
-            className="h-9 w-9 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
+            className="h-10 w-10 rounded-xl text-gray-500 hover:text-gray-900 dark:hover:text-white border border-gray-100 dark:border-neutral-800 bg-white dark:bg-neutral-900/40 shadow-sm"
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
 
-          <div className="flex items-center gap-2">
-            <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 shrink-0">
-              <ClipboardCheck size={18} />
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400">
+              <ClipboardCheck size={21} />
             </span>
 
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                 {podeRevisar
                   ? "Solicitações de Recados"
                   : "Minhas Solicitações"}
               </h1>
 
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 {podeRevisar
                   ? "Aprove ou recuse os pedidos de gerenciamento enviados pelas unidades."
                   : "Acompanhe o status dos recados que você solicitou."}
@@ -366,7 +397,7 @@ export default function SolicitacoesClient({
         </div>
 
         {pendentesCount > 0 && (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 text-xs font-bold rounded-xl border border-orange-100 dark:border-orange-900/40 w-fit">
+          <span className="inline-flex w-fit items-center gap-2 rounded-xl border border-orange-100 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-600 dark:border-orange-900/40 dark:bg-orange-950/30 dark:text-orange-400">
             <Clock className="w-3.5 h-3.5" />
             {pendentesCount} pendente
             {pendentesCount > 1 ? "s" : ""}
@@ -388,7 +419,7 @@ export default function SolicitacoesClient({
             key={option}
             type="button"
             onClick={() => setFiltro(option)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors ${filtro === option
+            className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-colors ${filtro === option
               ? "bg-orange-600 border-orange-600 text-white"
               : "bg-white dark:bg-neutral-900/40 border-gray-200 dark:border-neutral-800 text-gray-500 hover:border-orange-300"
               }`}
@@ -402,20 +433,20 @@ export default function SolicitacoesClient({
       </div>
 
       {listaFiltrada.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-neutral-900/20 rounded-2xl border border-gray-100 dark:border-neutral-800/80">
-          <ClipboardCheck className="w-8 h-8 text-gray-300 dark:text-neutral-700 mx-auto mb-2" />
+        <div className="rounded-2xl border border-gray-100 bg-white py-20 text-center dark:border-neutral-800/80 dark:bg-neutral-900/20">
+          <ClipboardCheck className="mx-auto mb-3 h-10 w-10 text-gray-300 dark:text-neutral-700" />
 
-          <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200">
+          <h4 className="text-base font-bold text-gray-800 dark:text-gray-200">
             Nenhuma solicitação por aqui
           </h4>
 
-          <p className="text-xs text-gray-400 dark:text-gray-500 max-w-xs mx-auto mt-0.5">
+          <p className="mx-auto mt-1 max-w-md text-sm text-gray-500 dark:text-gray-400">
             Quando novas solicitações forem enviadas,
             elas aparecerão nesta lista.
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
           {listaFiltrada.map((solicitacao) => {
             const Icone =
               tipoIcon[solicitacao.tipo];
@@ -431,7 +462,7 @@ export default function SolicitacoesClient({
             return (
               <div
                 key={solicitacao.id}
-                className="p-5 bg-white dark:bg-neutral-900/40 rounded-2xl border border-gray-100 dark:border-neutral-800/80 relative"
+                className="relative rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-neutral-800/80 dark:bg-[#111a2d] sm:p-7"
               >
                 {processando && (
                   <div className="absolute inset-0 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm flex items-center justify-center rounded-2xl z-20">
@@ -441,16 +472,16 @@ export default function SolicitacoesClient({
 
                 <div className="flex items-start justify-between gap-4 mb-3 flex-wrap">
                   <div className="flex items-center gap-2.5">
-                    <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 shrink-0">
-                      <Icone size={15} />
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                      <Icone size={18} />
                     </span>
 
                     <div>
-                      <p className="text-xs font-bold text-gray-900 dark:text-white">
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">
                         {tipoLabel[solicitacao.tipo]}
                       </p>
 
-                      <p className="text-[10px] text-gray-400 flex items-center gap-1">
+                      <p className="mt-1 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                         <MapPin className="w-3 h-3" />
 
                         {solicitacao.unidade?.nome ??
@@ -466,7 +497,7 @@ export default function SolicitacoesClient({
                   </div>
 
                   <span
-                    className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase border ${solicitacao.status ===
+                    className={`rounded-lg border px-3 py-1.5 text-xs font-bold uppercase ${solicitacao.status ===
                       "PENDENTE"
                       ? "bg-yellow-50 dark:bg-yellow-950/30 text-yellow-700 dark:text-yellow-400 border-yellow-100 dark:border-yellow-900/40"
                       : solicitacao.status ===
@@ -502,6 +533,7 @@ export default function SolicitacoesClient({
                       </p>
                     )}
 
+                    <CategoriasTags categorias={solicitacao.categorias} />
                     {renderizarImagem(solicitacao)}
                   </div>
                 ) : (
@@ -513,6 +545,7 @@ export default function SolicitacoesClient({
                         {solicitacao.titulo}
                       </h4>
 
+                      <CategoriasTags categorias={solicitacao.categorias} />
                       <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed break-words whitespace-pre-wrap">
                         {solicitacao.conteudo}
                       </p>

@@ -45,6 +45,23 @@ export default async function NoticiasSolicitacoesPage() {
       },
     });
 
+  const categoriaIds = [
+    ...new Set(
+      solicitacoes.flatMap((solicitacao) =>
+        parseCategoriaIds(solicitacao.categoriaIds),
+      ),
+    ),
+  ];
+  const categorias = categoriaIds.length
+    ? await prisma.categoria.findMany({
+        where: { id: { in: categoriaIds } },
+        select: { id: true, nome: true, cor: true },
+      })
+    : [];
+  const categoriasPorId = new Map(
+    categorias.map((categoria) => [categoria.id, categoria]),
+  );
+
   const formatted = solicitacoes.map(
     (solicitacao) => ({
       id: solicitacao.id,
@@ -58,6 +75,9 @@ export default async function NoticiasSolicitacoesPage() {
       ),
       titulo: solicitacao.titulo,
       conteudo: solicitacao.conteudo,
+      categorias: parseCategoriaIds(solicitacao.categoriaIds)
+        .map((id) => categoriasPorId.get(id))
+        .filter((categoria) => categoria !== undefined),
       imagem: solicitacao.imagem,
       imagemAntiga:
         solicitacao.imagemAntiga,
@@ -85,6 +105,27 @@ export default async function NoticiasSolicitacoesPage() {
       userUnidadeId={user.unidadeId}
     />
   );
+}
+
+function parseCategoriaIds(value: string | null): number[] {
+  if (!value) {
+    return [];
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return [...new Set(
+      parsed
+        .map(Number)
+        .filter((id) => Number.isInteger(id) && id > 0),
+    )];
+  } catch {
+    return [];
+  }
 }
 
 function parseUnidadeIds(
