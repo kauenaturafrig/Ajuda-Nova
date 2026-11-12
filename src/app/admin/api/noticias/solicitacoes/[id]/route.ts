@@ -350,11 +350,9 @@ export async function PUT(
         noticiaAntes.imagem;
 
       if (solicitacao.imagem) {
-        await apagarArquivo(
-          noticiaAntes.imagem,
-        );
-
         imagemFinal = solicitacao.imagem;
+      } else if (solicitacao.imagemAntiga === "") {
+        imagemFinal = null;
       }
 
       await prisma.noticia.update({
@@ -373,6 +371,10 @@ export async function PUT(
                 },
         },
       });
+
+      if (noticiaAntes.imagem !== imagemFinal) {
+        await apagarArquivo(noticiaAntes.imagem);
+      }
 
       await logAudit(
         noticiaAntes.id,

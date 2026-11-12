@@ -94,6 +94,7 @@ export default function NoticiasClient({
     imagem: null as File | null,
     imagemPreview: "",
     imagemAntiga: "",
+    imagemRemovida: false,
     categoriaIds: [] as number[],
   });
 
@@ -134,6 +135,7 @@ export default function NoticiasClient({
       imagem: null,
       imagemPreview: noticia.imagem ? getImagemUrl(noticia) : "",
       imagemAntiga: noticia.imagem || "",
+      imagemRemovida: false,
       categoriaIds: (noticia.categorias ?? []).map((categoria) => categoria.id),
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -216,11 +218,15 @@ export default function NoticiasClient({
         fd.append("tipo", editingId ? "UPDATE" : "CREATE");
         if (editingId) {
           fd.append("noticiaId", editingId.toString());
-          fd.append("imagemAntiga", formData.imagemAntiga);
+          fd.append(
+            "imagemAntiga",
+            formData.imagemRemovida ? "" : formData.imagemAntiga,
+          );
         }
       } else if (editingId) {
         fd.append("id", editingId.toString());
         fd.append("imagemAntiga", formData.imagemAntiga);
+        fd.append("removerImagem", String(formData.imagemRemovida));
       }
 
       const res = await fetch(url, { method, body: fd });
@@ -237,6 +243,7 @@ export default function NoticiasClient({
         imagem: null,
         imagemPreview: "",
         imagemAntiga: "",
+        imagemRemovida: false,
         categoriaIds: [],
       });
       setEditingId(null);
@@ -278,7 +285,7 @@ export default function NoticiasClient({
       ...prev,
       imagem: file,
       imagemPreview: preview,
-      imagemAntiga: "",
+      imagemRemovida: false,
     }));
     setImagemNoticia(file);
   }, []);
@@ -311,12 +318,29 @@ export default function NoticiasClient({
 
   const removeImage = useCallback(() => {
     setImagemNoticia(null);
-    setFormData((prev) => ({
-      ...prev,
-      imagem: null,
-      imagemPreview: editingId ? prev.imagemAntiga : "",
-    }));
-  }, [editingId]);
+    setFormData((prev) => {
+      const removingReplacement = Boolean(prev.imagem);
+      const preserveOriginal = Boolean(
+        removingReplacement &&
+          editingId &&
+          prev.imagemAntiga &&
+          !prev.imagemRemovida,
+      );
+      const originalNoticia = editingId
+        ? noticias.find((noticia) => noticia.id === editingId)
+        : undefined;
+
+      return {
+        ...prev,
+        imagem: null,
+        imagemPreview:
+          preserveOriginal && originalNoticia
+            ? getImagemUrl(originalNoticia)
+            : "",
+        imagemRemovida: !preserveOriginal,
+      };
+    });
+  }, [editingId, noticias]);
 
   return (
     <>
@@ -415,6 +439,7 @@ export default function NoticiasClient({
                     imagem: null,
                     imagemPreview: "",
                     imagemAntiga: "",
+                    imagemRemovida: false,
                     categoriaIds: [],
                   });
                   setImagemNoticia(null);
@@ -544,7 +569,7 @@ export default function NoticiasClient({
                   </div>
 
                   {(imagemNoticia || formData.imagemPreview) && (
-                    <div className="absolute inset-1.5 bg-white dark:bg-neutral-900 flex flex-col items-center justify-center z-30 rounded-lg p-2 border border-gray-100 dark:border-neutral-800">
+                    <div className="pointer-events-none absolute inset-1.5 z-30 flex flex-col items-center justify-center rounded-lg border border-gray-100 bg-white p-2 dark:border-neutral-800 dark:bg-neutral-900">
                       {formData.imagemPreview ? (
                         <div className="relative w-full h-full flex items-center justify-center bg-gray-50 dark:bg-neutral-950 rounded-md overflow-hidden">
                           <img
@@ -554,10 +579,11 @@ export default function NoticiasClient({
                           />
                           <Button
                             type="button"
-                            variant="destructive"
+                            variant="ghost"
                             size="icon"
                             onClick={removeImage}
-                            className="absolute top-1.5 right-1.5 h-6 w-6 rounded-lg opacity-90 hover:opacity-100"
+                            aria-label="Remover imagem"
+                            className="pointer-events-auto absolute right-1 top-1 h-6 w-6 rounded-md border border-gray-200 bg-white text-red-600 shadow-md hover:bg-red-50 hover:text-red-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-red-400 dark:hover:bg-neutral-700 dark:hover:text-red-300"
                           >
                             <X className="h-3 w-3" />
                           </Button>
@@ -578,9 +604,10 @@ export default function NoticiasClient({
                             variant="ghost"
                             size="icon"
                             onClick={removeImage}
-                            className="h-7 w-7 p-0 rounded-lg text-gray-400 hover:text-red-500"
+                            aria-label="Remover imagem"
+                            className="pointer-events-auto h-5 w-5 p-0 text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-neutral-800"
                           >
-                            <X className="h-3.5 w-3.5" />
+                            <X className="h-3 w-3" />
                           </Button>
                         </div>
                       )}
