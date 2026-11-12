@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./uploads:/app/public/uploads
+      - ./uploads:/app/storage/uploads
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
