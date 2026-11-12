@@ -430,10 +430,11 @@ export async function POST(req: NextRequest) {
         formData.get("conteudo") ?? "",
       ).trim();
 
+      const imagemAntigaForm = formData.get("imagemAntiga");
       imagemAntiga =
-        String(
-          formData.get("imagemAntiga") ?? "",
-        ).trim() || null;
+        imagemAntigaForm === null
+          ? null
+          : String(imagemAntigaForm).trim();
 
       if (!titulo || !conteudo) {
         return NextResponse.json(

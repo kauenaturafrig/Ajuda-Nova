@@ -369,11 +369,6 @@ export async function PUT(req: NextRequest) {
       formData.get("conteudo") ?? "",
     ).trim();
 
-    const imagemAntiga =
-      String(
-        formData.get("imagemAntiga") ?? "",
-      ).trim() || null;
-
     if (
       !Number.isInteger(id) ||
       id <= 0 ||
@@ -411,8 +406,9 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    let imagem =
-      imagemAntiga || noticiaAntes.imagem;
+    let imagem = noticiaAntes.imagem;
+    const removerImagem =
+      formData.get("removerImagem") === "true";
 
     const imageValue =
       formData.get("imagem");
@@ -425,10 +421,8 @@ export async function PUT(req: NextRequest) {
         await salvarImagem(imageValue);
 
       imagem = uploadedImage;
-
-      await apagarArquivo(
-        imagemAntiga || noticiaAntes.imagem,
-      );
+    } else if (removerImagem) {
+      imagem = null;
     }
 
     const noticiaDepois =
@@ -453,6 +447,10 @@ export async function PUT(req: NextRequest) {
           },
         },
       });
+
+    if (noticiaAntes.imagem !== imagem) {
+      await apagarArquivo(noticiaAntes.imagem);
+    }
 
     await logAudit(
       noticiaDepois.id,
