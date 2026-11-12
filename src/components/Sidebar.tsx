@@ -313,7 +313,12 @@ export default function Sidebar({
       ].join(" ")}
     >
       {/* Header */}
-      <div className="flex min-h-20 shrink-0 items-center gap-3 px-2 pb-2 pt-4">
+      <div
+        className={[
+          "flex min-h-20 shrink-0 items-center gap-3 px-2 pb-2 pt-4",
+          expanded ? "justify-center" : "justify-start",
+        ].join(" ")}
+      >
         <Image
           src="/assets/images/logo-naturafrig.png"
           width={96}
@@ -321,17 +326,9 @@ export default function Sidebar({
           alt="Naturafrig"
           className={[
             "h-auto shrink-0 transition-[width] duration-300",
-            expanded ? "w-24" : "w-14",
+            expanded ? "w-28" : "w-14",
           ].join(" ")}
         />
-
-        {expanded && (
-          <span className="whitespace-nowrap text-[0.7rem] font-semibold uppercase leading-snug tracking-[0.18em] text-amber-400">
-            Intranet
-            <br />
-            Corporativa
-          </span>
-        )}
       </div>
 
       {/* Navegação */}
