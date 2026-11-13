@@ -345,7 +345,7 @@ export default function AgendaAdminClient({
                 Gerenciar Agenda
               </h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Crie, edite e remova as auditorias de cada unidade.
+                Crie, edite e remova os eventos de cada unidade.
               </p>
             </div>
           </div>
@@ -687,7 +687,7 @@ export default function AgendaAdminClient({
                   value={form.descricao}
                   onChange={(e) => setForm({ ...form, descricao: e.target.value })}
                   rows={3}
-                  placeholder="Detalhes adicionais sobre a auditoria"
+                  placeholder="Detalhes adicionais sobre o evento, como instruções, links ou contatos."
                   className="mt-2 w-full resize-y rounded-xl border border-gray-200 bg-white px-3 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
                 />
               </div>
