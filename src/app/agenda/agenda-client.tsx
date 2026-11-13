@@ -230,10 +230,10 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
           </span>
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Agenda de Auditorias
+              Agenda de Eventos
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Acompanhe as próximas auditorias de todas as unidades.
+              Acompanhe os próximos eventos de todas as unidades.
             </p>
           </div>
         </div>
@@ -267,7 +267,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
           <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
             <StatCard
               icon={CalendarCheck}
-              label="Auditorias hoje"
+              label="Eventos hoje"
               value={stats.hoje}
               tone="bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
             />
@@ -448,7 +448,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                   </h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
                     {selecionado.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} ·{" "}
-                    {eventosDoSelecionado.length} auditoria{eventosDoSelecionado.length === 1 ? "" : "s"}
+                    {eventosDoSelecionado.length} evento{eventosDoSelecionado.length === 1 ? "" : "s"}
                   </p>
                 </div>
 
@@ -456,8 +456,8 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                   <div className="rounded-xl border border-dashed border-gray-200 py-8 text-center dark:border-neutral-800">
                     <Calendar size={22} className="mx-auto mb-2 text-gray-300 dark:text-neutral-600" />
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Nenhuma auditoria neste dia.
-                    </p>
+                        Nenhum evento neste dia.
+                      </p>
                   </div>
                 ) : (
                   <div className="space-y-2.5">
@@ -471,7 +471,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
               <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-[#111a2d]">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                    Próximas auditorias
+                    Próximos eventos
                   </h3>
                   <span className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-600 dark:bg-neutral-800 dark:text-gray-300">
                     {proximos.length}
@@ -482,7 +482,7 @@ export default function AgendaPublicClient({ initialEventos }: Props) {
                   <p className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">
                     {eventos.length === 0
                       ? "Nenhum evento cadastrado."
-                      : "Nenhuma auditoria futura para os filtros atuais."}
+                      : "Nenhum evento futuro para os filtros atuais."}
                   </p>
                 ) : (
                   <ul className="space-y-1">

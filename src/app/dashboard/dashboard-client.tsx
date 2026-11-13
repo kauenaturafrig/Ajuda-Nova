@@ -147,7 +147,7 @@ const paginas = [
   { label: "Emails", hint: "Endereços corporativos", href: "/emails" },
   { label: "Notícias", hint: "Novidades da empresa", href: "/noticias" },
   { label: "Recados", hint: "Avisos por unidade", href: "/recados" },
-  { label: "Agenda", hint: "Auditorias", href: "/agenda" },
+  { label: "Agenda", hint: "Eventos", href: "/agenda" },
 ];
 
 const manuais = [
@@ -943,7 +943,7 @@ function AgendaCard({
       {!now ? (
         <ListSkeleton />
       ) : proximos.length === 0 ? (
-        <EmptyState text="Nenhuma auditoria agendada." />
+        <EmptyState text="Nenhum evento agendado." />
       ) : (
         <ul className="flex flex-col gap-0.5">
           {proximos.map((ev) => {
